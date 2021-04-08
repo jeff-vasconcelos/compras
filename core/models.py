@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 
 """ Modelo de empresas """
@@ -26,7 +25,7 @@ class Empresa(models.Model):
 class Endereco(models.Model):
 
     ESTADOS = (
-        ("AC", "Acre"),("AL", "Alagoas"),("AP", "Amapá"), ("AM", "Amazonas"), ("BA", "Bahia"),
+        ("AC", "Acre"), ("AL", "Alagoas"),("AP", "Amapá"), ("AM", "Amazonas"), ("BA", "Bahia"),
         ("CE", "Ceará"), ("DF", "Distrito Federal"), ("ES", "Espirito Santo"), ("GO", "Goiás"),
         ("MA", "Maranhão"), ("MS", "Mato Grosso do Sul"), ("MT", "Mato Grosso"), ("MG", "Minas Gerais"),
         ("PA", "Pará"), ("PB", "Paraíba"), ("PR", "Paraná"), ("PE", "Pernambuco"), ("PI", "Piauí"), ("RJ", "Rio de Janeiro"),
@@ -44,18 +43,3 @@ class Endereco(models.Model):
     def __str__(self):
         return self.endereco
 
-
-""" Modelo de usuário relacionado a empresas """
-class Usuario(models.Model):
-    TIPO = (
-        ('admin', 'Administrador'),
-        ('comp', 'Comprador')
-    )
-    tipo = models.CharField(max_length=15, null=True, blank=True, choices=TIPO, verbose_name='Tipo')
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True,
-                                related_name='usuario')
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, blank=True,
-                                related_name='empresa')
-
-    def __str__(self):
-        return self.user.username
