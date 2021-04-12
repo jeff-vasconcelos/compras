@@ -1,4 +1,4 @@
 from django.shortcuts import render
 
-def index(request, template_name='admin/paginas/index.html'):
+def index(request, template_name='administracao/paginas/index.html'):
     return render(request, template_name)
