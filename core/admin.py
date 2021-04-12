@@ -1,9 +1,6 @@
 from django.contrib import admin
 from core.models import *
 
-class UsuarioInLine(admin.TabularInline):
-    model = Usuario
-    extra = 1
 
 class EnderecoInLine(admin.TabularInline):
     model = Endereco
@@ -17,10 +14,8 @@ class EmpresaAdmin(admin.ModelAdmin):
     list_filter = ('ativo',)
     inlines = [
         EnderecoInLine,
-        UsuarioInLine,
     ]
 
-admin.site.register(Usuario)
 admin.site.register(Endereco)
 admin.site.register(Empresa, EmpresaAdmin)
 
