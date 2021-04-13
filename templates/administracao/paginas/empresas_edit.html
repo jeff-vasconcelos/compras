@@ -1,0 +1,97 @@
+{% extends 'administracao/base.html' %}
+{% load crispy_forms_tags %}
+{% block conteudo %}
+
+<form method="post">
+    {% csrf_token %}
+
+    <h2>Empresa</h2>
+    <hr>
+    <h4>Informações</h4>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="razao">Razão Social</label>
+            <input type="text" class="form-control" id="razao">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="fantasia">Nome Fantasia</label>
+            <input type="text" class="form-control" id="fantasia">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="cnpj">CNPJ</label>
+            <input type="text" class="form-control" id="cnpj">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="iestadual">Inscrição Estadual</label>
+            <input type="text" class="form-control" id="iestadual">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="rtecnico">Resp. Técnico</label>
+            <input type="text" class="form-control" id="rtecnico">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="rlegal">Resp. Legal</label>
+            <input type="text" class="form-control" id="rlegal">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" id="email">
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="fone">Telefone de contato</label>
+            <input type="text" class="form-control" id="fone">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="gridCheck">
+            <label class="form-check-label" for="gridCheck">
+                Ativo
+            </label>
+        </div>
+    </div>
+
+
+    <h4>Endereço</h4>
+
+    <div class="form-group">
+        <label for="endereco">Endereço</label>
+        <input type="text" class="form-control" id="endereco" placeholder="Logradouro, número e bairro">
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="cidade">Cidade</label>
+            <input type="text" class="form-control" id="cidade">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="estado">Estado</label>
+            <select id="estado" class="form-control">
+                <option selected>Selecione...</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="cep">CEP</label>
+            <input type="text" class="form-control" id="cep">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-outline-success btn-sm">
+        <i class="fas fa-save"></i> Salvar
+    </button>
+
+    <a class="btn btn-outline-danger btn-sm" href="#" role="button">
+        <i class="fas fa-times-circle"></i> Cancelar
+    </a>
+
+</form>
+
+{% endblock conteudo %}
