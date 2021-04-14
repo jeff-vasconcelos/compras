@@ -17,6 +17,7 @@ class Empresa(models.Model):
     nome_fantasia = models.CharField(max_length=255, null=True, blank=True)
     razao_social = models.CharField(max_length=255, null=True, blank=True)
     cnpj = models.CharField(max_length=18, null=True, blank=True)
+    iestadual = models.CharField(max_length=13, null=True, blank=True)
     resp_tec = models.CharField(max_length=255, null=True, blank=True,
                                        verbose_name='Responsável técnico')
     resp_leg = models.CharField(max_length=255, null=True, blank=True,
@@ -27,6 +28,7 @@ class Empresa(models.Model):
     endereco = models.CharField(max_length=255, null=True, blank=True)
     numero = models.CharField(max_length=6, null=True, blank=True)
     cidade = models.CharField(max_length=90, null=True, blank=True)
+    bairro = models.CharField(max_length=90, null=True, blank=True)
     estado = models.CharField(max_length=50, null=True, blank=True, choices=ESTADOS)
     cep = models.CharField(max_length=9, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)

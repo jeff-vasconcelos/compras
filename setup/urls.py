@@ -25,7 +25,7 @@ router.register('produtos', ProdutoViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('insight/', include('core.urls'))
+    path('administracao/painel/', include('core.urls'))
 ]
 
 admin.site.site_header = 'Administração Insight'
