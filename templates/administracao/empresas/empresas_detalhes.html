@@ -16,7 +16,7 @@
 
         {% else %}
 
-         <a href="" type="button" class="float-right btn btn-success btn-sm">
+         <a href="{% url 'desativar_empresa' empresa.pk %}" type="button" class="float-right btn btn-success btn-sm">
             <i class="fas fa-check-circle"></i> Ativar
          </a>
 
@@ -93,7 +93,7 @@
                     <p> Tem certeza que deseja inativar a empresa <strong>{{ empresa.razao_social }}</strong> ?</p>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger btn-sm" href=""><i class="fas fa-ban"></i> Inativar</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'desativar_empresa' empresa.pk %}"><i class="fas fa-ban"></i> Inativar</a>
                     <button type="button" data-dismiss="modal" class="btn btn-secondary btn-sm">Cancelar</button>
                 </div>
             </div>
