@@ -11,7 +11,7 @@
                     <h6 class="m-0 font-weight-bold">Empresas Cadastradas</h6>
                 </div>
                 <div class="col-6">
-                    <a href="{% url 'cadastrar_empresa' %}" type="button" class="float-right btn btn-secondary btn-sm">
+                    <a href="{% url 'cadastrar_empresa' %}" type="button" class="float-right btn btn-primary btn-sm">
                         <i class="fas fa-plus-circle"></i> Cadastrar empresa
                     </a>
                 </div>
@@ -47,7 +47,7 @@
 
                             <td>{{ empresa.created_at }}</td>
                             <td>
-                                <a href="{% url 'detalhes_empresa' empresa.pk %}" class="btn btn-outline-primary btn-sm active" role="button" aria-pressed="true">
+                                <a href="{% url 'detalhes_empresa' empresa.pk %}" class="btn btn-outline-secondary btn-sm" role="button" aria-pressed="true">
                                     <i class="fas fa-info-circle"></i> detalhes
                                 </a>
 

@@ -18,9 +18,13 @@
 
          <a href="" type="button" class="float-right btn btn-success btn-sm">
             <i class="fas fa-check-circle"></i> Ativar
-        </a>
+         </a>
 
         {% endif %}
+
+        <a href="{% url 'editar_empresa' empresa.pk %}" type="button" style="margin: 0px 5px" class="float-right btn btn-primary btn-sm">
+            <i class="fas fa-pen"></i> Editar
+         </a>
     </div>
 </div>
 
@@ -135,7 +139,7 @@
 
                                 <td>
                                     <a href="{% url 'detalhes_empresa' usuario.pk %}"
-                                       class="btn btn-outline-primary btn-sm active" role="button" aria-pressed="true">
+                                       class="btn btn-outline-secondary btn-sm" role="button" aria-pressed="true">
                                         <i class="fas fa-info-circle"></i> detalhes
                                     </a>
                                 </td>
