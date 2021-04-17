@@ -101,6 +101,9 @@ def desativar_ativar_empresa(request, pk):
         messages.error(request, "Ops, o usuário não tem permissão!")
         return redirect('index')
 
+
+def teste(request, template_name='aplicacao/paginas/home.html'):
+    return render(request, template_name)
 """
 PEGAR EMPRESA E PRODUTOS DO USUARIO LOGADO
 usuario_id = request.user.id

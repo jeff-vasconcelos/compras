@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+
+<head>
+    {% include 'aplicacao/parciais/_head.html' %}
+</head>
+
+<body id="page-top">
+
+    <div id="wrapper">
+
+        <!-- MENU LATERAL -->
+        {% include 'aplicacao/parciais/_lateral.html' %}
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <!-- NAV TOPO - TELA MENORES -->
+                {% include 'aplicacao/parciais/_topo_mobile.html' %}
+
+                <div class="container-fluid">
+
+                <!-- MENSAGENS -->
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ message }}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <!--  CONTEÚDO  -->
+                {% block conteudo %}
+                {% endblock conteudo %}
+
+                </div>
+            </div>
+
+            <!-- RODAPÉ -->
+            {% include 'aplicacao/parciais/_footer.html' %}
+
+        </div>
+    </div>
+
+    <!-- SCROLL TO TOP BOTAO-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- MODAL LOGOUT-->
+    {% include 'aplicacao/parciais/_modal_logout.html' %}
+
+    <script src="{% static 'aplicacao/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'aplicacao/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'aplicacao/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'aplicacao/js/sb-admin-2.min.js' %}"></script>
+    <script src="{% static 'aplicacao/vendor/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'aplicacao/js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'aplicacao/js/demo/chart-pie-demo.js' %}"></script>
+
+</body>
+
+</html>

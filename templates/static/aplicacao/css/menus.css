@@ -1,0 +1,182 @@
+@font-face {
+    font-family: RBN-Extralight;
+    src: url(../fonts/RBNo3-1-ExtraLight.otf);
+}
+
+@font-face {
+    font-family: RBN-Medium;
+    src: url(../fonts/RBNo3-1-Medium.otf);
+}
+#wrapper #content-wrapper #content{
+    background-color: #fbf8f8;
+}
+
+#accordionSidebar{
+    background-color: #FFFFFF;
+}
+.sidebar-dark #sidebarToggle{
+    background-color: #707070;
+    margin-top: 30px;
+}
+.sidebar-dark #sidebarToggle:hover{
+    background-color: #224390;
+}
+#editar-perfil-lat{
+    color: #9ba9cb;
+    font-size: 12px;
+    text-decoration: none;
+}
+#editar-perfil-lat:hover{
+    color: #224390;
+}
+#sair-lat{
+    color: #9ba9cb;
+    font-size: 12px;
+    text-decoration: none;
+}
+#sair-lat:hover{
+    color: #224390;
+}
+
+div.usuario-logado{
+    text-align: center;
+    margin: 40px 0px;
+}
+img.img-usuario-logado{
+    width: 70px; height: auto
+}
+h5.nome-usuario-logado{
+    font-size: 18px;
+    margin-top: 20px;
+    color: #707070;
+}
+
+
+/* HOME LATERAL */
+#link-home-lat{
+    color:#707070;
+    padding: 8px 10px
+}
+#link-home-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-home{
+    color: #707070;
+}
+
+
+/* ANALISE LATERAL */
+#link-anali-lat{
+    color: #707070;
+    padding: 8px 10px
+}
+#link-anali-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-anali{
+    color: #707070;
+}
+
+
+/* ALERTAS LATERAL */
+
+#link-alert-lat{
+    color: #707070;
+    padding: 8px 10px
+}
+#link-alert-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-alert{
+    color: #707070;
+}
+#contador-alerta{
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    margin-left: 15px;
+}
+
+
+/* PEDIDOS LATERAL */
+#link-pedi-lat{
+    color: #707070;
+    padding: 8px 10px
+}
+#link-pedi-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-pedi{
+    color: #707070;
+}
+
+
+/* USUARIOS LATERAL */
+#link-user-lat{
+    color: #707070;
+    padding: 8px 10px
+}
+#link-user-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-user{
+    color: #707070;
+}
+
+
+/* REPOSICAO LATERAL */
+#link-repo-lat{
+    color: #707070;
+    padding: 8px 10px
+}
+#link-repo-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-repo{
+    color: #707070;
+}
+
+
+/* ACADEMY LATERAL */
+#link-acad-lat{
+    color: #707070;
+    padding: 8px 10px
+}
+#link-acad-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-acad{
+    color: #707070;
+}
+
+
+/* CONFIG LATERAL */
+#link-conf-lat{
+    color: #707070;
+    padding: 8px 10px
+}
+#link-conf-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-conf{
+    color: #707070;
+}
+
