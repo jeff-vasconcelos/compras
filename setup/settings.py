@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_URL= '/painel/login'
+LOGIN_URL= '/acesso/login'
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'core',
-    'usuario',
     'rest_framework',
     'crispy_forms',
 

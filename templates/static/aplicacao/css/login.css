@@ -2,11 +2,15 @@
     font-family: RBN-Extralight;
     src: url(../fonts/RBNo3-1-ExtraLight.otf);
 }
+@font-face {
+    font-family: Montserrat-Medium;
+    src: url(../fonts/Montserrat-Medium.ttf);
+}
 
 body {
-    font-family: RBN-Extralight;
     height: 100%;
     background-color: #679bf9;
+    font-family: Montserrat-Medium;
 }
 
 nav.nav-topo{
@@ -16,6 +20,11 @@ nav.nav-topo{
 img.logo-cluster{
     height: 50px;
     width: auto;
+}
+
+div.messages-login{
+    max-width: 350px;
+    margin: 0px auto 0px auto;
 }
 
 div.main-login{
@@ -29,7 +38,6 @@ div.main-login{
 
 div.logo-login{
     text-align: center;
-
 }
 
 img.img-login{
@@ -46,6 +54,7 @@ input.form-control{
 small.texto-link-senha{
     margin-top: -10px;
     margin-bottom: 30px;
+
 }
 
 button.btn-login{

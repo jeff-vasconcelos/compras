@@ -7,6 +7,17 @@
     font-family: RBN-Medium;
     src: url(../fonts/RBNo3-1-Medium.otf);
 }
+
+@font-face {
+    font-family: Montserrat-Light;
+    src: url(../fonts/Montserrat-Light.ttf);
+}
+@font-face {
+    font-family: Montserrat-Medium;
+    src: url(../fonts/Montserrat-Medium.ttf);
+}
+
+
 #wrapper #content-wrapper #content{
     background-color: #fbf8f8;
 }
@@ -25,6 +36,7 @@
     color: #9ba9cb;
     font-size: 12px;
     text-decoration: none;
+    font-family: Montserrat-Medium;
 }
 #editar-perfil-lat:hover{
     color: #224390;
@@ -33,6 +45,7 @@
     color: #9ba9cb;
     font-size: 12px;
     text-decoration: none;
+    font-family: Montserrat-Medium;
 }
 #sair-lat:hover{
     color: #224390;
@@ -40,14 +53,23 @@
 
 div.usuario-logado{
     text-align: center;
-    margin: 40px 0px;
+    margin: 30px 0px;
 }
 img.img-usuario-logado{
-    width: 70px; height: auto
+    width: 75px;
+    height: auto;
+    border-radius: 50%;
 }
 h5.nome-usuario-logado{
     font-size: 18px;
     margin-top: 20px;
+    color: #707070;
+    font-family: Montserrat-Medium;
+}
+p.empresa-usuario-logado{
+    margin-top: -8px;
+    font-size: 12px;
+    font-family: Montserrat-Light;
     color: #707070;
 }
 
@@ -55,7 +77,8 @@ h5.nome-usuario-logado{
 /* HOME LATERAL */
 #link-home-lat{
     color:#707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-home-lat:hover{
     background-color: #f2f7ff;
@@ -70,7 +93,8 @@ h5.nome-usuario-logado{
 /* ANALISE LATERAL */
 #link-anali-lat{
     color: #707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-anali-lat:hover{
     background-color: #f2f7ff;
@@ -86,7 +110,8 @@ h5.nome-usuario-logado{
 
 #link-alert-lat{
     color: #707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-alert-lat:hover{
     background-color: #f2f7ff;
@@ -103,13 +128,15 @@ h5.nome-usuario-logado{
     border-radius: 10px;
     font-size: 10px;
     margin-left: 15px;
+    font-family: Montserrat-Medium;
 }
 
 
 /* PEDIDOS LATERAL */
 #link-pedi-lat{
     color: #707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-pedi-lat:hover{
     background-color: #f2f7ff;
@@ -124,7 +151,8 @@ h5.nome-usuario-logado{
 /* USUARIOS LATERAL */
 #link-user-lat{
     color: #707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-user-lat:hover{
     background-color: #f2f7ff;
@@ -139,7 +167,8 @@ h5.nome-usuario-logado{
 /* REPOSICAO LATERAL */
 #link-repo-lat{
     color: #707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-repo-lat:hover{
     background-color: #f2f7ff;
@@ -154,7 +183,8 @@ h5.nome-usuario-logado{
 /* ACADEMY LATERAL */
 #link-acad-lat{
     color: #707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-acad-lat:hover{
     background-color: #f2f7ff;
@@ -169,7 +199,8 @@ h5.nome-usuario-logado{
 /* CONFIG LATERAL */
 #link-conf-lat{
     color: #707070;
-    padding: 8px 10px
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
 }
 #link-conf-lat:hover{
     background-color: #f2f7ff;

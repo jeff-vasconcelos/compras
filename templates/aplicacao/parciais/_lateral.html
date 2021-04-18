@@ -2,8 +2,9 @@
 
     <!-- USUÁRIO LOGADO -->
     <div class="usuario-logado d-none d-sm-block">
-        <img src="img/undraw_profile.svg" class="img-usuario-logado" alt="">
-        <h5 class="nome-usuario-logado">Welleson Lukas</h5>
+        <img src="{{ request.user.usuario.imagem.url }}" class="img-usuario-logado" alt="">
+        <h5 class="nome-usuario-logado">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+        <p class="empresa-usuario-logado">{{ request.user.usuario.empresa }}</p>
 
         <a id="editar-perfil-lat" href="">Editar perfil</a><br>
 

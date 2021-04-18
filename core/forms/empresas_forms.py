@@ -1,5 +1,5 @@
 from django import forms
-from core.models import Empresa
+from core.models.empresas_models import Empresa
 
 
 """ Form para empresas """

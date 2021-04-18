@@ -8,13 +8,16 @@ from django.core.paginator import Paginator, InvalidPage
 from django.db.models.query import QuerySet
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from core.forms.usuarios_form import *
-from usuario.models import *
+#from core.forms.usuarios_form import *
+from core.models.usuarios_models import *
+
+def home_painel(request, template_name='aplicacao/paginas/home.html'):
+    return render(request, template_name)
 
 
 """ Função de Login """
-def login_painel(request, template_name="administracao/login.html"):
-    next = request.GET.get('next', '/painel/administracao')
+def login_painel(request, template_name="aplicacao/login.html"):
+    next = request.GET.get('next', '/painel/home')
 
     if request.method == "POST":
         username = request.POST['username']
@@ -22,25 +25,17 @@ def login_painel(request, template_name="administracao/login.html"):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            if user.is_staff == True:
-
-                if user.is_active == True:
-                    login(request, user)
-                    messages.success(request, "Login realizado com sucesso!")
-                    return HttpResponseRedirect(next)
-                else:
-                    messages.error(request, "Usuário inativo")
-                    return HttpResponseRedirect(settings.LOGIN_URL)
-
+            if user.is_active == True:
+                login(request, user)
+                return HttpResponseRedirect(next)
             else:
-                messages.error(request, "Usuário não tem permissão")
+                messages.error(request, "Usuário inativo")
                 return HttpResponseRedirect(settings.LOGIN_URL)
-
         else:
-            messages.error(request, "Email e/ou Senha incorretos.")
+            messages.error(request, "Usuário e/ou Senha incorretos.")
             return HttpResponseRedirect(settings.LOGIN_URL)
 
-    return render(request, template_name, {'redirect_to':next})
+    return render(request, template_name, {'redirect_to': next})
 
 
 """ Função de Logout """
@@ -49,20 +44,20 @@ def logout_painel(request):
     return HttpResponseRedirect(settings.LOGIN_URL)
 
 
-""" Acesso a Ferramenta """
+""" Acesso a Ferramenta
 @login_required
 def painel_administrativo(request, template_name="administracao/painel.html"):
     if request.user.is_staff:
         return render(request, template_name)
 
-
-""" Acesso ao perfil de administração """
+"""
+""" Acesso ao perfil de administração 
 @login_required
 def perfil_admin(request, template_name="administracao/usuarios/perfil_admin.html"):
     return render(request, template_name)
 
-
-""" Editar perfil de administração """
+"""
+""" Editar perfil de administração 
 @login_required
 def editar_admin(request, template_name="administracao/usuarios/editar_admin.html"):
     #usuario = get_object_or_404(Usuario, pk=request.user.pk)
@@ -81,8 +76,9 @@ def editar_admin(request, template_name="administracao/usuarios/editar_admin.htm
 
     return render(request, template_name, {'form': form})
 
-
-##### USUÁRIOS - SERVIDORES CBM #####
+"""
+##### USUÁRIOS -  #####
+"""
 @login_required
 def cadastrar_usuario(request, template_name="administracao/usuarios/cadastro_usuario.html"):
     try:
@@ -173,3 +169,4 @@ def inativar_usuario(request, pk):
     else:
         messages.success(request, "Você não tem permissão para acessar a página.")
         return redirect('painel_administrativo')
+"""
