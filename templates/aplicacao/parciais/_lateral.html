@@ -13,7 +13,7 @@
         <h5 class="nome-usuario-logado">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
         <p class="empresa-usuario-logado">{{ request.user.usuario.empresa }}</p>
 
-        <a id="editar-perfil-lat" href="{% url 'editar-perfil-usuario' %}">Editar perfil</a><br>
+        <a id="editar-perfil-lat" href="{% url 'perfil-usuario' %}">Editar perfil</a><br>
 
         <a id="sair-lat" href="" data-toggle="modal" data-target="#logoutModal">Sair
             <i class="fas fa-sign-out-alt"></i>
@@ -22,7 +22,7 @@
 
     <!-- HOME -->
     <li id="home-lat" class="nav-item">
-        <a id="link-home-lat" class="nav-link" href="">
+        <a id="link-home-lat" class="nav-link" href="{% url 'home_painel' %}">
             <i id="icone-home" class="fas fa-fw fa-home"></i>
             <span>Home</span></a>
     </li>
@@ -53,11 +53,13 @@
     </li>
 
     <!-- USUÁRIOS -->
-    <li id="user-lat" class="nav-item">
-        <a id="link-user-lat" class="nav-link" href="#">
-            <i id="icone-user" class="fas fa-fw fa-user-friends"></i>
-            <span>Cadastro de usuários</span></a>
-    </li>
+    {% if request.user.usuario.tipo == "Administrador" %}
+        <li id="user-lat" class="nav-item">
+            <a id="link-user-lat" class="nav-link" href="{% url 'listar-usuarios' %}">
+                <i id="icone-user" class="fas fa-fw fa-user-friends"></i>
+                <span>Usuários</span></a>
+        </li>
+    {% endif %}
 
     <!-- CICLO DE REPOSIÇÃO -->
     <li id="repo-lat" class="nav-item">
@@ -73,13 +75,14 @@
             <span>Academy</span></a>
     </li>
 
-    <!-- CONFIGURAÇÕES -->
-    <li id="conf-lat" class="nav-item">
-        <a id="link-conf-lat" class="nav-link" href="#">
-            <i id="icone-conf" class="fas fa-fw fa-cog"></i>
-            <span>Configurações</span></a>
-    </li>
-
+    {% if request.user.usuario.tipo == "Administrador" %}
+        <!-- CONFIGURAÇÕES -->
+        <li id="conf-lat" class="nav-item">
+            <a id="link-conf-lat" class="nav-link" href="#">
+                <i id="icone-conf" class="fas fa-fw fa-cog"></i>
+                <span>Configurações</span></a>
+        </li>
+    {% endif %}
     <!-- BOTAO RECOLHER LATERAL-->
     <div class="botao-lateral text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

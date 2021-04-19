@@ -58,54 +58,7 @@ def perfil_admin(request, template_name="administracao/usuarios/perfil_admin.htm
 
 """
 
-@login_required
-def editar_perfil(request, template_name="aplicacao/paginas/usuarios/usuario_form.html"):
-
-    try:
-        usuario = get_object_or_404(Usuario, pk=request.user.pk)
-        user = get_object_or_404(User, pk=request.user.pk)
-
-        print(user)
-        print(usuario)
-
-        form = UsersForm(request.POST, instance=user)
-        form2 = UsuariosForm(request.POST, request.FILES, instance=usuario)
-
-        if request.method == 'POST':
-
-            password_confirm = request.POST['password_confirm']
-            password = request.POST['password']
-
-            if password == password_confirm:
-                if form.is_valid():
-                    if form2.is_valid():
-                        user = form.save(commit=False)
-                        if user.password != "":
-                            user.set_password(user.password)
-                        user.is_active = True
-                        user.save()
-
-                        usuario = form2.save(commit=False)
-                        usuario.save()
-
-                        messages.success(request, "Perfil atualizado com sucesso!")
-                        return redirect('perfil_admin')
-                    else:
-                        messages.error(request, "Por favor, verifique os campos obrigatórios!")
-                else:
-                    messages.error(request, "Por favor, verifique os campos obrigatórios!")
-            else:
-                messages.error(request, "Senhas não conferem. Tente novamente!")
-        else:
-            form = UsersForm(instance=user)
-            form2 = UsuariosForm(instance=usuario)
-    except Exception:
-
-        messages.error(request, "Erro ao cadastrar usuário, por favor verifique os campos informados!")
-    return render(request, template_name, {'form': form, 'form2': form2})
-
-
-
+""" Função de cadastro de usuários """
 @login_required
 def cadastrar_usuario(request, template_name="aplicacao/paginas/usuarios/usuario_form.html"):
     try:
@@ -142,6 +95,108 @@ def cadastrar_usuario(request, template_name="aplicacao/paginas/usuarios/usuario
     except Exception:
         messages.error(request, "Erro ao cadastrar usuário, por favor verifique os campos informados!")
     return render(request, template_name, {'form': form, 'form2': form2})
+
+
+""" Função para editar perfil do usuário logado """
+@login_required
+def editar_perfil(request, template_name="aplicacao/paginas/usuarios/usuario_form.html"):
+
+    try:
+        usuario = get_object_or_404(Usuario, pk=request.user.pk)
+        user = get_object_or_404(User, pk=request.user.pk)
+
+        form = UsersForm(request.POST, instance=user)
+        form2 = UsuariosForm(request.POST, request.FILES, instance=usuario)
+
+        if request.method == 'POST':
+
+            password_confirm = request.POST['password_confirm']
+            password = request.POST['password']
+
+            if password == password_confirm:
+                if form.is_valid():
+                    if form2.is_valid():
+                        user = form.save(commit=False)
+                        if user.password != "":
+                            user.set_password(user.password)
+                        user.is_active = True
+                        user.save()
+
+                        usuario = form2.save(commit=False)
+                        usuario.save()
+
+                        messages.success(request, "Perfil atualizado com sucesso!")
+                        return redirect('login')
+                    else:
+                        messages.error(request, "Por favor, verifique os campos obrigatórios!")
+                else:
+                    messages.error(request, "Por favor, verifique os campos obrigatórios!")
+            else:
+                messages.error(request, "Senhas não conferem. Tente novamente!")
+        else:
+            form = UsersForm(instance=user)
+            form2 = UsuariosForm(instance=usuario)
+    except Exception:
+
+        messages.error(request, "Erro ao cadastrar usuário, por favor verifique os campos informados!")
+    return render(request, template_name, {'form': form, 'form2': form2})
+
+
+""" Listando usuários cadastrados """
+@login_required
+def listar_usuarios(request, template_name="aplicacao/paginas/usuarios/usuarios.html"):
+    if request.user.usuario.tipo == "Administrador":
+        usuario = Usuario.objects.all()
+        usuarios = {'usuarios': usuario}
+        return render(request, template_name, usuarios)
+    else:
+        messages.error(request, "Ops, o usuário não tem permissão!")
+        return redirect('home_painel')
+
+
+""" Função para editar perfil do usuário logado 
+@login_required
+def editar_perfil(request, pk, template_name="aplicacao/paginas/usuarios/usuario_form.html"):
+
+    try:
+        usuario = get_object_or_404(Usuario, pk=pk)
+        user = get_object_or_404(User, pk=pk)
+
+        form = UsersForm(request.POST)
+        form2 = UsuariosForm(request.POST, request.FILES)
+
+        if request.method == 'POST':
+            password_confirm = request.POST['password_confirm']
+            password = request.POST['password']
+
+            if password == password_confirm:
+                if form.is_valid():
+                    if form2.is_valid():
+                        user = form.save(commit=False)
+                        if user.password != "":
+                            user.set_password(user.password)
+                        user.is_active = True
+                        user.save()
+
+                        usuario = form2.save(commit=False)
+                        usuario.save()
+
+                        messages.success(request, "Perfil atualizado com sucesso!")
+                        return redirect('perfil_admin')
+                    else:
+                        messages.error(request, "Por favor, verifique os campos obrigatórios!")
+                else:
+                    messages.error(request, "Por favor, verifique os campos obrigatórios!")
+            else:
+                messages.error(request, "Senhas não conferem. Tente novamente!")
+        else:
+            form = UsersForm()
+            form2 = UsuariosForm()
+    except Exception:
+
+        messages.error(request, "Erro ao cadastrar usuário, por favor verifique os campos informados!")
+    return render(request, template_name, {'form': form, 'form2': form2})
+"""
 """
 
 @login_required
