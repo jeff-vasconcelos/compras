@@ -60,6 +60,11 @@ img.img-usuario-logado{
     height: auto;
     border-radius: 50%;
 }
+img.img-usuario-logado-mobile{
+    width: 40px;
+    height: auto;
+    border-radius: 50%;
+}
 h5.nome-usuario-logado{
     font-size: 18px;
     margin-top: 20px;

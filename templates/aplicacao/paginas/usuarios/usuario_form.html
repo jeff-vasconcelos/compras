@@ -1,0 +1,96 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block conteudo %}
+
+    <h2>Cadastro de usuário</h2>
+    <hr>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-row">
+
+        <div class="form-group col-md-6">
+            <label for="firstname">Primeiro nome</label>
+            {{ form.first_name }}
+            <div class="invalid-feedback">
+                {{ form.first_name.errors }}
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="lastname">Último nome</label>
+            {{ form.last_name }}
+            <div class="invalid-feedback">
+                {{ form.last_name.errors }}
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="username">Usuário</label>
+            {{ form.username }}
+            <div class="invalid-feedback">
+                {{ form.username.errors }}
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="email">E-mail</label>
+            {{ form.email }}
+            <div class="invalid-feedback">
+                {{ form.email.errors }}
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="tipo">Tipo</label>
+            {{ form2.tipo }}
+            <div class="invalid-feedback">
+                {{ form2.tipo.errors }}
+            </div>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="imagem">Imagem</label>
+            {{ form2.imagem }}
+            <div class="invalid-feedback">
+                {{ form2.imagem.errors }}
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="password">Senha</label>
+            {{ form.password }}
+            <div class="invalid-feedback">
+                {{ form.password.errors }}
+            </div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="password_confirm">Confirmar senha</label>
+            <input name="password_confirm" type="password" class="form-control" required><br>
+        </div>
+        {% if request.user.usuario.tipo == "Administrador" %}
+            <div class="form-group col-md-4">
+                <div class="form-check">
+                    {{ form.is_active }}
+                    <label class="form-check-label" for="gridCheck">
+                        Ativo
+                    </label>
+                </div>
+            </div>
+        {% else %}
+
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-success btn-sm">
+        <i class="fas fa-save"></i> Salvar
+    </button>
+
+    <a class="btn btn-danger btn-sm" href="{% url 'home_painel' %}" role="button">
+        <i class="fas fa-times-circle"></i> Cancelar
+    </a>
+
+</form>
+
+{% endblock conteudo %}

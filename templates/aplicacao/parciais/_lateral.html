@@ -1,12 +1,19 @@
+{% load static %}
 <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- USUÁRIO LOGADO -->
     <div class="usuario-logado d-none d-sm-block">
-        <img src="{{ request.user.usuario.imagem.url }}" class="img-usuario-logado" alt="">
+
+        {% if request.user.usuario.imagem %}
+            <img src="{{ request.user.usuario.imagem.url }}" class="img-usuario-logado" alt="">
+        {% else %}
+            <img src="{% static 'aplicacao/img/undraw_profile.svg' %}" class="img-usuario-logado" alt="">
+        {% endif  %}
+
         <h5 class="nome-usuario-logado">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
         <p class="empresa-usuario-logado">{{ request.user.usuario.empresa }}</p>
 
-        <a id="editar-perfil-lat" href="">Editar perfil</a><br>
+        <a id="editar-perfil-lat" href="{% url 'editar-perfil-usuario' %}">Editar perfil</a><br>
 
         <a id="sair-lat" href="" data-toggle="modal" data-target="#logoutModal">Sair
             <i class="fas fa-sign-out-alt"></i>

@@ -26,14 +26,14 @@ class Permissao(models.Model):
 """ Modelo de usuário relacionado a empresas """
 class Usuario(models.Model):
     TIPO = (
-        ('admin', 'Administrador'),
-        ('comp', 'Comprador')
+        ('Administrador', 'Administrador'),
+        ('Comprador', 'Comprador')
     )
-    tipo = models.CharField(max_length=15, null=True, blank=True, choices=TIPO, verbose_name='Tipo')
+    tipo = models.CharField(max_length=15, null=False, blank=False, choices=TIPO, verbose_name='Tipo')
     imagem = models.ImageField(upload_to=get_file_path, blank=True, null=True)
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True,
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=False, blank=False,
                                 related_name='usuario')
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, blank=True,
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=False, blank=False,
                                 related_name='empresa')
 
     def __str__(self):

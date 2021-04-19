@@ -8,7 +8,7 @@ from django.core.paginator import Paginator, InvalidPage
 from django.db.models.query import QuerySet
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-#from core.forms.usuarios_form import *
+from core.forms.usuarios_forms import *
 from core.models.usuarios_models import *
 
 def home_painel(request, template_name='aplicacao/paginas/home.html'):
@@ -57,62 +57,92 @@ def perfil_admin(request, template_name="administracao/usuarios/perfil_admin.htm
     return render(request, template_name)
 
 """
-""" Editar perfil de administração 
-@login_required
-def editar_admin(request, template_name="administracao/usuarios/editar_admin.html"):
-    #usuario = get_object_or_404(Usuario, pk=request.user.pk)
-    user = get_object_or_404(User, pk=request.user.pk)
-    if request.method == 'POST':
-        form = UsuarioAdminForm(request.POST, instance=user)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(user.password)
-            user.is_active = True
-            user.save()
-            messages.success(request, "Perfil atualizado com sucesso!")
-            return redirect('perfil_admin')
-    else:
-        form = UsuarioAdminForm(instance=user)
 
-    return render(request, template_name, {'form': form})
-
-"""
-##### USUÁRIOS -  #####
-"""
 @login_required
-def cadastrar_usuario(request, template_name="administracao/usuarios/cadastro_usuario.html"):
+def editar_perfil(request, template_name="aplicacao/paginas/usuarios/usuario_form.html"):
+
     try:
-        form2 = UsuarioForm(request.POST or None)
-        form = UsuarioAdminForm(request.POST or None)
+        usuario = get_object_or_404(Usuario, pk=request.user.pk)
+        user = get_object_or_404(User, pk=request.user.pk)
+
+        print(user)
+        print(usuario)
+
+        form = UsersForm(request.POST, instance=user)
+        form2 = UsuariosForm(request.POST, request.FILES, instance=usuario)
+
+        if request.method == 'POST':
+
+            password_confirm = request.POST['password_confirm']
+            password = request.POST['password']
+
+            if password == password_confirm:
+                if form.is_valid():
+                    if form2.is_valid():
+                        user = form.save(commit=False)
+                        if user.password != "":
+                            user.set_password(user.password)
+                        user.is_active = True
+                        user.save()
+
+                        usuario = form2.save(commit=False)
+                        usuario.save()
+
+                        messages.success(request, "Perfil atualizado com sucesso!")
+                        return redirect('perfil_admin')
+                    else:
+                        messages.error(request, "Por favor, verifique os campos obrigatórios!")
+                else:
+                    messages.error(request, "Por favor, verifique os campos obrigatórios!")
+            else:
+                messages.error(request, "Senhas não conferem. Tente novamente!")
+        else:
+            form = UsersForm(instance=user)
+            form2 = UsuariosForm(instance=usuario)
+    except Exception:
+
+        messages.error(request, "Erro ao cadastrar usuário, por favor verifique os campos informados!")
+    return render(request, template_name, {'form': form, 'form2': form2})
+
+
+
+@login_required
+def cadastrar_usuario(request, template_name="aplicacao/paginas/usuarios/usuario_form.html"):
+    try:
+        form = UsersForm(request.POST, request.FILES)
+        form2 = UsuariosForm(request.POST, request.FILES)
         if request.method == "POST":
             password_confirm = request.POST['password_confirm']
             password = request.POST['password']
-            tipo = request.POST['tipo']
-            admin = "admin"
+            empresa = request.user.usuario.empresa
+
             if password == password_confirm:
                 if form.is_valid():
-                    user = form.save(commit=False)
-                    user.set_password(user.password)
-                    if tipo == admin:
-                        user.is_staff = True
+                    if form2.is_valid():
+                        user = form.save(commit=False)
+                        user.set_password(user.password)
+                        user.is_active = True
+                        user.save()
+
+                        user2 = User.objects.get(username=user.username)
+                        usuario = form2.save(commit=False)
+                        usuario.usuario = user2
+                        usuario.empresa = empresa
+                        usuario.save()
+
+                        messages.success(request, "Cadastrado com sucesso!")
+                        return redirect('home_painel')
                     else:
-                        user.is_staff = False
-                    user.is_active = True
-                    user.save()
-                    user2 = User.objects.get(username=user.username)
-                    usuario = form2.save(commit=False)
-                    usuario.user = user2
-                    usuario.save()
-                    messages.success(request, "Cadastrado com sucesso!")
-                    return redirect('listar_usuarios')
+                        messages.error(request, "Por favor, verifique os campos obrigatórios!")
                 else:
-                    messages.error(request, "Usuário ja existe!")
+                    messages.error(request, "Por favor, verifique os campos obrigatórios!")
+
             else:
                 messages.error(request, "Senhas não conferem. Tente novamente!")
     except Exception:
-        messages.error(request, "Erro ao cadastrar usuário!")
+        messages.error(request, "Erro ao cadastrar usuário, por favor verifique os campos informados!")
     return render(request, template_name, {'form': form, 'form2': form2})
-
+"""
 
 @login_required
 def listar_usuarios(request, template_name="administracao/usuarios/listar_usuarios.html"):
