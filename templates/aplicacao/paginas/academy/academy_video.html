@@ -1,0 +1,19 @@
+{% extends 'aplicacao/base.html' %}
+{% block conteudo %}
+    <h2>{{ video.titulo }}</h2>
+    <div class="col-6" btn btn-primary>
+        {% if prevpost %}
+            <a href="{{ STATIC_URL }}/painel/teste2/{{ prevpost.slug }}">{{ prevpost }}</a>
+        {% else %}
+
+        {% endif %}
+    </div>
+
+    <div class="col-6" btn btn-primary>
+        {% if nextpost %}
+            <a href="{{ STATIC_URL }}/painel/teste2/{{ nextpost.slug }}">{{ nextpost }}</a>
+        {% else %}
+
+        {% endif %}
+    </div>
+{% endblock conteudo %}

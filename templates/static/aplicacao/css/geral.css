@@ -8,5 +8,9 @@ body{
 }
 
 div.container-conteudo{
-    margin-top: 10px;
+    margin-top: 20px;
+}
+div.formularios-usuario{
+    font-size: 14px;
+    font-weight: bold;
 }

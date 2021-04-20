@@ -7,7 +7,7 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    <div class="form-row">
+    <div class="form-row formularios-usuario">
 
         <div class="form-group col-md-6">
             <label for="firstname">Primeiro nome</label>
@@ -87,7 +87,7 @@
         <i class="fas fa-save"></i> Salvar
     </button>
 
-    <a class="btn btn-danger btn-sm" href="{% url 'home_painel' %}" role="button">
+    <a class="btn btn-danger btn-sm" href="{% url 'listar-usuarios' %}" role="button">
         <i class="fas fa-times-circle"></i> Cancelar
     </a>
 

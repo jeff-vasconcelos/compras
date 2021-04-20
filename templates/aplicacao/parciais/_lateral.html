@@ -13,7 +13,7 @@
         <h5 class="nome-usuario-logado">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
         <p class="empresa-usuario-logado">{{ request.user.usuario.empresa }}</p>
 
-        <a id="editar-perfil-lat" href="{% url 'perfil-usuario' %}">Editar perfil</a><br>
+        <a id="editar-perfil-lat" href="{% url 'editar-perfil-usuario' %}">Editar perfil</a><br>
 
         <a id="sair-lat" href="" data-toggle="modal" data-target="#logoutModal">Sair
             <i class="fas fa-sign-out-alt"></i>
@@ -40,8 +40,8 @@
             <i id="icone-alert" class="fas fa-fw fa-envelope"></i>
 
             <span>Alertas
-                        <span id="contador-alerta">23</span>
-                    </span>
+                <span id="contador-alerta">23</span>
+            </span>
         </a>
     </li>
 
