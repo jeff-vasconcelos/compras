@@ -14,7 +14,7 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
 
 """ Função de Login """
-def login_painel(request, template_name="aplicacao/login.html"):
+def login_painel(request, template_name="aplicacao/login/login.html"):
     next = request.GET.get('next', '/painel/home')
 
     if request.method == "POST":

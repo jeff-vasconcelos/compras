@@ -8,10 +8,20 @@
     src: url(../fonts/RBNo3-1-Medium.otf);
 }
 
+@font-face {
+    font-family: Montserrat-Medium;
+    src: url(../fonts/Montserrat-Medium.ttf);
+}
+
+@font-face {
+    font-family: Montserrat-Light;
+    src: url(../fonts/Montserrat-Light.ttf);
+}
+
 body {
-    font-family: RBN-Extralight;
+    font-family: Montserrat-Medium;
     height: 100%;
-    background-color: #FFFFFF;
+    background-color: #f0f2f5;
 }
 
 nav.nav-topo{
@@ -24,10 +34,10 @@ img.logo-cluster{
 }
 
 div.main-recuperar{
-    background-color: #fbf8f8;
+    background-color: #ffffff;
     max-width: 350px;
-    margin-top: 8%;
-    padding: 40px 20px 40px 20px;
+    margin-top: 5%;
+    padding: 30px 20px 20px 20px;
     border-radius: 10px;
     border: solid 1px #224390;
 }
@@ -38,7 +48,7 @@ input.form-control{
     font-size: 16px;
 }
 
-button.btn-continuar{
+.btn-continuar{
     width: 100%;
     background-color: #224390;
     border: none;
@@ -47,7 +57,20 @@ button.btn-continuar{
     margin-top: 30px;
 }
 
-button.btn-continuar:hover{
+.btn-continuar:hover{
+    background-color: #4d67a3;
+}
+
+button.btn-continuar-r{
+    width: 100%;
+    background-color: #224390;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+button.btn-continuar-r:hover{
     background-color: #4d67a3;
 }
 
@@ -67,4 +90,34 @@ h4.texto-recuperar{
     margin-bottom: 20px;
     font-family: RBN-Medium;
     color: #828282;
+}
+p.texto-rec-senha{
+    font-family: Montserrat-Light;
+    font-size: 14px;
+}
+
+span.helptext{
+    margin-top: 20px;
+    padding-top: 50px;
+    font-size: 12px;
+}
+
+#id_new_password1{
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    margin-bottom: 10px;
+    font-size: 16px;
+    width: 100%;
+    height: calc(1.5rem + 1rem + 2px);
+    padding: .5rem 1rem;
+}
+#id_new_password2{
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    margin-bottom: -5px;
+    font-size: 16px;
+    width: 100%;
+    height: calc(1.5rem + 1rem + 2px);
+    padding: .5rem 1rem;
+
 }
