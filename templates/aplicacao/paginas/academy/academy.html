@@ -1,28 +1,16 @@
 {% extends 'aplicacao/base.html' %}
 
 {% block conteudo %}
-<div class="row">
+    <h3 style="text-align: center">Academy - Insight</h3>
+    <div class="row">
+    {% for video in videos %}
 
-    <div class="col" style="text-align: center">
-        <img src="https://source.unsplash.com/random/150x150">
-        <p>titulo</p>
+        <div class="col" style="text-align: center">
+            <a href="{% url 'academy-video' video.slug %}">
+                <img src="https://source.unsplash.com/random/150x150">
+                <p>{{ video.titulo }}</p>
+            </a>
+        </div>
+    {% endfor %}
     </div>
-    <div class="col">
-        <img src="https://source.unsplash.com/random/150x150">
-        <p>titulo</p>
-    </div>
-    <div class="col">
-        <img src="https://source.unsplash.com/random/150x150">
-        <p>titulo</p>
-    </div>
-    <div class="col">
-        <img src="https://source.unsplash.com/random/150x150">
-        <p>titulo</p>
-    </div>
-    <div class="col">
-        <img src="https://source.unsplash.com/random/150x150">
-        <p>titulo</p>
-    </div>
-
-</div>
 {% endblock conteudo %}

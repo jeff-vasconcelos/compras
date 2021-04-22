@@ -8,8 +8,8 @@ from core.views.academy_views import *
 urlpatterns = [
     path('home/', home_painel, name='home_painel'),
 
-    path('teste/', teste, name='teste'),
-    path('teste2/<slug>', paginacao, name='pagteste'),
+    path('academy/', academy, name='academy'),
+    path('academy/<slug>', video_academy, name='academy-video'),
 
     path('cadastrar/usuario', cadastrar_usuario, name='cadastrar-usuario'),
     path('editar/perfil-usuario', editar_perfil, name='editar-perfil-usuario'),

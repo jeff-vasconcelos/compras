@@ -1,21 +1,16 @@
 from django.shortcuts import render
 from core.models.academy_models import *
 
-def teste(request, template_name='aplicacao/paginas/academy/academy.html'):
-    return render(request, template_name)
 
-def paginacao(request, slug):
-    videos = Academy.objects.get(slug=slug)
+def academy(request, template_name='aplicacao/paginas/academy/academy.html'):
+    videos = Academy.objects.all()
+    return render(request, template_name, {'videos': videos})
 
-    nextpost = Academy.objects.filter(id__gt=videos.id).order_by('id').first()
-    prevpost = Academy.objects.filter(id__lt=videos.id).order_by('id').last()
 
-    return render(request, 'aplicacao/paginas/academy/academy_video.html',
-                  {'video': videos, 'prevpost': prevpost,'nextpost': nextpost})
+def video_academy(request, slug, template_name='aplicacao/paginas/academy/academy_video.html'):
+    video = Academy.objects.get(slug=slug)
+    nextacad = Academy.objects.filter(id__gt=video.id).order_by('id').first()
+    prevacad = Academy.objects.filter(id__lt=video.id).order_by('id').last()
 
-def PaginaPublico(request, slug):
-    pagina = get_object_or_404(Pagina, slug=slug)
-
-    context = {'page':pagina, 'arquivos':arquivos}
-
-    return render(request, "publico/paginas/pagina.html", context)
+    return render(request, template_name,
+                  {'video': video, 'prevacad': prevacad, 'nextacad': nextacad})

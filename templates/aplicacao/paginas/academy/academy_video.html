@@ -1,19 +1,63 @@
 {% extends 'aplicacao/base.html' %}
 {% block conteudo %}
-    <h2>{{ video.titulo }}</h2>
-    <div class="col-6" btn btn-primary>
-        {% if prevpost %}
-            <a href="{{ STATIC_URL }}/painel/teste2/{{ prevpost.slug }}">{{ prevpost }}</a>
-        {% else %}
+    <div class="row">
+        <div class="col-md-1 d-none d-md-block d-sm-none"></div>
+        <div class="col-md-10" style="padding: 10px 0px">
+            <div class="texto-titulo-academy" style="text-align: center; margin-bottom: 20px">
+                <h3>{{ video.titulo }}</h3>
+            </div>
 
-        {% endif %}
-    </div>
+            <div class="video-academy">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video.cod_video }}?rel=0" allowfullscreen></iframe>
+                </div>
+            </div>
 
-    <div class="col-6" btn btn-primary>
-        {% if nextpost %}
-            <a href="{{ STATIC_URL }}/painel/teste2/{{ nextpost.slug }}">{{ nextpost }}</a>
-        {% else %}
+            <div class="row" style="margin-top: 20px; margin-bottom: 20px">
 
-        {% endif %}
+                <div class="col-5" style="text-align: left">
+                     {% if prevacad %}
+                         <a href="{% url 'academy-video' prevacad.slug %}" type="button"
+                            class="btn btn-secondary btn-sm d-none d-md-block d-sm-none" title="Vídeo anterior">
+                             <i class="fas fa-chevron-left"></i>&emsp;{{ prevacad.titulo }}
+                         </a>
+
+                         <a href="{% url 'academy-video' prevacad.slug %}" type="button"
+                                class="btn btn-secondary btn-sm d-sm-block d-md-none" title="Vídeo anterior">
+                             <i class="fas fa-chevron-left"></i>
+                         </a>
+                    {% else %}
+
+                    {% endif %}
+                </div>
+
+                <div class="col-2"></div>
+
+                <div class="col-5" style="text-align: right">
+                    {% if nextacad %}
+                        <a href="{% url 'academy-video' nextacad.slug %}" type="button"
+                           class="btn btn-secondary btn-sm d-none d-md-block d-sm-none" title="Próximo vídeo">
+                            {{ nextacad.titulo }}&emsp;<i class="fas fa-chevron-right"></i>
+                        </a>
+
+                        <a href="{% url 'academy-video' nextacad.slug %}" type="button"
+                           class="btn btn-secondary btn-sm d-sm-block d-md-none" title="Próximo vídeo">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    {% else %}
+
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="descricao-academy">
+                <p>
+                    {{ video.descricao }}
+                </p>
+            </div>
+
+        </div>
+        <div class="col-md-1 d-none d-md-block d-sm-none"></div>
     </div>
 {% endblock conteudo %}
