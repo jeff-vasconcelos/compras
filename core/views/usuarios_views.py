@@ -42,6 +42,7 @@ def logout_painel(request):
     return HttpResponseRedirect(settings.LOGIN_URL)
 
 
+""" Cadastrar usuários """
 @login_required
 def cadastrar_usuario(request, template_name="aplicacao/paginas/usuarios/usuario_cad.html"):
     if request.user.usuario.tipo == "Administrador":
@@ -186,6 +187,7 @@ def editar_usuario(request, pk, template_name="aplicacao/paginas/usuarios/usuari
     return render(request, template_name, {'form': form, 'form2': form2})
 
 
+""" Inativar usuários """
 @login_required
 def inativar_usuario(request, pk):
     if request.user.usuario.tipo == "Administrador":

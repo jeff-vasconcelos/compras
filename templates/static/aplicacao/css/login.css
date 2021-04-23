@@ -76,3 +76,10 @@ h5.texto-rodape{
     margin-top: 20px;
     color: #000000;
 }
+
+.footer {
+    position: fixed;
+    bottom:0;
+    text-align: center;
+    width: 100%;
+}

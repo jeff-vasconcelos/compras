@@ -25,7 +25,7 @@ body {
 }
 
 nav.nav-topo{
-    background-color: #679bf9;
+    background-color: #f0f2f5;
 }
 
 img.logo-cluster{
@@ -81,9 +81,9 @@ small.texto-link-cancelar{
 
 h5.texto-rodape{
     text-align: center;
-    font-size: 12px;
-    margin-top: 50px;
-    color: #707070
+    font-size: 10px;
+    margin-top: 20px;
+    color: #000000;
 }
 
 h4.texto-recuperar{
@@ -120,4 +120,11 @@ span.helptext{
     height: calc(1.5rem + 1rem + 2px);
     padding: .5rem 1rem;
 
+}
+
+.footer {
+    position: fixed;
+    bottom:0;
+    text-align: center;
+    width: 100%;
 }
