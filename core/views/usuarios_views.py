@@ -9,10 +9,6 @@ from core.forms.usuarios_forms import *
 from core.models.usuarios_models import *
 
 
-def home_painel(request, template_name='aplicacao/paginas/home.html'):
-    return render(request, template_name)
-
-
 """ Função de Login """
 def login_painel(request, template_name="aplicacao/login/login.html"):
     next = request.GET.get('next', '/painel/home')

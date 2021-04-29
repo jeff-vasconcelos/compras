@@ -3,10 +3,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from core.views.usuarios_views import *
 from core.views.academy_views import *
+from core.views.home_views import *
+from core.views.analise_views import *
 
 
 urlpatterns = [
     path('home/', home_painel, name='home_painel'),
+    path('analise/', analise_painel, name='analise_painel'),
 
     path('academy/', academy, name='academy'),
     path('academy/<slug>', video_academy, name='academy-video'),

@@ -20,10 +20,11 @@ div.cards-home-sifrao{
     margin-top: auto;
     margin-bottom: auto;
     font-size: 16px;
+    padding-right: 0px;
 }
 div.cards-home-valor{
     padding-left: 0px;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
     margin-top: auto;
     margin-bottom: auto;
