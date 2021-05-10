@@ -23,6 +23,5 @@ def valida_produto(data):
             return True
         else:
             return False
-
     else:
         return False
