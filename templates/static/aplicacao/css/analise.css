@@ -1,0 +1,68 @@
+label.label-analise-tabela {
+    font-size: 14px;
+}
+
+#div-analise-tabela {
+    padding: 5px 15px;
+}
+
+#div-tabela {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#tabela-analise {
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+}
+input.input-tabela-analise {
+    max-width: 65px;
+
+    border-radius: 5px;
+    border: 1px solid #d1d3e2;
+}
+th.tabela-info-th{
+    border-right: 1px solid;
+    font-size: 14px;
+}
+th.tabela-info-th-d{
+    font-size: 14px;
+}
+td.tabela-info{
+    border-right: 1px solid;
+}
+th.tabela-info{
+    border-right: 1px solid;
+}
+div.botoes-analise-tabela {
+    margin-top: 10px;
+    text-align: right;
+    padding: 10px 0px;
+}
+button.ver-pedido {
+    background-color: #4791ff;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+}
+button.adicionar-item {
+    background-color: #224390;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+#div-grafico-um {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 5px 15px;
+}
+
+p.texto-grafico-analise {
+    text-align: center;
+    margin-bottom: 0px;
+}
