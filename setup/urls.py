@@ -17,16 +17,26 @@ from django.contrib import admin
 from django.urls import path, include
 from api.views import ProdutoViewSet
 from rest_framework import routers
+from django.conf import settings
+from django.conf.urls.static import static
+from rest_framework.authtoken import views
 
 """ Rotas da API de produtos """
 router = routers.DefaultRouter()
 router.register('produtos', ProdutoViewSet)
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('insight/', include('core.urls'))
+    path('api-token-auth', views.obtain_auth_token, name='api-token-auth'),
+    path('administracao/painel/', include('core.urls.urls_administracao')),
+    path('painel/', include('core.urls.urls_aplicacao')),
+    path('acesso/', include('core.urls.urls_login')),
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = 'Administração Insight'
 admin.site.site_title = 'Ecluster'
