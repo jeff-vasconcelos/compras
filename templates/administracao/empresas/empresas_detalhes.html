@@ -1,0 +1,160 @@
+{% extends 'administracao/base.html' %}
+
+{% block conteudo %}
+<div class="row">
+    <div class="col-6">
+        <h2>{{ empresa.razao_social }}</h2>
+    </div>
+    <div class="col-6">
+
+        {% if empresa.ativo == True %}
+
+        <a title="inativar" href="#" data-toggle="modal" data-target="#confirm" type="button"
+           class="float-right btn btn-danger btn-sm">
+            <i class="fas fa-ban"></i> Inativar
+        </a>
+
+        {% else %}
+
+         <a href="{% url 'desativar_empresa' empresa.pk %}" type="button" class="float-right btn btn-success btn-sm">
+            <i class="fas fa-check-circle"></i> Ativar
+         </a>
+
+        {% endif %}
+
+        <a href="{% url 'editar_empresa' empresa.pk %}" type="button" style="margin: 0px 5px" class="float-right btn btn-primary btn-sm">
+            <i class="fas fa-pen"></i> Editar
+         </a>
+    </div>
+</div>
+
+<style>
+    div.col-empr-detalhes{
+        margin: 20px 0px;
+    }
+    hr{
+        margin-top: 5px;
+    }
+    h4.titulo-detalhes-emp{
+
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-4 col-sm-12 col-empr-detalhes">
+        <h4 class="titulo-detalhes-emp"><b>Empresa</b></h4>
+        <hr>
+        <div class="empr-detalhes">
+            <strong>Cod. Empresa: </strong>{{ empresa.id }}<br>
+            <strong>Nome Fantasia: </strong>{{ empresa.nome_fantasia }}<br>
+            <strong>Razão Social: </strong>{{ empresa.razao_social }}<br>
+            <strong>CNPJ: </strong>{{ empresa.cnpj }}<br>
+            <strong>Inscrição Estadual: </strong>{{ empresa.iestadual }}<br>
+            <strong>Responsável Legal: </strong>{{ empresa.resp_leg }}<br>
+            <strong>Responsável Técnico: </strong>{{ empresa.resp_tec }}<br>
+            <strong>E-mail: </strong>{{ empresa.email }}<br>
+            <strong>Telefone: </strong>{{ empresa.telefone }}<br>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-12 col-empr-detalhes">
+        <h4 class="titulo-detalhes-emp"><b>Endereço</b></h4>
+        <hr>
+        <div class="empr-detalhes">
+            <strong>Logradouro: </strong>{{ empresa.endereco }}<br>
+            <strong>Número: </strong>{{ empresa.numero }}<br>
+            <strong>Bairro: </strong>{{ empresa.bairro }}<br>
+            <strong>Cidade: </strong>{{ empresa.cidade }}<br>
+            <strong>Estado: </strong>{{ empresa.estado }}<br>
+            <strong>CEP: </strong>{{ empresa.cep }}<br>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-12 col-empr-detalhes">
+        <h4 class="titulo-detalhes-emp"><b>+ Informações</b></h4>
+    <hr>
+        <div class="empr-detalhes">
+            {% if empresa.ativo == True %}
+                <strong>Status: </strong>Ativa<br>
+            {% else %}
+                <strong>Status: </strong>Inativa<br>
+            {% endif %}
+            <strong>Cadastrado em: </strong>{{ empresa.created_at }}<br>
+            <strong>Atualizado em: </strong>{{ empresa.updated_at }}<br>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirm" role="dialog">
+        <div class="modal-dialog modal-md">
+
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p> Tem certeza que deseja inativar a empresa <strong>{{ empresa.razao_social }}</strong> ?</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger btn-sm" href="{% url 'desativar_empresa' empresa.pk %}"><i class="fas fa-ban"></i> Inativar</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary btn-sm">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<h4 class="titulo-detalhes-emp"><b>Usuários</b></h4>
+<hr>
+
+
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                         <tr>
+                            <th>Nome</th>
+                            <th>Usuário</th>
+                            <th>Tipo</th>
+                            <th>Situação</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if usuarios %}
+                        {% for usuario in usuarios %}
+
+                            <tr>
+                                <td>{{ usuario.usuario.first_name }} {{ usuario.usuario.last_name }}</td>
+                                <td>{{ usuario.usuario.username }}</td>
+                                <td>{{ usuario.tipo }}</td>
+
+                                {% if usuario.usuario.is_active == True %}
+                                    <td>Ativo</td>
+                                {% else %}
+                                    <td>Inativo</td>
+                                {% endif %}
+
+                                <td>
+                                    <a href="{% url 'detalhes_empresa' usuario.pk %}"
+                                       class="btn btn-outline-secondary btn-sm" role="button" aria-pressed="true">
+                                        <i class="fas fa-info-circle"></i> detalhes
+                                    </a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

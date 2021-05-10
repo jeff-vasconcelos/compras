@@ -1,0 +1,337 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block conteudo %}
+    <!-- CARDS -->
+    <div class="row">
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                             999.7M
+                        </div>
+                        <!--
+                        <div class="col-4" style="margin-top: auto; margin-bottom: auto">
+                            Grafico
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                             999.7M
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                             999.7M
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                             999.7M
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAFICO -->
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <p>Faturamento x Margem</p>
+                    <div class="chart-bar">
+                        <canvas id="myAreaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RUPTURA POR CURVA -->
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <p>Ruptura por curva ABCDEX</p>
+                    <div class="row curva-home">
+                        <div class="col-5">
+                            <div class="chart-pie pt-4">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-7 curva-home-info">
+
+                            <!-- CURVA A -->
+                            <div class="row curva-info">
+                                <div class="col-1 curva-info-cor">
+                                    <div class="curva-cor-a"></div>
+                                </div>
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="#">
+                                                Curva A
+                                            </a>
+                                        </div>
+                                        <div class="col-6 curva-info-valor">
+                                            R$ 329.960,00
+                                        </div>
+                                    </div>
+                                    <div class="row linha-sub-curva">
+                                        <div class="linha-sub"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CURVA B -->
+                            <div class="row curva-info">
+                                <div class="col-1 curva-info-cor">
+                                    <div class="curva-cor-b"></div>
+                                </div>
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="#">
+                                                Curva B
+                                            </a>
+                                        </div>
+                                        <div class="col-6 curva-info-valor">
+                                            R$ 329.960,00
+                                        </div>
+                                    </div>
+                                    <div class="row linha-sub-curva">
+                                        <div class="linha-sub"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CURVA C -->
+                            <div class="row curva-info">
+                                <div class="col-1 curva-info-cor">
+                                    <div class="curva-cor-c"></div>
+                                </div>
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="">
+                                                Curva C
+                                            </a>
+                                        </div>
+                                        <div class="col-6 curva-info-valor">
+                                            R$ 329.960,00
+                                        </div>
+                                    </div>
+                                    <div class="row linha-sub-curva">
+                                        <div class="linha-sub"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CURVA D -->
+                            <div class="row curva-info">
+                                <div class="col-1 curva-info-cor">
+                                    <div class="curva-cor-d"></div>
+                                </div>
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="">
+                                                Curva D
+                                            </a>
+                                        </div>
+                                        <div class="col-6 curva-info-valor">
+                                            R$ 329.960,00
+                                        </div>
+                                    </div>
+                                    <div class="row linha-sub-curva">
+                                        <div class="linha-sub"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- CURVA E -->
+                            <div class="row curva-info">
+                                <div class="col-1 curva-info-cor">
+                                    <div class="curva-cor-e"></div>
+                                </div>
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="">
+                                                Curva E
+                                            </a>
+                                        </div>
+                                        <div class="col-6 curva-info-valor">
+                                            R$ 329.960,00
+                                        </div>
+                                    </div>
+                                    <div class="row linha-sub-curva">
+                                        <div class="linha-sub"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CURVA X -->
+                            <div class="row curva-info">
+                                <div class="col-1 curva-info-cor">
+                                    <div class="curva-cor-x"></div>
+                                </div>
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="">
+                                                Curva X
+                                            </a>
+                                        </div>
+                                        <div class="col-6 curva-info-valor">
+                                            R$ 329.960,00
+                                        </div>
+                                    </div>
+                                    <div class="row linha-sub-curva">
+                                        <div class="linha-sub"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- TABELA PEDIDOS PENDENTES -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <p>Pedidos pendentes por fornecedor</p>
+                    <table class="tabela-home">
+                        <tr>
+                            <th>Seq.</th>
+                            <th>Cód. Fornec</th>
+                            <th>Fornecedor</th>
+                            <th>Quntidade</th>
+                            <th>Qt. Itens</th>
+                            <th>Vl. Total</th>
+                        </tr>
+                        <tr>
+                            <td>001</td>
+                            <td>999</td>
+                            <td>BRF S/A</td>
+                            <td>10</td>
+                            <td>3000</td>
+                            <td>R$ 324.900,00</td>
+                        </tr>
+                        <tr>
+                            <td>001</td>
+                            <td>999</td>
+                            <td>BRF S/A</td>
+                            <td>10</td>
+                            <td>3000</td>
+                            <td>R$ 324.900,00</td>
+                        </tr>
+                        <tr>
+                            <td>001</td>
+                            <td>999</td>
+                            <td>BRF S/A</td>
+                            <td>10</td>
+                            <td>3000</td>
+                            <td>R$ 324.900,00</td>
+                        </tr>
+                        <tr>
+                            <td>001</td>
+                            <td>999</td>
+                            <td>BRF S/A</td>
+                            <td>10</td>
+                            <td>3000</td>
+                            <td>R$ 324.900,00</td>
+                        </tr>
+                        <tr>
+                            <td>001</td>
+                            <td>999</td>
+                            <td>BRF S/A</td>
+                            <td>10</td>
+                            <td>3000</td>
+                            <td>R$ 303,00</td>
+                        </tr>
+                    </table>
+                    <div class="row" style="margin-top: 30px">
+                        <div class="col-12 ver-fornec-home">
+                            <a href="#">
+                                Ver fornecedores <i class="far fa-caret-square-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock conteudo %}

@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import Empresa
+from core.models.empresas_models import Empresa
 
 """ Modelo de produtos """
 class Produto(models.Model):

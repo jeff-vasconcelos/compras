@@ -1,0 +1,91 @@
+{% load static %}
+<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- USUÁRIO LOGADO -->
+    <div class="usuario-logado d-none d-sm-block">
+
+        {% if request.user.usuario.imagem %}
+            <img src="{{ request.user.usuario.imagem.url }}" class="img-usuario-logado" alt="">
+        {% else %}
+            <img src="{% static 'aplicacao/img/undraw_profile.svg' %}" class="img-usuario-logado" alt="">
+        {% endif  %}
+
+        <h5 class="nome-usuario-logado">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+        <p class="empresa-usuario-logado">{{ request.user.usuario.empresa }}</p>
+
+        <a id="editar-perfil-lat" href="{% url 'editar-perfil-usuario' %}">Editar perfil</a><br>
+
+        <a id="sair-lat" href="" data-toggle="modal" data-target="#logoutModal">Sair
+            <i class="fas fa-sign-out-alt"></i>
+        </a>
+    </div>
+
+    <!-- HOME -->
+    <li id="home-lat" class="nav-item">
+        <a id="link-home-lat" class="nav-link" href="{% url 'home_painel' %}">
+            <i id="icone-home" class="fas fa-fw fa-home"></i>
+            <span>Home</span></a>
+    </li>
+
+    <!-- ANÁLISE -->
+    <li id="anali-lat" class="nav-item">
+        <a id="link-anali-lat" class="nav-link" href="{% url 'analise_painel' %}">
+            <i id="icone-anali" class="fas fa-fw fa-chart-bar"></i>
+            <span>Análise</span></a>
+    </li>
+
+    <!-- ALERTAS -->
+    <li id="alert-lat" class="nav-item">
+        <a id="link-alert-lat" class="nav-link" href="">
+            <i id="icone-alert" class="fas fa-fw fa-envelope"></i>
+
+            <span>Alertas
+                <span id="contador-alerta">23</span>
+            </span>
+        </a>
+    </li>
+
+    <!-- PEDIDOS -->
+    <li id="pedi-lat" class="nav-item">
+        <a id="link-pedi-lat" class="nav-link" href="">
+            <i id="icone-pedi" class="fas fa-fw fa-file-alt"></i>
+            <span>Pedidos</span></a>
+    </li>
+
+    <!-- USUÁRIOS -->
+    {% if request.user.usuario.tipo == "Administrador" %}
+        <li id="user-lat" class="nav-item">
+            <a id="link-user-lat" class="nav-link" href="{% url 'listar-usuarios' %}">
+                <i id="icone-user" class="fas fa-fw fa-user-friends"></i>
+                <span>Usuários</span></a>
+        </li>
+    {% endif %}
+
+    <!-- CICLO DE REPOSIÇÃO -->
+    <li id="repo-lat" class="nav-item">
+        <a id="link-repo-lat" class="nav-link" href="#">
+            <i id="icone-repo" class="fas fa-fw fa-calendar-minus"></i>
+            <span>Ciclo de Reposição</span></a>
+    </li>
+
+    <!-- ACADEMY -->
+    <li id="acad-lat" class="nav-item">
+        <a id="link-acad-lat" class="nav-link" href="#">
+            <i id="icone-acad" class="fas fa-fw fa-graduation-cap"></i>
+            <span>Academy</span></a>
+    </li>
+
+    {% if request.user.usuario.tipo == "Administrador" %}
+        <!-- CONFIGURAÇÕES -->
+        <li id="conf-lat" class="nav-item">
+            <a id="link-conf-lat" class="nav-link" href="#">
+                <i id="icone-conf" class="fas fa-fw fa-cog"></i>
+                <span>Configurações</span></a>
+        </li>
+    {% endif %}
+    <!-- BOTAO RECOLHER LATERAL-->
+    <div class="botao-lateral text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>

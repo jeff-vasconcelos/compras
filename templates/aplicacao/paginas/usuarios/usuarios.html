@@ -1,0 +1,100 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block conteudo %}
+    <div class="card shadow mb-4">
+
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold">Usuários Cadastrados</h6>
+                </div>
+                <div class="col-6">
+                    <a href="{% url 'cadastrar-usuario' %}" type="button"
+                       class="float-right btn btn-primary btn-sm">
+                        <i class="fas fa-plus-circle"></i> Cadastrar usuário
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Usuário</th>
+                        <th>Tipo</th>
+                        <th>Situação</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if usuarios %}
+                        {% for usuario in usuarios %}
+
+                            <tr>
+                                <td>{{ usuario.usuario.first_name }} {{ usuario.usuario.last_name }}</td>
+                                <td>{{ usuario.usuario.username }}</td>
+                                <td>{{ usuario.tipo }}</td>
+
+                                {% if usuario.usuario.is_active == True %}
+                                    <td>Ativo</td>
+                                {% else %}
+                                    <td>Inativo</td>
+                                {% endif %}
+
+                                <td>
+                                    <a href="{% url 'editar-usuario'  usuario.pk %}"
+                                       class="btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                                        <i class="fas fa-info-circle"></i> Editar
+                                    </a>
+
+                                    {% if usuario.usuario.is_active == True %}
+                                        <a class="btn btn-danger btn-sm" title="Inativar" href="#" data-toggle="modal" data-target="#confirm{{ usuario.pk }}">
+                                            <i class="fas fa-ban"></i> Inativar
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-success btn-sm" title="Ativar" href="{% url 'inativar-usuarios' usuario.pk %}">
+                                            <i class="fas fa-check-circle"></i> Ativar
+                                        </a>
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+
+
+                            <div class="modal fade" id="confirm{{ usuario.pk }}" role="dialog">
+                                <div class="modal-dialog modal-md">
+
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p> Tem certeza que deseja inativar o usuário?
+                                                <strong>{{ usuario.usuario.first_name }} {{ usuario.usuario.last_name }}</strong> ?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a class="btn btn-danger"
+                                               href="{% url 'inativar-usuarios' usuario.pk %}">Inativar</a>
+                                            <button type="button" data-dismiss="modal" class="btn btn-default">
+                                                Cancelar
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

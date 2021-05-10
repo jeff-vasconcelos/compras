@@ -1,0 +1,279 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block scripts %}
+
+{% endblock scripts %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" class="form-control" name="p_fornecedor" placeholder="Pesquisar por fornecedor">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="text" class="form-control" name="p_produto" placeholder="Pesquisar por produto">
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                            999.7M
+                        </div>
+                        <!--
+                        <div class="col-4" style="margin-top: auto; margin-bottom: auto">
+                            Grafico
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                            999.7M
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                            999.7M
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Total Faturamento
+                        </div>
+                        <div class="col-4 cards-home-porc">
+                            92%
+                        </div>
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-2 cards-home-sifrao">
+                            R$
+                        </div>
+                        <div class="col-10 cards-home-valor">
+                            999.7M
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow mb-4">
+                <div class="row">
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label>Leadtime</label>
+                            <input type="text" class="form-control" name="leadtime">
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label>Ciclo reposição</label>
+                            <input type="text" class="form-control" name="leadtime">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="produtos">Produto</label>
+                            <select class="form-control" name="produtos" id="produtos">
+                                <option value="volvo">item</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="semana">Sequência semanal</label>
+                            <select class="form-control" name="semana" id="semana">
+                                <option value="volvo">item</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="mensal">Sequência mensal</label>
+                            <select class="form-control" name="mensal" id="mensal">
+                                <option value="volvo">item</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label for="curva">Curva</label>
+                            <select class="form-control" name="curva" id="curva">
+                                <option value="curva_a">A</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="marca">Marca</label>
+                            <select class="form-control" name="marca" id="marca">
+                                <option value="volvo">item</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="background-color: #1c7430">
+                    <div class="col-md-12">
+                        <table style="font-size: 10px; text-align: center">
+                            <thead>
+                            <tr>
+                                <th style="background-color: blue" colspan="5">Dados filiais</th>
+                                <th style="background-color: #0b2e13" colspan="4">Dados de entrada</th>
+                                <th style="background-color: gray" colspan="1">Calc, dias</th>
+                                <th style="background-color: #0b2e13" colspan="5">Dados estatísticos</th>
+                                <th style="background-color: red" colspan="1">Preço prat.</th>
+                                <th style="background-color: green" colspan="5">Preço prat.</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>Cód</th>
+                                <th>Filial</th>
+                                <th>Estoque</th>
+                                <th>Avaria</th>
+                                <th><a href="#">Ped. pendente <i class="fas fa-chevron-circle-right"></i></a></th>
+                                <th>Dt. ult. Ent.</th>
+                                <th>Qt. ult. Ent.</th>
+                                <th>Vl. ult. Ent.</th>
+                                <th>DDE normal</th>
+                                <th>Est. seg.</th>
+                                <th>Ponto rep.</th>
+                                <th>Cx Fech.</th>
+                                <th>Caixa</th>
+                                <th>Unid.</th>
+                                <th>Pr. tabela</th>
+                                <th>% margem</th>
+
+                                <th>% margem</th>
+                                <th>% margem</th>
+                                <th>% margem</th>
+                                <th>% margem</th>
+                                <th>% margem</th>
+
+                            </tr>
+                            <tr>
+                                <td>1234</td>
+                                <td>Matriz</td>
+                                <td>32000</td>
+                                <td>9999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+                                <td>999</td>
+
+                                <td>
+                                    <input style="width: 50px" name="">
+                                </td>
+                                <td>
+                                    <input style="width: 50px" name="">
+                                </td>
+                                <td>
+                                    <input style="width: 50px" name="">
+                                </td>
+                                <td>
+                                    <input style="width: 50px" name="">
+                                </td>
+                                <td>
+                                    <input style="width: 50px" name="">
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!--<div class="col-md-3">
+                        <table style="font-size: 10px; text-align: center">
+                            <thead>
+                            <tr>
+                                <th style="background-color: blue" colspan="5">Dados filiais</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>% margem</th>
+                                <th>% margem</th>
+                                <th>% margem</th>
+                                <th>% margem</th>
+                                <th>% margem</th>
+                            </tr>
+                            <tr>
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>ANÁLISE</h2>
+{% endblock conteudo %}

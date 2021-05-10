@@ -1,0 +1,67 @@
+{% extends 'administracao/base.html' %}
+
+{% block conteudo %}
+
+<div class="container-fluid">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold">Empresas Cadastradas</h6>
+                </div>
+                <div class="col-6">
+                    <a href="{% url 'cadastrar_empresa' %}" type="button" class="float-right btn btn-primary btn-sm">
+                        <i class="fas fa-plus-circle"></i> Cadastrar empresa
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+                    <thead>
+                        <tr>
+                            <th>Nome Fantasia</th>
+                            <th>CNPJ</th>
+                            <th>Situação</th>
+                            <th>Cadastrado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for empresa in empresas %}
+                        <tr>
+                            <td>{{ empresa.nome_fantasia }}</td>
+                            <td>{{ empresa.cnpj }}</td>
+
+                            {% if empresa.ativo == True %}
+                                <td>Ativa</td>
+                            {% else %}
+                                <td>Inativa</td>
+                            {% endif %}
+
+                            <td>{{ empresa.created_at }}</td>
+                            <td>
+                                <a href="{% url 'detalhes_empresa' empresa.pk %}" class="btn btn-outline-secondary btn-sm" role="button" aria-pressed="true">
+                                    <i class="fas fa-info-circle"></i> detalhes
+                                </a>
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock conteudo %}
