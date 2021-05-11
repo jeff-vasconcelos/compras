@@ -117,55 +117,55 @@
         <div class="col-md-12">
             <div class="card shadow mb-4" id="div-analise-tabela">
                 <div class="row">
-                    <div class="col-md-1">
+                    <div class="col-md-1 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela">Leadtime</label>
-                            <input type="text" class="form-control" name="leadtime">
+                            <input type="text" class="form-control input-analise" name="leadtime">
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela">C. reposição</label>
-                            <input type="text" class="form-control" name="leadtime">
+                            <input type="text" class="form-control input-analise" name="leadtime">
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="produtos">Produto</label>
-                            <select class="form-control" name="produtos" id="produtos">
-                                <option value="volvo">item</option>
+                            <select class="form-control select-analise" name="produtos" id="produtos">
+                                <option class="option-analise" value="volvo">item</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 analise-div">
                         <div class="form-group">
-                            <label class="label-analise-tabela" for="semana">Seq. semanal</label>
-                            <select class="form-control" name="semana" id="semana">
-                                <option value="volvo">item</option>
+                            <label class="label-analise-tabela" for="semana">Semana</label>
+                            <select class="form-control select-analise" name="semana" id="semana">
+                                <option class="option-analise" value="volvo">item</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 analise-div">
                         <div class="form-group">
-                            <label class="label-analise-tabela" for="mensal">Seq. mensal</label>
-                            <select class="form-control" name="mensal" id="mensal">
-                                <option value="volvo">itemafdfsdfssssssssdfsdfsdfsdfsdfdsfsfdsf</option>
+                            <label class="label-analise-tabela" for="mensal">Mês</label>
+                            <select class="form-control select-analise" name="mensal" id="mensal">
+                                <option class="option-analise" value="volvo">itemafdfsddfsdfsdfdsfsfdsf</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="curva">Curva</label>
-                            <select class="form-control" name="curva" id="curva">
-                                <option value="curva_a">A</option>
+                            <select class="form-control select-analise" name="curva" id="curva">
+                                <option class="option-analise" value="curva_a">A</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="marca">Marca</label>
-                            <select class="form-control" name="marca" id="marca">
-                                <option value="volvo">item</option>
+                            <select class="form-control select-analise" name="marca" id="marca">
+                                <option class="option-analise" value="volvo">item</option>
                             </select>
                         </div>
                     </div>
@@ -261,10 +261,10 @@
 
         <div class="col-md-12">
             <div class="card shadow mb-4">
-                <div class="card-body"  >
-                    <p>Faturamento x Margem</p>
-                    <div class="chart-bar" id="div-grafico-um">
-                        <canvas id="myAreaChart"></canvas>
+                <div class="card-body" id="grafico-serie-hist">
+                    <p class="texto-grafico-analise">Série histórica de vendas</p>
+                    <div class="chart-bar">
+                        <canvas id="ChartSerieHist"></canvas>
                     </div>
                 </div>
             </div>
@@ -272,10 +272,10 @@
 
         <div class="col-md-12">
             <div class="card shadow mb-4">
-                <div class="card-body" id="grafico-serie-hist">
-                    <p class="texto-grafico-analise">Série histórica de vendas</p>
-                    <div class="chart-bar">
-                        <canvas id="ChartSerieHist"></canvas>
+                <div class="card-body">
+                    <p class="texto-grafico-analise" >Cobertura de estoque</p>
+                    <div class="chart-bar" id="div-grafico-um">
+                        <canvas id="ChartCobertura"></canvas>
                     </div>
                 </div>
             </div>

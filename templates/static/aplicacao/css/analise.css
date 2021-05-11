@@ -1,9 +1,27 @@
+@font-face {
+    font-family: Montserrat-Light;
+    src: url(../fonts/Montserrat-Light.ttf);
+}
+
+
 label.label-analise-tabela {
-    font-size: 14px;
+    font-size: 13px;
+}
+input.input-analise {
+    font-size: 16px;
+    height: 30px;
+    text-align: center;
+}
+select.select-analise {
+    height: 30px;
+    font-size: 12px;
+}
+div.analise-div {
+    padding: 0px 5px;
 }
 
 #div-analise-tabela {
-    padding: 5px 15px;
+    padding: 5px 20px;
 }
 
 #div-tabela {
@@ -17,10 +35,10 @@ label.label-analise-tabela {
     width: 100%;
 }
 input.input-tabela-analise {
-    max-width: 65px;
-
+    max-width: 50px;
     border-radius: 5px;
     border: 1px solid #d1d3e2;
+    text-align: center;
 }
 th.tabela-info-th{
     border-right: 1px solid;
