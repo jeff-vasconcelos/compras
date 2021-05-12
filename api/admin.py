@@ -1,5 +1,5 @@
 from django.contrib import admin
-from api.models import Produto
+from api.models import Produto, Fornecedor
 
 """ Adicionando dados da API de Produtos no Admin do DJANGO """
 class Produtos(admin.ModelAdmin):
@@ -9,3 +9,4 @@ class Produtos(admin.ModelAdmin):
     list_per_page = 20
 
 admin.site.register(Produto, Produtos)
+admin.site.register(Fornecedor)

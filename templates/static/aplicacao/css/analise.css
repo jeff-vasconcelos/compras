@@ -58,12 +58,25 @@ div.botoes-analise-tabela {
     text-align: right;
     padding: 10px 0px;
 }
+
+button.ver-pendentes {
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+}
 button.ver-pedido {
     background-color: #4791ff;
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
     font-size: 12px;
+    margin-left: 10px;
+}
+button.ver-pedido:hover, button.ver-pedido:focus{
+    background-color: #4791ff;
+}
+button.adicionar-item:hover, button.adicionar-item:focus {
+    background-color: #224390;
 }
 button.adicionar-item {
     background-color: #224390;
@@ -71,6 +84,7 @@ button.adicionar-item {
     border: none;
     border-radius: 10px;
     font-size: 12px;
+    margin-left: 10px;
 }
 
 #div-grafico-um {
@@ -83,4 +97,21 @@ button.adicionar-item {
 p.texto-grafico-analise {
     text-align: center;
     margin-bottom: 0px;
+}
+
+#modal-ver-pedido {
+    max-width: 1100px;
+    font-size: 14px;
+}
+#btn-expo-modal-analise{
+    background-color: #224390;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+}
+#btn-canc-modal-analise{
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
 }

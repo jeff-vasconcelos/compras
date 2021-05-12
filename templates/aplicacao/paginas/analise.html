@@ -1,19 +1,36 @@
 {% extends 'aplicacao/base.html' %}
+{% load static %}
 
 {% block scripts %}
-
+    <script src="{% static 'aplicacao/js/pesquisa_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtros_pesquisa_analise.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block conteudo %}
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" class="form-control" name="p_fornecedor" placeholder="Pesquisar por fornecedor">
+                <form id="search-f" autocomplete="off">
+
+                    <input id="search-fornec" type="text" class="form-control" name="p_fornecedor"
+                           placeholder="Pesquisar por fornecedor">
+                </form>
+                <div id="results-box-fornec" class="resultados d-none">
+
+                </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <input type="text" class="form-control" name="p_produto" placeholder="Pesquisar por produto">
+                <form id="search-p" autocomplete="off">
+                    {% csrf_token %}
+                    <input id="search-prod" type="text" class="form-control" name="p_produto"
+                           placeholder="Pesquisar por produto">
+                </form>
+                <div id="results-box-prod" class="resultados d-none">
+
+                </div>
             </div>
         </div>
 
@@ -22,7 +39,7 @@
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
                         <div class="col-8">
-                            Total Faturamento
+                            Faturamento
                         </div>
                         <div class="col-4 cards-home-porc">
                             92%
@@ -50,7 +67,7 @@
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
                         <div class="col-8">
-                            Total Faturamento
+                            Curva
                         </div>
                         <div class="col-4 cards-home-porc">
                             92%
@@ -58,10 +75,10 @@
                     </div>
                     <div class="row cards-home-valores">
                         <div class="col-2 cards-home-sifrao">
-                            R$
+
                         </div>
                         <div class="col-10 cards-home-valor">
-                            999.7M
+                            C
                         </div>
                     </div>
                 </div>
@@ -73,7 +90,7 @@
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
                         <div class="col-8">
-                            Total Faturamento
+                            Media Ajustada
                         </div>
                         <div class="col-4 cards-home-porc">
                             92%
@@ -81,10 +98,10 @@
                     </div>
                     <div class="row cards-home-valores">
                         <div class="col-2 cards-home-sifrao">
-                            R$
+
                         </div>
                         <div class="col-10 cards-home-valor">
-                            999.7M
+                            239,45
                         </div>
                     </div>
                 </div>
@@ -96,7 +113,7 @@
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
                         <div class="col-8">
-                            Total Faturamento
+                            Ruptura
                         </div>
                         <div class="col-4 cards-home-porc">
                             92%
@@ -107,7 +124,7 @@
                             R$
                         </div>
                         <div class="col-10 cards-home-valor">
-                            999.7M
+                            999.7K
                         </div>
                     </div>
                 </div>
@@ -132,7 +149,7 @@
                     <div class="col analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="produtos">Produto</label>
-                            <select class="form-control select-analise" name="produtos" id="produtos">
+                            <select class="form-control select-analise" name="produtos" id="results-produtos">
                                 <option class="option-analise" value="volvo">item</option>
                             </select>
                         </div>
@@ -190,8 +207,7 @@
                                 <th class="tabela-info">Filial</th>
                                 <th class="tabela-info">Estoque</th>
                                 <th class="tabela-info">Avaria</th>
-                                <th class="tabela-info"><a href="#">Ped. pendente <i
-                                        class="fas fa-chevron-circle-right"></i></a></th>
+                                <th class="tabela-info">Ped. pendente</th>
                                 <th class="tabela-info">Dt. ult. Ent.</th>
                                 <th class="tabela-info">Qt. ult. Ent.</th>
                                 <th class="tabela-info">Vl. ult. Ent.</th>
@@ -251,7 +267,12 @@
 
                         </table>
                         <div class="col-md-12 botoes-analise-tabela">
-                            <button class="btn btn-secondary btn-sm ver-pedido">Ver pedido</button>
+                            <button class="btn btn-secondary btn-sm ver-pendentes" type="button"
+                                    data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes
+                            </button>
+                            <button class="btn btn-secondary btn-sm ver-pedido" type="button"
+                                    data-toggle="modal" data-target=".modal-pedido">Ver pedido
+                            </button>
                             <button class="btn btn-secondary btn-sm adicionar-item">Adicionar item</button>
                         </div>
                     </div>
@@ -273,7 +294,7 @@
         <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <p class="texto-grafico-analise" >Cobertura de estoque</p>
+                    <p class="texto-grafico-analise">Cobertura de estoque</p>
                     <div class="chart-bar" id="div-grafico-um">
                         <canvas id="ChartCobertura"></canvas>
                     </div>
@@ -282,5 +303,102 @@
         </div>
     </div>
 
-    <h2>ANÁLISE</h2>
+
+    <!-- MODAL ITENS PEDIDOS  -->
+    <div class="modal fade modal-pedido" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" id="modal-ver-pedido">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ver pedido</h5>
+                </div>
+                <div class="modal-body">
+
+                    <table width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Cód. filial</th>
+                            <th>Filial</th>
+                            <th>Cód. prod</th>
+                            <th>Descrição produto</th>
+                            <th>Preço</th>
+                            <th>Quantidade</th>
+                            <th>Data do pedido</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td>nome</td>
+                            <td>cnpj</td>
+                            <td>Ativa</td>
+                            <td>Inativa</td>
+                            <td>Inativa</td>
+                            <td>Inativa</td>
+                            <td>Inativa</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
+                            data-dismiss="modal">Voltar
+                    </button>
+                    <button id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PEDIDOS PENDENTES -->
+    <div class="modal fade modal-pendentes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" id="modal-ver-pedido">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pedidos pendentes</h5>
+                </div>
+                <div class="modal-body">
+
+                    <table width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Cód. filial</th>
+                            <th>Filial</th>
+                            <th>Cód. prod</th>
+                            <th>Descrição produto</th>
+                            <th>Preço</th>
+                            <th>Quantidade</th>
+                            <th>Data do pedido</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td>nome</td>
+                            <td>cnpj</td>
+                            <td>Ativa</td>
+                            <td>Inativa</td>
+                            <td>Inativa</td>
+                            <td>Inativa</td>
+                            <td>Inativa</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
+                            data-dismiss="modal">Voltar
+                    </button>
+                    <button id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock conteudo %}
