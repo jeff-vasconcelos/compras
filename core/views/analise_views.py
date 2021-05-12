@@ -60,8 +60,35 @@ def search_fornecedor(request):
     return JsonResponse({})
 
 
+def filter_produto_fornecedor(request):
+    empresa = 1
+    if request.is_ajax():
+        res_fil_fornec = None
+        fornecedor = request.POST.get('fornecedor')
+        print(fornecedor)
+        qs = Produto.objects.filter(
+            Q(fornecedor_id__exact=fornecedor),
+            Q(empresa__id__exact=empresa)
+        )
+        if len(qs) > 0 and len(fornecedor) > 0:
+            data = []
+            for prod in qs:
+                item = {
+                    'pk': prod.pk,
+                    'nome': prod.desc_produto,
+                    'cod': prod.cod_produto
+                }
+                data.append(item)
+            res_fil_fornec = data
+        else:
+            res_fil_fornec = "Nada encontrado!"
+        return JsonResponse({'data': res_fil_fornec})
+    return JsonResponse({})
+
+"""
 def get_produto_fornecedor(request, *args, **kwargs):
     empresa = 1
     fornecedor = kwargs.get('fornec')
     produto_obj = list(Produto.objects.filter(fornecedor_id=fornecedor, empresa_id=empresa).values())
     return JsonResponse({'data': produto_obj})
+"""

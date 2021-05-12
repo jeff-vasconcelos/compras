@@ -18,9 +18,11 @@ const sendSearchData = (fornec) =>{
                 resultsBoxFornec.innerHTML = ""
                 data.forEach(fornec=> {
                     resultsBoxFornec.innerHTML += `
-                    <a href="" value="${fornec.cod}">
-                        <h3>${fornec.cod} - ${fornec.nome}</h3>
-                    </a>
+                    <input name="item-fornec" class="form-check-input" type="checkbox" value="${fornec.pk}" id="${fornec.pk}" 
+                    style="display: block" onclick="teste()">
+                        <label style="display: block" class="form-check-label" for="${fornec.pk}">
+                            ${fornec.cod} - ${fornec.nome}
+                        </label>
                     `
                 })
             }else{

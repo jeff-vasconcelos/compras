@@ -10,7 +10,7 @@ from core.views.analise_views import *
 urlpatterns = [
     path('search/prod', search_produto, name='results-produto'),
     path('search/fornec', search_fornecedor, name='results-fornecedor'),
-    path('get/filter/<str:fornec>/', get_produto_fornecedor, name='get-produto-fornecedor'),
+    path('filter-fornec/', filter_produto_fornecedor, name='filter-fornecedor'),
 
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),
