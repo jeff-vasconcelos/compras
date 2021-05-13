@@ -4,7 +4,7 @@
 {% block scripts %}
     <script src="{% static 'aplicacao/js/pesquisa_fornecedor.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/filtros_pesquisa_analise.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block conteudo %}
@@ -156,7 +156,7 @@
                         <div class="form-group">
                             <label class="label-analise-tabela" for="produtos">Produto</label>
                             <select class="form-control select-analise" name="produtos" id="results-produtos">
-
+                                <option selected>Selecione o produto</option>
                             </select>
                         </div>
                     </div>

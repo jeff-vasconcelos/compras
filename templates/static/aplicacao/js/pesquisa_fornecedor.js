@@ -4,6 +4,7 @@ const resultsBoxFornec = document.getElementById('results-box-fornec')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value
 
 const sendSearchData = (fornec) =>{
+    console.log(fornec)
     $.ajax({
         type: 'POST',
         url: '/painel/search/fornec',
@@ -18,8 +19,8 @@ const sendSearchData = (fornec) =>{
                 resultsBoxFornec.innerHTML = ""
                 data.forEach(fornec=> {
                     resultsBoxFornec.innerHTML += `
-                    <input name="item-fornec" class="form-check-input" type="checkbox" value="${fornec.pk}" id="${fornec.pk}" 
-                    style="display: block" onclick="teste()">
+                    <input name="item-fornecedor" class="form-check-input" type="checkbox" value="${fornec.pk}" id="${fornec.pk}" 
+                    style="display: block" onclick="selecao_fornecedor()">
                         <label style="display: block" class="form-check-label" for="${fornec.pk}">
                             ${fornec.cod} - ${fornec.nome}
                         </label>

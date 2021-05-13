@@ -65,18 +65,24 @@ def filter_produto_fornecedor(request):
     if request.is_ajax():
         res_fil_fornec = None
         fornecedor = request.POST.get('fornecedor')
-        print(fornecedor)
-        qs = Produto.objects.filter(
-            Q(fornecedor_id__exact=fornecedor),
-            Q(empresa__id__exact=empresa)
-        )
-        if len(qs) > 0 and len(fornecedor) > 0:
+        fornecedor = fornecedor.replace(",", "")
+
+        lista_fornecedor = []
+        for i in fornecedor:
+            lista_fornecedor.append(int(i))
+
+        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor
+                                    , empresa__id__exact=empresa).order_by('cod_produto')
+        print(qs)
+
+        if len(qs) > 0 and len(lista_fornecedor) > 0:
             data = []
             for prod in qs:
                 item = {
                     'pk': prod.pk,
                     'nome': prod.desc_produto,
-                    'cod': prod.cod_produto
+                    'cod': prod.cod_produto,
+                    'emb': prod.embalagem
                 }
                 data.append(item)
             res_fil_fornec = data
