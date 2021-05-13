@@ -8,7 +8,7 @@ def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
     return render(request, template_name)
 
 
-def search_produto(request):
+def buscar_produto(request):
     empresa = 1
     if request.is_ajax():
         res = None
@@ -34,7 +34,7 @@ def search_produto(request):
     return JsonResponse({})
 
 
-def search_fornecedor(request):
+def buscar_fornecedor(request):
     empresa = 1
     if request.is_ajax():
         res_f = None
@@ -60,7 +60,7 @@ def search_fornecedor(request):
     return JsonResponse({})
 
 
-def filter_produto_fornecedor(request):
+def filtrar_produto_fornecedor(request):
     empresa = 1
     if request.is_ajax():
         res_fil_fornec = None
@@ -91,10 +91,34 @@ def filter_produto_fornecedor(request):
         return JsonResponse({'data': res_fil_fornec})
     return JsonResponse({})
 
-"""
-def get_produto_fornecedor(request, *args, **kwargs):
+
+def filtrar_produto_produto(request):
     empresa = 1
-    fornecedor = kwargs.get('fornec')
-    produto_obj = list(Produto.objects.filter(fornecedor_id=fornecedor, empresa_id=empresa).values())
-    return JsonResponse({'data': produto_obj})
-"""
+    if request.is_ajax():
+        res_fil_fornec = None
+        fornecedor = request.POST.get('fornecedor')
+        fornecedor = fornecedor.replace(",", "")
+
+        lista_fornecedor = []
+        for i in fornecedor:
+            lista_fornecedor.append(int(i))
+
+        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor
+                                    , empresa__id__exact=empresa).order_by('cod_produto')
+        print(qs)
+
+        if len(qs) > 0 and len(lista_fornecedor) > 0:
+            data = []
+            for prod in qs:
+                item = {
+                    'pk': prod.pk,
+                    'nome': prod.desc_produto,
+                    'cod': prod.cod_produto,
+                    'emb': prod.embalagem
+                }
+                data.append(item)
+            res_fil_fornec = data
+        else:
+            res_fil_fornec = "Nada encontrado!"
+        return JsonResponse({'data': res_fil_fornec})
+    return JsonResponse({})
