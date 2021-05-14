@@ -1,4 +1,4 @@
-from api.models import *
+from api.models.produto_models import *
 from django.db.models import Q
 
 

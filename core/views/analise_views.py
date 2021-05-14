@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Q
-from api.models import *
+from api.models.fornecedor_models import *
+from api.models.produto_models import *
 
 
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
@@ -123,3 +124,31 @@ def filtrar_produto_produto(request):
             res_fil_prod = "Nada encontrado!"
         return JsonResponse({'data': res_fil_prod})
     return JsonResponse({})
+
+
+def selecionar_produto(request):
+    empresa = 1
+    if request.is_ajax():
+        info_prod = None
+        produto = request.POST.get('produto')
+
+        qs = Produto.objects.filter(id__exact=produto, empresa__id__exact=empresa).order_by('cod_produto')
+        print(qs)
+
+        if len(qs) > 0 and len(produto) > 0:
+            data = []
+            for prod in qs:
+                item = {
+                    'pk': prod.pk,
+                    'nome': prod.desc_produto,
+                    'cod': prod.cod_produto,
+                    'emb': prod.embalagem,
+                    'filial': prod.filial.desc_filial
+                }
+                data.append(item)
+            info_prod = data
+        else:
+            info_prod = "Nada encontrado!"
+        return JsonResponse({'data': info_prod})
+    return JsonResponse({})
+

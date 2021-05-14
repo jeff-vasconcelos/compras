@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from api.validator import *
-from api.models import *
+from api.models.produto_models import *
 
 """ Serializador de produtos """
 class ProdutoSerializer(serializers.ModelSerializer):

@@ -4,6 +4,7 @@ from core.models.usuarios_models import *
 from core.models.academy_models import *
 
 admin.site.register(Empresa)
+admin.site.register(Filial)
 admin.site.register(Usuario)
 admin.site.register(Academy)
 

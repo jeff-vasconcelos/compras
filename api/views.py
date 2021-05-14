@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from api.serializer import ProdutoSerializer
-from api.models import Produto
+from api.models.produto_models import Produto
 
 """ Views responsavel por todos os metodos de produtos """
 class ProdutoViewSet(viewsets.ModelViewSet):

@@ -36,3 +36,16 @@ class Empresa(models.Model):
 
     def __str__(self):
         return self.nome_fantasia
+
+
+class Filial(models.Model):
+    cod_filial = models.IntegerField(blank=True, null=False)
+    desc_filial = models.CharField(max_length=255, blank=True, null=True)
+    empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='filial_empresa')
+
+    class Meta:
+        verbose_name = 'Filial'
+        verbose_name_plural = 'Filiais'
+
+    def __str__(self):
+        return self.desc_filial

@@ -12,6 +12,8 @@ urlpatterns = [
     path('search/fornec', buscar_fornecedor, name='results-fornecedor'),
     path('filter-fornec/', filtrar_produto_fornecedor, name='filter-fornecedor'),
     path('filter-prod/', filtrar_produto_produto, name='filter-produto'),
+    path('select-prod/', selecionar_produto, name='filter-produto'),
+
 
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),
