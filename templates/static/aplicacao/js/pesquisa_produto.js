@@ -16,13 +16,11 @@ const sendSearchProd = (prod) =>{
                 resultsBoxProd.innerHTML = ""
                 data.forEach(prod=> {
                     resultsBoxProd.innerHTML += `
-                    <a href="">
-                        <div class="row">
-                            <div class="col">
-                                <h3>${prod.cod} - ${prod.nome}</h3>
-                            </div>
-                        </div>
-                    </a>
+                    <input name="item-produto" class="form-check-input" type="checkbox" value="${prod.pk}" id="${prod.pk}" 
+                    style="display: block" onclick="selecao_produto()   ">
+                        <label style="display: block" class="form-check-label" for="${prod.pk}">
+                            ${prod.cod} - ${prod.nome} ${prod.emb}
+                        </label>
                     `
                 })
             }else{
@@ -30,6 +28,7 @@ const sendSearchProd = (prod) =>{
                       resultsBoxProd.innerHTML = `<b>${data}</b>`
                  }else{
                      resultsBoxProd.classList.add('d-none')
+                     resultadosPProdutos.innerHTML = ""
                  }
             }
         },

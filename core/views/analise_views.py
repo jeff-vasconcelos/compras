@@ -25,6 +25,7 @@ def buscar_produto(request):
                     'pk': prod.pk,
                     'nome': prod.desc_produto,
                     'cod': prod.cod_produto,
+                    'emb': prod.embalagem
                 }
                 data.append(item)
             res = data
@@ -95,19 +96,19 @@ def filtrar_produto_fornecedor(request):
 def filtrar_produto_produto(request):
     empresa = 1
     if request.is_ajax():
-        res_fil_fornec = None
-        fornecedor = request.POST.get('fornecedor')
-        fornecedor = fornecedor.replace(",", "")
+        res_fil_prod = None
+        produto = request.POST.get('produto')
+        produto = produto.replace(",", "")
 
-        lista_fornecedor = []
-        for i in fornecedor:
-            lista_fornecedor.append(int(i))
+        lista_produto = []
+        for i in produto:
+            lista_produto.append(int(i))
 
-        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor
+        qs = Produto.objects.filter(id__in=lista_produto
                                     , empresa__id__exact=empresa).order_by('cod_produto')
         print(qs)
 
-        if len(qs) > 0 and len(lista_fornecedor) > 0:
+        if len(qs) > 0 and len(lista_produto) > 0:
             data = []
             for prod in qs:
                 item = {
@@ -117,8 +118,8 @@ def filtrar_produto_produto(request):
                     'emb': prod.embalagem
                 }
                 data.append(item)
-            res_fil_fornec = data
+            res_fil_prod = data
         else:
-            res_fil_fornec = "Nada encontrado!"
-        return JsonResponse({'data': res_fil_fornec})
+            res_fil_prod = "Nada encontrado!"
+        return JsonResponse({'data': res_fil_prod})
     return JsonResponse({})

@@ -121,6 +121,15 @@ label.check-fornecedor{
 div.check-div-fornec {
     background-color: #FFF;
     padding: 0px 3%;
-    margin: 0px 1.5%;
+    margin: 0px 10px;
+    border-radius: 5px;
+}
+label.check-pro{
+    display: block;
+}
+div.check-div-prod {
+    background-color: #FFF;
+    padding: 0px 3%;
+    margin: 0px 10px;
     border-radius: 5px;
 }

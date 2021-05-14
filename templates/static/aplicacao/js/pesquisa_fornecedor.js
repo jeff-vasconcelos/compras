@@ -31,6 +31,7 @@ const sendSearchData = (fornec) =>{
                       resultsBoxFornec.innerHTML = `<b>${data}</b>`
                  }else{
                      resultsBoxFornec.classList.add('d-none')
+                     resultadosPProdutos.innerHTML = ""
                  }
             }
         },

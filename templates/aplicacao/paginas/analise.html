@@ -5,6 +5,7 @@
     <script src="{% static 'aplicacao/js/pesquisa_fornecedor.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block conteudo %}
@@ -19,9 +20,11 @@
 
                     <div class="row">
                         <div class="col check-div-fornec">
-                    <div class="form-check" id="results-box-fornec">
+                            <div class="form-check" id="results-box-fornec">
 
-                    </div></div></div>
+                            </div>
+                        </div>
+                    </div>
 
                 </form>
 
@@ -33,10 +36,15 @@
                     {% csrf_token %}
                     <input id="search-prod" type="text" class="form-control" name="p_produto"
                            placeholder="Pesquisar por produto">
-                </form>
-                <div id="results-box-prod" class="resultados d-none">
 
-                </div>
+                    <div class="row">
+                        <div class="col check-div-prod">
+                            <div class="form-check" id="results-box-prod">
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
