@@ -15,7 +15,7 @@ class ProdutoSerializer(serializers.ModelSerializer):
 
         fornecedor = data['cod_fornec']
         fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
-        print(fornec)
+
         if not fornec:
             raise serializers.ValidationError({'fornecedor': "registro não existente"})
 

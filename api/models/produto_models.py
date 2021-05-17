@@ -17,5 +17,11 @@ class Produto(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='produto',
                                 blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if not self.fornecedor:
+            fornecedor = Fornecedor.objects.get(cod_fornecedor=self.cod_fornec, empresa=self.empresa)
+            self.fornecedor = fornecedor
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.desc_produto}-{self.cod_produto} - {self.empresa.razao_social}'
