@@ -9,19 +9,14 @@ from django.db.models import Q
 """
 def valida_produto(data):
     cod_produto = data['cod_produto']
-    desc_produto = data['desc_produto']
+    cod_empresa = data['empresa']
 
     #codproduto = Produto.objects.filter(Q(cod_produto=cod_produto) & (Q(desc_produto=desc_produto))).exists()
-    codproduto = Produto.objects.filter(cod_produto=cod_produto).exists()
-    descproduto = Produto.objects.filter(desc_produto=desc_produto).exists()
-
-    print(codproduto)
-    print(descproduto)
+    codproduto = Produto.objects.filter(
+        cod_produto=cod_produto, empresa=cod_empresa
+    ).exists()
 
     if codproduto == False:
-        if descproduto == False:
-            return True
-        else:
-            return False
+        return True
     else:
         return False

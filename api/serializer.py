@@ -11,6 +11,13 @@ class ProdutoSerializer(serializers.ModelSerializer):
     """ Função responsável por chamar e enviar dados ao validator """
     def validate(self, data):
         if not valida_produto(data):
-            raise serializers.ValidationError({'produto':"registro ja existente"})
+            raise serializers.ValidationError({'produto': "registro ja existente"})
+
+        fornecedor = data['cod_fornec']
+        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
+        print(fornec)
+        if not fornec:
+            raise serializers.ValidationError({'fornecedor': "registro não existente"})
 
         return data
+
