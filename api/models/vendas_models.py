@@ -7,7 +7,7 @@ from api.models.produto_models import Produto
 class Venda(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)
-    cod_fornec = models.IntegerField(null=True, blank=True)
+    cod_fornecedor = models.IntegerField(null=True, blank=True)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_vendas',
                                 blank=True, null=True)
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_vendas',

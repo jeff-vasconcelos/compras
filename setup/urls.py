@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api.views import ProdutoViewSet
+from api.views import *
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,7 +23,9 @@ from rest_framework.authtoken import views
 
 """ Rotas da API de produtos """
 router = routers.DefaultRouter()
-router.register('produtos', ProdutoViewSet)
+router.register('produto', ProdutoViewSet)
+router.register('fornecedor', FornecedorViewSet)
+router.register('avaria', AvariaViewSet)
 
 
 urlpatterns = [
