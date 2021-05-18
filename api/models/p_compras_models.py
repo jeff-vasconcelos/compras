@@ -6,6 +6,7 @@ from api.models.produto_models import Produto
 
 class PedidoCompras(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
+    desc_produto = models.CharField(max_length=255, null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)
     cod_fornecedor = models.IntegerField(null=True, blank=True)
 
@@ -24,5 +25,14 @@ class PedidoCompras(models.Model):
         verbose_name = 'Pedido de compra'
         verbose_name_plural = 'Pedidos de compra'
 
+    def save(self, *args, **kwargs):
+        if not self.fornecedor:
+            fornecedor = Fornecedor.objects.get(cod_fornecedor=self.cod_fornecedor, empresa=self.empresa)
+            produto = Produto.objects.get(cod_produto=self.cod_produto, empresa=self.empresa)
+            self.fornecedor = fornecedor
+            self.produto = produto
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.cod_produto
+        return self.desc_produto

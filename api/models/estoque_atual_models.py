@@ -6,6 +6,7 @@ from api.models.produto_models import Produto
 
 class EstoqueAtual(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
+    desc_produto = models.CharField(max_length=255, null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)
     cod_fornecedor = models.IntegerField(null=True, blank=True)
 
@@ -20,7 +21,7 @@ class EstoqueAtual(models.Model):
     qt_reservada = models.IntegerField(null=True, blank=True)
     qt_pendente = models.IntegerField(null=True, blank=True)
     qt_disponivel = models.IntegerField(null=True, blank=True)
-    custo_ult_ent = models.IntegerField(null=True, blank=True)
+    custo_ult_ent = models.FloatField(null=True, blank=True)
     data = models.DateField(null=True, blank=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
@@ -28,5 +29,14 @@ class EstoqueAtual(models.Model):
         verbose_name = 'Estoque atual'
         verbose_name_plural = 'Estoque atual'
 
+    def save(self, *args, **kwargs):
+        if not self.fornecedor:
+            fornecedor = Fornecedor.objects.get(cod_fornecedor=self.cod_fornecedor, empresa=self.empresa)
+            produto = Produto.objects.get(cod_produto=self.cod_produto, empresa=self.empresa)
+            self.fornecedor = fornecedor
+            self.produto = produto
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.cod_produto
+        return self.desc_produto
