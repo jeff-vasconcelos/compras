@@ -1,10 +1,12 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
 
 
+@login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
     return render(request, template_name)
 
@@ -152,3 +154,6 @@ def selecionar_produto(request):
         return JsonResponse({'data': info_prod})
     return JsonResponse({})
 
+
+def informacao_produtos():
+    pass
