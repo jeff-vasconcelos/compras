@@ -4,10 +4,13 @@ from django.http import JsonResponse
 from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
+from core.trata_dados.datas import dia_semana_mes_ano
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
+    teste = dia_semana_mes_ano()
+    print(teste)
     return render(request, template_name)
 
 
