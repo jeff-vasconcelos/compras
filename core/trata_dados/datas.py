@@ -13,7 +13,7 @@ def validando_mes(mes):
 
 def daterange(start_date, end_date):
     data = datetime.date.today() + datetime.timedelta(days=1)
-    start_date = datetime.date.today() - datetime.timedelta(days=119)
+    start_date = datetime.date.today() - datetime.timedelta(days=119) #Aqui sempre será o periodo informado -1
     end_date = data
 
     for n in range(int((end_date - start_date).days)):
@@ -22,7 +22,7 @@ def daterange(start_date, end_date):
 
 def dia_semana_mes_ano():
     data = datetime.date.today() + datetime.timedelta(days=1)
-    start_date = datetime.date.today() - datetime.timedelta(days=119)
+    start_date = datetime.date.today() - datetime.timedelta(days=119) #Aqui sempre será o periodo informado -1
     end_date = data
 
     nome_semana = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"]

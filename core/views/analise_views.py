@@ -5,12 +5,14 @@ from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
 from core.trata_dados.datas import dia_semana_mes_ano
+from core.trata_dados.vendas import *
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    teste = dia_semana_mes_ano()
-    print(teste)
+    #teste = vendas()
+    teste = estatisca_vendas()
+
     return render(request, template_name)
 
 
@@ -22,7 +24,7 @@ def buscar_produto(request):
         qs = Produto.objects.filter(
             Q(desc_produto__icontains=produto) |
             Q(cod_produto__icontains=produto),
-            Q(empresa__id__icontains=empresa)
+            Q(empresa__id__exact=empresa)
         )
         if len(qs) > 0 and len(produto) > 0:
             data = []
@@ -49,7 +51,7 @@ def buscar_fornecedor(request):
         qs = Fornecedor.objects.filter(
             Q(desc_fornecedor__icontains=fornecedor) |
             Q(cod_fornecedor__icontains=fornecedor),
-            Q(empresa__id__icontains=empresa)
+            Q(empresa__id__exact=empresa)
         )
         if len(qs) > 0 and len(fornecedor) > 0:
             data = []
