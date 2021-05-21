@@ -4,14 +4,20 @@ from django.http import JsonResponse
 from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
+
 from core.trata_dados.datas import dia_semana_mes_ano
 from core.trata_dados.vendas import *
+from core.trata_dados.avarias import *
+from core.trata_dados.pedidos import *
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    #teste = vendas()
-    teste = estatisca_vendas()
+    vendas, info_vendas = estatisca_vendas()
+
+    #ava = avarias()
+    #ava = pedidos_compras()
+    #teste = info_vendas['dias_vendas']
 
     return render(request, template_name)
 

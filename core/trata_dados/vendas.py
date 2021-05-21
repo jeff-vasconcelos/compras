@@ -17,79 +17,85 @@ def vendas():
         data__range=[data_fim, data_inicio]
     ).values())
 
-    #TRATANDO DADOS
-    vendas_df['data'] = pd.to_datetime(vendas_df['data'])
-    preco = vendas_df.groupby(['data'])['preco_unit'].mean().round(2).to_frame().reset_index()
-    custo = vendas_df.groupby(['data'])['custo_fin'].mean().round(2).to_frame().reset_index()
+    if not vendas_df.empty:
+        #TRATANDO DADOS
+        vendas_df['data'] = pd.to_datetime(vendas_df['data'])
+        preco = vendas_df.groupby(['data'])['preco_unit'].mean().round(2).to_frame().reset_index()
+        custo = vendas_df.groupby(['data'])['custo_fin'].mean().round(2).to_frame().reset_index()
 
-    preco_custo = pd.merge(preco, custo, how="left", on=["data"])
+        preco_custo = pd.merge(preco, custo, how="left", on=["data"])
 
-    qtvendas = vendas_df.groupby(['data', 'cod_produto', 'desc_produto', 'cod_filial', 'cod_fornecedor'])['qt_vendas'].sum().to_frame().reset_index()
+        qtvendas = vendas_df.groupby(['data', 'cod_produto', 'desc_produto', 'cod_filial', 'cod_fornecedor'])['qt_vendas'].sum().to_frame().reset_index()
 
-    qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
-    vendas_datas = pd.merge(datas, qtvendas_preco_custo, how="left", on=["data"])
+        qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
+        vendas_datas = pd.merge(datas, qtvendas_preco_custo, how="left", on=["data"])
 
-    cod_filial = vendas_datas['cod_filial'].unique()
-    cod_prod = vendas_datas['cod_produto'].unique()
-    cod_fornec = vendas_datas['cod_fornecedor'].unique()
-    desc_prod = vendas_datas['desc_produto'].unique()
+        cod_filial = vendas_datas['cod_filial'].unique()
+        cod_prod = vendas_datas['cod_produto'].unique()
+        cod_fornec = vendas_datas['cod_fornecedor'].unique()
+        desc_prod = vendas_datas['desc_produto'].unique()
 
-    values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
-              'cod_fornecedor': cod_fornec[0], 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
+        values = {'cod_produto': cod_prod[1], 'desc_produto': desc_prod[1], 'cod_filial': cod_filial[1],
+                  'cod_fornecedor': cod_fornec[1], 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
 
-    vendas_datas.fillna(value=values, inplace=True)
+        vendas_datas.fillna(value=values, inplace=True)
 
-    return vendas_datas
+        return vendas_datas
+
+    if not vendas_df.empty:
+        return vendas_df
 
 
 def estatisca_vendas():
     e_vendas = vendas()
 
-    # MÉDIA DE VENDAS DESCONSIDERANDO NUMEROS NEGATIVOS
-    tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
-    media = tratando_media.mean()
+    if e_vendas is not None:
+        # MÉDIA DE VENDAS DESCONSIDERANDO NUMEROS NEGATIVOS
+        tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
+        media = tratando_media.mean()
 
-    maximo = e_vendas['qt_vendas'].max()
-    d_padrao = tratando_media.std()
+        maximo = e_vendas['qt_vendas'].max()
+        d_padrao = tratando_media.std()
 
-    d_vendas = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else 1).sum()
-    #d_sem_vendas = 120 - d_vendas
+        d_vendas = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else 1).sum()
+        d_sem_vendas = 120 - d_vendas
 
-    d_m = d_padrao / media
-    d_m_dois = d_m * 2
-    d_m_media = media * d_m_dois
-    print(type(d_padrao))
-    print(type(d_m))
-    print(type(d_m_dois))
-    print(type(d_m_media))
-    #print(media)
+        d_m = d_padrao / media
+        d_m_dois = d_m * 2
+        d_m_media = media * d_m_dois
+        max_media = d_m_media + media
 
-    max_media = 200
+        # CONSIDERAR VENDAS MAIORES OU IGUAIS A ZERO E MENORES QUE A MÉDIA MAXIMA
+        lista_media = []
+        for i in e_vendas.qt_vendas:
+            if i < max_media and i >= 0:
+                lista_media.append(i)
+        lista_for_df = pd.DataFrame(data=lista_media, columns=["valores"]).reset_index()
+        media_ajustada = lista_for_df['valores'].mean()
 
+        # ADICIONANDO VALORES AO DATAFRAME
+        e_vendas['media'] = round(media, 2)
+        e_vendas['max'] = round(max_media, 2)
+        e_vendas['min'] = 0
 
-    # CONSIDERAR VENDAS MAIORES OU IGUAIS A ZERO E MENORES QUE A MÉDIA MAXIMA
-    lista_media = []
-    for i in e_vendas.qt_vendas:
-        if i < max_media and i >= 0:
-            lista_media.append(i)
-    lista_for_df = pd.DataFrame(data=lista_media, columns=["valores"]).reset_index()
-    media_ponderada = lista_for_df['valores'].mean()
+        # VALIDANDO VENDAS FORA DA MEDIA
+        lista_fora = []
+        for i in e_vendas.qt_vendas:
+            if i > max_media:
+                item = round(i)
+            else:
+                item = 0
+            lista_fora.append(item)
 
-    # aDICIONANDO VALORES AO DATAFRAME
-    e_vendas['media'] = round(media, 2)
-    e_vendas['max'] = round(max_media, 2)
-    e_vendas['min'] = 0
+        e_vendas['fora_media'] = lista_fora
 
-    # VALIDANDO VENDAS FORA DA MEDIA
-    lista_fora = []
-    for i in e_vendas.qt_vendas:
-        if i > max_media:
-            item = round(i)
-        else:
-            item = 0
-        lista_fora.append(item)
+        info_prod = {
+            'dias_s_vendas': d_sem_vendas, 'dias_vendas': d_vendas,
+            'media': media, 'maximo': maximo, 'desvio': d_padrao, 'max_media': max_media,
+            'media_ajustada': media_ajustada
+        }
+        return e_vendas, info_prod
 
-    e_vendas['fora_media'] = lista_fora
-
-
-    return e_vendas
+    if e_vendas is None:
+        print("Não há registro de vendas")
+        return None, None
