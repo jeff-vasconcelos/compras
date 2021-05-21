@@ -9,13 +9,15 @@ from core.trata_dados.datas import dia_semana_mes_ano
 from core.trata_dados.vendas import *
 from core.trata_dados.avarias import *
 from core.trata_dados.pedidos import *
+from core.trata_dados.ultima_entrada import *
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    vendas, info_vendas = estatisca_vendas()
+    #vendas, info_vendas = estatisca_vendas()
 
-    #ava = avarias()
+
+    ava = ultima_entrada()
     #ava = pedidos_compras()
     #teste = info_vendas['dias_vendas']
 
