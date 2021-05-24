@@ -47,7 +47,7 @@ def valida_avaria(data):
     print("codigo da empresa ", cod_empresa)
 
     avaria = Avaria.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa, data=data_avaria
+        cod_produto=cod_produto, empresa=cod_empresa
     ).exists()
 
     if avaria == False:

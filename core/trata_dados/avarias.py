@@ -17,7 +17,7 @@ def avarias():
 
     if not avarias_df.empty:
         avarias = avarias_df.groupby(['data', 'cod_produto', 'desc_produto', 'cod_filial'])['qt_avaria'].sum().to_frame().reset_index()
-
+        avarias['data'] = pd.to_datetime(avarias['data'])
         return avarias
     else:
         print("O produto não possui avarias no periodo!")
