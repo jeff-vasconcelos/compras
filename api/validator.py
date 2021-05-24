@@ -44,6 +44,7 @@ def valida_avaria(data):
     cod_produto = data['cod_produto']
     cod_empresa = data['empresa']
     data_avaria = data['data']
+    print("codigo da empresa ", cod_empresa)
 
     avaria = Avaria.objects.filter(
         cod_produto=cod_produto, empresa=cod_empresa, data=data_avaria
