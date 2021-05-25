@@ -9,8 +9,8 @@ def ultima_entrada():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     u_entrada_df = pd.DataFrame(UltimaEntrada.objects.filter(
-        cod_produto__exact=2042,
-        empresa__id__exact=2,
+        cod_produto__exact=183,
+        empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     )[:1].values())
 
@@ -18,9 +18,10 @@ def ultima_entrada():
         data = u_entrada_df['data'][0]
         qt_entrada = u_entrada_df['qt_ult_entrada'][0]
 
-        entrada = {
-            'data': data, 'qt_entrada': qt_entrada
+        entr = {
+            'data': [data], 'qt_ult_entrada': [qt_entrada]
         }
+        entrada = pd.DataFrame(entr)
 
         return entrada
     else:

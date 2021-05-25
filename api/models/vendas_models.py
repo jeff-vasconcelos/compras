@@ -16,6 +16,7 @@ class Venda(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_vendas',
                                 blank=True, null=True)
     qt_vendas = models.IntegerField(null=True, blank=True)
+    qt_unit_caixa = models.IntegerField(null=True, blank=True)
     preco_unit = models.FloatField(null=True, blank=True)
     custo_fin = models.FloatField(null=True, blank=True)
     data = models.DateField(null=True, blank=True)

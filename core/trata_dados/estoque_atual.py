@@ -9,18 +9,20 @@ def estoque_atual():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
-        cod_produto__exact=2042,
-        empresa__id__exact=2,
+        cod_produto__exact=183,
+        empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     )[:1].values())
 
     if not estoque_a.empty:
         data = estoque_a['data'][0]
         qt_disponivel = estoque_a['qt_disponivel'][0]
+        qt_inden = estoque_a['qt_indenizada'][0]
 
-        disponivel = {
-            'data': data, 'qt_disponivel': qt_disponivel
+        disp = {
+            'data': [data], 'qt_disponivel': [qt_disponivel], 'qt_indenizada': qt_inden
         }
+        disponivel = pd.DataFrame(disp)
 
         return disponivel
     else:

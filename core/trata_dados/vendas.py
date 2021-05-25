@@ -1,7 +1,6 @@
 from api.models.vendas_models import Venda
 from core.trata_dados.datas import dia_semana_mes_ano
 import pandas as pd
-from scipy.stats import norm
 import datetime
 
 
@@ -12,8 +11,8 @@ def vendas():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
-        cod_produto__exact=2042,
-        empresa__id__exact=2,
+        cod_produto__exact=183,
+        empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     ).values())
 
@@ -25,7 +24,7 @@ def vendas():
 
         preco_custo = pd.merge(preco, custo, how="left", on=["data"])
 
-        qtvendas = vendas_df.groupby(['data', 'cod_produto', 'desc_produto', 'cod_filial', 'cod_fornecedor'])['qt_vendas'].sum().to_frame().reset_index()
+        qtvendas = vendas_df.groupby(['data', 'cod_produto', 'desc_produto', 'cod_filial', 'cod_fornecedor', 'qt_unit_caixa'])['qt_vendas'].sum().to_frame().reset_index()
 
         qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
         vendas_datas = pd.merge(datas, qtvendas_preco_custo, how="left", on=["data"])
@@ -35,14 +34,14 @@ def vendas():
         cod_fornec = vendas_datas['cod_fornecedor'].unique()
         desc_prod = vendas_datas['desc_produto'].unique()
 
-        values = {'cod_produto': cod_prod[1], 'desc_produto': desc_prod[1], 'cod_filial': cod_filial[1],
-                  'cod_fornecedor': cod_fornec[1], 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
+        values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
+                  'cod_fornecedor': cod_fornec[0], 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
 
         vendas_datas.fillna(value=values, inplace=True)
 
         return vendas_datas
 
-    if not vendas_df.empty:
+    if vendas_df.empty:
         return vendas_df
 
 
@@ -89,11 +88,13 @@ def estatisca_vendas():
 
         e_vendas['fora_media'] = lista_fora
 
-        info_prod = {
-            'dias_s_vendas': d_sem_vendas, 'dias_vendas': d_vendas,
-            'media': media, 'maximo': maximo, 'desvio': d_padrao, 'max_media': max_media,
-            'media_ajustada': media_ajustada
+        info_p = {
+            'dias_s_vendas': [d_sem_vendas], 'dias_vendas': [d_vendas],
+            'media': [round(media, 2)], 'maximo': [maximo], 'desvio': [round(d_padrao, 2)], 'max_media': [round(max_media, 2)],
+            'media_ajustada': [round(media_ajustada, 2)]
         }
+        info_prod = pd.DataFrame(info_p)
+
         return e_vendas, info_prod
 
     if e_vendas is None:

@@ -10,8 +10,8 @@ def avarias():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     avarias_df = pd.DataFrame(Avaria.objects.filter(
-        cod_produto__exact=2042,
-        empresa__id__exact=2,
+        cod_produto__exact=183,
+        empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     ).values())
 

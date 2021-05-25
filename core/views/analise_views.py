@@ -5,10 +5,11 @@ from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
 
+from core.trata_dados.curva_abc import abc
 from core.trata_dados.datas import dia_semana_mes_ano
 from core.trata_dados.estoque_atual import estoque_atual
 from core.trata_dados.hist_estoque import historico_estoque
-from core.trata_dados.info_produto import produto_info
+from core.trata_dados.infor_produto import dados_produto
 from core.trata_dados.vendas import *
 from core.trata_dados.avarias import *
 from core.trata_dados.pedidos import *
@@ -20,8 +21,8 @@ def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
     #vendas, info_vendas = estatisca_vendas()
 
 
-    ava = produto_info()
-    print(ava)
+    ava = dados_produto()
+    #print(ava)
 
 
     return render(request, template_name)

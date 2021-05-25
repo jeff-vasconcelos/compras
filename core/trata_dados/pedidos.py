@@ -10,8 +10,8 @@ def pedidos_compras():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     pedidos_df = pd.DataFrame(PedidoCompras.objects.filter(
-        cod_produto__exact=2042,
-        empresa__id__exact=2,
+        cod_produto__exact=183,
+        empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     ).values())
 
