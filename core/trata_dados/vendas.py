@@ -42,7 +42,7 @@ def vendas():
         return vendas_datas
 
     if vendas_df.empty:
-        return vendas_df
+        return None
 
 
 def estatisca_vendas():

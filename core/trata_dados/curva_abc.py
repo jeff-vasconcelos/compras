@@ -16,9 +16,7 @@ def abc():
         data__range=[data_fim, data_inicio]
     ).values())
 
-
     if not vendas_df.empty:
-
         vendas_df['vl_total_vendido'] = vendas_df['qt_vendas'] * vendas_df['preco_unit']
         vendas_df['vl_total_custo'] = vendas_df['qt_vendas'] * vendas_df['custo_fin']
 
@@ -26,7 +24,6 @@ def abc():
         abc = vendas_df_abc.groupby(['cod_produto'])['vl_total_vendido', 'vl_total_custo'].sum().round(2).reset_index()
         abc['lucro'] = abc['vl_total_vendido'] - abc['vl_total_custo']
         abc.sort_values(by='lucro', ascending=False, inplace=True)
-
 
         lucro_total = abc['lucro'].sum().round(2)
 
