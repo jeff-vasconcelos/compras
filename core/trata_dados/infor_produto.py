@@ -2,7 +2,7 @@ from core.trata_dados.pedidos import pedidos_compras
 from core.trata_dados.ultima_entrada import ultima_entrada
 from core.trata_dados.estoque_atual import estoque_atual
 from core.trata_dados.curva_abc import abc
-from core.trata_dados.vendas import estatisca_vendas
+from core.trata_dados.vendas import vendas
 import pandas as pd
 import math
 
@@ -11,7 +11,7 @@ def dados_produto():
     pedidos = pedidos_compras()
     u_entrada = ultima_entrada()
     e_atual = estoque_atual()
-    vendas, info_produto = estatisca_vendas()
+    vendas_p, info_produto = vendas()
     curva = abc()
     leadtime = 15
     t_reposicao = 25
@@ -35,8 +35,6 @@ def dados_produto():
             prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
             prod_resumo['dt_ult_ent'] = dt_ult_entrada
             prod_resumo['qt_ult_ent'] = qt_ult_entrada
-
-
 
             prod_resumo['dias_estoque_estim'] = (prod_resumo['estoque_dispon'] / media).round(0)
 
@@ -75,7 +73,6 @@ def dados_produto():
 
             estoque_segur = est_seg.round(0)
 
-
             ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
 
             prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
@@ -88,6 +85,9 @@ def dados_produto():
                         prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
             prod_resumo['sugestao'] = sugestao[0].round(0)
+            prod_resumo['media'] = media
+            prod_resumo['media_ajustada'] = media_ajustada
+            prod_resumo['desvio'] = desvio
 
             print("PASSOU - SUGESTAO DE COMPRAS")
 

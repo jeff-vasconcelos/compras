@@ -39,17 +39,9 @@ def vendas():
 
         vendas_datas.fillna(value=values, inplace=True)
 
-        return vendas_datas
+        # ESTATISTICAS DE VENDAS
 
-    if vendas_df.empty:
-        return None
-
-
-def estatisca_vendas():
-    e_vendas = vendas()
-
-    if e_vendas is not None:
-        # MÉDIA DE VENDAS DESCONSIDERANDO NUMEROS NEGATIVOS
+        e_vendas = vendas_datas
         tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
         media = tratando_media.mean()
 
@@ -90,13 +82,13 @@ def estatisca_vendas():
 
         info_p = {
             'dias_s_vendas': [d_sem_vendas], 'dias_vendas': [d_vendas],
-            'media': [round(media, 2)], 'maximo': [maximo], 'desvio': [round(d_padrao, 2)], 'max_media': [round(max_media, 2)],
+            'media': [round(media, 2)], 'maximo': [maximo], 'desvio': [round(d_padrao, 2)],
+            'max_media': [round(max_media, 2)],
             'media_ajustada': [round(media_ajustada, 2)]
         }
         info_prod = pd.DataFrame(info_p)
 
         return e_vendas, info_prod
 
-    if e_vendas is None:
-        print("Não há registro de vendas")
-        return None, None
+    if vendas_df.empty:
+        return None
