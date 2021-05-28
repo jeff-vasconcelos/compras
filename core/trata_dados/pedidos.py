@@ -12,7 +12,7 @@ def pedidos_compras():
     pedidos_df = pd.DataFrame(PedidoCompras.objects.filter(
         cod_produto__exact=182,
         empresa__id__exact=1,
-        data__range=[data_fim, data_inicio]
+        data_=[data_fim, data_inicio]
     ).values())
 
     if not pedidos_df.empty:

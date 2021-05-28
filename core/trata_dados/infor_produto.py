@@ -3,22 +3,30 @@ from core.trata_dados.ultima_entrada import ultima_entrada
 from core.trata_dados.estoque_atual import estoque_atual
 from core.trata_dados.curva_abc import abc
 from core.trata_dados.vendas import vendas
+from core.models.parametros_models import Parametro
 import pandas as pd
 #from scipy.stats import norm
 import math
 
 
-def dados_produto(cod, empresa):
+def dados_produto(cod, forn, empresa, leadt, t_reposi):
+    # PEGANDO DADOS DE PRODUTO, FORNCEDOR, EMPRESA E FUNCOES NECESSARIAS
+
+    id_fornec = forn
     id_prod = cod
     id_emp = empresa
+    leadtime = leadt
+    t_reposicao = t_reposi
+
+    parametros = Parametro.objects.get(empresa_id=id_emp)
+    pedidos = pedidos_compras(id_prod, id_emp)
+    u_entrada = ultima_entrada(id_prod, id_emp, parametros.periodo)
+
+    e_atual = estoque_atual(id_prod, id_emp, parametros.periodo)
+    vendas_p, info_produto = vendas(id_prod, id_emp, parametros.periodo)
+    curva = abc(id_fornec, id_emp, parametros.periodo)
+
     print("IDs produto e empresa", id_prod, id_emp)
-    pedidos = pedidos_compras()
-    u_entrada = ultima_entrada()
-    e_atual = estoque_atual()
-    vendas_p, info_produto = vendas(id_prod, id_emp)
-    curva = abc()
-    leadtime = 15
-    t_reposicao = 25
 
     # INFORMÇÕES GERAIS
 
@@ -47,11 +55,11 @@ def dados_produto(cod, empresa):
                 #
                 # # ESTOQUE DE SEGURANÇA
                 #
-                # curva_a = norm.ppf(0.75).round(3)
-                # curva_b = norm.ppf(0.85).round(3)
-                # curva_c = norm.ppf(0.50).round(3)
-                # curva_d = norm.ppf(0.50).round(3)
-                # curva_e = norm.ppf(0.50).round(3)
+                # curva_a = norm.ppf(parametros.curva_a/100).round(3)print(parametros.curva_a / 100)
+                # curva_b = norm.ppf(parametros.curva_b/100).round(3)
+                # curva_c = norm.ppf(parametros.curva_c/100).round(3)
+                # curva_d = norm.ppf(parametros.curva_d/100).round(3)
+                # curva_e = norm.ppf(parametros.curva_e/100).round(3)
                 #
                 # produto = curva.cod_produto
                 #

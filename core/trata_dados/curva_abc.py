@@ -5,14 +5,15 @@ import datetime
 from core.trata_dados.datas import dia_semana_mes_ano
 
 
-def abc():
+def abc(id_fornecedor, id_empresa, periodo):
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=119)  # Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano()
 
+
     vendas_df = pd.DataFrame(Venda.objects.filter(
-        fornecedor_id__exact=1,
-        empresa__id__exact=1,
+        fornecedor_id__exact=id_fornecedor,
+        empresa__id__exact=id_empresa,
         data__range=[data_fim, data_inicio]
     ).values())
 
@@ -21,7 +22,8 @@ def abc():
         vendas_df['vl_total_custo'] = vendas_df['qt_vendas'] * vendas_df['custo_fin']
 
         vendas_df_abc = vendas_df
-        abc = vendas_df_abc.groupby(['cod_produto'])['vl_total_vendido', 'vl_total_custo'].sum().round(2).reset_index()
+        list_val_cus = ['vl_total_vendido', 'vl_total_custo']
+        abc = vendas_df_abc.groupby(['cod_produto'])[list_val_cus].sum().round(2).reset_index()
         abc['lucro'] = abc['vl_total_vendido'] - abc['vl_total_custo']
         abc.sort_values(by='lucro', ascending=False, inplace=True)
 

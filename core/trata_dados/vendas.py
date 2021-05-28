@@ -4,17 +4,17 @@ import pandas as pd
 import datetime
 
 
-def vendas(cod, empresa):
+def vendas(cod_produto, id_empresa, periodo):
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=119) #Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=periodo - 1) #Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano()
 
-    print(cod, empresa, "printando em vendas")
+    print(cod_produto, id_empresa, "printando em vendas")
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
-        cod_produto__exact=cod,
-        empresa__id__exact=empresa,
+        cod_produto__exact=cod_produto,
+        empresa__id__exact=id_empresa,
         data__range=[data_fim, data_inicio]
     ).values())
 

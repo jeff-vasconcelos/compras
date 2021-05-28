@@ -3,15 +3,12 @@ import pandas as pd
 import datetime
 
 
-def estoque_atual():
-    data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=119)  # Aqui sempre será o periodo informado -1
-
+def estoque_atual(cod_produto, id_empresa):
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
-        cod_produto__exact=182,
-        empresa__id__exact=1,
-        data__range=[data_fim, data_inicio]
+        cod_produto__exact=cod_produto,
+        empresa__id__exact=id_empresa,
+        data=datetime.date.today()
     )[:1].values())
 
     if not estoque_a.empty:
