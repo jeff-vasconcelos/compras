@@ -18,14 +18,8 @@ from core.trata_dados.ultima_entrada import *
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    teste = dados_produto()
+    teste = dados_produto(182, 1)
     print(teste)
-
-
-    #ava = estoque_seguranca()
-    #print(ava)
-
-
     return render(request, template_name)
 
 

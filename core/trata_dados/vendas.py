@@ -4,15 +4,17 @@ import pandas as pd
 import datetime
 
 
-def vendas():
+def vendas(cod, empresa):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=119) #Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano()
 
+    print(cod, empresa, "printando em vendas")
+
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
-        cod_produto__exact=182,
-        empresa__id__exact=1,
+        cod_produto__exact=cod,
+        empresa__id__exact=empresa,
         data__range=[data_fim, data_inicio]
     ).values())
 
@@ -33,9 +35,10 @@ def vendas():
         cod_prod = vendas_datas['cod_produto'].unique()
         cod_fornec = vendas_datas['cod_fornecedor'].unique()
         desc_prod = vendas_datas['desc_produto'].unique()
+        qt_un_caixa = vendas_datas['qt_unit_caixa'].unique()
 
         values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
-                  'cod_fornecedor': cod_fornec[0], 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
+                  'cod_fornecedor': cod_fornec[0], 'qt_unit_caixa': qt_un_caixa[0] , 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
 
         vendas_datas.fillna(value=values, inplace=True)
 
@@ -91,4 +94,4 @@ def vendas():
         return e_vendas, info_prod
 
     if vendas_df.empty:
-        return None
+        return None, None
