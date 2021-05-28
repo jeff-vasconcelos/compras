@@ -9,7 +9,7 @@ def estoque_atual():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
-        cod_produto__exact=183,
+        cod_produto__exact=182,
         empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     )[:1].values())

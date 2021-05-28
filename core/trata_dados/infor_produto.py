@@ -4,6 +4,7 @@ from core.trata_dados.estoque_atual import estoque_atual
 from core.trata_dados.curva_abc import abc
 from core.trata_dados.vendas import vendas
 import pandas as pd
+from scipy.stats import norm
 import math
 
 

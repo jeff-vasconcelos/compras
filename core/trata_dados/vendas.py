@@ -11,7 +11,7 @@ def vendas():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
-        cod_produto__exact=183,
+        cod_produto__exact=182,
         empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     ).values())

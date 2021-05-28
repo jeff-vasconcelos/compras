@@ -9,7 +9,7 @@ def ultima_entrada():
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     u_entrada_df = pd.DataFrame(UltimaEntrada.objects.filter(
-        cod_produto__exact=183,
+        cod_produto__exact=182,
         empresa__id__exact=1,
         data__range=[data_fim, data_inicio]
     )[:1].values())
