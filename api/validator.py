@@ -89,10 +89,11 @@ def valida_hist_estoque(data):
 def valida_pedido(data):
     cod_produto = data['cod_produto']
     cod_empresa = data['empresa']
-    data = data['data']
+    pedido = data['num_pedido']
+    saldo = data['saldo']
 
     pedido = PedidoCompras.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa, data=data
+        cod_produto=cod_produto, empresa=cod_empresa, saldo=saldo, num_pedido=pedido
     ).exists()
 
     if pedido == False:

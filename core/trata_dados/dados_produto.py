@@ -1,5 +1,5 @@
 from core.trata_dados.datas import dia_semana_mes_ano
-from core.trata_dados.vendas import estatisca_vendas
+from core.trata_dados.vendas import vendas
 from core.trata_dados.avarias import avarias
 from core.trata_dados.hist_estoque import historico_estoque
 from core.trata_dados.pedidos import pedidos_compras
@@ -7,7 +7,7 @@ import pandas as pd
 
 
 def produto_dados():
-    df_vendas, infor = estatisca_vendas()
+    df_vendas, infor = vendas()
     df_avarias = avarias()
     df_historico = historico_estoque()
     df_pedidos = pedidos_compras()

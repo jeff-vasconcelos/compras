@@ -9,24 +9,24 @@ import pandas as pd
 import math
 
 
-def dados_produto(cod, forn, empresa, leadt, t_reposi):
+def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     # PEGANDO DADOS DE PRODUTO, FORNCEDOR, EMPRESA E FUNCOES NECESSARIAS
 
-    id_fornec = forn
-    id_prod = cod
-    id_emp = empresa
+    id_fornec = cod_forn
+    cod_prod = cod_produto
+    id_emp = id_empresa
     leadtime = leadt
-    t_reposicao = t_reposi
+    t_reposicao = t_reposicao
 
     parametros = Parametro.objects.get(empresa_id=id_emp)
-    pedidos = pedidos_compras(id_prod, id_emp)
-    u_entrada = ultima_entrada(id_prod, id_emp, parametros.periodo)
 
-    e_atual = estoque_atual(id_prod, id_emp, parametros.periodo)
-    vendas_p, info_produto = vendas(id_prod, id_emp, parametros.periodo)
+    pedidos = pedidos_compras(cod_prod, id_emp)
+    u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
+    e_atual = estoque_atual(cod_prod, id_emp)
+    vendas_p, info_produto = vendas(cod_prod, id_emp, parametros.periodo)
     curva = abc(id_fornec, id_emp, parametros.periodo)
 
-    print("IDs produto e empresa", id_prod, id_emp)
+    print("IDs produto e empresa", cod_prod, id_emp)
 
     # INFORMÇÕES GERAIS
 

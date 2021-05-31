@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 
 
-def ultima_entrada():
+def ultima_entrada(cod_produto, id_empresa, periodo):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=119)  # Aqui sempre será o periodo informado -1
 
