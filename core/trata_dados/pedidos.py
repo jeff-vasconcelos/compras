@@ -5,18 +5,17 @@ import pandas as pd
 import datetime
 
 
-def pedidos_compras(cod_produto, id_empresa, periodo):
+def pedidos_compras(cod_produto, id_empresa, cod_filial):
 
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=periodo - 1) #Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=90 - 1) #Aqui sempre será o periodo informado -1
 
     df = pd.DataFrame(PedidoCompras.objects.all().filter(
         cod_produto__exact=cod_produto,
         empresa__id__exact=id_empresa,
+        cod_filial=cod_filial,
         data__range=[data_fim, data_inicio]
     ).order_by('-id').values())
-
-    print(df)
 
     pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
 
@@ -27,5 +26,9 @@ def pedidos_compras(cod_produto, id_empresa, periodo):
 
         return pedidos
     else:
+        pedido_vazio = {
+            'cod_produto': cod_produto, 'cod_filial': cod_filial, 'saldo': 0
+        }
+        pedido_vazio_df = pd.DataFrame([pedido_vazio])
         print("O produto não tem pedidos de compras pendentes!")
-    return None
+    return pedido_vazio_df

@@ -18,16 +18,18 @@ from core.trata_dados.ultima_entrada import *
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    #teste = dados_produto(182, 1, 1, 15, 30)
-    #cod, forn, empresa, leadt, t_reposi
-    teste = pedidos_compras(182, 1, 120)
-
-    print(teste)
+    # teste = dados_produto(182, 1, 1, 15, 30)
+    # cod, forn, empresa, leadt, t_reposi
+    # teste = pedidos_compras(180, 1, 1)
+    #
+    # print(teste)
+    teste = request.user.usuario.empresa_id
+    print("cod empresa:", teste)
     return render(request, template_name)
 
 
 def buscar_produto(request):
-    empresa = 1
+    empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         res = None
         produto = request.POST.get('produto')
@@ -54,7 +56,7 @@ def buscar_produto(request):
 
 
 def buscar_fornecedor(request):
-    empresa = 1
+    empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         res_f = None
         fornecedor = request.POST.get('fornecedor')
@@ -80,7 +82,7 @@ def buscar_fornecedor(request):
 
 
 def filtrar_produto_fornecedor(request):
-    empresa = 1
+    empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         res_fil_fornec = None
         fornecedor = request.POST.get('fornecedor')
@@ -112,7 +114,7 @@ def filtrar_produto_fornecedor(request):
 
 
 def filtrar_produto_produto(request):
-    empresa = 1
+    empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         res_fil_prod = None
         produto = request.POST.get('produto')
@@ -144,31 +146,77 @@ def filtrar_produto_produto(request):
 
 
 def selecionar_produto(request):
-    empresa = 1
+    empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         info_prod = None
         produto = request.POST.get('produto')
 
-        qs = Produto.objects.filter(id__exact=produto, empresa__id__exact=empresa).order_by('cod_produto')
-        print(qs)
+        qs = Produto.objects.get(id=produto, empresa__id=empresa)
+        print(produto)
+        print(qs.cod_produto)
 
-        if len(qs) > 0 and len(produto) > 0:
+        produto_codigo = qs.cod_produto
+        fornecedor_codigo = qs.cod_fornecedor
+        leadtime = 0
+        t_reposicao = 0
+
+        produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
+
+        if produto_dados is None:
+            print("O produto não pode ser analisado! O produto pode não ter vendas.")
+            print(produto_dados)
+
             data = []
-            for prod in qs:
-                item = {
-                    'pk': prod.pk,
-                    'nome': prod.desc_produto,
-                    'cod': prod.cod_produto,
-                    'emb': prod.embalagem,
-                    'filial': prod.filial.desc_filial
-                }
-                data.append(item)
+            item = {
+                'pk': '',
+                'nome': '',
+                'cod': '',
+                'emb': '',
+                'filial': ''
+            }
+            data.append(item)
             info_prod = data
+
+            return JsonResponse({'data': info_prod})
+
         else:
-            info_prod = "Nada encontrado!"
-        return JsonResponse({'data': info_prod})
+            print(produto_dados)
+
+            data = []
+            item = {
+                'pk': qs.pk,
+                'nome': qs.desc_produto,
+                'cod': qs.cod_produto,
+                'emb': qs.embalagem,
+                'filial': qs.cod_filial
+            }
+            data.append(item)
+            info_prod = data
+
+            return JsonResponse({'data': info_prod})
+
     return JsonResponse({})
 
 
-def informacao_produtos():
-    pass
+def mapa_serie(request):
+    label_max = []
+    data_max = []
+    label_med = []
+    data_med = []
+    label_min = []
+    data_min = []
+    label_preco = []
+    data_preco = []
+    label_custo = []
+    data_custo = []
+    label_lucro = []
+    data_lucro = []
+    label_qtvenda = []
+    data_qtvenda = []
+    empresa = request.user.usuario.empresa_id
+    if request.is_ajax():
+        info_prod = None
+        produto = request.POST.get('produto')
+
+
+        vendas(produto, empresa)

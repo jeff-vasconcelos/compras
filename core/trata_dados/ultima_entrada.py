@@ -5,12 +5,12 @@ import datetime
 
 def ultima_entrada(cod_produto, id_empresa, periodo):
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=119)  # Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     u_entrada_df = pd.DataFrame(UltimaEntrada.objects.filter(
-        cod_produto__exact=182,
-        empresa__id__exact=1,
+        cod_produto__exact=cod_produto,
+        empresa__id__exact=id_empresa,
         data__range=[data_fim, data_inicio]
     )[:1].values())
 
@@ -25,5 +25,5 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
 
         return entrada
     else:
-        print("O produto não tem entradas!")
+        print("O produto", cod_produto, "não teve entradas no periodo!")
         return None

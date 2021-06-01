@@ -1,15 +1,15 @@
 from api.models.vendas_models import Venda
+from core.models.parametros_models import Parametro
 from core.trata_dados.datas import dia_semana_mes_ano
 import pandas as pd
 import datetime
 
 
-def vendas(cod_produto, id_empresa, periodo):
+def vendas(cod_produto, id_empresa):
+    parametros = Parametro.objects.get(empresa_id=id_empresa)
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=periodo - 1) #Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=parametros.periodo - 1) #Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano()
-
-    print(cod_produto, id_empresa, "printando em vendas")
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
@@ -90,8 +90,9 @@ def vendas(cod_produto, id_empresa, periodo):
             'media_ajustada': [round(media_ajustada, 2)]
         }
         info_prod = pd.DataFrame(info_p)
-
+        print(e_vendas)
         return e_vendas, info_prod
 
     if vendas_df.empty:
+        print('O produto', cod_produto ,'não teve vendas no periodo')
         return None, None
