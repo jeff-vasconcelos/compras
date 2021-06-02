@@ -6,7 +6,7 @@ from core.trata_dados.curva_abc import abc
 from core.trata_dados.vendas import vendas
 from core.models.parametros_models import Parametro
 import pandas as pd
-# from scipy.stats import norm
+from scipy.stats import norm
 import math
 
 
@@ -14,7 +14,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     # PEGANDO DADOS DE PRODUTO, FORNCEDOR, EMPRESA E FUNCOES NECESSARIAS
     filial = 1
 
-    id_fornec = cod_forn
+    cod_fornec = cod_forn
     cod_prod = cod_produto
     id_emp = id_empresa
     leadtime = leadt
@@ -26,7 +26,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
     e_atual = estoque_atual(cod_prod, id_emp)
     vendas_p, info_produto = produto_dados(cod_prod, id_emp, parametros.periodo)
-    curva = abc(id_fornec, id_emp, parametros.periodo)
+    curva = abc(cod_fornec, id_emp, parametros.periodo)
 
     print("IDs produto e empresa", cod_prod, id_emp)
 
@@ -62,13 +62,14 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         # ESTOQUE DE SEGURANÇA
 
         curva_a = norm.ppf(parametros.curva_a / 100).round(3)
-        print(parametros.curva_a / 100)
         curva_b = norm.ppf(parametros.curva_b / 100).round(3)
         curva_c = norm.ppf(parametros.curva_c / 100).round(3)
         curva_d = norm.ppf(parametros.curva_d / 100).round(3)
         curva_e = norm.ppf(parametros.curva_e / 100).round(3)
 
-        produto = curva.cod_produto
+        #produto = curva.cod_produto
+        produto = curva.query('cod_produto == @cod_produto')
+        print(produto.curva)
 
         if produto.curva[0] == "A":
             est_seg = curva_a * math.sqrt((leadtime + t_reposicao)) * desvio

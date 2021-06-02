@@ -20,9 +20,9 @@ from core.trata_dados.ultima_entrada import *
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
 
-    teste = request.user.usuario.empresa_id
-    avar = produto_dados(182, teste, 120)
-    print("Dataframe avarias:", avar)
+    # teste = request.user.usuario.empresa_id
+    # avar = produto_dados(182, teste, 120)
+    # print("Dataframe avarias:", avar)
     return render(request, template_name)
 
 
@@ -155,8 +155,8 @@ def selecionar_produto(request):
 
         produto_codigo = qs.cod_produto
         fornecedor_codigo = qs.cod_fornecedor
-        leadtime = 0
-        t_reposicao = 0
+        leadtime = 15
+        t_reposicao = 30
 
         produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
 
