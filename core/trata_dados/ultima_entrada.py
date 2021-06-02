@@ -21,9 +21,16 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
         entr = {
             'data': [data], 'qt_ult_entrada': [qt_entrada]
         }
+
         entrada = pd.DataFrame(entr)
+
+        print("ENTRADAS - OK")
+        print(entrada)
+        print("##############################")
 
         return entrada
     else:
-        print("O produto", cod_produto, "não teve entradas no periodo!")
+        print("ENTRADAS - O PRODUTO NÃO TEM ENTRADAS")
+        print("##############################")
+
         return None

@@ -1,3 +1,4 @@
+from core.trata_dados.dados_produto import produto_dados
 from core.trata_dados.pedidos import pedidos_compras
 from core.trata_dados.ultima_entrada import ultima_entrada
 from core.trata_dados.estoque_atual import estoque_atual
@@ -24,7 +25,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     pedidos = pedidos_compras(cod_prod, id_emp, filial)
     u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
     e_atual = estoque_atual(cod_prod, id_emp)
-    vendas_p, info_produto = vendas(cod_prod, id_emp)
+    vendas_p, info_produto = produto_dados(cod_prod, id_emp, parametros.periodo)
     curva = abc(id_fornec, id_emp, parametros.periodo)
 
     print("IDs produto e empresa", cod_prod, id_emp)

@@ -5,10 +5,10 @@ import pandas as pd
 import datetime
 
 
-def vendas(cod_produto, id_empresa):
-    parametros = Parametro.objects.get(empresa_id=id_empresa)
+def vendas(cod_produto, id_empresa, periodo):
+
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=parametros.periodo - 1) #Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=periodo - 1) #Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano()
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
@@ -37,8 +37,13 @@ def vendas(cod_produto, id_empresa):
         desc_prod = vendas_datas['desc_produto'].unique()
         qt_un_caixa = vendas_datas['qt_unit_caixa'].unique()
 
-        values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
+        if vendas_df.size == 1:
+            values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
                   'cod_fornecedor': cod_fornec[0], 'qt_unit_caixa': qt_un_caixa[0] , 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
+        else:
+            values = {'cod_produto': cod_prod[1], 'desc_produto': desc_prod[1], 'cod_filial': cod_filial[1],
+                      'cod_fornecedor': cod_fornec[1], 'qt_unit_caixa': qt_un_caixa[1], 'qt_vendas': 0, 'custo_fin': 0,
+                      'preco_unit': 0}
 
         vendas_datas.fillna(value=values, inplace=True)
 
@@ -90,9 +95,16 @@ def vendas(cod_produto, id_empresa):
             'media_ajustada': [round(media_ajustada, 2)]
         }
         info_prod = pd.DataFrame(info_p)
+
+        print("VENDAS - OK")
         print(e_vendas)
+        print("##############################")
+
         return e_vendas, info_prod
 
     if vendas_df.empty:
-        print('O produto', cod_produto ,'não teve vendas no periodo')
+
+        print("VENDAS - NÃO HÁ VENDAS")
+        print("##############################")
+
         return None, None

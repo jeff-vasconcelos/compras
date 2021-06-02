@@ -6,6 +6,7 @@ from api.models.fornecedor_models import *
 from api.models.produto_models import *
 
 from core.trata_dados.curva_abc import abc
+from core.trata_dados.dados_produto import produto_dados
 from core.trata_dados.datas import dia_semana_mes_ano
 from core.trata_dados.estoque_atual import estoque_atual
 from core.trata_dados.hist_estoque import historico_estoque
@@ -18,13 +19,10 @@ from core.trata_dados.ultima_entrada import *
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    # teste = dados_produto(182, 1, 1, 15, 30)
-    # cod, forn, empresa, leadt, t_reposi
-    # teste = pedidos_compras(180, 1, 1)
-    #
-    # print(teste)
+
     teste = request.user.usuario.empresa_id
-    print("cod empresa:", teste)
+    avar = produto_dados(182, teste, 120)
+    print("Dataframe avarias:", avar)
     return render(request, template_name)
 
 

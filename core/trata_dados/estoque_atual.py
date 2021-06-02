@@ -4,7 +4,6 @@ import datetime
 
 
 def estoque_atual(cod_produto, id_empresa):
-    # CONSULTANDO VENDAS NO BANCO DE DADOS
     estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
         cod_produto__exact=cod_produto,
         empresa__id__exact=id_empresa,
@@ -21,7 +20,13 @@ def estoque_atual(cod_produto, id_empresa):
         }
         disponivel = pd.DataFrame(disp)
 
+        print("ESTOQUE ATUAL - OK")
+        print(disponivel)
+        print("##############################")
+
         return disponivel
     else:
-        print("O produto não tem registro de estoque!")
+        print("ESTOQUE ATUAL - O PRODUTO NÃO ESTOQUE")
+        print("##############################")
+
         return None
