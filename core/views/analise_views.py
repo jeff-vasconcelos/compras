@@ -183,10 +183,12 @@ def selecionar_produto(request):
             data = []
             item = {
                 'pk': qs.pk,
-                'nome': qs.desc_produto,
-                'cod': qs.cod_produto,
-                'emb': qs.embalagem,
-                'filial': qs.cod_filial
+                'filial': int(produto_dados['cod_filial']),
+                'estoque': int(produto_dados['estoque_dispon']),
+                'avaria': int(produto_dados['avarias']),
+                'saldo': int(produto_dados['saldo']),
+                #'dt_ult_entrada': str(produto_dados['dt_ult_ent']),
+                'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
             }
             data.append(item)
             info_prod = data
@@ -195,26 +197,26 @@ def selecionar_produto(request):
 
     return JsonResponse({})
 
-
-def mapa_serie(request):
-    label_max = []
-    data_max = []
-    label_med = []
-    data_med = []
-    label_min = []
-    data_min = []
-    label_preco = []
-    data_preco = []
-    label_custo = []
-    data_custo = []
-    label_lucro = []
-    data_lucro = []
-    label_qtvenda = []
-    data_qtvenda = []
-    empresa = request.user.usuario.empresa_id
-    if request.is_ajax():
-        info_prod = None
-        produto = request.POST.get('produto')
-
-
-        vendas(produto, empresa)
+#
+# def mapa_serie(request):
+#     label_max = []
+#     data_max = []
+#     label_med = []
+#     data_med = []
+#     label_min = []
+#     data_min = []
+#     label_preco = []
+#     data_preco = []
+#     label_custo = []
+#     data_custo = []
+#     label_lucro = []
+#     data_lucro = []
+#     label_qtvenda = []
+#     data_qtvenda = []
+#     empresa = request.user.usuario.empresa_id
+#     if request.is_ajax():
+#         info_prod = None
+#         produto = request.POST.get('produto')
+#
+#
+#         vendas(produto, empresa)

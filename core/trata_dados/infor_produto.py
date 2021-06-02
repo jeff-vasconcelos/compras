@@ -1,3 +1,4 @@
+import datetime
 from core.trata_dados.dados_produto import produto_dados
 from core.trata_dados.pedidos import pedidos_compras
 from core.trata_dados.ultima_entrada import ultima_entrada
@@ -35,7 +36,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     if info_produto is not None:
 
         if u_entrada is None:
-            dt_ult_entrada = ""
+            dt_ult_entrada = datetime.date.today()
             qt_ult_entrada = 0
             print("SEM DADOS ULT ENTRADA - DEF DADOS_PROD")
         else:
@@ -67,9 +68,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         curva_d = norm.ppf(parametros.curva_d / 100).round(3)
         curva_e = norm.ppf(parametros.curva_e / 100).round(3)
 
-        #produto = curva.cod_produto
-        produto = curva.query('cod_produto == @cod_produto')
-        print(produto.curva)
+        produto = curva.query('cod_produto == @cod_produto').reset_index(drop=True)
 
         if produto.curva[0] == "A":
             est_seg = curva_a * math.sqrt((leadtime + t_reposicao)) * desvio
@@ -85,6 +84,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         else:
             est_seg = curva_e * math.sqrt((leadtime + t_reposicao)) * desvio
+
 
         prod_resumo['estoque_segur'] = est_seg.round(0)
 
@@ -109,6 +109,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['media'] = media
         prod_resumo['media_ajustada'] = media_ajustada
         prod_resumo['desvio'] = desvio
+        prod_resumo['curva'] = produto.curva[0]
 
         print("PASSOU - SUGESTAO DE COMPRAS")
 
