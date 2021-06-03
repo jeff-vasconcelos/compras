@@ -96,8 +96,17 @@ def vendas(cod_produto, id_empresa, periodo):
         }
         info_prod = pd.DataFrame(info_p)
 
+        list_val_cus = ['vl_total_vendido', 'vl_total_custo']
+        vendas_lucro = e_vendas
+
+        vendas_lucro['vl_total_vendido'] = e_vendas['qt_vendas'] * e_vendas['preco_unit']
+        vendas_lucro['vl_total_custo'] = e_vendas['qt_vendas'] * e_vendas['custo_fin']
+
+        lucro = vendas_lucro.groupby(['data'])[list_val_cus].sum().round(2).reset_index()
+        e_vendas['lucro'] = vendas_lucro['vl_total_vendido'] - vendas_lucro['vl_total_custo']
+
         print("VENDAS - OK")
-        print(e_vendas)
+        print(e_vendas, info_prod)
         print("##############################")
 
         return e_vendas, info_prod

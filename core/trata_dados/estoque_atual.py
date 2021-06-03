@@ -6,8 +6,7 @@ import datetime
 def estoque_atual(cod_produto, id_empresa):
     estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
         cod_produto__exact=cod_produto,
-        empresa__id__exact=id_empresa,
-        data=datetime.date.today()
+        empresa__id__exact=id_empresa
     )[:1].values())
 
     if not estoque_a.empty:

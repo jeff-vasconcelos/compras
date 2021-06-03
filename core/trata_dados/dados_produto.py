@@ -29,6 +29,7 @@ def produto_dados(cod_produto, id_empresa, periodo):
 
             df_avarias = pd.DataFrame([avarias_vazio])
             df_avarias['data'] = pd.to_datetime(df_avarias['data'], format='%Y-%m-%d')
+
             print("PRODUTOS DADOS - AVARIAS VAZIO")
             print(df_avarias)
             print("##############################")
@@ -49,7 +50,7 @@ def produto_dados(cod_produto, id_empresa, periodo):
             columns=['id', 'produto_id', 'fornecedor_id', 'empresa_id', 'created_at', 'cod_fornecedor_y'],
             inplace=True)
 
-        print("PRODUTOS DADOS - AVARIAS OK")
+        print("PRODUTOS DADOS - AVARIAS/VENDAS OK")
         print(df_ven_ava_hist)
         print("##############################")
 

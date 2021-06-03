@@ -29,6 +29,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     vendas_p, info_produto = produto_dados(cod_prod, id_emp, parametros.periodo)
     curva = abc(cod_fornec, id_emp, parametros.periodo)
 
+
     print("IDs produto e empresa", cod_prod, id_emp)
 
     # INFORMÇÕES GERAIS
@@ -36,12 +37,14 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     if info_produto is not None:
 
         if u_entrada is None:
-            dt_ult_entrada = datetime.date.today()
+            dt_ult_entrada = "-"
             qt_ult_entrada = 0
+            vl_ult_entrada = 0
             print("SEM DADOS ULT ENTRADA - DEF DADOS_PROD")
         else:
             dt_ult_entrada = u_entrada['data'].unique()
             qt_ult_entrada = u_entrada['qt_ult_entrada'].unique()
+            vl_ult_entrada = u_entrada['vl_ult_entrada'].unique()
 
         media = info_produto.media[0]
         media_ajustada = info_produto.media_ajustada[0]
@@ -55,6 +58,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
+        prod_resumo['vl_ult_ent'] = vl_ult_entrada
 
         prod_resumo['dias_estoque_estim'] = (prod_resumo['estoque_dispon'] / media).round(0)
 
@@ -110,6 +114,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['media_ajustada'] = media_ajustada
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = produto.curva[0]
+        #prod_resumo['dt_ult_ent'] = pd.to_datetime(prod_resumo['dt_ult_ent'])
+
 
         print("PASSOU - SUGESTAO DE COMPRAS")
 

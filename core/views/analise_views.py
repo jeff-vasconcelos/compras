@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
-
+import datetime
 from core.trata_dados.curva_abc import abc
 from core.trata_dados.dados_produto import produto_dados
 from core.trata_dados.datas import dia_semana_mes_ano
@@ -15,6 +15,7 @@ from core.trata_dados.vendas import *
 from core.trata_dados.avarias import *
 from core.trata_dados.pedidos import *
 from core.trata_dados.ultima_entrada import *
+import pandas as pd
 
 
 @login_required
@@ -145,18 +146,17 @@ def filtrar_produto_produto(request):
 
 def selecionar_produto(request):
     empresa = request.user.usuario.empresa_id
+
     if request.is_ajax():
         info_prod = None
         produto = request.POST.get('produto')
+        leadtime = int(request.POST.get('leadtime'))
+        t_reposicao = int(request.POST.get('tempo_reposicao'))
 
         qs = Produto.objects.get(id=produto, empresa__id=empresa)
-        print(produto)
-        print(qs.cod_produto)
 
         produto_codigo = qs.cod_produto
         fornecedor_codigo = qs.cod_fornecedor
-        leadtime = 15
-        t_reposicao = 30
 
         produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
 
@@ -166,11 +166,22 @@ def selecionar_produto(request):
 
             data = []
             item = {
-                'pk': '',
-                'nome': '',
-                'cod': '',
-                'emb': '',
-                'filial': ''
+                'filial': '',
+                'estoque': '',
+                'avaria': '',
+                'saldo': '',
+                'dt_ult_entrada': '',
+                'qt_ult_entrada': '',
+                'vl_ult_entrada': '',
+                'est_seguranca': '',
+                'p_reposicao': '',
+                'cx_fech': '',
+                'cx': '',
+                'unidade': '',
+                'preco_tab': '',
+                'margem': '',
+                'curva': '',
+                'media_ajustada': '',
             }
             data.append(item)
             info_prod = data
@@ -179,16 +190,36 @@ def selecionar_produto(request):
 
         else:
             print(produto_dados)
+            dt_entrada = produto_dados['dt_ult_ent'][0]
+            if dt_entrada == '-':
+                dt_u_entrada = dt_entrada
+            else:
+                dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
+
+            rupt = -1
 
             data = []
             item = {
-                'pk': qs.pk,
                 'filial': int(produto_dados['cod_filial']),
                 'estoque': int(produto_dados['estoque_dispon']),
                 'avaria': int(produto_dados['avarias']),
                 'saldo': int(produto_dados['saldo']),
-                #'dt_ult_entrada': str(produto_dados['dt_ult_ent']),
+                'dt_ult_entrada': dt_u_entrada,
                 'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
+                'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
+                'est_seguranca': float(produto_dados['estoque_segur']),
+                'p_reposicao': float(produto_dados['ponto_repo']),
+
+                'sugestao': float(produto_dados['sugestao']),
+
+                # 'cx_fech': int(produto_dados['vl_ult_ent']),
+                # 'cx': int(produto_dados['vl_ult_ent']),
+                # 'unidade': float(produto_dados['vl_ult_ent']),
+                # 'preco_tab': float(produto_dados['vl_ult_ent']),
+                # 'margem': float(produto_dados['vl_ult_ent']),
+                'curva': str(produto_dados['curva'][0]),
+                'media_ajustada': str(produto_dados['media_ajustada'][0]),
+                'ruptura': rupt
             }
             data.append(item)
             info_prod = data
@@ -197,26 +228,50 @@ def selecionar_produto(request):
 
     return JsonResponse({})
 
-#
-# def mapa_serie(request):
-#     label_max = []
-#     data_max = []
-#     label_med = []
-#     data_med = []
-#     label_min = []
-#     data_min = []
-#     label_preco = []
-#     data_preco = []
-#     label_custo = []
-#     data_custo = []
-#     label_lucro = []
-#     data_lucro = []
-#     label_qtvenda = []
-#     data_qtvenda = []
-#     empresa = request.user.usuario.empresa_id
-#     if request.is_ajax():
-#         info_prod = None
-#         produto = request.POST.get('produto')
-#
-#
-#         vendas(produto, empresa)
+
+def mapa_serie(request):
+    empresa = request.user.usuario.empresa_id
+
+    if request.is_ajax():
+        info_prod = None
+        produto = request.POST.get('produto')
+        qs = Produto.objects.get(id=produto, empresa__id=empresa)
+        produto_codigo = qs.cod_produto
+
+        parametros = Parametro.objects.get(empresa_id=empresa)
+        df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo)
+
+        label_max = ['Máximo']
+        data_max = list(df_vendas['max'])
+        label_med = ['Média']
+        data_med = list(df_vendas['media'])
+        label_min = ['Mínimo']
+        data_min = list(df_vendas['min'])
+        label_preco = ['Preço']
+        data_preco = list(df_vendas['preco_unit'])
+        label_custo = ['Custo']
+        data_custo = list(df_vendas['custo_unit'])
+        label_lucro = ['Lucro']
+        data_lucro = list(df_vendas['lucro'])
+        label_qtvenda = ['Quantidade de Vendas']
+        data_qtvenda = list(df_vendas['qt_vendas'])
+
+        return JsonResponse(data={
+            'label_max': label_max,
+            'data_max': data_max,
+            'label_med': label_med,
+            'data_med': data_med,
+            'label_min': label_min,
+            'data_min': data_min,
+            'label_preco': label_preco,
+            'data_preco': data_preco,
+            'label_custo': label_custo,
+            'data_custo': data_custo,
+            'label_lucro': label_lucro,
+            'data_lucro': data_lucro,
+            'label_qtvenda': label_qtvenda,
+            'data_qtvenda': data_qtvenda
+        })
+    return JsonResponse({})
+
+

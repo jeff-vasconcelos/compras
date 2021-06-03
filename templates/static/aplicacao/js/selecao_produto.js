@@ -12,14 +12,20 @@ const valor_media = document.getElementById('valor_media')
 const porc_ruptura = document.getElementById('porc_ruptura')
 const valor_ruptura = document.getElementById('valor_ruptura')
 
+const leadtime = document.getElementById('leadtime')
+const t_reposicao = document.getElementById('tempo_reposicao')
 
-const sendSelectProd = (prod) => {
+
+
+const sendSelectProd = (prod, lead, t_repo) => {
     $.ajax({
         type: 'POST',
         url: '/painel/select-prod/',
         data: {
             'csrfmiddlewaretoken': csrf,
-            'produto': prod
+            'produto': prod,
+            'leadtime': lead,
+            'tempo_reposicao': t_repo
         },
         success: (info_prod) => {
             const data = info_prod.data
@@ -31,6 +37,11 @@ const sendSelectProd = (prod) => {
 
                 tabelaInfo.innerHTML = ""
                 data.forEach(prod => {
+                    if (prod.ruptura < 0) {
+                        valor_ruptura.style.color = "#ec2300"
+                    } else if (prod.ruptura >= 0) {
+                        valor_ruptura.style.color = "#228b22"
+                    }
                     tabelaInfo.innerHTML += `
                         <td class="tabela-info">${prod.filial}</td>
                         <td class="tabela-info">Matriz</td>
@@ -39,10 +50,10 @@ const sendSelectProd = (prod) => {
                         <td class="tabela-info">${prod.saldo}</td>
                         <td class="tabela-info">${prod.dt_ult_entrada}</td>
                         <td class="tabela-info">${prod.qt_ult_entrada}</td>
-                        <td class="tabela-info">$</td>
+                        <td class="tabela-info">R$ ${prod.vl_ult_entrada}</td>
                         <td class="tabela-info">999</td>
-                        <td class="tabela-info">999</td>
-                        <td class="tabela-info">999</td>
+                        <td class="tabela-info">${prod.est_seguranca}</td>
+                        <td class="tabela-info">${prod.p_reposicao}</td>
                         <td class="tabela-info">999</td>
                         <td class="tabela-info">999</td>
                         <td class="tabela-info">999</td>
@@ -86,9 +97,30 @@ const sendSelectProd = (prod) => {
 }
 
 listaProdutosSelecionar.addEventListener('change', e => {
+    // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = e.target.value
-    console.log(produtoSelecionado)
 
-    sendSelectProd(produtoSelecionado)
+    // PEGANDO LEADTIME
+    const valorlead = leadtime.value
+    var lead = 0
+    if (valorlead === ""){
+        lead = 0
+    } else {
+        lead = valorlead
+    }
+
+    // PEGANDO TEMPO DE REPOSIÇÃO
+    const valor_treposicao = t_reposicao.value
+    var t_repo = 0
+    if (valor_treposicao === ""){
+        t_repo = 0
+    } else {
+        t_repo = valorlead
+    }
+
+    console.log(produtoSelecionado)
+    console.log(lead)
+
+    sendSelectProd(produtoSelecionado, lead, t_repo)
 })
 
