@@ -229,49 +229,50 @@ def selecionar_produto(request):
     return JsonResponse({})
 
 
-def mapa_serie(request):
+def mapas_serie(request):
     empresa = request.user.usuario.empresa_id
 
     if request.is_ajax():
         info_prod = None
         produto = request.POST.get('produto')
+        print(produto, "produto para o grafico")
         qs = Produto.objects.get(id=produto, empresa__id=empresa)
         produto_codigo = qs.cod_produto
 
         parametros = Parametro.objects.get(empresa_id=empresa)
         df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo)
 
-        label_max = ['Máximo']
-        data_max = list(df_vendas['max'])
-        label_med = ['Média']
-        data_med = list(df_vendas['media'])
-        label_min = ['Mínimo']
-        data_min = list(df_vendas['min'])
-        label_preco = ['Preço']
-        data_preco = list(df_vendas['preco_unit'])
-        label_custo = ['Custo']
-        data_custo = list(df_vendas['custo_unit'])
-        label_lucro = ['Lucro']
-        data_lucro = list(df_vendas['lucro'])
-        label_qtvenda = ['Quantidade de Vendas']
-        data_qtvenda = list(df_vendas['qt_vendas'])
+        data_day = df_vendas['data'].copy()
+        data_dia = data_day.dt.strftime('%d/%m/%Y')
 
-        return JsonResponse(data={
-            'label_max': label_max,
+        df_vendas['data_serie_hist'] = df_vendas['semana'].str.cat(data_dia, sep=" - ")
+
+        print(df_vendas)
+
+        data_max = list(df_vendas['max'])
+        data_med = list(df_vendas['media'])
+        data_min = list(df_vendas['min'])
+        data_preco = list(df_vendas['preco_unit'])
+        data_custo = list(df_vendas['custo_fin'])
+        data_lucro = list(df_vendas['lucro'])
+        data_qtvenda = list(df_vendas['qt_vendas'])
+        label_dt_serie = list(df_vendas['data_serie_hist'])
+
+        graf_prod = []
+        item = {
             'data_max': data_max,
-            'label_med': label_med,
             'data_med': data_med,
-            'label_min': label_min,
             'data_min': data_min,
-            'label_preco': label_preco,
             'data_preco': data_preco,
-            'label_custo': label_custo,
             'data_custo': data_custo,
-            'label_lucro': label_lucro,
             'data_lucro': data_lucro,
-            'label_qtvenda': label_qtvenda,
-            'data_qtvenda': data_qtvenda
-        })
+            'data_qtvenda': data_qtvenda,
+            'label_dt_serie': label_dt_serie
+        }
+
+        graf_prod.append(item)
+        return JsonResponse({'data': item})
+
     return JsonResponse({})
 
 

@@ -7,6 +7,7 @@
     <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block conteudo %}
@@ -266,8 +267,10 @@
             <div class="card shadow mb-4">
                 <div class="card-body" id="grafico-serie-hist">
                     <p class="texto-grafico-analise">Série histórica de vendas</p>
-                    <div class="chart-bar">
-                        <canvas id="ChartSerieHist"></canvas>
+                    <div style="overflow-x: auto; white-space: nowrap;">
+                        <div class="chart-bar" style="width:2000px;">
+                            <canvas id="ChartSerieHist"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
