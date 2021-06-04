@@ -30,7 +30,7 @@
 // Bar Chart Example
 const leadtime = document.getElementById('leadtime')
 const t_reposicao = document.getElementById('tempo_reposicao')
-const listaProdutosSelecionar = document.getElementById('results-produtos')
+const listaProdutosSelecionarG = document.getElementById('results-produtos')
 
 
 const sendSelectProdGraf = (prod) => {
@@ -43,8 +43,6 @@ const sendSelectProdGraf = (prod) => {
         },
         success: (data) => {
             const graficos = data.data
-            console.log(graficos.data_lucro, "dados da view")
-            console.log(graficos.data_max, "maximo")
             var ctx = document.getElementById("ChartSerieHist");
             var ChartSerieHist = new Chart(ctx, {
                 data: {
@@ -254,11 +252,20 @@ const sendSelectProdGraf = (prod) => {
                     },
                 }
             });
+            //
+            //ChartSerieHist.destroy();
+            ChartSerieHist.update();
+            // graficos.update();
+            // graficos.destroy();
+
+            console.log(graficos, "apagando arry")
+            console.log(ChartSerieHist, "apagando arry")
         }
+
     })
 }
 
-listaProdutosSelecionar.addEventListener('change', e => {
+listaProdutosSelecionarG.addEventListener('change', e => {
     // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = e.target.value
 
