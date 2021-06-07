@@ -9,7 +9,7 @@ def vendas(cod_produto, id_empresa, periodo):
 
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1) #Aqui sempre será o periodo informado -1
-    datas = dia_semana_mes_ano()
+    datas = dia_semana_mes_ano(id_empresa)
 
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
@@ -22,7 +22,9 @@ def vendas(cod_produto, id_empresa, periodo):
         #TRATANDO DADOS
         vendas_df['data'] = pd.to_datetime(vendas_df['data'])
         preco = vendas_df.groupby(['data'])['preco_unit'].mean().round(2).to_frame().reset_index()
+        media_preco_vendas = preco['preco_unit'].mean(skipna=True)
         custo = vendas_df.groupby(['data'])['custo_fin'].mean().round(2).to_frame().reset_index()
+
 
         preco_custo = pd.merge(preco, custo, how="left", on=["data"])
 
@@ -30,6 +32,7 @@ def vendas(cod_produto, id_empresa, periodo):
 
         qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
         vendas_datas = pd.merge(datas, qtvendas_preco_custo, how="left", on=["data"])
+
 
         cod_filial = vendas_datas['cod_filial'].unique()
         cod_prod = vendas_datas['cod_produto'].unique()
@@ -39,7 +42,7 @@ def vendas(cod_produto, id_empresa, periodo):
 
         if vendas_df.size == 1:
             values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
-                  'cod_fornecedor': cod_fornec[0], 'qt_unit_caixa': qt_un_caixa[0] , 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
+                  'cod_fornecedor': cod_fornec[0], 'qt_unit_caixa': qt_un_caixa[0], 'qt_vendas': 0, 'custo_fin': 0, 'preco_unit': 0}
         else:
             values = {'cod_produto': cod_prod[1], 'desc_produto': desc_prod[1], 'cod_filial': cod_filial[1],
                       'cod_fornecedor': cod_fornec[1], 'qt_unit_caixa': qt_un_caixa[1], 'qt_vendas': 0, 'custo_fin': 0,
@@ -92,7 +95,9 @@ def vendas(cod_produto, id_empresa, periodo):
             'dias_s_vendas': [d_sem_vendas], 'dias_vendas': [d_vendas],
             'media': [round(media, 2)], 'maximo': [maximo], 'desvio': [round(d_padrao, 2)],
             'max_media': [round(max_media, 2)],
-            'media_ajustada': [round(media_ajustada, 2)]
+            'media_ajustada': [round(media_ajustada, 2)],
+            'qt_unit_caixa': e_vendas['qt_unit_caixa'][0],
+            'media_preco_praticado': media_preco_vendas
         }
         info_prod = pd.DataFrame(info_p)
 
@@ -107,6 +112,7 @@ def vendas(cod_produto, id_empresa, periodo):
 
         print("VENDAS - OK")
         print(e_vendas, info_prod)
+        print(e_vendas.qt_unit_caixa, 'quantidade unidade')
         print("##############################")
 
         return e_vendas, info_prod

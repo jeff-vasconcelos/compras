@@ -114,10 +114,30 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['media_ajustada'] = media_ajustada
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = produto.curva[0]
+        prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
         #prod_resumo['dt_ult_ent'] = pd.to_datetime(prod_resumo['dt_ult_ent'])
+
+        total_linha = vendas_p.shape[0]
+        d_estoque = vendas_p['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
+        d_sem_estoque = total_linha - d_estoque
+
+        media_preco = info_produto.media_preco_praticado[0].round(2)
+        dias_s_est = d_sem_estoque
+        variavel = media * media_preco
+        ruptura = variavel * dias_s_est
+
+        print("total de linha df", total_linha)
+        print("dias com estoque", d_estoque)
+        print("dias sem estoque", d_sem_estoque)
+
+
+        print(media_preco, "media preco")
+        print(ruptura, "RUPTURA")
+
 
 
         print("PASSOU - SUGESTAO DE COMPRAS")
+        print()
 
         print("FUNCIONANDO - DEF DADOS_PROD")
         return prod_resumo

@@ -1,3 +1,5 @@
+from math import ceil
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -5,6 +7,8 @@ from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
 import datetime
+
+from core.models.empresas_models import Filial
 from core.trata_dados.curva_abc import abc
 from core.trata_dados.dados_produto import produto_dados
 from core.trata_dados.datas import dia_semana_mes_ano
@@ -197,8 +201,15 @@ def selecionar_produto(request):
                 dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
 
             rupt = -1
+            sugestao = float(produto_dados['sugestao'])
+            qt_un_caixa = float(produto_dados['qt_unit_caixa'])
+
+            sug_cx = sugestao / qt_un_caixa
+            sug_cx = ceil(sug_cx)
+            sug_unit = sug_cx * qt_un_caixa
 
             data = []
+            mapas = []
             item = {
                 'filial': int(produto_dados['cod_filial']),
                 'estoque': int(produto_dados['estoque_dispon']),
@@ -209,70 +220,63 @@ def selecionar_produto(request):
                 'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
                 'est_seguranca': float(produto_dados['estoque_segur']),
                 'p_reposicao': float(produto_dados['ponto_repo']),
-
                 'sugestao': float(produto_dados['sugestao']),
-
-                # 'cx_fech': int(produto_dados['vl_ult_ent']),
-                # 'cx': int(produto_dados['vl_ult_ent']),
-                # 'unidade': float(produto_dados['vl_ult_ent']),
-                # 'preco_tab': float(produto_dados['vl_ult_ent']),
-                # 'margem': float(produto_dados['vl_ult_ent']),
+                'sugestao_caixa': sug_cx,
+                'sugestao_unidade': sug_unit,
                 'curva': str(produto_dados['curva'][0]),
                 'media_ajustada': str(produto_dados['media_ajustada'][0]),
                 'ruptura': rupt
             }
+            mapa = mapas_serie(empresa, produto)
             data.append(item)
-            info_prod = data
+            data.append(mapa)
+            # mapas.append(mapa)
+            # info_prod = data
+            # info_maps = mapas
 
-            return JsonResponse({'data': info_prod})
+            # print(info_prod)
+            # print(info_maps)
 
-    return JsonResponse({})
-
-
-def mapas_serie(request):
-    empresa = request.user.usuario.empresa_id
-
-    if request.is_ajax():
-        info_prod = None
-        produto = request.POST.get('produto')
-        print(produto, "produto para o grafico")
-        qs = Produto.objects.get(id=produto, empresa__id=empresa)
-        produto_codigo = qs.cod_produto
-
-        parametros = Parametro.objects.get(empresa_id=empresa)
-        df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo)
-
-        data_day = df_vendas['data'].copy()
-        data_dia = data_day.dt.strftime('%d/%m/%Y')
-
-        df_vendas['data_serie_hist'] = df_vendas['semana'].str.cat(data_dia, sep=" - ")
-
-        print(df_vendas)
-
-        data_max = list(df_vendas['max'])
-        data_med = list(df_vendas['media'])
-        data_min = list(df_vendas['min'])
-        data_preco = list(df_vendas['preco_unit'])
-        data_custo = list(df_vendas['custo_fin'])
-        data_lucro = list(df_vendas['lucro'])
-        data_qtvenda = list(df_vendas['qt_vendas'])
-        label_dt_serie = list(df_vendas['data_serie_hist'])
-
-        graf_prod = []
-        item = {
-            'data_max': data_max,
-            'data_med': data_med,
-            'data_min': data_min,
-            'data_preco': data_preco,
-            'data_custo': data_custo,
-            'data_lucro': data_lucro,
-            'data_qtvenda': data_qtvenda,
-            'label_dt_serie': label_dt_serie
-        }
-
-        graf_prod.append(item)
-        return JsonResponse({'data': item})
+            return JsonResponse({'data': data})
 
     return JsonResponse({})
 
 
+def mapas_serie(empresa, produto):
+    info_prod = None
+    print(produto, "produto para o grafico")
+    qs = Produto.objects.get(id=produto, empresa__id=empresa)
+    produto_codigo = qs.cod_produto
+
+    parametros = Parametro.objects.get(empresa_id=empresa)
+    df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo)
+
+    data_day = df_vendas['data'].copy()
+    data_dia = data_day.dt.strftime('%d/%m/%Y')
+
+    df_vendas['data_serie_hist'] = df_vendas['semana'].str.cat(data_dia, sep=" - ")
+
+    # print(df_vendas)
+
+    data_max = list(df_vendas['max'])
+    data_med = list(df_vendas['media'])
+    data_min = list(df_vendas['min'])
+    data_preco = list(df_vendas['preco_unit'])
+    data_custo = list(df_vendas['custo_fin'])
+    data_lucro = list(df_vendas['lucro'])
+    data_qtvenda = list(df_vendas['qt_vendas'])
+    label_dt_serie = list(df_vendas['data_serie_hist'])
+
+    graf_prod = []
+    item = {
+        'data_max': data_max,
+        'data_med': data_med,
+        'data_min': data_min,
+        'data_preco': data_preco,
+        'data_custo': data_custo,
+        'data_lucro': data_lucro,
+        'data_qtvenda': data_qtvenda,
+        'label_dt_serie': label_dt_serie
+    }
+
+    return item

@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime
+from core.models.parametros_models import Parametro
 
 
 def validando_mes(mes):
@@ -10,18 +11,21 @@ def validando_mes(mes):
     return mes_valido
 
 
-def daterange(start_date, end_date):
+def daterange(start_date, end_date, periodo):
+
     data = datetime.date.today() + datetime.timedelta(days=1)
-    start_date = datetime.date.today() - datetime.timedelta(days=119) #Aqui sempre será o periodo informado -1
+    start_date = datetime.date.today() - datetime.timedelta(days=periodo - 1) #Aqui sempre será o periodo informado -1
     end_date = data
 
     for n in range(int((end_date - start_date).days)):
         yield start_date + datetime.timedelta(n)
 
 
-def dia_semana_mes_ano():
+def dia_semana_mes_ano(id_empresa):
+    parametros = Parametro.objects.get(empresa_id=id_empresa)
+    periodo = parametros.periodo
     data = datetime.date.today() + datetime.timedelta(days=1)
-    start_date = datetime.date.today() - datetime.timedelta(days=119) #Aqui sempre será o periodo informado -1
+    start_date = datetime.date.today() - datetime.timedelta(days=periodo - 1) #Aqui sempre será o periodo informado -1
     end_date = data
 
     nome_semana = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"]
@@ -32,7 +36,7 @@ def dia_semana_mes_ano():
     lista_mes = []
     lista_ano = []
 
-    for single_date in daterange(start_date, end_date):
+    for single_date in daterange(start_date, end_date, periodo):
         wk_num = int(single_date.strftime("%w"))
         ms_num = int(single_date.strftime("%m"))
         an_num = int(single_date.strftime("%Y"))
