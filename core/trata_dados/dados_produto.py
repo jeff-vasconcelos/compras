@@ -11,7 +11,7 @@ def produto_dados(cod_produto, id_empresa, periodo):
     df_historico = historico_estoque(cod_produto, id_empresa, periodo)
     cod_filial = 1
 
-    if not df_vendas.empty:
+    if df_vendas is not None:
         df_vendas['data'] = pd.to_datetime(df_vendas['data'], format='%Y-%m-%d')
         df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
 
@@ -54,5 +54,5 @@ def produto_dados(cod_produto, id_empresa, periodo):
 
         return df_ven_ava_hist, info_produto
     else:
-        return None
+        return None, None
 

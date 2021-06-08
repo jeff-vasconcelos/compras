@@ -20,6 +20,16 @@ class Venda(models.Model):
     preco_unit = models.FloatField(null=True, blank=True)
     custo_fin = models.FloatField(null=True, blank=True)
     data = models.DateField(null=True, blank=True)
+    cliente = models.CharField(max_length=255, null=True, blank=True)
+    marca = models.CharField(max_length=255, null=True, blank=True)
+    peso_liquido = models.FloatField(null=True, blank=True)
+    cod_depto = models.IntegerField(null=True, blank=True)
+    num_nota = models.IntegerField(null=True, blank=True)
+    cod_usur = models.IntegerField(null=True, blank=True)
+    cod_fab = models.IntegerField(null=True, blank=True)
+    desc_dois = models.CharField(max_length=255, null=True, blank=True)
+    supervisor = models.CharField(max_length=255, null=True, blank=True)
+
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
