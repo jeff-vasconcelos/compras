@@ -23,7 +23,6 @@ def pedidos_compras(cod_produto, id_empresa, cod_filial):
         pedidos = pedidos_df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
         print("PEDIDOS - OK")
-        print(pedidos)
         print("##############################")
 
         return pedidos
@@ -34,7 +33,6 @@ def pedidos_compras(cod_produto, id_empresa, cod_filial):
         pedido_vazio_df = pd.DataFrame([pedido_vazio])
 
         print("PEDIDOS - O PRODUTO NÃO TEM PEDIDOS PENDENTES")
-        print(pedido_vazio_df)
         print("##############################")
 
     return pedido_vazio_df

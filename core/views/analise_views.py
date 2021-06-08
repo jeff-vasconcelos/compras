@@ -193,7 +193,6 @@ def selecionar_produto(request):
             return JsonResponse({'data': info_prod})
 
         else:
-            print(produto_dados)
             dt_entrada = produto_dados['dt_ult_ent'][0]
             if dt_entrada == '-':
                 dt_u_entrada = dt_entrada
@@ -218,6 +217,7 @@ def selecionar_produto(request):
                 'dt_ult_entrada': dt_u_entrada,
                 'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
                 'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
+                'dde': float(produto_dados['dde']),
                 'est_seguranca': float(produto_dados['estoque_segur']),
                 'p_reposicao': float(produto_dados['ponto_repo']),
                 'sugestao': float(produto_dados['sugestao']),
@@ -225,7 +225,8 @@ def selecionar_produto(request):
                 'sugestao_unidade': sug_unit,
                 'curva': str(produto_dados['curva'][0]),
                 'media_ajustada': str(produto_dados['media_ajustada'][0]),
-                'ruptura': rupt
+                'ruptura': float(produto_dados['ruptura']),
+                'ruptura_porc': float(produto_dados['ruptura_porc']),
             }
             mapa = mapas_serie(empresa, produto)
             data.append(item)
@@ -244,7 +245,6 @@ def selecionar_produto(request):
 
 def mapas_serie(empresa, produto):
     info_prod = None
-    print(produto, "produto para o grafico")
     qs = Produto.objects.get(id=produto, empresa__id=empresa)
     produto_codigo = qs.cod_produto
 

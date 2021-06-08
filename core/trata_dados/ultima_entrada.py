@@ -26,7 +26,6 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
         entrada = pd.DataFrame(entr)
 
         print("ENTRADAS - OK")
-        print(entrada)
         print("##############################")
 
         return entrada

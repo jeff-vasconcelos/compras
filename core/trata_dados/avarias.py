@@ -20,7 +20,6 @@ def avarias(cod_produto, id_empresa, periodo):
         avarias['data'] = pd.to_datetime(avarias['data'])
 
         print("AVARIAS - AVARIAS DO PRODUTO NO PERIODO")
-        print(avarias)
         print("##############################")
 
         return avarias

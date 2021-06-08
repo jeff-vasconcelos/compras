@@ -29,9 +29,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     vendas_p, info_produto = produto_dados(cod_prod, id_emp, parametros.periodo)
     curva = abc(cod_fornec, id_emp, parametros.periodo)
 
-
-    print("IDs produto e empresa", cod_prod, id_emp)
-
     # INFORMÇÕES GERAIS
 
     if info_produto is not None:
@@ -115,31 +112,44 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = produto.curva[0]
         prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
-        #prod_resumo['dt_ult_ent'] = pd.to_datetime(prod_resumo['dt_ult_ent'])
 
         total_linha = vendas_p.shape[0]
         d_estoque = vendas_p['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
         d_sem_estoque = total_linha - d_estoque
-
         media_preco = info_produto.media_preco_praticado[0].round(2)
-        dias_s_est = d_sem_estoque
         variavel = media * media_preco
-        ruptura = variavel * dias_s_est
+        ruptura = variavel * d_sem_estoque
+        porcent_ruptura = (d_sem_estoque / total_linha) * 100
 
-        print("total de linha df", total_linha)
-        print("dias com estoque", d_estoque)
-        print("dias sem estoque", d_sem_estoque)
+        # ultimo_preco = vendas_p['preco_unit'].iloc[-1]
+        estoque_disponivel = prod_resumo.estoque_dispon[0]
+        dde = estoque_disponivel / media
+
+        prod_resumo['ruptura'] = ruptura.round(2)
+        prod_resumo['dde'] = dde.round(2)
+        prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
+
+        dde_ponto_rep = ponto_reposicao / media
+        print(ponto_reposicao)
+        print(dde_ponto_rep)
 
 
-        print(media_preco, "media preco")
-        print(ruptura, "RUPTURA")
+        if dde > dde_ponto_rep:
+            condicao_estoque = 'ESTOQUE NORMAL'
+        elif dde_ponto_rep >= dde > 0:
+            condicao_estoque = 'ESTOQUE PARCIAL'
+        else:
+            condicao_estoque = 'RUPTURA'
+
+        print(condicao_estoque)
+
 
 
 
         print("PASSOU - SUGESTAO DE COMPRAS")
-        print()
 
         print("FUNCIONANDO - DEF DADOS_PROD")
+        print(prod_resumo)
         return prod_resumo
 
     else:

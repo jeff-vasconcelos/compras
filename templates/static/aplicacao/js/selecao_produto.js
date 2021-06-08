@@ -36,7 +36,9 @@ const sendSelectProd = (prod, lead, t_repo) => {
             console.log(data, 'tamanho')
             console.log(graficos)
 
+
             var ctx = document.getElementById("ChartSerieHist");
+
             var ChartSerieHist = new Chart(ctx, {
                 data: {
                     datasets: [{
@@ -245,6 +247,8 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     },
                 }
             });
+            ChartSerieHist.update();
+
 
             //DADOS DA TABELA
 
@@ -253,6 +257,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                 valor_curva.innerHTML = ""
                 valor_media.innerHTML = ""
                 valor_ruptura.innerHTML = ""
+                porc_ruptura.innerHTML = ""
                 tabelaInfo.innerHTML = ""
 
             } else {
@@ -261,12 +266,13 @@ const sendSelectProd = (prod, lead, t_repo) => {
                 valor_curva.innerHTML = ""
                 valor_media.innerHTML = ""
                 valor_ruptura.innerHTML = ""
+                porc_ruptura.innerHTML = ""
                 tabelaInfo.innerHTML = ""
 
                 if (data.ruptura < 0) {
-                    valor_ruptura.style.color = "#ec2300"
+                    valor_ruptura.style.color = "#707070"
                 } else if (data.ruptura >= 0) {
-                    valor_ruptura.style.color = "#228b22"
+                    valor_ruptura.style.color = "#de200d"
                 }
                 tabelaInfo.innerHTML += `
                         <td class="tabela-info">${data.filial}</td>
@@ -277,7 +283,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                         <td class="tabela-info">${data.dt_ult_entrada}</td>
                         <td class="tabela-info">${data.qt_ult_entrada}</td>
                         <td class="tabela-info">R$ ${data.vl_ult_entrada}</td>
-                        <td class="tabela-info">999</td>
+                        <td class="tabela-info">${data.dde}</td>
                         <td class="tabela-info">${data.est_seguranca}</td>
                         <td class="tabela-info">${data.p_reposicao}</td>
                         <td class="tabela-info">${data.sugestao_caixa}</td>
@@ -315,6 +321,9 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     `
                 valor_ruptura.innerHTML += `
                         ${data.ruptura}
+                    `
+                porc_ruptura.innerHTML += `
+                        ${data.ruptura_porc} %
                     `
 
             }

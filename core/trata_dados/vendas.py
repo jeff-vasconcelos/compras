@@ -111,8 +111,6 @@ def vendas(cod_produto, id_empresa, periodo):
         e_vendas['lucro'] = vendas_lucro['vl_total_vendido'] - vendas_lucro['vl_total_custo']
 
         print("VENDAS - OK")
-        print(e_vendas, info_prod)
-        print(e_vendas.qt_unit_caixa, 'quantidade unidade')
         print("##############################")
 
         return e_vendas, info_prod

@@ -20,7 +20,6 @@ def estoque_atual(cod_produto, id_empresa):
         disponivel = pd.DataFrame(disp)
 
         print("ESTOQUE ATUAL - OK")
-        print(disponivel)
         print("##############################")
 
         return disponivel
