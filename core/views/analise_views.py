@@ -1,8 +1,9 @@
 from math import ceil
+from django.contrib import messages
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
@@ -165,32 +166,9 @@ def selecionar_produto(request):
         produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
 
         if produto_dados is None:
-            print("O produto não pode ser analisado! O produto pode não ter vendas.")
-            print(produto_dados)
+            messages.error(request, "O produto selecionado pode não ter vendas no periodo!")
 
-            data = []
-            item = {
-                'filial': '',
-                'estoque': '',
-                'avaria': '',
-                'saldo': '',
-                'dt_ult_entrada': '',
-                'qt_ult_entrada': '',
-                'vl_ult_entrada': '',
-                'est_seguranca': '',
-                'p_reposicao': '',
-                'cx_fech': '',
-                'cx': '',
-                'unidade': '',
-                'preco_tab': '',
-                'margem': '',
-                'curva': '',
-                'media_ajustada': '',
-            }
-            data.append(item)
-            info_prod = data
-
-            return JsonResponse({'data': info_prod})
+            return JsonResponse({'data': 0})
 
         else:
             dt_entrada = produto_dados['dt_ult_ent'][0]

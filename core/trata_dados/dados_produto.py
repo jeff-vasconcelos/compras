@@ -50,6 +50,7 @@ def produto_dados(cod_produto, id_empresa, periodo):
             inplace=True)
 
         print("PRODUTOS DADOS - AVARIAS/VENDAS OK")
+        print(df_ven_ava_hist.describe())
         print("##############################")
 
         return df_ven_ava_hist, info_produto

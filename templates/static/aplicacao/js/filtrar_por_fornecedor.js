@@ -40,7 +40,6 @@ function selecao_fornecedor(){
             const desmarq = listaFornecedores[i].value
             if (checkFornecedor.indexOf(desmarq) > -1){
                 checkFornecedor.splice(checkFornecedor.indexOf(desmarq), 1)
-
             }
         }
     }

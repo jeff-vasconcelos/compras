@@ -116,6 +116,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         total_linha = vendas_p.shape[0]
         d_estoque = vendas_p['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
         d_sem_estoque = total_linha - d_estoque
+
         media_preco = info_produto.media_preco_praticado[0].round(2)
         variavel = media * media_preco
         ruptura = variavel * d_sem_estoque
@@ -123,15 +124,16 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         # ultimo_preco = vendas_p['preco_unit'].iloc[-1]
         estoque_disponivel = prod_resumo.estoque_dispon[0]
-        dde = estoque_disponivel / media
+        dde = estoque_disponivel / media_ajustada
 
         prod_resumo['ruptura'] = ruptura.round(2)
         prod_resumo['dde'] = dde.round(2)
         prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
 
         dde_ponto_rep = ponto_reposicao / media
-        print(ponto_reposicao)
-        print(dde_ponto_rep)
+
+        print(d_sem_estoque, "DIAS SEM ESTOQUE")
+        print(media_preco, "PRECO MEDIO")
 
 
         if dde > dde_ponto_rep:
@@ -143,9 +145,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         print(condicao_estoque)
         prod_resumo['condicao_estoque'] = condicao_estoque
-
-
-
 
         print("PASSOU - SUGESTAO DE COMPRAS")
 
