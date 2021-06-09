@@ -1,6 +1,7 @@
 console.log("selecao_produto")
 const listaProdutosSelecionar = document.getElementById('results-produtos')
 const tabelaInfo = document.getElementById('tabela-info-analise')
+const tabelaPedidosPendentes = document.getElementById('pedidos-pendentes-modal')
 
 //CARDS
 const porc_faturamento = document.getElementById('porc_fat')
@@ -39,6 +40,9 @@ const sendSelectProd = (prod, lead, t_repo) => {
 
                 const data = dados[0]
                 const graficos = dados[1]
+                const pedidos = dados[2]
+
+                console.log(pedidos)
 
                 //GRAFICO 01
                 var ctx = document.getElementById("ChartSerieHist");
@@ -368,6 +372,21 @@ const sendSelectProd = (prod, lead, t_repo) => {
                 });
 
 
+                // PEDIDOS PENDENTES
+                if (Array.isArray(pedidos)) {
+                    tabelaPedidosPendentes.innerHTML = ""
+                    pedidos.forEach(ped => {
+                        console.log(${ped.p_cod_filial})
+                        tabelaPedidosPendentes.innerHTML += `
+                        <td class="tabela-ped-pend">${ped.p_cod_filial}</td>
+                        <td class="tabela-ped-pend">${ped.p_cod_produto}</td>
+                        <td class="tabela-ped-pend">${ped.p_desc_produto}</td>
+                        <td class="tabela-ped-pend">${ped.p_saldo}</td>
+                        <td class="tabela-ped-pend">${ped.p_data}</td>
+                    `
+                    })
+                }
+
                 //DADOS DA TABELA
 
                 if (!data) {
@@ -377,15 +396,12 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
-
                 } else {
-
                     valor_faturamento.innerHTML = ""
                     valor_curva.innerHTML = ""
                     valor_media.innerHTML = ""
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
-                    tabelaInfo.innerHTML = ""
 
                     if (data.ruptura < 0) {
                         valor_ruptura.style.color = "#707070"
@@ -485,7 +501,7 @@ listaProdutosSelecionar.addEventListener('change', e => {
 })
 
 // EXECUTA AO ALTERAR LEADTIME
-leadtime.addEventListener('keyup', a=>{
+leadtime.addEventListener('keyup', a => {
     resultsBoxFornec.classList.add('d-none')
     resultsBoxProd.classList.add('d-none')
 
@@ -520,7 +536,7 @@ leadtime.addEventListener('keyup', a=>{
 })
 
 // EXECUTA AO ALTERAR TEMPO DE REPOSICAO
-t_reposicao.addEventListener('keyup', a=>{
+t_reposicao.addEventListener('keyup', a => {
     resultsBoxFornec.classList.add('d-none')
     resultsBoxProd.classList.add('d-none')
 

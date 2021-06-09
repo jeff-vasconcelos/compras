@@ -23,7 +23,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
     parametros = Parametro.objects.get(empresa_id=id_emp)
 
-    pedidos = pedidos_compras(cod_prod, id_emp, filial)
+    pedidos, pedidos_all = pedidos_compras(cod_prod, id_emp, filial)
     u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
     e_atual = estoque_atual(cod_prod, id_emp)
     vendas_p, info_produto = produto_dados(cod_prod, id_emp, parametros.periodo)
@@ -149,8 +149,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         print("PASSOU - SUGESTAO DE COMPRAS")
 
         print("FUNCIONANDO - DEF DADOS_PROD")
-        print(prod_resumo)
-        return prod_resumo
+        print(pedidos_all)
+        return prod_resumo, pedidos_all
 
     else:
         print("SEM DADOS VENDAS - DEF DADOS_PROD")

@@ -25,7 +25,6 @@ import pandas as pd
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-
     # teste = request.user.usuario.empresa_id
     # avar = produto_dados(182, teste, 120)
     # print("Dataframe avarias:", avar)
@@ -163,7 +162,7 @@ def selecionar_produto(request):
         produto_codigo = qs.cod_produto
         fornecedor_codigo = qs.cod_fornecedor
 
-        produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
+        produto_dados, pedidos_todos = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
 
         if produto_dados is None:
             messages.error(request, "O produto selecionado pode não ter vendas no periodo!")
@@ -186,8 +185,7 @@ def selecionar_produto(request):
             sug_unit = sug_cx * qt_un_caixa
 
             data = []
-            mapas = []
-            item = {
+            itens_analise = {
                 'filial': int(produto_dados['cod_filial']),
                 'estoque': int(produto_dados['estoque_dispon']),
                 'avaria': int(produto_dados['avarias']),
@@ -207,15 +205,24 @@ def selecionar_produto(request):
                 'ruptura_porc': float(produto_dados['ruptura_porc']),
                 'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
             }
-            mapa = mapas_serie(empresa, produto)
-            data.append(item)
-            data.append(mapa)
-            # mapas.append(mapa)
-            # info_prod = data
-            # info_maps = mapas
+            itens_pedido = []
+            for index, row in pedidos_todos.iterrows():
+                itens = {
+                    'p_cod_filial': int(row['cod_filial']),
+                    'p_cod_produto': int(row['cod_produto']),
+                    'p_desc_produto': str(row['desc_produto']),
+                    'p_saldo': int(row['saldo']),
+                    'p_data': str(row['data'].strftime('%d/%m/%Y')),
+                }
 
-            # print(info_prod)
-            # print(info_maps)
+                itens_pedido.append(itens)
+            print(itens_pedido)
+
+            mapa = mapas_serie(empresa, produto)
+
+            data.append(itens_analise) #0
+            data.append(mapa) #1
+            data.append(itens_pedido) #2
 
             return JsonResponse({'data': data})
 

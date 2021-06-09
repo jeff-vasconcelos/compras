@@ -20,12 +20,17 @@ def pedidos_compras(cod_produto, id_empresa, cod_filial):
     pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
 
     if not pedidos_df.empty:
+        pedidos_all = pedidos_df.sort_values(by=['data'], ascending=False)
+
+        indexNames = pedidos_all[(pedidos_all['saldo'] == 0)].index
+        pedidos_all.drop(indexNames, inplace=True)
+
         pedidos = pedidos_df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
         print("PEDIDOS - OK")
         print("##############################")
 
-        return pedidos
+        return pedidos, pedidos_all
     else:
         pedido_vazio = {
             'cod_produto': cod_produto, 'cod_filial': cod_filial, 'saldo': 0
