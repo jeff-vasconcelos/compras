@@ -135,13 +135,14 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
 
         if dde > dde_ponto_rep:
-            condicao_estoque = 'ESTOQUE NORMAL'
+            condicao_estoque = 'NORMAL'
         elif dde_ponto_rep >= dde > 0:
-            condicao_estoque = 'ESTOQUE PARCIAL'
+            condicao_estoque = 'PARCIAL'
         else:
             condicao_estoque = 'RUPTURA'
 
         print(condicao_estoque)
+        prod_resumo['condicao_estoque'] = condicao_estoque
 
 
 

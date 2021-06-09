@@ -227,6 +227,7 @@ def selecionar_produto(request):
                 'media_ajustada': str(produto_dados['media_ajustada'][0]),
                 'ruptura': float(produto_dados['ruptura']),
                 'ruptura_porc': float(produto_dados['ruptura_porc']),
+                'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
             }
             mapa = mapas_serie(empresa, produto)
             data.append(item)

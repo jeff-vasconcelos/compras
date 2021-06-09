@@ -311,7 +311,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     `
 
                 valor_faturamento.innerHTML += `
-                        ${data.valor_fatur}
+                        ${data.condicao_estoque}
                     `
                 valor_curva.innerHTML += `
                         ${data.curva}
