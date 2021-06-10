@@ -26,7 +26,6 @@ import pandas as pd
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-
     # teste = request.user.usuario.empresa_id
     # avar = produto_dados(182, teste, 120)
     # print("Dataframe avarias:", avar)
@@ -222,9 +221,9 @@ def selecionar_produto(request):
 
             mapa = mapas_serie(empresa, produto)
 
-            data.append(itens_analise) #0
-            data.append(mapa) #1
-            #data.append(itens_pedido) #2
+            data.append(itens_analise)  # 0
+            data.append(mapa)  # 1
+            # data.append(itens_pedido) #2
 
             return JsonResponse({'data': data})
 
@@ -249,7 +248,6 @@ def mapas_serie(empresa, produto):
     data_day_est = hist_estoque['data'].copy()
     data_dia_est = data_day_est.dt.strftime('%d/%m/%Y')
     hist_estoque['data_serie_hist_est'] = hist_estoque['semana'].str.cat(data_dia_est, sep=" - ")
-
 
     print('hist_estoque')
     print(hist_estoque)
@@ -294,13 +292,12 @@ def mapas_serie(empresa, produto):
 def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
-        #TODO Aumatizar filial
+        # TODO Aumatizar filial
         cod_filial = 1
 
         qt_digitada = request.POST.get('qt_digitada')
         pr_compra = request.POST.get('pr_compra')
         margem = request.POST.get('margem')
-
 
         prod_qs = Produto.objects.get(id=produto_id)
         produto_nome = prod_qs.desc_produto
@@ -313,7 +310,6 @@ def add_prod_pedido_sessao(request):
         pedido = request.session['pedido_produto']
 
         pedido[produto_id] = {
-            'ped_produto_id': produto_id,
             'ped_produto_cod': produto_codigo,
             'ped_produto_nome': produto_nome,
             'ped_cod_filial': cod_filial,
@@ -354,22 +350,21 @@ def export_csv(request):
     response = HttpResponse(content_type='text/csv')
 
     writer = csv.writer(response)
-    writer.writerow(['cod_produto', 'preco', 'quantidade'])
+    writer.writerow(['cod_produto', 'desc_produto', 'preco', 'quantidade'])
 
     pedido = request.session.get('pedido_produto', [])
     lista = []
 
     for value in pedido.values():
         temp = value
-        print(temp)
-        for valor in temp.values():
-            t = valor
-            print
-            lista.append(t)
-            writer.writerow(lista)
 
-    print(lista)
+        del [temp['ped_cod_filial']]
+        del [temp['ped_margem']]
 
+        lista.append(temp)
+
+    for i in lista:
+        writer.writerow(i.values())
 
     response['Content-Disposition'] = 'attachment; filename="pedido_insight.csv"'
 
