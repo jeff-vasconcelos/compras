@@ -300,8 +300,7 @@ def add_prod_pedido_sessao(request):
         qt_digitada = request.POST.get('qt_digitada')
         pr_compra = request.POST.get('pr_compra')
         margem = request.POST.get('margem')
-        pr_sugerido = request.POST.get('pr_sugerido')
-        dde = request.POST.get('dde')
+
 
         prod_qs = Produto.objects.get(id=produto_id)
         produto_nome = prod_qs.desc_produto
@@ -320,9 +319,7 @@ def add_prod_pedido_sessao(request):
             'ped_cod_filial': cod_filial,
             'ped_qt_digitada': qt_digitada,
             'ped_pr_compra': pr_compra,
-            'ped_margem': margem,
-            'ped_pr_sugerido': pr_sugerido,
-            'ped_dde': dde,
+            'ped_margem': margem
         }
 
         request.session.save()

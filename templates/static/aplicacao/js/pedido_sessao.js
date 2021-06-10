@@ -2,8 +2,8 @@
 const ProdutosSelecionar = document.getElementById('results-produtos')
 const inputPrCompraDigitada = document.getElementById('pr_compra')
 const inputMargemDigitada = document.getElementById('porc_margem')
-const inputPrSugeridoDigitada = document.getElementById('pr_sugerido')
-const inputDDEDigitada = document.getElementById('dde')
+// const inputPrSugeridoDigitada = document.getElementById('pr_sugerido')
+// const inputDDEDigitada = document.getElementById('dde')
 const inputQtDigitada = document.getElementById('qt_digit')
 
 const botaoPedidoSessao = document.getElementById('add_pedido_sessao')
@@ -24,12 +24,13 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, margem, pr_sugerido, d
             'produto': produto,
             'qt_digitada': qt_digitada,
             'pr_compra': pr_compra,
-            'margem': margem,
-            'pr_sugerido': pr_sugerido,
-            'dde': dde
+            'margem': margem
         },
         success: (pedido_sessao) => {
             console.log(pedido_sessao.data)
+            inputQtDigitada.value = ""
+            inputPrCompraDigitada.value = ""
+            inputMargemDigitada.value = ""
             location.reload();
         }
     });
@@ -67,32 +68,30 @@ botaoPedidoSessao.addEventListener('click', e => {
         margem = mar
     }
 
-    // PEGANDO PR SUGERIDO
-    const p_sug = inputPrSugeridoDigitada.value
-    var p_sugerido = 0
-    if (p_sug === "") {
-        p_sugerido = 0
-    } else {
-        p_sugerido = p_sug
-    }
-
-    // PEGANDO DDE
-    const dde_p = inputDDEDigitada.value
-    var dde = 0
-    if (dde_p === "") {
-        dde = 0
-    } else {
-        dde = dde_p
-    }
+    // // PEGANDO PR SUGERIDO
+    // const p_sug = inputPrSugeridoDigitada.value
+    // var p_sugerido = 0
+    // if (p_sug === "") {
+    //     p_sugerido = 0
+    // } else {
+    //     p_sugerido = p_sug
+    // }
+    //
+    // // PEGANDO DDE
+    // const dde_p = inputDDEDigitada.value
+    // var dde = 0
+    // if (dde_p === "") {
+    //     dde = 0
+    // } else {
+    //     dde = dde_p
+    // }
 
     console.log(produtoSelecionado, "PRODUTO SELECIONADO")
     console.log(qt_digitada, "QT DIGITADA")
     console.log(p_compra, "PRECO DE COMPRA")
     console.log(margem, "MARGEM")
-    console.log(p_sugerido, "PRECO SUGERIDO")
-    console.log(dde, "DDE")
 
-    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, margem, p_sugerido, dde)
+    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, margem)
 })
 
 
