@@ -17,15 +17,15 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
     if not u_entrada_df.empty:
         data = u_entrada_df['data'][0]
         qt_entrada = u_entrada_df['qt_ult_entrada'][0]
+        vl_entrada = u_entrada_df['vl_ult_entrada'][0]
 
         entr = {
-            'data': [data], 'qt_ult_entrada': [qt_entrada]
+            'data': [data], 'qt_ult_entrada': [qt_entrada], 'vl_ult_entrada': [vl_entrada]
         }
 
         entrada = pd.DataFrame(entr)
 
         print("ENTRADAS - OK")
-        print(entrada)
         print("##############################")
 
         return entrada

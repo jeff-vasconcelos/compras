@@ -11,18 +11,18 @@
 
 <body id="page-top">
 
-    <div id="wrapper">
+<div id="wrapper">
 
-        <!-- MENU LATERAL -->
-        {% include 'aplicacao/parciais/_lateral.html' %}
+    <!-- MENU LATERAL -->
+    {% include 'aplicacao/parciais/_lateral.html' %}
 
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
 
-                <!-- NAV TOPO - TELA MENORES -->
-                {% include 'aplicacao/parciais/_topo_mobile.html' %}
+            <!-- NAV TOPO - TELA MENORES -->
+            {% include 'aplicacao/parciais/_topo_mobile.html' %}
 
-                <div class="container-fluid container-conteudo">
+            <div class="container-fluid container-conteudo">
 
                 <!-- MENSAGENS -->
                 {% if messages %}
@@ -43,37 +43,45 @@
                 {% block conteudo %}
                 {% endblock conteudo %}
 
-                </div>
             </div>
-
-            <!-- RODAPÉ -->
-            {% include 'aplicacao/parciais/_footer.html' %}
-
         </div>
+
+        <!-- RODAPÉ -->
+        {% include 'aplicacao/parciais/_footer.html' %}
+
     </div>
+</div>
 
-    <!-- SCROLL TO TOP BOTAO-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+<!-- SCROLL TO TOP BOTAO-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
 
-    <!-- MODAL LOGOUT-->
-    {% include 'aplicacao/parciais/_modal_logout.html' %}
+<!-- MODAL LOGOUT-->
+{% include 'aplicacao/parciais/_modal_logout.html' %}
 
-    <script src="{% static 'aplicacao/vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'aplicacao/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'aplicacao/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-    <script src="{% static 'aplicacao/js/sb-admin-2.min.js' %}"></script>
-    <script src="{% static 'aplicacao/vendor/chart.js/Chart.min.js' %}"></script>
-    <script src="{% static 'aplicacao/js/demo/chart-area-demo.js' %}"></script>
-    <script src="{% static 'aplicacao/js/demo/chart-bar-demo.js' %}"></script>
-    <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}"></script>
-    <script src="{% static 'aplicacao/js/demo/chart-cobert-estoq.js' %}"></script>
-    <script src="{% static 'aplicacao/js/demo/chart-pie-demo.js' %}"></script>
+<script src="{% static 'aplicacao/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'aplicacao/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'aplicacao/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'aplicacao/js/sb-admin-2.min.js' %}"></script>
+<script src="{% static 'aplicacao/vendor/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'aplicacao/js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'aplicacao/js/demo/chart-bar-demo.js' %}"></script>
+<script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}"></script>
+<script src="{% static 'aplicacao/js/demo/chart-cobert-estoq.js' %}"></script>
+<script src="{% static 'aplicacao/js/demo/chart-pie-demo.js' %}"></script>
 
-    <script src="{% static 'aplicacao/vendor/datatables/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'aplicacao/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'aplicacao/js/demo/datatables-demo.js' %}"></script>
+<script src="{% static 'aplicacao/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'aplicacao/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'aplicacao/js/demo/datatables-demo.js' %}"></script>
 </body>
 
 </html>
+<script>
+    $(document).ready(function () {
+        // show the alert
+        setTimeout(function () {
+            $(".alert").alert('close');
+        }, 5000);
+    });
+</script>

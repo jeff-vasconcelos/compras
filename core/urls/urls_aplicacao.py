@@ -13,7 +13,7 @@ urlpatterns = [
     path('filter-fornec/', filtrar_produto_fornecedor, name='filter-fornecedor'),
     path('filter-prod/', filtrar_produto_produto, name='filter-produto'),
     path('select-prod/', selecionar_produto, name='filter-produto'),
-    #path('info-select-prod/', informacao_produto, name='info-filter-produto'),
+    path('graficos-prod-selec/', mapas_serie, name='graficos-prod-selec'),
 
 
     path('home/', home_painel, name='home_painel'),

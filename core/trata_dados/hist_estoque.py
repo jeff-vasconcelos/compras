@@ -10,9 +10,9 @@ def historico_estoque(cod_produto, id_empresa, periodo):
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     h_estoque = pd.DataFrame(HistEstoque.objects.filter(
         cod_produto__exact=cod_produto,
-        empresa__id__exact=id_empresa,
-        data__range=[data_fim, data_inicio]
-    )[:1].values())
+        data__range=[data_fim, data_inicio],
+        empresa__id__exact=id_empresa
+    ).values())
 
     if not h_estoque.empty:
 

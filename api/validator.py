@@ -120,10 +120,14 @@ def valida_ultentrada(data):
 def valida_venda(data):
     cod_produto = data['cod_produto']
     cod_empresa = data['empresa']
-    data = data['data']
+    dt = data['data']
+    qt = data['qt_vendas']
+    preco = data['preco_unit']
+    cli = data['cliente']
+    nf = data['num_nota']
 
     venda = Venda.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa, data=data
+        cod_produto=cod_produto, empresa=cod_empresa, data=dt, qt_vendas=qt, preco_unit=preco, cliente=cli, num_nota=nf
     ).exists()
 
     if venda == False:

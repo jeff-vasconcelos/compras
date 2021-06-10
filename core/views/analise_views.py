@@ -1,10 +1,15 @@
-from django.shortcuts import render
+from math import ceil
+from django.contrib import messages
+
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
+import datetime
 
+from core.models.empresas_models import Filial
 from core.trata_dados.curva_abc import abc
 from core.trata_dados.dados_produto import produto_dados
 from core.trata_dados.datas import dia_semana_mes_ano
@@ -15,6 +20,7 @@ from core.trata_dados.vendas import *
 from core.trata_dados.avarias import *
 from core.trata_dados.pedidos import *
 from core.trata_dados.ultima_entrada import *
+import pandas as pd
 
 
 @login_required
@@ -145,76 +151,119 @@ def filtrar_produto_produto(request):
 
 def selecionar_produto(request):
     empresa = request.user.usuario.empresa_id
+
     if request.is_ajax():
         info_prod = None
         produto = request.POST.get('produto')
+        leadtime = int(request.POST.get('leadtime'))
+        t_reposicao = int(request.POST.get('tempo_reposicao'))
 
         qs = Produto.objects.get(id=produto, empresa__id=empresa)
-        print(produto)
-        print(qs.cod_produto)
 
         produto_codigo = qs.cod_produto
         fornecedor_codigo = qs.cod_fornecedor
-        leadtime = 0
-        t_reposicao = 0
 
-        produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
+        produto_dados, pedidos_todos = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
 
         if produto_dados is None:
-            print("O produto não pode ser analisado! O produto pode não ter vendas.")
-            print(produto_dados)
+            messages.error(request, "O produto selecionado pode não ter vendas no periodo!")
 
-            data = []
-            item = {
-                'pk': '',
-                'nome': '',
-                'cod': '',
-                'emb': '',
-                'filial': ''
-            }
-            data.append(item)
-            info_prod = data
-
-            return JsonResponse({'data': info_prod})
+            return JsonResponse({'data': 0})
 
         else:
-            print(produto_dados)
+            dt_entrada = produto_dados['dt_ult_ent'][0]
+            if dt_entrada == '-':
+                dt_u_entrada = dt_entrada
+            else:
+                dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
+
+            rupt = -1
+            sugestao = float(produto_dados['sugestao'])
+            qt_un_caixa = float(produto_dados['qt_unit_caixa'])
+
+            sug_cx = sugestao / qt_un_caixa
+            sug_cx = ceil(sug_cx)
+            sug_unit = sug_cx * qt_un_caixa
 
             data = []
-            item = {
-                'pk': qs.pk,
-                'nome': qs.desc_produto,
-                'cod': qs.cod_produto,
-                'emb': qs.embalagem,
-                'filial': qs.cod_filial
+            itens_analise = {
+                'filial': int(produto_dados['cod_filial']),
+                'estoque': int(produto_dados['estoque_dispon']),
+                'avaria': int(produto_dados['avarias']),
+                'saldo': int(produto_dados['saldo']),
+                'dt_ult_entrada': dt_u_entrada,
+                'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
+                'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
+                'dde': float(produto_dados['dde']),
+                'est_seguranca': float(produto_dados['estoque_segur']),
+                'p_reposicao': float(produto_dados['ponto_repo']),
+                'sugestao': float(produto_dados['sugestao']),
+                'sugestao_caixa': sug_cx,
+                'sugestao_unidade': sug_unit,
+                'curva': str(produto_dados['curva'][0]),
+                'media_ajustada': str(produto_dados['media_ajustada'][0]),
+                'ruptura': float(produto_dados['ruptura']),
+                'ruptura_porc': float(produto_dados['ruptura_porc']),
+                'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
             }
-            data.append(item)
-            info_prod = data
+            itens_pedido = []
+            for index, row in pedidos_todos.iterrows():
+                itens = {
+                    'p_cod_filial': int(row['cod_filial']),
+                    'p_cod_produto': int(row['cod_produto']),
+                    'p_desc_produto': str(row['desc_produto']),
+                    'p_saldo': int(row['saldo']),
+                    'p_data': str(row['data'].strftime('%d/%m/%Y')),
+                }
 
-            return JsonResponse({'data': info_prod})
+                itens_pedido.append(itens)
+            print(itens_pedido)
+
+            mapa = mapas_serie(empresa, produto)
+
+            data.append(itens_analise) #0
+            data.append(mapa) #1
+            data.append(itens_pedido) #2
+
+            return JsonResponse({'data': data})
 
     return JsonResponse({})
 
 
-def mapa_serie(request):
-    label_max = []
-    data_max = []
-    label_med = []
-    data_med = []
-    label_min = []
-    data_min = []
-    label_preco = []
-    data_preco = []
-    label_custo = []
-    data_custo = []
-    label_lucro = []
-    data_lucro = []
-    label_qtvenda = []
-    data_qtvenda = []
-    empresa = request.user.usuario.empresa_id
-    if request.is_ajax():
-        info_prod = None
-        produto = request.POST.get('produto')
+def mapas_serie(empresa, produto):
+    info_prod = None
+    qs = Produto.objects.get(id=produto, empresa__id=empresa)
+    produto_codigo = qs.cod_produto
 
+    parametros = Parametro.objects.get(empresa_id=empresa)
+    df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo)
 
-        vendas(produto, empresa)
+    data_day = df_vendas['data'].copy()
+    data_dia = data_day.dt.strftime('%d/%m/%Y')
+
+    df_vendas['data_serie_hist'] = df_vendas['semana'].str.cat(data_dia, sep=" - ")
+
+    # print(df_vendas)
+
+    data_max = list(df_vendas['max'])
+    data_med = list(df_vendas['media'])
+    data_min = list(df_vendas['min'])
+    data_preco = list(df_vendas['preco_unit'])
+    data_custo = list(df_vendas['custo_fin'])
+    data_lucro = list(df_vendas['lucro'])
+    data_qtvenda = list(df_vendas['qt_vendas'])
+    label_dt_serie = list(df_vendas['data_serie_hist'])
+
+    graf_prod = []
+    item = {
+        'data_max': data_max,
+        'data_med': data_med,
+        'data_min': data_min,
+        'data_preco': data_preco,
+        'data_custo': data_custo,
+        'data_lucro': data_lucro,
+        'data_qtvenda': data_qtvenda,
+        'label_dt_serie': label_dt_serie
+    }
+
+    return item

@@ -7,6 +7,7 @@
     <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block conteudo %}
@@ -53,11 +54,8 @@
             <div class="card shadow mb-4 cards-home-info">
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc" id="porc_fat">
-                            92%
+                        <div class="col-12">
+                            Previsão de Estoque
                         </div>
                     </div>
                     <div class="row cards-home-valores">
@@ -131,7 +129,7 @@
                             Ruptura
                         </div>
                         <div class="col-4 cards-home-porc" id="porc_ruptura">
-                            92%
+
                         </div>
                     </div>
                     <div class="row cards-home-valores">
@@ -152,13 +150,13 @@
                     <div class="col-md-1 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela">Leadtime</label>
-                            <input type="text" class="form-control input-analise" name="leadtime">
+                            <input type="text" class="form-control input-analise" id="leadtime" name="leadtime">
                         </div>
                     </div>
                     <div class="col-md-1 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela">C. reposição</label>
-                            <input type="text" class="form-control input-analise" name="leadtime">
+                            <input type="text" class="form-control input-analise" id="tempo_reposicao" name="tempo_reposicao">
                         </div>
                     </div>
                     <div class="col analise-div">
@@ -173,7 +171,7 @@
                         <div class="form-group">
                             <label class="label-analise-tabela" for="semana">Semana</label>
                             <select class="form-control select-analise" name="semana" id="semana">
-                                <option class="option-analise" value="volvo">item</option>
+                                <option class="option-analise" value="volvo">Selecione</option>
                             </select>
                         </div>
                     </div>
@@ -181,7 +179,7 @@
                         <div class="form-group">
                             <label class="label-analise-tabela" for="mensal">Mês</label>
                             <select class="form-control select-analise" name="mensal" id="mensal">
-                                <option class="option-analise" value="volvo">itemafdfsddfsdfsdfdsfsfdsf</option>
+                                <option class="option-analise" value="volvo">Selecione</option>
                             </select>
                         </div>
                     </div>
@@ -190,6 +188,10 @@
                             <label class="label-analise-tabela" for="curva">Curva</label>
                             <select class="form-control select-analise" name="curva" id="curva">
                                 <option class="option-analise" value="curva_a">A</option>
+                                <option class="option-analise" value="curva_b">B</option>
+                                <option class="option-analise" value="curva_c">C</option>
+                                <option class="option-analise" value="curva_d">D</option>
+                                <option class="option-analise" value="curva_e">E</option>
                             </select>
                         </div>
                     </div>
@@ -197,7 +199,7 @@
                         <div class="form-group">
                             <label class="label-analise-tabela" for="marca">Marca</label>
                             <select class="form-control select-analise" name="marca" id="marca">
-                                <option class="option-analise" value="volvo">item</option>
+                                <option class="option-analise" value="volvo">Selecione</option>
                             </select>
                         </div>
                     </div>
@@ -209,11 +211,10 @@
                             <thead>
                             <tr>
                                 <th class="tabela-info-th" colspan="5">Dados filiais</th>
-                                <th class="tabela-info-th" colspan="4">Dados de entrada</th>
-                                <th class="tabela-info-th" colspan="1">Calc. dias</th>
-                                <th class="tabela-info-th" colspan="5">Dados estatísticos</th>
-                                <th class="tabela-info-th" colspan="1">Preço prat.</th>
-                                <th class="tabela-info-th-d" colspan="5">Digitar pedido de compra</th>
+                                <th class="tabela-info-th" colspan="3">Dados de entrada</th>
+                                <th class="tabela-info-th" colspan="6">Dados estatísticos</th>
+                                <th class="tabela-info-th" colspan="2">Preço prat.</th>
+                                <th class="tabela-info-th-d" colspan="4">Digitar pedido de compra</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -226,12 +227,12 @@
                                 <th class="tabela-info">Dt. ult. Ent.</th>
                                 <th class="tabela-info">Qt. ult. Ent.</th>
                                 <th class="tabela-info">Vl. ult. Ent.</th>
-                                <th class="tabela-info">DDE normal</th>
+                                <th class="tabela-info">DDE</th>
                                 <th class="tabela-info">Est. seg.</th>
                                 <th class="tabela-info">Ponto rep.</th>
                                 <th class="tabela-info">Cx Fech.</th>
-                                <th class="tabela-info">Caixa</th>
-                                <th class="tabela-info">Unid.</th>
+                                <th class="tabela-info">Und Caixa</th>
+                                <th class="tabela-info">Sugestão Und</th>
                                 <th class="tabela-info">Pr. tabela</th>
                                 <th class="tabela-info">% margem</th>
 
@@ -266,8 +267,10 @@
             <div class="card shadow mb-4">
                 <div class="card-body" id="grafico-serie-hist">
                     <p class="texto-grafico-analise">Série histórica de vendas</p>
-                    <div class="chart-bar">
-                        <canvas id="ChartSerieHist"></canvas>
+                    <div style="overflow-x: auto; white-space: nowrap;">
+                        <div class="chart-bar" style="width:2000px;">
+                            <canvas id="ChartSerieHist"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -350,19 +353,15 @@
                         <thead>
                         <tr>
                             <th>Cód. filial</th>
-                            <th>Filial</th>
                             <th>Cód. prod</th>
                             <th>Descrição produto</th>
-                            <th>Preço</th>
-                            <th>Quantidade</th>
+                            <th>Saldo</th>
                             <th>Data do pedido</th>
                         </tr>
                         </thead>
 
                         <tbody>
-                        <tr>
-                            <td>nome</td>
-                            <td>cnpj</td>
+                        <tr id="pedidos-pendentes-modal">
                             <td>Ativa</td>
                             <td>Inativa</td>
                             <td>Inativa</td>
