@@ -386,8 +386,8 @@ const sendSelectProd = (prod, lead, t_repo) => {
                         <td class="tabela-info">${data.sugestao_caixa}</td>
                         <td class="tabela-info">${data.sugestao_unidade}</td>
                         <td class="tabela-info">${data.sugestao}</td>
-                        <td class="tabela-info">999</td>
-                        <td class="tabela-info">10</td>
+                        <td class="tabela-info">R$ 0</td>
+                        <td class="tabela-info">0</td>
                     `
 
                     valor_faturamento.innerHTML += `

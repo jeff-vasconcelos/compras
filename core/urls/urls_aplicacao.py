@@ -23,6 +23,8 @@ urlpatterns = [
     path('rm-produto-pedido/', rm_prod_pedido_sessao, name='rm-prod-pedido-sessao'),
     path('exportar-produto-pedido/', export_csv, name='exportar-pedido-sessao'),
 
+    path('ver-pedido-pendentes/', pedidos_pedentes, name='ver-pedido-pendentes'),
+
 
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),

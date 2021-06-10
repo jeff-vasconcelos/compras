@@ -150,7 +150,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         print("FUNCIONANDO - DEF DADOS_PROD")
         # print(pedidos_all)
-        return prod_resumo, pedidos_all
+        return prod_resumo
 
     else:
         print("SEM DADOS VENDAS - DEF DADOS_PROD")

@@ -163,7 +163,7 @@ def selecionar_produto(request):
         produto_codigo = qs.cod_produto
         fornecedor_codigo = qs.cod_fornecedor
 
-        produto_dados, pedidos_todos = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
+        produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
 
         if produto_dados is None:
             messages.error(request, "O produto selecionado pode não ter vendas no periodo!")
@@ -206,24 +206,12 @@ def selecionar_produto(request):
                 'ruptura_porc': float(produto_dados['ruptura_porc']),
                 'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
             }
-            itens_pedido = []
-            for index, row in pedidos_todos.iterrows():
-                itens = {
-                    'p_cod_filial': int(row['cod_filial']),
-                    'p_cod_produto': int(row['cod_produto']),
-                    'p_desc_produto': str(row['desc_produto']),
-                    'p_saldo': int(row['saldo']),
-                    'p_data': str(row['data'].strftime('%d/%m/%Y')),
-                }
-
-                itens_pedido.append(itens)
-            print(itens_pedido)
 
             mapa = mapas_serie(empresa, produto)
 
             data.append(itens_analise)  # 0
             data.append(mapa)  # 1
-            # data.append(itens_pedido) #2
+
 
             return JsonResponse({'data': data})
 
@@ -249,8 +237,6 @@ def mapas_serie(empresa, produto):
     data_dia_est = data_day_est.dt.strftime('%d/%m/%Y')
     hist_estoque['data_serie_hist_est'] = hist_estoque['semana'].str.cat(data_dia_est, sep=" - ")
 
-    print('hist_estoque')
-    print(hist_estoque)
 
     df_vendas = df_vendas.sort_values(by=['data'], ascending=True)
     data_day = df_vendas['data'].copy()
@@ -369,3 +355,34 @@ def export_csv(request):
     response['Content-Disposition'] = 'attachment; filename="pedido_insight.csv"'
 
     return response
+
+
+def pedidos_pedentes(request):
+    empresa = request.user.usuario.empresa_id
+    filial = 1
+
+    if request.is_ajax():
+        produto_id = request.POST.get('produto')
+
+        prod_qs = Produto.objects.get(id=produto_id)
+        produto_codigo = prod_qs.cod_produto
+
+        p, pedidos = pedidos_compras(produto_codigo, empresa, filial)
+
+        # pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
+
+        pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
+        pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
+
+        pedidos['data_ped'] = pedidos['data_ped'].astype(str)
+
+
+        print(pedidos)
+        pedid = pedidos.assign(**pedidos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
+            "records")
+
+        print(type(pedid))
+        print(pedid)
+
+        return JsonResponse({'data': pedid})
+    return JsonResponse({})

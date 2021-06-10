@@ -9,6 +9,7 @@
     <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/pedido_sessao.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/pedidos_pendentes.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block conteudo %}
@@ -396,17 +397,12 @@
                             <th>Descrição produto</th>
                             <th>Saldo</th>
                             <th>Data do pedido</th>
+                            <th>Número do pedido</th>
                         </tr>
                         </thead>
 
-                        <tbody>
-                        <tr id="pedidos-pendentes-modal">
-                            <td>Ativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                        </tr>
+                        <tbody id="pedidos-pendentes-modal">
+
                         </tbody>
 
                     </table>
@@ -416,9 +412,9 @@
                     <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
                             data-dismiss="modal">Voltar
                     </button>
-                    <button id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i
-                            class="fas fa-chevron-right"></i>
-                    </button>
+{#                    <button id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i#}
+{#                            class="fas fa-chevron-right"></i>#}
+{#                    </button>#}
                 </div>
             </div>
         </div>
