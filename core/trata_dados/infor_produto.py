@@ -143,13 +143,13 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         else:
             condicao_estoque = 'RUPTURA'
 
-        print(condicao_estoque)
+
         prod_resumo['condicao_estoque'] = condicao_estoque
 
         print("PASSOU - SUGESTAO DE COMPRAS")
 
         print("FUNCIONANDO - DEF DADOS_PROD")
-        print(pedidos_all)
+        # print(pedidos_all)
         return prod_resumo, pedidos_all
 
     else:

@@ -17,11 +17,6 @@ def vendas(cod_produto, id_empresa, periodo):
         empresa__id__exact=id_empresa
     ).values())
 
-    print(periodo, "periodo")
-    print(cod_produto, "codigo prod")
-    print(id_empresa, "id empresa")
-    print(vendas_df, "vendas")
-
     if not vendas_df.empty:
         # TRATANDO DADOS
         vendas_df['data'] = pd.to_datetime(vendas_df['data'])

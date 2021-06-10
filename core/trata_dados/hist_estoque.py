@@ -17,7 +17,6 @@ def historico_estoque(cod_produto, id_empresa, periodo):
     if not h_estoque.empty:
 
         print("HISTORICO ESTOQUE - OK")
-        print(h_estoque)
         print("##############################")
 
         return h_estoque

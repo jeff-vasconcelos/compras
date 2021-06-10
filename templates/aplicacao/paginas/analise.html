@@ -8,6 +8,7 @@
     <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/pedido_sessao.js' %}" defer></script>
 {% endblock scripts %}
 
 {% block conteudo %}
@@ -147,16 +148,17 @@
         <div class="col-md-12">
             <div class="card shadow mb-4" id="div-analise-tabela">
                 <div class="row">
-                    <div class="col-md-1 analise-div">
+                    <div class="col-md-2 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela">Leadtime</label>
-                            <input type="text" class="form-control input-analise" id="leadtime" name="leadtime">
+                            <input type="text" class="form-control input-analise" id="leadtime" name="leadtime" placeholder="Ex. 10">
                         </div>
                     </div>
-                    <div class="col-md-1 analise-div">
+                    <div class="col-md-2 analise-div">
                         <div class="form-group">
-                            <label class="label-analise-tabela">C. reposição</label>
-                            <input type="text" class="form-control input-analise" id="tempo_reposicao" name="tempo_reposicao">
+                            <label class="label-analise-tabela">P. Reposição</label>
+                            <input type="text" class="form-control input-analise" id="tempo_reposicao"
+                                   name="tempo_reposicao" placeholder="Ex. 10">
                         </div>
                     </div>
                     <div class="col analise-div">
@@ -167,6 +169,7 @@
                             </select>
                         </div>
                     </div>
+                    <!--
                     <div class="col-md-1 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="semana">Semana</label>
@@ -183,6 +186,7 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-md-1 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="curva">Curva</label>
@@ -195,6 +199,7 @@
                             </select>
                         </div>
                     </div>
+                    -->
                     <div class="col-md-2 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="marca">Marca</label>
@@ -206,7 +211,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12" id="div-tabela">
+                    <div class="col-md-9" id="div-tabela">
                         <table id="tabela-analise">
                             <thead>
                             <tr>
@@ -214,7 +219,7 @@
                                 <th class="tabela-info-th" colspan="3">Dados de entrada</th>
                                 <th class="tabela-info-th" colspan="6">Dados estatísticos</th>
                                 <th class="tabela-info-th" colspan="2">Preço prat.</th>
-                                <th class="tabela-info-th-d" colspan="4">Digitar pedido de compra</th>
+                                {#                                <th class="tabela-info-th-d" colspan="4">Digitar pedido de compra</th>#}
                             </tr>
                             </thead>
                             <tbody>
@@ -236,6 +241,29 @@
                                 <th class="tabela-info">Pr. tabela</th>
                                 <th class="tabela-info">% margem</th>
 
+                                {#                                <th>Qt digitada</th>#}
+                                {#                                <th>Pr. compra</th>#}
+                                {#                                <th>% margem</th>#}
+                                {#                                <th>Pr. sugerido</th>#}
+                                {#                                <th>DDE</th>#}
+
+                            </tr>
+                            <tr id="tabela-info-analise">
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-3" id="div-tabela" style="padding-left: 0px; padding-right: 0px">
+                        <table id="tabela-analise">
+                            <thead>
+                            <tr>
+                                <th class="tabela-info-th-d" colspan="5">Digitar pedido de compra</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
                                 <th>Qt digitada</th>
                                 <th>Pr. compra</th>
                                 <th>% margem</th>
@@ -243,21 +271,39 @@
                                 <th>DDE</th>
 
                             </tr>
-                            <tr id="tabela-info-analise">
-
+                            <tr>
+                                <td class="tabela-form">
+                                    <input class="input-tabela-analise" name="qt_digitada" id="qt_digit">
+                                </td>
+                                <td class="tabela-form">
+                                    <input class="input-tabela-analise" name="pr_compra" id="pr_compra">
+                                </td>
+                                <td class="tabela-form">
+                                    <input class="input-tabela-analise" name="porc_margem" id="porc_margem">
+                                </td>
+                                <td class="tabela-form">
+                                    <input class="input-tabela-analise" name="pr_sugerido" id="pr_sugerido">
+                                </td>
+                                <td class="tabela-form">
+                                    <input class="input-tabela-analise" name="dde" id="dde">
+                                </td>
                             </tr>
                             </tbody>
 
                         </table>
-                        <div class="col-md-12 botoes-analise-tabela">
-                            <button class="btn btn-secondary btn-sm ver-pendentes" type="button"
-                                    data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes
-                            </button>
-                            <button class="btn btn-secondary btn-sm ver-pedido" type="button"
-                                    data-toggle="modal" data-target=".modal-pedido">Ver pedido
-                            </button>
-                            <button class="btn btn-secondary btn-sm adicionar-item">Adicionar item</button>
-                        </div>
+                    </div>
+
+                    <div class="col-md-12 botoes-analise-tabela">
+                        <button id="ver_pedidos_pendentes" class="btn btn-secondary btn-sm ver-pendentes"
+                                type="button"
+                                data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes
+                        </button>
+                        <button id="ver_pedido_sessao" class="btn btn-secondary btn-sm ver-pedido" type="button"
+                                data-toggle="modal" data-target=".modal-pedido">Ver pedido
+                        </button>
+                        <button id="add_pedido_sessao" class="btn btn-secondary btn-sm adicionar-item">Adicionar
+                            item
+                        </button>
                     </div>
                 </div>
             </div>
@@ -280,8 +326,10 @@
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <p class="texto-grafico-analise">Cobertura de estoque</p>
-                    <div class="chart-bar" id="div-grafico-um">
-                        <canvas id="ChartCobertura"></canvas>
+                    <div style="overflow-x: auto; white-space: nowrap;">
+                        <div class="chart-bar" style="width:2000px;" id="div-grafico-um">
+                            <canvas id="ChartCobertura"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -290,7 +338,7 @@
 
 
     <!-- MODAL ITENS PEDIDOS  -->
-    <div class="modal fade modal-pedido" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    <div id="modal-ver-pedido-geral" class="modal fade modal-pedido" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" id="modal-ver-pedido">
             <div class="modal-content">
@@ -303,25 +351,16 @@
                         <thead>
                         <tr>
                             <th>Cód. filial</th>
-                            <th>Filial</th>
                             <th>Cód. prod</th>
                             <th>Descrição produto</th>
                             <th>Preço</th>
                             <th>Quantidade</th>
-                            <th>Data do pedido</th>
+                            <th>Margem</th>
                         </tr>
                         </thead>
 
-                        <tbody>
-                        <tr>
-                            <td>nome</td>
-                            <td>cnpj</td>
-                            <td>Ativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                        </tr>
+                        <tbody id="tbody_pedidos_sessao">
+
                         </tbody>
 
                     </table>
@@ -331,9 +370,9 @@
                     <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
                             data-dismiss="modal">Voltar
                     </button>
-                    <button id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i
+                    <a href="{% url 'exportar-pedido-sessao' %}" id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i
                             class="fas fa-chevron-right"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

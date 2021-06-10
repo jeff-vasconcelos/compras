@@ -40,9 +40,6 @@ const sendSelectProd = (prod, lead, t_repo) => {
 
                 const data = dados[0]
                 const graficos = dados[1]
-                const pedidos = dados[2]
-
-                console.log(pedidos)
 
                 //GRAFICO 01
                 var ctx = document.getElementById("ChartSerieHist");
@@ -263,7 +260,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     data: {
                         datasets: [{
                             type: 'line',
-                            label: 'Preço unitário',
+                            label: 'Quantidade estoque',
                             lineTension: 0,
                             backgroundColor: "rgba(255, 255, 255, 0.05)",
                             pointRadius: 2,
@@ -276,29 +273,10 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             pointHitRadius: 10,
                             pointBorderWidth: 2,
                             borderColor: "#4c66a3",
-                            data: [1567, 3689, 8756, 2354, 4556, 3333],
-                        }, {
-                            type: 'bar',
-                            label: 'Quantidade vendida',
-                            backgroundColor: "#6acadb",
-                            hoverBackgroundColor: "#6acadb",
-                            borderColor: "#6acadb",
-                            data: [14984, 9821, 7841, 5312, 6251, 5781]
+                            data: graficos.qt_estoque,
                         }],
 
-                        labels: ["January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                            "January", "February", "March", "April", "May", "June",
-                        ],
+                        labels: graficos.label_dt_serie_est,
                     },
                     options: {
                         maintainAspectRatio: false,
@@ -334,7 +312,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                                     padding: 10,
                                     // Include a dollar sign in the ticks
                                     callback: function (value, index, values) {
-                                        return 'R$' + number_format(value);
+                                        return number_format(value);
                                     }
                                 },
                                 gridLines: {
@@ -364,28 +342,12 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             callbacks: {
                                 label: function (tooltipItem, chart) {
                                     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                    return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                                    return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + ' Unidades';
                                 }
                             }
                         },
                     }
                 });
-
-
-                // PEDIDOS PENDENTES
-                if (Array.isArray(pedidos)) {
-                    tabelaPedidosPendentes.innerHTML = ""
-                    pedidos.forEach(ped => {
-                        console.log(${ped.p_cod_filial})
-                        tabelaPedidosPendentes.innerHTML += `
-                        <td class="tabela-ped-pend">${ped.p_cod_filial}</td>
-                        <td class="tabela-ped-pend">${ped.p_cod_produto}</td>
-                        <td class="tabela-ped-pend">${ped.p_desc_produto}</td>
-                        <td class="tabela-ped-pend">${ped.p_saldo}</td>
-                        <td class="tabela-ped-pend">${ped.p_data}</td>
-                    `
-                    })
-                }
 
                 //DADOS DA TABELA
 
@@ -402,6 +364,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     valor_media.innerHTML = ""
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
+                    tabelaInfo.innerHTML = ""
 
                     if (data.ruptura < 0) {
                         valor_ruptura.style.color = "#707070"
@@ -425,23 +388,6 @@ const sendSelectProd = (prod, lead, t_repo) => {
                         <td class="tabela-info">${data.sugestao}</td>
                         <td class="tabela-info">999</td>
                         <td class="tabela-info">10</td>
-
-
-                        <td class="tabela-form">
-                            <input class="input-tabela-analise" name="qt_digitada">
-                        </td>
-                        <td class="tabela-form">
-                            <input class="input-tabela-analise" name="pr_compra">
-                        </td>
-                        <td class="tabela-form">
-                            <input class="input-tabela-analise" name="porc_margem">
-                        </td>
-                        <td class="tabela-form">
-                            <input class="input-tabela-analise" name="pr_sugerido">
-                        </td>
-                        <td class="tabela-form">
-                            <input class="input-tabela-analise" name="dde">
-                        </td>
                     `
 
                     valor_faturamento.innerHTML += `

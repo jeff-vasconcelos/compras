@@ -16,6 +16,13 @@ urlpatterns = [
     # TODO remover path de url
     path('graficos-prod-selec/', export_csv, name='graficos-prod-selec'),
 
+    #path('ver-pedido-pendente/', ver_pedido_pendente, name='ver-pedido-pendente'),
+
+    path('add-produto-pedido/', add_prod_pedido_sessao, name='add-prod-pedido-sessao'),
+    path('ver-produto-pedido/', ver_prod_pedido_sessao, name='ver-prod-pedido-sessao'),
+    path('rm-produto-pedido/', rm_prod_pedido_sessao, name='rm-prod-pedido-sessao'),
+    path('exportar-produto-pedido/', export_csv, name='exportar-pedido-sessao'),
+
 
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),

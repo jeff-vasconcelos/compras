@@ -224,7 +224,7 @@ def selecionar_produto(request):
 
             data.append(itens_analise) #0
             data.append(mapa) #1
-            data.append(itens_pedido) #2
+            #data.append(itens_pedido) #2
 
             return JsonResponse({'data': data})
 
@@ -239,6 +239,22 @@ def mapas_serie(empresa, produto):
     parametros = Parametro.objects.get(empresa_id=empresa)
     df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo)
 
+    datas = dia_semana_mes_ano(empresa)
+    df_historico = historico_estoque(produto_codigo, empresa, parametros.periodo)
+    df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
+    hist_estoque = pd.merge(datas, df_historico, how="left", on=["data"])
+    hist_estoque['qt_estoque'].fillna(0, inplace=True)
+    hist_estoque = hist_estoque.sort_values(by=['data'], ascending=True)
+
+    data_day_est = hist_estoque['data'].copy()
+    data_dia_est = data_day_est.dt.strftime('%d/%m/%Y')
+    hist_estoque['data_serie_hist_est'] = hist_estoque['semana'].str.cat(data_dia_est, sep=" - ")
+
+
+    print('hist_estoque')
+    print(hist_estoque)
+
+    df_vendas = df_vendas.sort_values(by=['data'], ascending=True)
     data_day = df_vendas['data'].copy()
     data_dia = data_day.dt.strftime('%d/%m/%Y')
 
@@ -255,6 +271,9 @@ def mapas_serie(empresa, produto):
     data_qtvenda = list(df_vendas['qt_vendas'])
     label_dt_serie = list(df_vendas['data_serie_hist'])
 
+    qt_estoque = list(hist_estoque['qt_estoque'])
+    label_dt_serie_est = list(hist_estoque['data_serie_hist_est'])
+
     graf_prod = []
     item = {
         'data_max': data_max,
@@ -264,73 +283,96 @@ def mapas_serie(empresa, produto):
         'data_custo': data_custo,
         'data_lucro': data_lucro,
         'data_qtvenda': data_qtvenda,
-        'label_dt_serie': label_dt_serie
+        'label_dt_serie': label_dt_serie,
+        'qt_estoque': qt_estoque,
+        'label_dt_serie_est': label_dt_serie_est
     }
 
     return item
 
 
 def add_prod_pedido_sessao(request):
-    produto_id = 1
-    if not request.session.get('pedido_produto'):
-        request.session['pedido_produto'] = {}
+    if request.is_ajax():
+        produto_id = request.POST.get('produto')
+        #TODO Aumatizar filial
+        cod_filial = 1
+
+        qt_digitada = request.POST.get('qt_digitada')
+        pr_compra = request.POST.get('pr_compra')
+        margem = request.POST.get('margem')
+        pr_sugerido = request.POST.get('pr_sugerido')
+        dde = request.POST.get('dde')
+
+        prod_qs = Produto.objects.get(id=produto_id)
+        produto_nome = prod_qs.desc_produto
+        produto_codigo = prod_qs.cod_produto
+
+        if not request.session.get('pedido_produto'):
+            request.session['pedido_produto'] = {}
+            request.session.save()
+
+        pedido = request.session['pedido_produto']
+
+        pedido[produto_id] = {
+            'ped_produto_id': produto_id,
+            'ped_produto_cod': produto_codigo,
+            'ped_produto_nome': produto_nome,
+            'ped_cod_filial': cod_filial,
+            'ped_qt_digitada': qt_digitada,
+            'ped_pr_compra': pr_compra,
+            'ped_margem': margem,
+            'ped_pr_sugerido': pr_sugerido,
+            'ped_dde': dde,
+        }
+
         request.session.save()
+        print(request.session['pedido_produto'])
 
-    pedido = request.session['pedido_produto']
-    pedido[produto_id] = {
-        'produto_id': produto_id,
-        'produto_nome': produto_nome,
-        'variacao_nome': variacao_nome,
-        'variacao_id': variacao_id,
-        'preco_unitario': preco_unitario,
-        'preco_unitario_promocional': preco_unitario_promocional,
-        'preco_quantitativo': preco_unitario,
-        'preco_quantitativo_promocional': preco_unitario_promocional,
-    }
-
-    request.session.save()
-
-    messages.success(request, "")
-
-
-def rm_prod_pedido_sessao(request):
-    variacao_id = request.GET.get('vid')
-
-    if not variacao_id:
-        return redirect(http_referer)
-
-    if not request.session.get('pedido_produto'):
-        return redirect(http_referer)
-
-    if variacao_id not in request.session['pedido_produto']:
-        return redirect(http_referer)
-
-    pedido = request.session['pedido_produto'][variacao_id]
-
-    messages.success(
-        request,
-        f'Produto {pedido["produto_nome"]} {pedido["variacao_nome"]} '
-        f'removido do seu carrinho.'
-    )
-
-    del request.session['carrinho'][variacao_id]
-    request.session.save()
-    return redirect(http_referer)
+        messages.success(request, "Produto adicionado com sucesso!")
+        return JsonResponse({'data': produto_id})
 
 
 def ver_prod_pedido_sessao(request):
-    contexto = {
-        'pedido': request.session.get('pedido_produto', {})
-    }
+    if request.is_ajax():
+        contexto = request.session.get('pedido_produto', [])
+        lista = []
+        for value in contexto.values():
+            temp = value
+            lista.append(temp)
 
-    return render(request, 'produto/carrinho.html', contexto)
+        return JsonResponse({'data': lista})
+
+
+def rm_prod_pedido_sessao(request):
+    if request.is_ajax():
+        produto_id = request.POST.get('produto')
+
+        del request.session['pedido_produto'][produto_id]
+        request.session.save()
+
+        return JsonResponse({'data': 0})
 
 
 def export_csv(request):
     response = HttpResponse(content_type='text/csv')
 
     writer = csv.writer(response)
-    writer.writerow(['COD_PRODUTO', 'DESC_PRODUTO'])
+    writer.writerow(['cod_produto', 'preco', 'quantidade'])
+
+    pedido = request.session.get('pedido_produto', [])
+    lista = []
+
+    for value in pedido.values():
+        temp = value
+        print(temp)
+        for valor in temp.values():
+            t = valor
+            print
+            lista.append(t)
+            writer.writerow(lista)
+
+    print(lista)
+
 
     response['Content-Disposition'] = 'attachment; filename="pedido_insight.csv"'
 

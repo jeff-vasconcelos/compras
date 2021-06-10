@@ -11,6 +11,7 @@ const sendSearchProd = (prod) =>{
         },
         success: (res)=> {
             const data = res.data
+            console.log(data)
             if (Array.isArray(data)){
                 resultsBoxProd.innerHTML = ""
                 data.forEach(prod=> {

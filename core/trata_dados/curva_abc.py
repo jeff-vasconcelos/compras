@@ -64,7 +64,6 @@ def abc(cod_fornecedor, id_empresa, periodo):
         abc['curva'] = lista_curva
 
         print("CURVA ABC - ABC OK")
-        print(abc)
         print("##############################")
 
         return abc
