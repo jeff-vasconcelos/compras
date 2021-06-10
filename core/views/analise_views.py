@@ -1,9 +1,10 @@
+import csv
 from math import ceil
 from django.contrib import messages
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.db.models import Q
 from api.models.fornecedor_models import *
 from api.models.produto_models import *
@@ -267,3 +268,70 @@ def mapas_serie(empresa, produto):
     }
 
     return item
+
+
+def add_prod_pedido_sessao(request):
+    produto_id = 1
+    if not request.session.get('pedido_produto'):
+        request.session['pedido_produto'] = {}
+        request.session.save()
+
+    pedido = request.session['pedido_produto']
+    pedido[produto_id] = {
+        'produto_id': produto_id,
+        'produto_nome': produto_nome,
+        'variacao_nome': variacao_nome,
+        'variacao_id': variacao_id,
+        'preco_unitario': preco_unitario,
+        'preco_unitario_promocional': preco_unitario_promocional,
+        'preco_quantitativo': preco_unitario,
+        'preco_quantitativo_promocional': preco_unitario_promocional,
+    }
+
+    request.session.save()
+
+    messages.success(request, "")
+
+
+def rm_prod_pedido_sessao(request):
+    variacao_id = request.GET.get('vid')
+
+    if not variacao_id:
+        return redirect(http_referer)
+
+    if not request.session.get('pedido_produto'):
+        return redirect(http_referer)
+
+    if variacao_id not in request.session['pedido_produto']:
+        return redirect(http_referer)
+
+    pedido = request.session['pedido_produto'][variacao_id]
+
+    messages.success(
+        request,
+        f'Produto {pedido["produto_nome"]} {pedido["variacao_nome"]} '
+        f'removido do seu carrinho.'
+    )
+
+    del request.session['carrinho'][variacao_id]
+    request.session.save()
+    return redirect(http_referer)
+
+
+def ver_prod_pedido_sessao(request):
+    contexto = {
+        'pedido': request.session.get('pedido_produto', {})
+    }
+
+    return render(request, 'produto/carrinho.html', contexto)
+
+
+def export_csv(request):
+    response = HttpResponse(content_type='text/csv')
+
+    writer = csv.writer(response)
+    writer.writerow(['COD_PRODUTO', 'DESC_PRODUTO'])
+
+    response['Content-Disposition'] = 'attachment; filename="pedido_insight.csv"'
+
+    return response
