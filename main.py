@@ -5,8 +5,8 @@ import json
 
 
 def login_api():
-    usuario = 'welleson'
-    senha = 'W180425l'
+    usuario = 'cluster'
+    senha = 'Cluster*2018'
 
     url = "http://127.0.0.1:8000/api-token-auth"
     user_data = {
@@ -23,6 +23,44 @@ def login_api():
         token = "Token "
         token += token_puro
         return token
+
+
+def produtos():
+    df_produtos = pd.read_csv(
+        'https://raw.githubusercontent.com/cluster-desenvolvimento/news-datasets/main/SKUs.csv',
+        sep=';')
+
+    df_produtos.columns = ["cod_produto", "desc_produto", "embalagem", "quantidade_un_cx", "marca", "peso_liq",
+                           "cod_fornecedor"]
+    df_produtos['filial'] = 1
+
+    df_produtos['quantidade_un_cx'] = df_produtos['quantidade_un_cx'].replace(",", ".", regex=True).astype(float).round(3)
+
+    produtos_dic = df_produtos.assign(**df_produtos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
+        "records")
+
+    print(df_produtos)
+    print(df_produtos.info())
+    dados = produtos_dic
+    token = login_api()
+
+    url = "http://127.0.0.1:8000/api/produto/"
+    headers = {
+        'Authorization': token,
+        'Content-Type': 'application/json',
+        'dataType': 'json',
+        'Accept': 'application/json'
+    }
+
+    response = requests.get(url=url, headers=headers)
+    if response.status_code == 200:
+        for i in dados:
+            data = json.dumps(i)
+            response = requests.post(url=url, headers=headers, data=data)
+            print(data)
+        return response.status_code
+    else:
+        token = login_api()
 
 
 def vendas():
@@ -47,7 +85,6 @@ def vendas():
     vendas_dic = vendas_df.assign(**vendas_df.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
 
     dados = vendas_dic
-    print(dados)
     token = login_api()
 
     url = "http://127.0.0.1:8000/api/venda/"
@@ -234,4 +271,4 @@ def estoque():
 
 
 if __name__ == '__main__':
-    estoque()
+    produtos()
