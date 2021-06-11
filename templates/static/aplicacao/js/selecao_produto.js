@@ -358,6 +358,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
+                    porc_media.innerHTML = ""
                 } else {
                     valor_faturamento.innerHTML = ""
                     valor_curva.innerHTML = ""
@@ -365,6 +366,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
+                    porc_media.innerHTML = ""
 
                     if (data.ruptura < 0) {
                         valor_ruptura.style.color = "#707070"
@@ -386,8 +388,8 @@ const sendSelectProd = (prod, lead, t_repo) => {
                         <td class="tabela-info">${data.sugestao_caixa}</td>
                         <td class="tabela-info">${data.sugestao_unidade}</td>
                         <td class="tabela-info">${data.sugestao}</td>
-                        <td class="tabela-info">R$ 0</td>
-                        <td class="tabela-info">0</td>
+                        <td class="tabela-info">R$ ${data.preco_tabela}</td>
+                        <td class="tabela-info">${data.margem} %</td>
                     `
 
                     valor_faturamento.innerHTML += `
@@ -398,6 +400,9 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     `
                     valor_media.innerHTML += `
                         ${data.media_ajustada}
+                    `
+                    porc_media.innerHTML += `
+                        ${data.porc_media} %
                     `
                     valor_ruptura.innerHTML += `
                         ${data.ruptura}

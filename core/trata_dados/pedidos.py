@@ -1,5 +1,4 @@
 from django.db.models import Count
-
 from api.models.p_compras_models import PedidoCompras
 import pandas as pd
 import datetime
@@ -35,9 +34,13 @@ def pedidos_compras(cod_produto, id_empresa, cod_filial):
         pedido_vazio = {
             'cod_produto': cod_produto, 'cod_filial': cod_filial, 'saldo': 0
         }
+        pedido_todos_vazio = {
+
+        }
         pedido_vazio_df = pd.DataFrame([pedido_vazio])
+        pedido_todos_vazio_df = pd.DataFrame([pedido_todos_vazio])
 
         print("PEDIDOS - O PRODUTO NÃO TEM PEDIDOS PENDENTES")
         print("##############################")
 
-    return pedido_vazio_df
+    return pedido_vazio_df, pedido_todos_vazio_df

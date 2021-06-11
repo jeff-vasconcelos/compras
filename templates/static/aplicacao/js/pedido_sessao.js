@@ -15,7 +15,7 @@ const modalPedidosSessao = document.getElementById('modal-ver-pedido-geral')
 
 
 // ADD PRODUTO AO PEDIDO NA SESSAO
-const addPedidoSessao = (produto, qt_digitada, pr_compra, margem, pr_sugerido, dde) => {
+const addPedidoSessao = (produto, qt_digitada, pr_compra) => {
     $.ajax({
         type: 'POST',
         url: '/painel/add-produto-pedido/',
@@ -23,14 +23,12 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, margem, pr_sugerido, d
             'csrfmiddlewaretoken': csrf,
             'produto': produto,
             'qt_digitada': qt_digitada,
-            'pr_compra': pr_compra,
-            'margem': margem
+            'pr_compra': pr_compra
         },
         success: (pedido_sessao) => {
             console.log(pedido_sessao.data)
             inputQtDigitada.value = ""
             inputPrCompraDigitada.value = ""
-            inputMargemDigitada.value = ""
             location.reload();
         }
     });
@@ -39,7 +37,6 @@ botaoPedidoSessao.addEventListener('click', e => {
     // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = ProdutosSelecionar.value
 
-    console.log(inputQtDigitada)
 
     // PEGANDO QT DIGITADA
     const qt_dig = inputQtDigitada.value
@@ -60,13 +57,13 @@ botaoPedidoSessao.addEventListener('click', e => {
     }
 
     // PEGANDO MARGEM
-    const mar = inputMargemDigitada.value
-    var margem = 0
-    if (mar === "") {
-        margem = 0
-    } else {
-        margem = mar
-    }
+    // const mar = inputMargemDigitada.value
+    // var margem = 0
+    // if (mar === "") {
+    //     margem = 0
+    // } else {
+    //     margem = mar
+    // }
 
     // // PEGANDO PR SUGERIDO
     // const p_sug = inputPrSugeridoDigitada.value
@@ -89,9 +86,9 @@ botaoPedidoSessao.addEventListener('click', e => {
     console.log(produtoSelecionado, "PRODUTO SELECIONADO")
     console.log(qt_digitada, "QT DIGITADA")
     console.log(p_compra, "PRECO DE COMPRA")
-    console.log(margem, "MARGEM")
 
-    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, margem)
+
+    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra)
 })
 
 
@@ -115,7 +112,7 @@ const verPedidoSessao = () => {
                         <td>${prod.ped_produto_nome}</td>
                         <td>R$ ${prod.ped_pr_compra}</td>
                         <td>${prod.ped_qt_digitada}</td>
-                        <td>${prod.ped_margem} %</td>
+                        
                         <td>
                             <button onclick="rm_prod_pedido_sessao(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="btn btn-danger btn-sm">
                                 <i class="fas fa-times-circle fa-1x"></i>

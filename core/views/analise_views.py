@@ -1,34 +1,21 @@
 import csv
 from math import ceil
 from django.contrib import messages
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.db.models import Q
-from api.models.fornecedor_models import *
 from api.models.produto_models import *
 import datetime
-
-from core.models.empresas_models import Filial
-from core.trata_dados.curva_abc import abc
-from core.trata_dados.dados_produto import produto_dados
-from core.trata_dados.datas import dia_semana_mes_ano
-from core.trata_dados.estoque_atual import estoque_atual
 from core.trata_dados.hist_estoque import historico_estoque
 from core.trata_dados.infor_produto import dados_produto
 from core.trata_dados.vendas import *
-from core.trata_dados.avarias import *
 from core.trata_dados.pedidos import *
-from core.trata_dados.ultima_entrada import *
 import pandas as pd
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    # teste = request.user.usuario.empresa_id
-    # avar = produto_dados(182, teste, 120)
-    # print("Dataframe avarias:", avar)
     return render(request, template_name)
 
 
@@ -96,9 +83,8 @@ def filtrar_produto_fornecedor(request):
         for i in fornecedor:
             lista_fornecedor.append(int(i))
 
-        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor
-                                    , empresa__id__exact=empresa).order_by('cod_produto')
-        print(qs)
+        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
+
 
         if len(qs) > 0 and len(lista_fornecedor) > 0:
             data = []
@@ -128,9 +114,7 @@ def filtrar_produto_produto(request):
         for i in produto:
             lista_produto.append(int(i))
 
-        qs = Produto.objects.filter(id__in=lista_produto
-                                    , empresa__id__exact=empresa).order_by('cod_produto')
-        print(qs)
+        qs = Produto.objects.filter(id__in=lista_produto, empresa__id__exact=empresa).order_by('cod_produto')
 
         if len(qs) > 0 and len(lista_produto) > 0:
             data = []
@@ -205,6 +189,9 @@ def selecionar_produto(request):
                 'ruptura': float(produto_dados['ruptura']),
                 'ruptura_porc': float(produto_dados['ruptura_porc']),
                 'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
+                'preco_tabela': int(produto_dados['preco_venda_tabela'][0]),
+                'margem': int(produto_dados['margem'][0]),
+                'porc_media': float(produto_dados['porcent_media'][0]),
             }
 
             mapa = mapas_serie(empresa, produto)
@@ -283,7 +270,7 @@ def add_prod_pedido_sessao(request):
 
         qt_digitada = request.POST.get('qt_digitada')
         pr_compra = request.POST.get('pr_compra')
-        margem = request.POST.get('margem')
+
 
         prod_qs = Produto.objects.get(id=produto_id)
         produto_nome = prod_qs.desc_produto
@@ -296,12 +283,12 @@ def add_prod_pedido_sessao(request):
         pedido = request.session['pedido_produto']
 
         pedido[produto_id] = {
+            'ped_produto_id': produto_id,
             'ped_produto_cod': produto_codigo,
             'ped_produto_nome': produto_nome,
             'ped_cod_filial': cod_filial,
-            'ped_qt_digitada': qt_digitada,
             'ped_pr_compra': pr_compra,
-            'ped_margem': margem
+            'ped_qt_digitada': qt_digitada,
         }
 
         request.session.save()
@@ -325,6 +312,7 @@ def ver_prod_pedido_sessao(request):
 def rm_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
+        print(produto_id)
 
         del request.session['pedido_produto'][produto_id]
         request.session.save()
@@ -336,7 +324,7 @@ def export_csv(request):
     response = HttpResponse(content_type='text/csv')
 
     writer = csv.writer(response)
-    writer.writerow(['cod_produto', 'desc_produto', 'preco', 'quantidade'])
+    writer.writerow(['cod_produto', 'preco', 'quantidade'])
 
     pedido = request.session.get('pedido_produto', [])
     lista = []
@@ -345,14 +333,15 @@ def export_csv(request):
         temp = value
 
         del [temp['ped_cod_filial']]
-        del [temp['ped_margem']]
+        del [temp['ped_produto_nome']]
+        del [temp['ped_produto_id']]
 
         lista.append(temp)
 
     for i in lista:
         writer.writerow(i.values())
 
-    response['Content-Disposition'] = 'attachment; filename="pedido_insight.csv"'
+    response['Content-Disposition'] = 'attachment; filename="importar_pedido.csv"'
 
     return response
 
@@ -369,20 +358,13 @@ def pedidos_pedentes(request):
 
         p, pedidos = pedidos_compras(produto_codigo, empresa, filial)
 
-        # pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
-
         pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
         pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
 
         pedidos['data_ped'] = pedidos['data_ped'].astype(str)
 
-
-        print(pedidos)
         pedid = pedidos.assign(**pedidos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
             "records")
-
-        print(type(pedid))
-        print(pedid)
 
         return JsonResponse({'data': pedid})
     return JsonResponse({})

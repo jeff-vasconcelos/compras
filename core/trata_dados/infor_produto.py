@@ -4,7 +4,6 @@ from core.trata_dados.pedidos import pedidos_compras
 from core.trata_dados.ultima_entrada import ultima_entrada
 from core.trata_dados.estoque_atual import estoque_atual
 from core.trata_dados.curva_abc import abc
-from core.trata_dados.vendas import vendas
 from core.models.parametros_models import Parametro
 import pandas as pd
 from scipy.stats import norm
@@ -14,55 +13,54 @@ import math
 def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     # PEGANDO DADOS DE PRODUTO, FORNCEDOR, EMPRESA E FUNCOES NECESSARIAS
     filial = 1
-
     cod_fornec = cod_forn
     cod_prod = cod_produto
     id_emp = id_empresa
     leadtime = leadt
     t_reposicao = t_reposicao
 
+    # BUSCANDO PARAMETROS DA EMPRESA DO USUARIO LOGADO
     parametros = Parametro.objects.get(empresa_id=id_emp)
 
+    # CARREGANDO DADOS DE OUTRAS FUNÇÕES
     pedidos, pedidos_all = pedidos_compras(cod_prod, id_emp, filial)
     u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
     e_atual = estoque_atual(cod_prod, id_emp)
     vendas_p, info_produto = produto_dados(cod_prod, id_emp, parametros.periodo)
     curva = abc(cod_fornec, id_emp, parametros.periodo)
 
-    # INFORMÇÕES GERAIS
-
+    # INFORMAÇÕES DE PRODUTO PARA AREA DE ANALISE
+    # VALIDANDO DATAFRAMES
     if info_produto is not None:
 
+        # VALIDANDO SE HOUVE ULTIMAS ENTRADAS
         if u_entrada is None:
             dt_ult_entrada = "-"
             qt_ult_entrada = 0
             vl_ult_entrada = 0
-            print("SEM DADOS ULT ENTRADA - DEF DADOS_PROD")
         else:
             dt_ult_entrada = u_entrada['data'].unique()
             qt_ult_entrada = u_entrada['qt_ult_entrada'].unique()
             vl_ult_entrada = u_entrada['vl_ult_entrada'].unique()
 
+        # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
         media = info_produto.media[0]
         media_ajustada = info_produto.media_ajustada[0]
         desvio = info_produto.desvio[0]
 
+        # SOMANDO SALDO DE PEDIDOS
         prod_resumo = pedidos.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
 
+        # INFORMAÇÕES DE PRODUTO
         estoque_a = e_atual['qt_disponivel'].to_frame().reset_index(drop=True)
-
         prod_resumo['avarias'] = e_atual['qt_indenizada'].sum()
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
         prod_resumo['vl_ult_ent'] = vl_ult_entrada
-
         prod_resumo['dias_estoque_estim'] = (prod_resumo['estoque_dispon'] / media).round(0)
 
-        print("PASSOU - INFORMACOES GERAIS")
-
-        # ESTOQUE DE SEGURANÇA
-
+        # CALCULANDO ESTOQUE DE SEGURANÇA
         curva_a = norm.ppf(parametros.curva_a / 100).round(3)
         curva_b = norm.ppf(parametros.curva_b / 100).round(3)
         curva_c = norm.ppf(parametros.curva_c / 100).round(3)
@@ -86,22 +84,15 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         else:
             est_seg = curva_e * math.sqrt((leadtime + t_reposicao)) * desvio
 
-
         prod_resumo['estoque_segur'] = est_seg.round(0)
 
-        print("PASSOU - ESTOQUE DE SEGURANÇA")
-
-        # PONTO DE REPOSIÇÃO
+        # CALCULANDO PONTO DE REPOSIÇÃO
 
         estoque_segur = est_seg.round(0)
-
         ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
-
         prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
-        print("PASSOU - PONTO DE REPOSICAO")
-
-        # SUGESTAO DE COMPRAS
+        # CALCULANDO SUGESTAO DE COMPRAS
 
         sugestao = ((media_ajustada * (leadtime + t_reposicao)) + estoque_segur) - (
                 prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
@@ -113,6 +104,23 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['curva'] = produto.curva[0]
         prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
 
+        # PORCENTAGEM DA MEDIA
+        d_m = desvio / media
+        por = 1.0 - d_m
+        porcent_media = por * 100
+        prod_resumo['porcent_media'] = porcent_media.round(2)
+
+        # CALCULO DE MARGEM
+        preco_custo = e_atual.preco_custo[0]
+        preco_tabela = e_atual.preco_venda[0]
+
+        m = preco_tabela - preco_custo
+        m_ = m / preco_tabela
+        margem = m_ * 100
+        prod_resumo['margem'] = margem.round(2)
+        prod_resumo['preco_venda_tabela'] = preco_tabela
+
+        # DIAS SEM ESTOQUE / COM ESTOQUE / MEDIA DE PRECOS / PORCENTAGEM RUPTURA / DDE
         total_linha = vendas_p.shape[0]
         d_estoque = vendas_p['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
         d_sem_estoque = total_linha - d_estoque
@@ -122,7 +130,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         ruptura = variavel * d_sem_estoque
         porcent_ruptura = (d_sem_estoque / total_linha) * 100
 
-        # ultimo_preco = vendas_p['preco_unit'].iloc[-1]
         estoque_disponivel = prod_resumo.estoque_dispon[0]
         dde = estoque_disponivel / media_ajustada
 
@@ -132,10 +139,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         dde_ponto_rep = ponto_reposicao / media
 
-        print(d_sem_estoque, "DIAS SEM ESTOQUE")
-        print(media_preco, "PRECO MEDIO")
-
-
+        # DIFININDO CONDIÇÃO DE ESTOQUE
         if dde > dde_ponto_rep:
             condicao_estoque = 'NORMAL'
         elif dde_ponto_rep >= dde > 0:
@@ -143,15 +147,9 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         else:
             condicao_estoque = 'RUPTURA'
 
-
         prod_resumo['condicao_estoque'] = condicao_estoque
 
-        print("PASSOU - SUGESTAO DE COMPRAS")
-
-        print("FUNCIONANDO - DEF DADOS_PROD")
-        # print(pedidos_all)
         return prod_resumo
 
     else:
-        print("SEM DADOS VENDAS - DEF DADOS_PROD")
         return None

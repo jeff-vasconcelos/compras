@@ -22,7 +22,7 @@ const verPedidosPendentes = (produto) => {
                         <td>${prod.cod_filial}</td>
                         <td>${prod.cod_produto}</td>
                         <td>${prod.desc_produto}</td>
-                        <td>R$ ${prod.saldo}</td>
+                        <td>${prod.saldo}</td>
                         <td>${prod.data_ped}</td>
                         <td>${prod.num_pedido}</td>
                      </tr>
