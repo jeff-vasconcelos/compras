@@ -189,8 +189,8 @@ def selecionar_produto(request):
                 'ruptura': float(produto_dados['ruptura']),
                 'ruptura_porc': float(produto_dados['ruptura_porc']),
                 'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
-                'preco_tabela': int(produto_dados['preco_venda_tabela'][0]),
-                'margem': int(produto_dados['margem'][0]),
+                'preco_tabela': float(produto_dados['preco_venda_tabela'][0]),
+                'margem': float(produto_dados['margem'][0]),
                 'porc_media': float(produto_dados['porcent_media'][0]),
             }
 

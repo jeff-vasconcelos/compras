@@ -118,7 +118,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         m_ = m / preco_tabela
         margem = m_ * 100
         prod_resumo['margem'] = margem.round(2)
-        prod_resumo['preco_venda_tabela'] = preco_tabela
+        prod_resumo['preco_venda_tabela'] = preco_tabela.round(2)
+
 
         # DIAS SEM ESTOQUE / COM ESTOQUE / MEDIA DE PRECOS / PORCENTAGEM RUPTURA / DDE
         total_linha = vendas_p.shape[0]
