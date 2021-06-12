@@ -186,12 +186,14 @@ def selecionar_produto(request):
                 'sugestao_unidade': sug_unit,
                 'curva': str(produto_dados['curva'][0]),
                 'media_ajustada': str(produto_dados['media_ajustada'][0]),
-                'ruptura': float(produto_dados['ruptura']),
+                'ruptura': str(produto_dados['ruptura'][0]),
                 'ruptura_porc': float(produto_dados['ruptura_porc']),
+                'ruptura_cor': str(produto_dados['cor_ruptura'][0]),
                 'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
                 'preco_tabela': float(produto_dados['preco_venda_tabela'][0]),
                 'margem': float(produto_dados['margem'][0]),
                 'porc_media': float(produto_dados['porcent_media'][0]),
+                'media_simples': float(produto_dados['media'][0]),
             }
 
             mapa = mapas_serie(empresa, produto)
@@ -244,6 +246,8 @@ def mapas_serie(empresa, produto):
 
     qt_estoque = list(hist_estoque['qt_estoque'])
     label_dt_serie_est = list(hist_estoque['data_serie_hist_est'])
+
+    print(data_med)
 
     graf_prod = []
     item = {

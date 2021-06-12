@@ -76,7 +76,7 @@ def vendas(cod_produto, id_empresa, periodo):
         media_ajustada = lista_for_df['valores'].mean()
 
         # ADICIONANDO VALORES AO DATAFRAME
-        e_vendas['media'] = round(media, 2)
+        e_vendas['media'] = media.round(2)
         e_vendas['max'] = round(max_media, 2)
         e_vendas['min'] = 0
 
@@ -93,9 +93,9 @@ def vendas(cod_produto, id_empresa, periodo):
 
         info_p = {
             'dias_s_vendas': [d_sem_vendas], 'dias_vendas': [d_vendas],
-            'media': [round(media, 2)], 'maximo': [maximo], 'desvio': [round(d_padrao, 2)],
-            'max_media': [round(max_media, 2)],
-            'media_ajustada': [round(media_ajustada, 2)],
+            'media': [media.round(2)], 'maximo': [maximo], 'desvio': [d_padrao.round(2)],
+            'max_media': [max_media.round(2)],
+            'media_ajustada': [media_ajustada.round(2)],
             'qt_unit_caixa': e_vendas['qt_unit_caixa'][0],
             'media_preco_praticado': media_preco_vendas
         }

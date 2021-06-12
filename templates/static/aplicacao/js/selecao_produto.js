@@ -5,11 +5,12 @@ const tabelaPedidosPendentes = document.getElementById('pedidos-pendentes-modal'
 
 //CARDS
 const porc_faturamento = document.getElementById('porc_fat')
-const valor_faturamento = document.getElementById('valor_fat')
+const valor_condicao_est = document.getElementById('valor_fat')
 const porc_curva = document.getElementById('porc_curva')
 const valor_curva = document.getElementById('valor_curva')
 const porc_media = document.getElementById('porc_media')
 const valor_media = document.getElementById('valor_media')
+const valor_media_simples = document.getElementById('valor_media_simples')
 const porc_ruptura = document.getElementById('porc_ruptura')
 const valor_ruptura = document.getElementById('valor_ruptura')
 
@@ -335,27 +336,54 @@ const sendSelectProd = (prod, lead, t_repo) => {
                 //DADOS DA TABELA
 
                 if (!data) {
-                    valor_faturamento.innerHTML = ""
+                    valor_condicao_est.innerHTML = ""
                     valor_curva.innerHTML = ""
                     valor_media.innerHTML = ""
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
                     porc_media.innerHTML = ""
+                    valor_media_simples.innerHTML = ""
                 } else {
-                    valor_faturamento.innerHTML = ""
+                    valor_condicao_est.innerHTML = ""
                     valor_curva.innerHTML = ""
                     valor_media.innerHTML = ""
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
                     porc_media.innerHTML = ""
+                    valor_media_simples.innerHTML = ""
 
-                    if (data.ruptura < 0) {
+                    // VALIDANDO COR DA RUPTURA
+                    if (data.ruptura_cor === 'positivo') {
                         valor_ruptura.style.color = "#707070"
-                    } else if (data.ruptura >= 0) {
+                    } else if (data.ruptura_cor === 'negativo') {
                         valor_ruptura.style.color = "#de200d"
                     }
+
+                    // VALIDANDO COR DA SITUAÇÃO ESTOQUE
+                    if (data.condicao_estoque === 'NORMAL') {
+                        valor_condicao_est.style.color = "#707070"
+                    } else if (data.condicao_estoque === 'PARCIAL') {
+                        valor_condicao_est.style.color = "#ff8518"
+                    } else if (data.condicao_estoque === 'RUPTURA') {
+                        valor_condicao_est.style.color = "#de200d"
+                    }
+
+                    // VALIDANDO COR DA CURVA
+                    if (data.curva === 'A') {
+                        valor_curva.style.color = "#02e591"
+                    } else if (data.curva === 'B') {
+                        valor_curva.style.color = "#4791ff"
+                    } else if (data.curva === 'C') {
+                        valor_curva.style.color = "#54d8ff"
+                    }else if (data.curva === 'D') {
+                        valor_curva.style.color = "#a3a0fb"
+                    }else if (data.curva === 'E') {
+                        valor_curva.style.color = "#ec6666"
+                    }
+
+
                     tabelaInfo.innerHTML += `
                         <td class="tabela-info">${data.filial}</td>
                         <td class="tabela-info">Matriz</td>
@@ -375,7 +403,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                         <td class="tabela-info">${data.margem} %</td>
                     `
 
-                    valor_faturamento.innerHTML += `
+                    valor_condicao_est.innerHTML += `
                         ${data.condicao_estoque}
                     `
                     valor_curva.innerHTML += `
@@ -383,6 +411,9 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     `
                     valor_media.innerHTML += `
                         ${data.media_ajustada}
+                    `
+                    valor_media_simples.innerHTML += `
+                        ${data.media_simples}
                     `
                     porc_media.innerHTML += `
                         ${data.porc_media} %

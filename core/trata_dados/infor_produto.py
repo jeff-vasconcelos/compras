@@ -8,6 +8,8 @@ from core.models.parametros_models import Parametro
 import pandas as pd
 from scipy.stats import norm
 import math
+import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
@@ -98,7 +100,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
                 prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
-        prod_resumo['media'] = media
+        prod_resumo['media'] = media.round(2)
         prod_resumo['media_ajustada'] = media_ajustada
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = produto.curva[0]
@@ -129,12 +131,21 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         media_preco = info_produto.media_preco_praticado[0].round(2)
         variavel = media * media_preco
         ruptura = variavel * d_sem_estoque
+
+        if ruptura > 0:
+            cor_ruptura = 'negativo'
+        else:
+            cor_ruptura = 'positivo'
+
+        prod_resumo['cor_ruptura'] = cor_ruptura
+
         porcent_ruptura = (d_sem_estoque / total_linha) * 100
 
         estoque_disponivel = prod_resumo.estoque_dispon[0]
         dde = estoque_disponivel / media_ajustada
 
-        prod_resumo['ruptura'] = ruptura.round(2)
+        ruptura = locale.currency(ruptura, grouping=True)
+        prod_resumo['ruptura'] = ruptura
         prod_resumo['dde'] = dde.round(2)
         prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
 
