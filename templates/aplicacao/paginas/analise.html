@@ -6,6 +6,7 @@
     <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_curva.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/pedido_sessao.js' %}" defer></script>
@@ -206,20 +207,21 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="col-md-1 analise-div">
+                    -->
+                    <div class="col-md-2 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="curva">Curva</label>
-                            <select class="form-control select-analise" name="curva" id="curva">
-                                <option class="option-analise" value="curva_a">A</option>
-                                <option class="option-analise" value="curva_b">B</option>
-                                <option class="option-analise" value="curva_c">C</option>
-                                <option class="option-analise" value="curva_d">D</option>
-                                <option class="option-analise" value="curva_e">E</option>
+                            <select class="form-control select-analise" id="curva_abc_select">
+                                <option class="option-analise" selected>Selecione</option>
+                                <option class="option-analise" value="A">A</option>
+                                <option class="option-analise" value="B">B</option>
+                                <option class="option-analise" value="C">C</option>
+                                <option class="option-analise" value="D">D</option>
+                                <option class="option-analise" value="E">E</option>
                             </select>
                         </div>
                     </div>
-                    -->
+                    <!--
                     <div class="col-md-2 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela" for="marca">Marca</label>
@@ -228,6 +230,7 @@
                             </select>
                         </div>
                     </div>
+                    -->
                 </div>
 
                 <div class="row">

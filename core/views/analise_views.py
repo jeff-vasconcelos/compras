@@ -7,6 +7,8 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.db.models import Q
 from api.models.produto_models import *
 import datetime
+
+from core.trata_dados.curva_abc import abc
 from core.trata_dados.hist_estoque import historico_estoque
 from core.trata_dados.infor_produto import dados_produto
 from core.trata_dados.vendas import *
@@ -85,7 +87,6 @@ def filtrar_produto_fornecedor(request):
 
         qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
 
-
         if len(qs) > 0 and len(lista_fornecedor) > 0:
             data = []
             for prod in qs:
@@ -133,6 +134,44 @@ def filtrar_produto_produto(request):
     return JsonResponse({})
 
 
+def filtrar_produto_curva(request):
+    empresa = request.user.usuario.empresa_id
+    if request.is_ajax():
+        res_fil_curva = None
+        id_fornecedor = request.POST.get('fornecedor')
+        curva = request.POST.get('curva')
+        fornecedor = id_fornecedor.replace(",", "")
+        parametros = Parametro.objects.get(empresa_id=empresa)
+
+        fornec = Fornecedor.objects.get(id=id_fornecedor)
+        cod_fornec = fornec.cod_fornecedor
+
+        curva_f = abc(cod_fornec, empresa, parametros.periodo)
+        curva_f = curva_f.query('curva== @curva')
+        codprod = curva_f['cod_produto']
+        list_produto = []
+        for items in codprod.iteritems():
+            list_produto.append(int(items[1]))
+
+        qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=empresa).order_by('cod_produto')
+
+        if len(qs) > 0 and len(list_produto) > 0:
+            data = []
+            for prod in qs:
+                item = {
+                    'pk': prod.pk,
+                    'nome': prod.desc_produto,
+                    'cod': prod.cod_produto,
+                    'emb': prod.embalagem
+                }
+                data.append(item)
+            res_fil_curva = data
+        else:
+            res_fil_curva = "Nada encontrado!"
+        return JsonResponse({'data': res_fil_curva})
+    return JsonResponse({})
+
+
 def selecionar_produto(request):
     empresa = request.user.usuario.empresa_id
 
@@ -161,7 +200,6 @@ def selecionar_produto(request):
             else:
                 dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
 
-            rupt = -1
             sugestao = float(produto_dados['sugestao'])
             qt_un_caixa = float(produto_dados['qt_unit_caixa'])
 
@@ -247,8 +285,6 @@ def mapas_serie(empresa, produto):
     qt_estoque = list(hist_estoque['qt_estoque'])
     label_dt_serie_est = list(hist_estoque['data_serie_hist_est'])
 
-    print(data_med)
-
     graf_prod = []
     item = {
         'data_max': data_max,
@@ -316,7 +352,6 @@ def ver_prod_pedido_sessao(request):
 def rm_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
-        print(produto_id)
 
         del request.session['pedido_produto'][produto_id]
         request.session.save()

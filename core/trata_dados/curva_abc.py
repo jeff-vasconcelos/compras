@@ -13,8 +13,8 @@ def abc(cod_fornecedor, id_empresa, periodo):
 
     vendas_df = pd.DataFrame(Venda.objects.filter(
         cod_fornecedor=cod_fornecedor,
-        empresa__id__exact=id_empresa,
-        data__range=[data_fim, data_inicio]
+        data__range=[data_fim, data_inicio],
+        empresa__id__exact=id_empresa
     ).values())
 
     if not vendas_df.empty:
@@ -62,9 +62,6 @@ def abc(cod_fornecedor, id_empresa, periodo):
 
             lista_curva.append(curva)
         abc['curva'] = lista_curva
-
-        print("CURVA ABC - ABC OK")
-        print("##############################")
 
         return abc
     else:
