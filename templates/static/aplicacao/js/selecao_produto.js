@@ -42,6 +42,11 @@ const sendSelectProd = (prod, lead, t_repo) => {
                 const data = dados[0]
                 const graficos = dados[1]
 
+                $("canvas#ChartSerieHist").remove();
+                $("canvas#ChartCobertura").remove();
+                $("div#div-grafico-um").append('<canvas id="ChartSerieHist"></canvas>')
+                $("div#div-grafico-dois").append('<canvas id="ChartCobertura"></canvas>')
+
                 //GRAFICO 01
                 var ctx = document.getElementById("ChartSerieHist");
                 var ChartSerieHist = new Chart(ctx, {
