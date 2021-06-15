@@ -79,10 +79,16 @@ def filtrar_produto_fornecedor(request):
     if request.is_ajax():
         res_fil_fornec = None
         fornecedor = request.POST.get('fornecedor')
-        fornecedor = fornecedor.replace(",", "")
+        fornecedor = fornecedor.replace(",", " ")
+
+        a = fornecedor.split()
+        b = []
+
+        for elemento in a:
+            b.append(int(elemento))
 
         lista_fornecedor = []
-        for i in fornecedor:
+        for i in b:
             lista_fornecedor.append(int(i))
 
         qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
@@ -109,12 +115,17 @@ def filtrar_produto_produto(request):
     if request.is_ajax():
         res_fil_prod = None
         produto = request.POST.get('produto')
-        produto = produto.replace(",", "")
+        produto = produto.replace(",", " ")
+        a = produto.split()
+        b = []
+        for elemento in a:
+            b.append(int(elemento))
 
         lista_produto = []
-        for i in produto:
+        for i in b:
             lista_produto.append(int(i))
 
+        print(lista_produto)
         qs = Produto.objects.filter(id__in=lista_produto, empresa__id__exact=empresa).order_by('cod_produto')
 
         if len(qs) > 0 and len(lista_produto) > 0:

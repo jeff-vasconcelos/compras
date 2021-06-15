@@ -43,6 +43,7 @@ function selecao_produto() {
             }
         }
     }
+    console.log(checkProduto)
     const produtos_selecionados = new FormData()
     produtos_selecionados.append('csrfmiddlewaretoken', csrf)
     produtos_selecionados.append('produto', checkProduto)
