@@ -11,9 +11,58 @@
 <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/pedido_sessao.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/pedidos_pendentes.js' %}" defer></script>
+<script src="{% static 'aplicacao/js/mascara_preco.js' %}" defer></script>
+
+<script>
+    $(document).ready(function () {
+        // show the alert
+        setTimeout(function () {
+            $(".alert").alert('close');
+        }, 5000);
+    });
+</script>
 {% endblock scripts %}
 
 {% block conteudo %}
+<div class="div-mensagem-sucesso" id="div-mensagem-sucesso">
+    <!--
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+            <use xlink:href="#check-circle-fill"/>
+        </svg>
+        <div>
+            &nbsp; An example success alert with an icon
+        </div>
+    </div>
+    -->
+</div>
+<div class="div-mensagem-erro" id="div-mensagem-erro">
+    <!--
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+            <use xlink:href="#exclamation-triangle-fill"/>
+        </svg>
+        <div>
+            &nbsp; An example danger alert with an icon
+        </div>
+    </div>
+    -->
+</div>
+
+<div class="div-mensagem-alerta" id="div-mensagem-alerta">
+    <!--
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+            <use xlink:href="#exclamation-triangle-fill"/>
+        </svg>
+        <div>
+            &nbsp; An example warning alert with an icon
+        </div>
+    </div>
+    -->
+</div>
+
+
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
@@ -190,7 +239,7 @@
                     <div class="form-group">
                         <label class="label-analise-tabela">Produto</label>
                         <select class="form-control select-analise" name="produtos" id="results-produtos">
-                            <option selected>Selecione o produto</option>
+                            <option class="option-analise" value="0" selected>Selecione o produto</option>
                         </select>
                     </div>
                 </div>
@@ -281,8 +330,8 @@
                     </table>
                 </div>
 
-                <div class="col-md-2" id="div-tabela" style="padding-left: 0px; padding-right: 0px">
-                    <table id="tabela-analise">
+                <div class="col-md-2" id="div-tabela-digite" style="padding-left: 0px; padding-right: 0px">
+                    <table id="tabela-analise-digite">
                         <thead>
                         <tr>
                             <th class="tabela-info-th-d" colspan="5">Digitar pedido de compra</th>
@@ -292,33 +341,33 @@
                         <tr>
                             <th>Qt digitada</th>
                             <th>Pr. compra</th>
-                            {#
+                            <!--
                             <th>% margem</th>
-                            #}
-                            {#
-                            <th>Pr. sugerido</th>
-                            #}
-                            {#
-                            <th>DDE</th>
-                            #}
 
+                            <th>Pr. sugerido</th>
+
+                            <th>DDE</th>
+                            -->
                         </tr>
                         <tr>
                             <td class="tabela-form">
                                 <input class="input-tabela-analise" name="qt_digitada" id="qt_digit">
                             </td>
                             <td class="tabela-form">
-                                <input class="input-tabela-analise" name="pr_compra" id="pr_compra">
+                                <input type="Text" class="input-tabela-analise" name="pr_compra" id="pr_compra"
+                                       onKeyUp="mascaraMoeda(this, event)" value="">
                             </td>
-                            <!--                                <td class="tabela-form">-->
-                            <!--                                    <input class="input-tabela-analise" name="porc_margem" id="porc_margem">-->
-                            <!--                                </td>-->
-                            <!--                                <td class="tabela-form">-->
-                            <!--                                    <input class="input-tabela-analise" name="pr_sugerido" id="pr_sugerido">-->
-                            <!--                                </td>-->
-                            <!--                                <td class="tabela-form">-->
-                            <!--                                    <input class="input-tabela-analise" name="dde" id="dde">-->
-                            <!--                                </td>-->
+                            <!--
+                            <td class="tabela-form">
+                                <input class="input-tabela-analise" name="porc_margem" id="porc_margem">
+                            </td>
+                            <td class="tabela-form">
+                                <input class="input-tabela-analise" name="pr_sugerido" id="pr_sugerido">
+                            </td>
+                            <td class="tabela-form">
+                                <input class="input-tabela-analise" name="dde" id="dde">
+                            </td>
+                            -->
                         </tr>
                         </tbody>
 
@@ -413,7 +462,7 @@
 </div>
 
 <!-- MODAL PEDIDOS PENDENTES -->
-<div class="modal fade modal-pendentes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div class="modal fade modal-pendentes" id="modal-pendentes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" id="modal-ver-pedido-p">
         <div class="modal-content">

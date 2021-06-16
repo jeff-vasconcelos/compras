@@ -34,8 +34,34 @@ const sendSelectProd = (prod, lead, t_repo) => {
             const dados = info_prod.data
 
             if (dados === 0) {
-                console.log("vazio")
-                location.reload();
+
+                botaoVerPedidosPendentes.style.display = 'none'
+                valor_condicao_est.innerHTML = ""
+                valor_curva.innerHTML = ""
+                valor_media.innerHTML = ""
+                valor_ruptura.innerHTML = ""
+                porc_ruptura.innerHTML = ""
+                tabelaInfo.innerHTML = ""
+                porc_media.innerHTML = ""
+                valor_media_simples.innerHTML = ""
+
+                mensagemErro.innerHTML += `
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                            <use xlink:href="#exclamation-triangle-fill"/>
+                        </svg>
+                        <div>
+                            &nbsp; O produto selecionado pode não ter vendas no periodo!
+                        </div>
+                    </div>
+                `
+                $(document).ready(function () {
+                    // show the alert
+                    setTimeout(function () {
+                        $(".alert").alert('close');
+                    }, 5000);
+                });
+
             } else {
                 console.log("tem dados")
 
@@ -341,6 +367,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                 //DADOS DA TABELA
 
                 if (!data) {
+                    botaoVerPedidosPendentes.style.display = 'none'
                     valor_condicao_est.innerHTML = ""
                     valor_curva.innerHTML = ""
                     valor_media.innerHTML = ""
@@ -350,6 +377,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     porc_media.innerHTML = ""
                     valor_media_simples.innerHTML = ""
                 } else {
+                    botaoVerPedidosPendentes.style.display = "initial"
                     valor_condicao_est.innerHTML = ""
                     valor_curva.innerHTML = ""
                     valor_media.innerHTML = ""

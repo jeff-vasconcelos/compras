@@ -200,8 +200,6 @@ def selecionar_produto(request):
         produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
 
         if produto_dados is None:
-            messages.error(request, "O produto selecionado pode não ter vendas no periodo!")
-
             return JsonResponse({'data': 0})
 
         else:
@@ -316,48 +314,56 @@ def mapas_serie(empresa, produto):
 def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
-        # TODO Aumatizar filial
-        cod_filial = 1
+        if produto_id != "0":
+            # TODO Aumatizar filial
+            cod_filial = 1
 
-        qt_digitada = request.POST.get('qt_digitada')
-        pr_compra = request.POST.get('pr_compra')
+            qt_digitada = request.POST.get('qt_digitada')
+            pr_compra = request.POST.get('pr_compra')
 
+            prod_qs = Produto.objects.get(id=produto_id)
+            produto_nome = prod_qs.desc_produto
+            produto_codigo = prod_qs.cod_produto
 
-        prod_qs = Produto.objects.get(id=produto_id)
-        produto_nome = prod_qs.desc_produto
-        produto_codigo = prod_qs.cod_produto
+            if not request.session.get('pedido_produto'):
+                request.session['pedido_produto'] = {}
+                request.session.save()
 
-        if not request.session.get('pedido_produto'):
-            request.session['pedido_produto'] = {}
+            pedido = request.session['pedido_produto']
+
+            pedido[produto_id] = {
+                'ped_produto_id': produto_id,
+                'ped_produto_cod': produto_codigo,
+                'ped_produto_nome': produto_nome,
+                'ped_cod_filial': cod_filial,
+                'ped_pr_compra': pr_compra,
+                'ped_qt_digitada': qt_digitada,
+            }
+
             request.session.save()
 
-        pedido = request.session['pedido_produto']
-
-        pedido[produto_id] = {
-            'ped_produto_id': produto_id,
-            'ped_produto_cod': produto_codigo,
-            'ped_produto_nome': produto_nome,
-            'ped_cod_filial': cod_filial,
-            'ped_pr_compra': pr_compra,
-            'ped_qt_digitada': qt_digitada,
-        }
-
-        request.session.save()
-        print(request.session['pedido_produto'])
-
-        messages.success(request, "Produto adicionado com sucesso!")
-        return JsonResponse({'data': produto_id})
+            res = "SUCESSO"
+            return JsonResponse({'data': res})
+        else:
+            res = "FALHOU"
+            return JsonResponse({'data': res})
 
 
 def ver_prod_pedido_sessao(request):
     if request.is_ajax():
         contexto = request.session.get('pedido_produto', [])
         lista = []
-        for value in contexto.values():
-            temp = value
-            lista.append(temp)
 
-        return JsonResponse({'data': lista})
+        if not contexto:
+            res = "FALSE"
+            return JsonResponse({'data': res})
+
+        else:
+            for value in contexto.values():
+                temp = value
+                lista.append(temp)
+
+            return JsonResponse({'data': lista})
 
 
 def rm_prod_pedido_sessao(request):
@@ -403,18 +409,24 @@ def pedidos_pedentes(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
 
-        prod_qs = Produto.objects.get(id=produto_id)
-        produto_codigo = prod_qs.cod_produto
+        if produto_id == "0":
+            print("nenhum selecionado")
+            res = "FALSE"
+            return JsonResponse({'data': res})
 
-        p, pedidos = pedidos_compras(produto_codigo, empresa, filial)
+        else:
+            prod_qs = Produto.objects.get(id=produto_id)
+            produto_codigo = prod_qs.cod_produto
 
-        pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
-        pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
+            p, pedidos = pedidos_compras(produto_codigo, empresa, filial)
 
-        pedidos['data_ped'] = pedidos['data_ped'].astype(str)
+            pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
+            pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
 
-        pedid = pedidos.assign(**pedidos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
-            "records")
+            pedidos['data_ped'] = pedidos['data_ped'].astype(str)
 
-        return JsonResponse({'data': pedid})
+            pedid = pedidos.assign(**pedidos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
+                "records")
+
+            return JsonResponse({'data': pedid})
     return JsonResponse({})

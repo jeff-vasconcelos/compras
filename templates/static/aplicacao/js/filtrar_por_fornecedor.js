@@ -14,7 +14,7 @@ const filterFornec = (forn) =>{
             //console.log(res_fil_fornec)
             const data_f = res_fil_fornec.data
             if (Array.isArray(data_f)){
-                resultadosProdutos.innerHTML = `<option class="option-analise" selected>Selecione o produto</option>`
+                resultadosProdutos.innerHTML = `<option class="option-analise" value="0" selected>Selecione o produto</option>`
                 data_f.forEach(prod=> {
                     resultadosProdutos.innerHTML += `
                         <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>
