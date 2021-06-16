@@ -8,13 +8,13 @@ from core.trata_dados.datas import dia_semana_mes_ano
 def abc(cod_fornecedor, id_empresa, periodo):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
-    datas = dia_semana_mes_ano()
+    datas = dia_semana_mes_ano(id_empresa)
 
 
     vendas_df = pd.DataFrame(Venda.objects.filter(
         cod_fornecedor=cod_fornecedor,
-        empresa__id__exact=id_empresa,
-        data__range=[data_fim, data_inicio]
+        data__range=[data_fim, data_inicio],
+        empresa__id__exact=id_empresa
     ).values())
 
     if not vendas_df.empty:
@@ -62,10 +62,6 @@ def abc(cod_fornecedor, id_empresa, periodo):
 
             lista_curva.append(curva)
         abc['curva'] = lista_curva
-
-        print("CURVA ABC - ABC OK")
-        print(abc)
-        print("##############################")
 
         return abc
     else:

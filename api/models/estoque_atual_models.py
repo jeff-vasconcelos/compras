@@ -7,6 +7,7 @@ from api.models.produto_models import Produto
 class EstoqueAtual(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
     desc_produto = models.CharField(max_length=255, null=True, blank=True)
+    embalagem = models.CharField(max_length=255, null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)
     cod_fornecedor = models.IntegerField(null=True, blank=True)
 
@@ -20,8 +21,10 @@ class EstoqueAtual(models.Model):
     qt_indenizada = models.IntegerField(null=True, blank=True)
     qt_reservada = models.IntegerField(null=True, blank=True)
     qt_pendente = models.IntegerField(null=True, blank=True)
+    qt_bloqueada = models.IntegerField(null=True, blank=True)
     qt_disponivel = models.IntegerField(null=True, blank=True)
     custo_ult_ent = models.FloatField(null=True, blank=True)
+    preco_venda = models.FloatField(null=True, blank=True)
     data = models.DateField(null=True, blank=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 

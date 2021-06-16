@@ -33,21 +33,19 @@ function selecao_fornecedor(){
 
             }else{
                 checkFornecedor.push(marcado)
-
             }
 
         }else if (listaFornecedores[i].checked == false){
             const desmarq = listaFornecedores[i].value
             if (checkFornecedor.indexOf(desmarq) > -1){
                 checkFornecedor.splice(checkFornecedor.indexOf(desmarq), 1)
-
             }
         }
     }
 
-    const fonecedores_selecionados = new FormData()
-    fonecedores_selecionados.append('csrfmiddlewaretoken', csrf)
-    fonecedores_selecionados.append('fornecedor', checkFornecedor)
+    const fornecedores_selecionados = new FormData()
+    fornecedores_selecionados.append('csrfmiddlewaretoken', csrf)
+    fornecedores_selecionados.append('fornecedor', checkFornecedor)
 
-    filterFornec(fonecedores_selecionados)
+    filterFornec(fornecedores_selecionados)
 }

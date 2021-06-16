@@ -7,6 +7,7 @@ from api.models.produto_models import Produto
 class HistEstoque(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
     desc_produto = models.CharField(max_length=255, null=True, blank=True)
+    embalagem = models.CharField(max_length=255, null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)
     cod_fornecedor = models.IntegerField(null=True, blank=True)
 

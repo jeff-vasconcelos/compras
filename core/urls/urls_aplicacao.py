@@ -12,8 +12,19 @@ urlpatterns = [
     path('search/fornec', buscar_fornecedor, name='results-fornecedor'),
     path('filter-fornec/', filtrar_produto_fornecedor, name='filter-fornecedor'),
     path('filter-prod/', filtrar_produto_produto, name='filter-produto'),
+    path('filter-curva/', filtrar_produto_curva, name='filter-curva'),
     path('select-prod/', selecionar_produto, name='filter-produto'),
-    #path('info-select-prod/', informacao_produto, name='info-filter-produto'),
+    # TODO remover path de url
+    path('graficos-prod-selec/', export_csv, name='graficos-prod-selec'),
+
+    #path('ver-pedido-pendente/', ver_pedido_pendente, name='ver-pedido-pendente'),
+
+    path('add-produto-pedido/', add_prod_pedido_sessao, name='add-prod-pedido-sessao'),
+    path('ver-produto-pedido/', ver_prod_pedido_sessao, name='ver-prod-pedido-sessao'),
+    path('rm-produto-pedido/', rm_prod_pedido_sessao, name='rm-prod-pedido-sessao'),
+    path('exportar-produto-pedido/', export_csv, name='exportar-pedido-sessao'),
+
+    path('ver-pedido-pendentes/', pedidos_pedentes, name='ver-pedido-pendentes'),
 
 
     path('home/', home_painel, name='home_painel'),

@@ -4,7 +4,6 @@ const resultsBoxFornec = document.getElementById('results-box-fornec')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value
 
 const sendSearchData = (fornec) =>{
-    console.log(fornec)
     $.ajax({
         type: 'POST',
         url: '/painel/search/fornec',
@@ -13,7 +12,6 @@ const sendSearchData = (fornec) =>{
             'fornecedor': fornec,
         },
         success: (res_f)=> {
-            console.log(res_f.data)
             const data = res_f.data
             if (Array.isArray(data)){
                 resultsBoxFornec.innerHTML = ""
@@ -43,7 +41,6 @@ const sendSearchData = (fornec) =>{
 }
 
 searchFornec.addEventListener('keyup', e=>{
-    console.log(e.target.value)
 
     if (resultsBoxFornec.classList.contains('d-none')){
         resultsBoxFornec.classList.remove('d-none')

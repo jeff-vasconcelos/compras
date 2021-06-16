@@ -10,8 +10,8 @@ const sendSearchProd = (prod) =>{
             'produto': prod,
         },
         success: (res)=> {
-            console.log(res.data)
             const data = res.data
+            console.log(data)
             if (Array.isArray(data)){
                 resultsBoxProd.innerHTML = ""
                 data.forEach(prod=> {
@@ -40,7 +40,6 @@ const sendSearchProd = (prod) =>{
 }
 
 searchProd.addEventListener('keyup', e=>{
-    console.log(e.target.value)
 
     if (resultsBoxProd.classList.contains('d-none')){
         resultsBoxProd.classList.remove('d-none')

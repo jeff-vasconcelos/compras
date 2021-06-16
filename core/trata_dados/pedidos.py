@@ -1,5 +1,4 @@
 from django.db.models import Count
-
 from api.models.p_compras_models import PedidoCompras
 import pandas as pd
 import datetime
@@ -20,21 +19,28 @@ def pedidos_compras(cod_produto, id_empresa, cod_filial):
     pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
 
     if not pedidos_df.empty:
+        pedidos_all = pedidos_df.sort_values(by=['data'], ascending=False)
+
+        indexNames = pedidos_all[(pedidos_all['saldo'] == 0)].index
+        pedidos_all.drop(indexNames, inplace=True)
+
         pedidos = pedidos_df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
         print("PEDIDOS - OK")
-        print(pedidos)
         print("##############################")
 
-        return pedidos
+        return pedidos, pedidos_all
     else:
         pedido_vazio = {
             'cod_produto': cod_produto, 'cod_filial': cod_filial, 'saldo': 0
         }
+        pedido_todos_vazio = {
+
+        }
         pedido_vazio_df = pd.DataFrame([pedido_vazio])
+        pedido_todos_vazio_df = pd.DataFrame([pedido_todos_vazio])
 
         print("PEDIDOS - O PRODUTO NÃO TEM PEDIDOS PENDENTES")
-        print(pedido_vazio_df)
         print("##############################")
 
-    return pedido_vazio_df
+    return pedido_vazio_df, pedido_todos_vazio_df
