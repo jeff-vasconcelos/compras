@@ -1,4 +1,5 @@
 const listaFornecedores = document.getElementsByName('item-fornecedor')
+
 const resultadosProdutos = document.getElementById('results-produtos')
 const checkFornecedor = []
 
@@ -11,13 +12,27 @@ const filterFornec = (forn) =>{
         processData: false,
         contentType: false,
         success: (res_fil_fornec)=> {
-            //console.log(res_fil_fornec)
-            const data_f = res_fil_fornec.data
+            console.log(res_fil_fornec)
+            const data = res_fil_fornec.data
+
+            const data_f = data[0]
+            const marcas = data[1]
+
             if (Array.isArray(data_f)){
                 resultadosProdutos.innerHTML = `<option class="option-analise" value="0" selected>Selecione o produto</option>`
                 data_f.forEach(prod=> {
                     resultadosProdutos.innerHTML += `
                         <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>
+                    `
+                })
+            }
+            if (Array.isArray(marcas)){
+                listaMarcaSelecionar.innerHTML = `<option class="option-analise" value="0" selected>Selecione</option>`
+
+                marcas.forEach(p_marcas=> {
+
+                    listaMarcaSelecionar.innerHTML += `
+                        <option class="option-analise" value="${p_marcas.marca_p}">${p_marcas.marca_p}</option>
                     `
                 })
             }

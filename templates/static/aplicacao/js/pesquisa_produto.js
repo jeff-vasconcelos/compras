@@ -29,6 +29,7 @@ const sendSearchProd = (prod) =>{
                  }else{
                      resultsBoxProd.classList.add('d-none')
                      resultadosPProdutos.innerHTML = ""
+                     listaMarcaSelecionar.innerHTML = ""
                  }
             }
         },

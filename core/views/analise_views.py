@@ -94,16 +94,30 @@ def filtrar_produto_fornecedor(request):
         qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
 
         if len(qs) > 0 and len(lista_fornecedor) > 0:
+            marcas = []
+            marcas_itens = []
+
             data = []
             for prod in qs:
                 item = {
                     'pk': prod.pk,
                     'nome': prod.desc_produto,
                     'cod': prod.cod_produto,
-                    'emb': prod.embalagem
+                    'emb': prod.embalagem,
                 }
+                if prod.marca not in marcas:
+                    marcas.append(prod.marca)
                 data.append(item)
-            res_fil_fornec = data
+
+            for i in marcas:
+                itens_marcas = {
+                    'marca_p': i
+                }
+                marcas_itens.append(itens_marcas)
+
+            res_fil_fornec = []
+            res_fil_fornec.append(data)
+            res_fil_fornec.append(marcas_itens)
         else:
             res_fil_fornec = "Nada encontrado!"
         return JsonResponse({'data': res_fil_fornec})
@@ -125,20 +139,33 @@ def filtrar_produto_produto(request):
         for i in b:
             lista_produto.append(int(i))
 
-        print(lista_produto)
         qs = Produto.objects.filter(id__in=lista_produto, empresa__id__exact=empresa).order_by('cod_produto')
 
         if len(qs) > 0 and len(lista_produto) > 0:
+            marcas = []
+            marcas_itens = []
+
             data = []
             for prod in qs:
                 item = {
                     'pk': prod.pk,
                     'nome': prod.desc_produto,
                     'cod': prod.cod_produto,
-                    'emb': prod.embalagem
+                    'emb': prod.embalagem,
                 }
+                if prod.marca not in marcas:
+                    marcas.append(prod.marca)
                 data.append(item)
-            res_fil_prod = data
+
+            for i in marcas:
+                itens_marcas = {
+                    'marca_p': i
+                }
+                marcas_itens.append(itens_marcas)
+
+            res_fil_prod = []
+            res_fil_prod.append(data)
+            res_fil_prod.append(marcas_itens)
         else:
             res_fil_prod = "Nada encontrado!"
         return JsonResponse({'data': res_fil_prod})
@@ -177,6 +204,51 @@ def filtrar_produto_curva(request):
                 }
                 data.append(item)
             res_fil_curva = data
+        else:
+            res_fil_curva = "Nada encontrado!"
+        return JsonResponse({'data': res_fil_curva})
+    return JsonResponse({})
+
+
+def filtrar_produto_marca(request):
+    empresa = request.user.usuario.empresa_id
+    if request.is_ajax():
+        res_fil_curva = None
+        marca = request.POST.get('marca')
+
+        fornecedor = request.POST.get('fornecedor')
+        fornecedor = fornecedor.replace(",", " ")
+
+        a = fornecedor.split()
+        b = []
+
+        for elemento in a:
+            b.append(int(elemento))
+
+        lista_fornecedor = []
+        for i in b:
+            lista_fornecedor.append(int(i))
+
+        print(marca)
+        print(lista_fornecedor)
+
+        qs = Produto.objects.filter(marca=marca, fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
+        print("####### RESULTADOS ###########")
+        print(qs)
+
+        if len(qs) > 0:
+            data = []
+            for prod in qs:
+                item = {
+                    'pk': prod.pk,
+                    'nome': prod.desc_produto,
+                    'cod': prod.cod_produto,
+                    'emb': prod.embalagem,
+                }
+                data.append(item)
+                print(data)
+            res_fil_curva = data
+            print(res_fil_curva)
         else:
             res_fil_curva = "Nada encontrado!"
         return JsonResponse({'data': res_fil_curva})
@@ -288,7 +360,7 @@ def mapas_serie(empresa, produto):
     data_preco = list(df_vendas['preco_unit'])
     data_custo = list(df_vendas['custo_fin'])
     data_lucro = list(df_vendas['lucro'])
-    data_qtvenda = list(df_vendas['qt_vendas'])
+    data_qtvenda = list((df_vendas['qt_vendas']))
     label_dt_serie = list(df_vendas['data_serie_hist'])
 
     qt_estoque = list(hist_estoque['qt_estoque'])
@@ -307,6 +379,7 @@ def mapas_serie(empresa, produto):
         'qt_estoque': qt_estoque,
         'label_dt_serie_est': label_dt_serie_est
     }
+    print(item)
 
     return item
 

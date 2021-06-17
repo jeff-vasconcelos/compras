@@ -185,6 +185,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                                 bottom: 0
                             }
                         },
+
                         scales: {
                             xAxes: [{
                                 time: {
@@ -211,15 +212,8 @@ const sendSelectProd = (prod, lead, t_repo) => {
                                     padding: 10,
                                     // Include a dollar sign in the ticks
                                     callback: function (value, index, values) {
-                                        return 'R$' + number_format(value);
+                                        return 'R$' + value;
                                     }
-                                },
-                                gridLines: {
-                                    color: "rgb(234, 236, 244)",
-                                    zeroLineColor: "rgb(234, 236, 244)",
-                                    drawBorder: false,
-                                    borderDash: [2],
-                                    zeroLineBorderDash: [2]
                                 }
                             }, {
                                 id: 'B',
@@ -260,9 +254,15 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             callbacks: {
                                 label: function (tooltipItem, chart) {
                                     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                    return datasetLabel + ": " + number_format(tooltipItem.yLabel);
+                                    return datasetLabel + ": " + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                                 }
                             }
+                            // callbacks: {
+                            //     label: function (tooltipItem, chart) {
+                            //         var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                            //         return datasetLabel + ": " + number_format(tooltipItem.yLabel);
+                            //     }
+                            // }
                         },
                     }
                 });
