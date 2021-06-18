@@ -10,9 +10,8 @@ def abc(cod_fornecedor, id_empresa, periodo):
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano(id_empresa)
 
-
     vendas_df = pd.DataFrame(Venda.objects.filter(
-        cod_fornecedor=cod_fornecedor,
+        cod_fornecedor__in=cod_fornecedor,
         data__range=[data_fim, data_inicio],
         empresa__id__exact=id_empresa
     ).values())

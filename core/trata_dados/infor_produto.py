@@ -29,7 +29,10 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
     e_atual = estoque_atual(cod_prod, id_emp)
     vendas_p, info_produto = produto_dados(cod_prod, id_emp, parametros.periodo)
-    curva = abc(cod_fornec, id_emp, parametros.periodo)
+
+    lista_fornecedor = []
+    lista_fornecedor.append(cod_fornec)
+    curva = abc(lista_fornecedor, id_emp, parametros.periodo)
 
     # INFORMAÇÕES DE PRODUTO PARA AREA DE ANALISE
     # VALIDANDO DATAFRAMES
@@ -143,6 +146,10 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         estoque_disponivel = prod_resumo.estoque_dispon[0]
         dde = estoque_disponivel / media_ajustada
+        # dde = estoque_disponivel / 1
+
+        print(estoque_disponivel)
+        print(media_ajustada)
 
         ruptura = locale.currency(ruptura, grouping=True)
         prod_resumo['ruptura'] = ruptura
