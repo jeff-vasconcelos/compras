@@ -30,6 +30,8 @@ const sendSearchData = (fornec) =>{
                  }else{
                      resultsBoxFornec.classList.add('d-none')
                      resultadosPProdutos.innerHTML = ""
+                     listaMarcaSelecionar.innerHTML = ""
+                     listaCurvaSelecionar.innerHTML = ""
                  }
             }
         },

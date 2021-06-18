@@ -20,6 +20,16 @@ const filterFornec = (forn) =>{
 
             if (Array.isArray(data_f)){
                 resultadosProdutos.innerHTML = `<option class="option-analise" value="0" selected>Selecione o produto</option>`
+                listaCurvaSelecionar.innerHTML = `
+                    <select class="form-control select-analise" id="curva_abc_select">
+                        <option class="option-analise" selected value="0">Selecione</option>
+                        <option class="option-analise" value="A">A</option>
+                        <option class="option-analise" value="B">B</option>
+                        <option class="option-analise" value="C">C</option>
+                        <option class="option-analise" value="D">D</option>
+                        <option class="option-analise" value="E">E</option>
+                    </select>
+                `
                 data_f.forEach(prod=> {
                     resultadosProdutos.innerHTML += `
                         <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>

@@ -47,6 +47,9 @@ listaCurvaSelecionar.addEventListener('change', e => {
     // PEGANDO PRODUTO SELECIONADO
     const curvaSelecionada = e.target.value
 
+    resultsBoxFornec.classList.add('d-none')
+    resultsBoxProd.classList.add('d-none')
+
     // PEGANDO COD FORNECEDOR
     for (var i = 0; i < listaFornecedores.length; i++){
         if (listaFornecedores[i].checked == true){
