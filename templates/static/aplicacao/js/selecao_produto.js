@@ -84,7 +84,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             lineTension: 0,
                             backgroundColor: "rgba(255, 255, 255, 0.05)",
                             pointRadius: 0,
-                            borderWidth: 2,
+                            borderWidth: 1,
                             pointBackgroundColor: "#ed1b24",
                             pointBorderColor: "#ed1b24",
                             pointHoverRadius: 5,
@@ -119,14 +119,14 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             backgroundColor: "rgba(255, 255, 255, 0.05)",
                             pointRadius: 0,
                             borderWidth: 2,
-                            pointBackgroundColor: "#274ea2",
-                            pointBorderColor: "#274ea2",
+                            pointBackgroundColor: "#FF6384",
+                            pointBorderColor: "#FF6384",
                             pointHoverRadius: 5,
-                            pointHoverBackgroundColor: "#274ea2",
-                            pointHoverBorderColor: "#274ea2",
+                            pointHoverBackgroundColor: "#FF6384",
+                            pointHoverBorderColor: "#FF6384",
                             pointHitRadius: 10,
                             pointBorderWidth: 2,
-                            borderColor: "#274ea2",
+                            borderColor: "#FF6384",
                             data: graficos.data_min,
                         }, {
                             type: 'line',
@@ -136,14 +136,14 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             backgroundColor: "rgba(255, 255, 255, 0.05)",
                             pointRadius: 2,
                             borderWidth: 1,
-                            pointBackgroundColor: "#4c66a3",
-                            pointBorderColor: "#4c66a3",
+                            pointBackgroundColor: "#2F6E36",
+                            pointBorderColor: "#2F6E36",
                             pointHoverRadius: 5,
-                            pointHoverBackgroundColor: "#4c66a3",
-                            pointHoverBorderColor: "#4c66a3",
+                            pointHoverBackgroundColor: "#2F6E36",
+                            pointHoverBorderColor: "#2F6E36",
                             pointHitRadius: 10,
                             pointBorderWidth: 2,
-                            borderColor: "#4c66a3",
+                            borderColor: "#2F6E36",
                             data: graficos.data_preco,
                         }, {
                             type: 'line',
@@ -166,9 +166,9 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             type: 'bar',
                             yAxisID: 'B',
                             label: 'Quantidade vendida',
-                            backgroundColor: "#6acadb",
-                            hoverBackgroundColor: "#6acadb",
-                            borderColor: "#6acadb",
+                            backgroundColor: "#36A2EB",
+                            hoverBackgroundColor: "#36A2EB",
+                            borderColor: "#36A2EB",
                             data: graficos.data_qtvenda
                         }],
 
@@ -224,8 +224,9 @@ const sendSelectProd = (prod, lead, t_repo) => {
                                     padding: 10,
                                     // Include a dollar sign in the ticks
                                     callback: function (value, index, values) {
-                                        return number_format(value);
+                                        return value;
                                     }
+
                                 },
                                 gridLines: {
                                     color: "rgb(234, 236, 244)",
@@ -237,7 +238,10 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             }],
                         },
                         legend: {
-                            display: true
+                            display: true,
+                            labels :{
+                                usePointStyle: true,
+                            }
                         },
                         tooltips: {
                             titleMarginBottom: 10,
@@ -251,12 +255,12 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             yPadding: 15,
                             displayColors: false,
                             caretPadding: 10,
-                            callbacks: {
-                                label: function (tooltipItem, chart) {
-                                    var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                    return datasetLabel + ": " + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                }
-                            }
+                            // callbacks: {
+                            //     label: function (tooltipItem, chart) {
+                            //         var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                            //         return datasetLabel + ": " + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            //     }
+                            // },
                             // callbacks: {
                             //     label: function (tooltipItem, chart) {
                             //         var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
@@ -327,7 +331,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                                     padding: 10,
                                     // Include a dollar sign in the ticks
                                     callback: function (value, index, values) {
-                                        return number_format(value);
+                                        return value;
                                     }
                                 },
                                 gridLines: {
@@ -340,7 +344,10 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             }],
                         },
                         legend: {
-                            display: true
+                            display: true,
+                            labels :{
+                                usePointStyle: true,
+                            }
                         },
                         tooltips: {
                             titleMarginBottom: 10,
@@ -357,7 +364,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
                             callbacks: {
                                 label: function (tooltipItem, chart) {
                                     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                    return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + ' Unidades';
+                                    return datasetLabel + ': ' + tooltipItem.yLabel + ' Unidades';
                                 }
                             }
                         },
@@ -405,11 +412,11 @@ const sendSelectProd = (prod, lead, t_repo) => {
 
                     // VALIDANDO COR DA CURVA
                     if (data.curva === 'A') {
-                        valor_curva.style.color = "#02e591"
+                        valor_curva.style.color = "#3B8A44"
                     } else if (data.curva === 'B') {
-                        valor_curva.style.color = "#4791ff"
+                        valor_curva.style.color = "#0576E0"
                     } else if (data.curva === 'C') {
-                        valor_curva.style.color = "#54d8ff"
+                        valor_curva.style.color = "#FFA500"
                     }else if (data.curva === 'D') {
                         valor_curva.style.color = "#a3a0fb"
                     }else if (data.curva === 'E') {

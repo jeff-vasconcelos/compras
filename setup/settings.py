@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'crispy_forms',
 
+    #TODO Remover app debug_toolbar
+    'debug_toolbar',
+
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -58,6 +61,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #TODO Remover middleware debug_toolbar
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -166,3 +172,8 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 1
 
 # Salvar a cada requisição
 SESSION_SAVE_EVERY_REQUEST = False
+
+#TODO Remover debug_toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
