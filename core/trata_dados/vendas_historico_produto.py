@@ -1,10 +1,10 @@
 from core.trata_dados.vendas import vendas
-from core.trata_dados.hist_estoque import historico_estoque
+from core.trata_dados.historico_estoque import historico_estoque
 import pandas as pd
 import datetime
 
 
-def produto_dados(cod_produto, id_empresa, periodo):
+def vendas_historico(cod_produto, id_empresa, periodo):
     df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo)
     df_historico = historico_estoque(cod_produto, id_empresa, periodo)
     cod_filial = 1

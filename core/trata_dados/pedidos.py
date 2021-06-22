@@ -1,5 +1,5 @@
 from django.db.models import Count
-from api.models.p_compras_models import PedidoCompras
+from api.models.pedido_compra import Pedido
 import pandas as pd
 import datetime
 
@@ -9,7 +9,7 @@ def pedidos_compras(cod_produto, id_empresa, cod_filial):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=90 - 1) #Aqui sempre será o periodo informado -1
 
-    df = pd.DataFrame(PedidoCompras.objects.all().filter(
+    df = pd.DataFrame(Pedido.objects.all().filter(
         cod_produto__exact=cod_produto,
         empresa__id__exact=id_empresa,
         cod_filial=cod_filial,

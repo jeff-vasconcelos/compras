@@ -1,4 +1,4 @@
-from api.models.vendas_models import Venda
+from api.models.venda import Venda
 import pandas as pd
 import datetime
 

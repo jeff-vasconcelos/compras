@@ -5,12 +5,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.db.models import Q
-from api.models.produto_models import *
+from api.models.produto import *
 import datetime
-
 from core.trata_dados.curva_abc import abc
-from core.trata_dados.hist_estoque import historico_estoque
-from core.trata_dados.infor_produto import dados_produto
+from core.trata_dados.historico_estoque import historico_estoque
+from core.trata_dados.produto_dados import dados_produto
 from core.trata_dados.vendas import *
 from core.trata_dados.pedidos import *
 import pandas as pd

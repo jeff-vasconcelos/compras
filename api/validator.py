@@ -1,9 +1,9 @@
-from api.models.produto_models import *
-from api.models.estoque_atual_models import *
-from api.models.hist_estoque_models import *
-from api.models.p_compras_models import *
-from api.models.ultima_entrada_models import *
-from api.models.vendas_models import *
+from api.models.produto import *
+from api.models.estoque_atual import *
+from api.models.historico_estoque import *
+from api.models.pedido_compra import *
+from api.models.ultima_entrada import *
+from api.models.venda import *
 
 
 """ Função responsável por verificar se ja existe o registro no BD web, não permitindo duplicar
@@ -59,7 +59,7 @@ def valida_hist_estoque(data):
     cod_empresa = data['empresa']
     data = data['data']
 
-    histestoque = HistEstoque.objects.filter(
+    histestoque = HistoricoEstoque.objects.filter(
         cod_produto=cod_produto, empresa=cod_empresa, data=data
     ).exists()
 
@@ -75,7 +75,7 @@ def valida_pedido(data):
     pedido = data['num_pedido']
     saldo = data['saldo']
 
-    pedido = PedidoCompras.objects.filter(
+    pedido = Pedido.objects.filter(
         cod_produto=cod_produto, empresa=cod_empresa, saldo=saldo, num_pedido=pedido
     ).exists()
 

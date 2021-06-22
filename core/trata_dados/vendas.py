@@ -1,4 +1,4 @@
-from api.models.vendas_models import Venda
+from api.models.venda import Venda
 from core.models.parametros_models import Parametro
 from core.trata_dados.datas import dia_semana_mes_ano
 import pandas as pd
