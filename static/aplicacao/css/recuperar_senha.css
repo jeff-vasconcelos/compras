@@ -1,0 +1,130 @@
+@font-face {
+    font-family: RBN-Extralight;
+    src: url(../fonts/RBNo3-1-ExtraLight.otf);
+}
+
+@font-face {
+    font-family: RBN-Medium;
+    src: url(../fonts/RBNo3-1-Medium.otf);
+}
+
+@font-face {
+    font-family: Montserrat-Medium;
+    src: url(../fonts/Montserrat-Medium.ttf);
+}
+
+@font-face {
+    font-family: Montserrat-Light;
+    src: url(../fonts/Montserrat-Light.ttf);
+}
+
+body {
+    font-family: Montserrat-Medium;
+    height: 100%;
+    background-color: #f0f2f5;
+}
+
+nav.nav-topo{
+    background-color: #f0f2f5;
+}
+
+img.logo-cluster{
+    height: 50px;
+    width: auto;
+}
+
+div.main-recuperar{
+    background-color: #ffffff;
+    max-width: 350px;
+    margin-top: 5%;
+    padding: 30px 20px 20px 20px;
+    border-radius: 10px;
+    border: solid 1px #224390;
+}
+
+input.form-control{
+    border-radius: 10px;
+    margin-bottom: -5px;
+    font-size: 16px;
+}
+
+.btn-continuar{
+    width: 100%;
+    background-color: #224390;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+.btn-continuar:hover{
+    background-color: #4d67a3;
+}
+
+button.btn-continuar-r{
+    width: 100%;
+    background-color: #224390;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+button.btn-continuar-r:hover{
+    background-color: #4d67a3;
+}
+
+small.texto-link-cancelar{
+    margin-top: 10px;
+    text-align: center;
+}
+
+h5.texto-rodape{
+    text-align: center;
+    font-size: 10px;
+    margin-top: 20px;
+    color: #000000;
+}
+
+h4.texto-recuperar{
+    margin-bottom: 20px;
+    font-family: RBN-Medium;
+    color: #828282;
+}
+p.texto-rec-senha{
+    font-family: Montserrat-Light;
+    font-size: 14px;
+}
+
+span.helptext{
+    margin-top: 20px;
+    padding-top: 50px;
+    font-size: 12px;
+}
+
+#id_new_password1{
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    margin-bottom: 10px;
+    font-size: 16px;
+    width: 100%;
+    height: calc(1.5rem + 1rem + 2px);
+    padding: .5rem 1rem;
+}
+#id_new_password2{
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    margin-bottom: -5px;
+    font-size: 16px;
+    width: 100%;
+    height: calc(1.5rem + 1rem + 2px);
+    padding: .5rem 1rem;
+
+}
+
+.footer {
+    position: fixed;
+    bottom:0;
+    text-align: center;
+    width: 100%;
+}
