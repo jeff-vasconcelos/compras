@@ -11,7 +11,6 @@ import debug_toolbar
 router = routers.DefaultRouter()
 router.register('produto', ProdutoViewSet)
 router.register('fornecedor', FornecedorViewSet)
-router.register('avaria', AvariaViewSet)
 router.register('estoque-atual', EstoqueAtualViewSet)
 router.register('historico-estoque', HistEstoqueViewSet)
 router.register('pedido-compra', PedidoViewSet)

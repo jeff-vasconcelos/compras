@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from api.validator import *
 from api.models.produto_models import *
-from api.models.avarias_models import *
 from api.models.estoque_atual_models import *
 from api.models.hist_estoque_models import *
 from api.models.p_compras_models import *
@@ -35,30 +34,6 @@ class FornecedorSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if not valida_fornecedor(data):
             raise serializers.ValidationError({'fornecedor': "registro ja existente"})
-
-        return data
-
-
-class AvariaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Avaria
-        fields = '__all__'
-
-    def validate(self, data):
-        if not valida_avaria(data):
-            raise serializers.ValidationError({'avaria': "registro já existe!"})
-
-        fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
-
-        produto = data['cod_produto']
-        produt = Produto.objects.filter(cod_produto=produto)
-
-        if not fornec:
-            raise serializers.ValidationError({'fornecedor': "registro não existente"})
-
-        if not produt:
-            raise serializers.ValidationError({'produto': "registro não existente"})
 
         return data
 
