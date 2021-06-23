@@ -12,12 +12,21 @@ from core.trata_dados.historico_estoque import historico_estoque
 from core.trata_dados.produto_dados import dados_produto
 from core.trata_dados.vendas import *
 from core.trata_dados.pedidos import *
+from core.models.empresas_models import Filial
 import pandas as pd
+
+from core.multifilial.curva_abc import abc
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    return render(request, template_name)
+    empresa = request.user.usuario.empresa_id
+    print(empresa)
+    filiais = Filial.objects.filter(empresa__id__exact=empresa)
+    context = {
+        'filiais': filiais
+    }
+    return render(request, template_name, context)
 
 
 def buscar_produto(request):

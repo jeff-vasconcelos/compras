@@ -167,7 +167,7 @@ EMAIL_HOST_PASSWORD = 'Faith*9090'
 """
 
 # Sessão em dias: 60s * 60m * 24h * 1d
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 1
+SESSION_COOKIE_AGE = 60 * 60 * 12 * 1
 
 # Salvar a cada requisição
 SESSION_SAVE_EVERY_REQUEST = False

@@ -62,6 +62,8 @@ def abc(cod_fornecedor, id_empresa, periodo):
             lista_curva.append(curva)
         abc['curva'] = lista_curva
 
+        print(abc)
+
         return abc
     else:
         return None

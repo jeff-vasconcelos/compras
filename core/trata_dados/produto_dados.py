@@ -145,8 +145,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         porcent_ruptura = (d_sem_estoque / total_linha) * 100
 
         estoque_disponivel = prod_resumo.estoque_dispon[0]
-        dde = estoque_disponivel / media_ajustada
-        # dde = estoque_disponivel / 1
+        #dde = estoque_disponivel / media_ajustada
+        dde = estoque_disponivel / 1
 
         #TODO Precisa validar como dividir a media ajustada, quando o ela for 0
         print(estoque_disponivel)

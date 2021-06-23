@@ -380,7 +380,16 @@
                     </table>
                 </div>
 
-                <div class="col-md-12 botoes-analise-tabela">
+                <div class="col-md-3" style="margin-bottom: 15px">
+                    <label class="label-analise-tabela">Filiais</label>
+                    <select class="form-control select-analise" id="filtro-filial">
+                        {% for filial in filiais %}
+                            <option class="option-analise" value="{{ filial.pk }}">{{ filial.cod_filial }} - {{ filial.desc_filial }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-9 botoes-analise-tabela">
                     <button id="ver_pedidos_pendentes" class="btn btn-secondary btn-sm ver-pendentes"
                             type="button"
                             data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes

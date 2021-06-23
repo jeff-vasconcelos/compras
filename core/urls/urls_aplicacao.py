@@ -6,6 +6,7 @@ from core.views.academy_views import *
 from core.views.home_views import *
 from core.views.analise_views import *
 
+from core.multifilial.processa_produtos import processa_produtos_filiais
 
 urlpatterns = [
     path('search/prod', buscar_produto, name='results-produto'),
@@ -39,6 +40,9 @@ urlpatterns = [
     path('editar/usuario/<int:pk>', editar_usuario, name='editar-usuario'),
     path('listar/usuarios', lista_usuarios, name='listar-usuarios'),
     path('inativar/usuarios/<int:pk>', inativar_usuario, name='inativar-usuarios'),
+
+    #TODO rota de testes
+    path('testando', processa_produtos_filiais, name='testando'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
