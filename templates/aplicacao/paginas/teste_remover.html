@@ -9,9 +9,16 @@
     PÁGINA DE TESTES
 </h1>
 
+<h1>Curva ABC</h1>
 {% for abc in curva %}
-<h5>{{ abc.cod_produto }}</h5>
+<h5>cod produto: {{ abc.cod_produto }}</h5>
 {% endfor %}
+
+<h1>Estoque atual</h1>
+{% for est in estoque %}
+<h5>cod produto: {{ est.cod_produto }}</h5>
+{% endfor %}
+
 
 </body>
 </html>

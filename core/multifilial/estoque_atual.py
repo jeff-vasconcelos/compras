@@ -1,10 +1,8 @@
 import dateutil.utils
-
+from core.models.empresas_models import Filial
 from api.models.estoque_atual import EstoqueAtual
 import pandas as pd
 import datetime
-
-from core.models.empresas_models import Filial
 
 
 def estoque_atual(cod_produto, id_empresa):
@@ -27,8 +25,6 @@ def estoque_atual(cod_produto, id_empresa):
             lista = estoque_.values.tolist()
             list.append(lista)
 
-        print(list)
-
         list_est_atual = []
         for i in list:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "embalagem", "cod_filial", "filial_id",
@@ -36,24 +32,7 @@ def estoque_atual(cod_produto, id_empresa):
                                           "qt_estoque_geral", "qt_indenizada", "qt_reservada", "qt_pendente",
                                           "qt_bloqueada", "qt_disponivel", "custo_ult_ent", "preco_venda", "data",
                                           "created_at"])
-
-            print(df['data'])
-            print(df['qt_disponivel'])
-
-            data = df['data']
-            qt_disponivel = df['qt_disponivel']
-            qt_inden = df['qt_indenizada']
-            pr_custo = df['custo_ult_ent']
-            pr_venda = df['preco_venda']
-
-            disp = {
-                'data': [data], 'qt_disponivel': [qt_disponivel], 'qt_indenizada': qt_inden, 'preco_venda': pr_venda,
-                'preco_custo': pr_custo
-            }
-            disponivel = pd.DataFrame(disp)
-
-            print(disponivel)
-
+            disponivel = df
             disponiveis = disponivel.assign(
                 **disponivel.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
 
@@ -65,10 +44,7 @@ def estoque_atual(cod_produto, id_empresa):
                     lista_fim.append(b)
 
             disponivel = pd.DataFrame(lista_fim)
-            print(disponivel)
 
         return disponivel
-
-
     else:
         return None
