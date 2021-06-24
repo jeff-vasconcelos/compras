@@ -2,6 +2,7 @@ from django.shortcuts import render
 from core.multifilial.curva_abc import abc
 from core.multifilial.estoque_atual import estoque_atual
 from core.multifilial.historico_estoque import historico_estoque
+from core.multifilial.pedidos import pedidos_compra
 
 
 def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_remover.html'):
@@ -21,8 +22,13 @@ def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_re
 
     #HISTORICO DE ESTOQUE
     h_estoque = historico_estoque(produto, empresa, 90)
-    print(h_estoque)
     lista_hist_estoq = h_estoque.to_dict('records')
+
+    #PEDIDOS
+    pedidos = pedidos_compra(produto, empresa)
+    print(pedidos)
+
+
 
 
     contexto = {
