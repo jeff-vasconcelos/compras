@@ -4,6 +4,7 @@ from core.multifilial.estoque_atual import estoque_atual
 from core.multifilial.historico_estoque import historico_estoque
 from core.multifilial.pedidos import pedidos_compra
 from core.multifilial.ultima_entrada import ultima_entrada
+from core.multifilial.vendas import vendas
 
 
 def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_remover.html'):
@@ -19,7 +20,6 @@ def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_re
     #ESTOQUE ATUAL
     est_atual_atual = estoque_atual(produto, empresa)
     lista_est_atual = est_atual_atual.to_dict('records')
-    #print(e_atual)
 
     #HISTORICO DE ESTOQUE
     h_estoque = historico_estoque(produto, empresa, 90)
@@ -27,11 +27,13 @@ def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_re
 
     #PEDIDOS
     pedidos = pedidos_compra(produto, empresa)
-    #print(pedidos)
 
     #ULTIMAS ENTRADAS
     entradas = ultima_entrada(produto, empresa, 90)
-    print(entradas)
+
+    #VENDAS
+    venda = vendas(produto, empresa, 90)
+    # print(venda)
 
 
 
