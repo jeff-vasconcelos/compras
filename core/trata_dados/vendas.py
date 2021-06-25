@@ -16,10 +16,13 @@ def vendas(cod_produto, id_empresa, periodo):
         data__range=[data_fim, data_inicio],
         empresa__id__exact=id_empresa
     ).values())
+    print("#################### vendas ###########3")
+    #print(vendas_df.info())
 
     if not vendas_df.empty:
         # TRATANDO DADOS
         vendas_df['data'] = pd.to_datetime(vendas_df['data'])
+        print(vendas_df.info())
         preco = vendas_df.groupby(['data'])['preco_unit'].mean().round(2).to_frame().reset_index()
         media_preco_vendas = preco['preco_unit'].mean(skipna=True)
         custo = vendas_df.groupby(['data'])['custo_fin'].mean().round(2).to_frame().reset_index()

@@ -15,7 +15,6 @@ def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_re
     #CURVA ABC
     curva = abc(forn, empresa, 90)
     lista_curva_abc = curva.to_dict('records')
-    #print(lista_curva_abc)
 
     #ESTOQUE ATUAL
     est_atual_atual = estoque_atual(produto, empresa)
@@ -27,20 +26,24 @@ def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_re
 
     #PEDIDOS
     pedidos = pedidos_compra(produto, empresa)
+    lista_pedidos = pedidos.to_dict('records')
 
     #ULTIMAS ENTRADAS
     entradas = ultima_entrada(produto, empresa, 90)
+    lista_entradas = entradas.to_dict('records')
 
     #VENDAS
-    venda = vendas(produto, empresa, 90)
-    # print(venda)
-
-
-
+    venda, informacoes = vendas(produto, empresa, 90)
+    print(type(venda))
+    print(venda)
+    lista_informacoes_vendas = informacoes.to_dict('records')
 
     contexto = {
         'curva': lista_curva_abc,
         'estoque': lista_est_atual,
-        'historico': lista_hist_estoq
+        'historico': lista_hist_estoq,
+        'vendas': lista_informacoes_vendas,
+        'pedidos': lista_pedidos,
+        'entradas': lista_entradas
     }
     return render(request, template_name, contexto)
