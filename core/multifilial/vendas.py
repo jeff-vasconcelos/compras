@@ -29,7 +29,12 @@ def vendas(cod_produto, id_empresa, periodo):
             lista = vendas_.values.tolist()
             list.append(lista)
 
+
         list_vendas = []
+        lista_fim_vendas = []
+        lista_prod = []
+        list_inf_prod = []
+
         for i in list:
             if i:
                 df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "cod_filial", "filial_id",
@@ -47,8 +52,9 @@ def vendas(cod_produto, id_empresa, periodo):
                 preco_custo = pd.merge(preco, custo, how="left", on=["data"])
 
                 qtvendas = \
-                vendas_df.groupby(['data', 'cod_produto', 'desc_produto', 'cod_filial', 'cod_fornecedor', 'qt_unit_caixa'])[
-                    'qt_vendas'].sum().to_frame().reset_index()
+                    vendas_df.groupby(
+                        ['data', 'cod_produto', 'desc_produto', 'cod_filial', 'cod_fornecedor', 'qt_unit_caixa'])[
+                        'qt_vendas'].sum().to_frame().reset_index()
 
                 qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
 
@@ -62,11 +68,13 @@ def vendas(cod_produto, id_empresa, periodo):
 
                 if vendas_df.size == 1:
                     values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
-                              'cod_fornecedor': cod_fornec[0], 'qt_unit_caixa': qt_un_caixa[0], 'qt_vendas': 0, 'custo_fin': 0,
+                              'cod_fornecedor': cod_fornec[0], 'qt_unit_caixa': qt_un_caixa[0], 'qt_vendas': 0,
+                              'custo_fin': 0,
                               'preco_unit': 0}
                 else:
                     values = {'cod_produto': cod_prod[1], 'desc_produto': desc_prod[1], 'cod_filial': cod_filial[1],
-                              'cod_fornecedor': cod_fornec[1], 'qt_unit_caixa': qt_un_caixa[1], 'qt_vendas': 0, 'custo_fin': 0,
+                              'cod_fornecedor': cod_fornec[1], 'qt_unit_caixa': qt_un_caixa[1], 'qt_vendas': 0,
+                              'custo_fin': 0,
                               'preco_unit': 0}
 
                 vendas_datas.fillna(value=values, inplace=True)
@@ -113,6 +121,7 @@ def vendas(cod_produto, id_empresa, periodo):
                 e_vendas['fora_media'] = lista_fora
 
                 info_p = {
+                    'cod_filial': e_vendas.cod_filial[0],
                     'dias_s_vendas': [d_sem_vendas], 'dias_vendas': [d_vendas],
                     'media': [media.round(2)], 'maximo': [maximo], 'desvio': [d_padrao.round(2)],
                     'max_media': [max_media.round(2)],
@@ -131,20 +140,34 @@ def vendas(cod_produto, id_empresa, periodo):
                 lucro = vendas_lucro.groupby(['data'])[list_val_cus].sum().round(2).reset_index()
                 e_vendas['lucro'] = vendas_lucro['vl_total_vendido'] - vendas_lucro['vl_total_custo']
 
+                # VENDAS
                 _venda = e_vendas
                 _vendas = _venda.assign(
                     **_venda.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
 
                 list_vendas.append(_vendas)
 
-                lista_fim = []
                 for a in list_vendas:
                     for b in a:
-                        lista_fim.append(b)
+                        lista_fim_vendas.append(b)
 
-                vendas = pd.DataFrame(lista_fim)
+                vendas = pd.DataFrame(lista_fim_vendas)
 
-        return vendas, info_prod
+                # INFOR PRODUTO
+                _info = info_prod
+                _info = _info.to_dict('records')
+
+                list_inf_prod.append(_info)
+
+                for c in list_inf_prod:
+                    for d in c:
+                        lista_prod.append(d)
+                    # print(lista_prod)
+
+                informacao_produto = pd.DataFrame(lista_prod)
+            informacao_produto = informacao_produto.drop_duplicates(subset=['cod_filial'], keep='first')
+
+        return vendas, informacao_produto
 
     if vendas_df.empty:
         print("VENDAS - NÃO HÁ VENDAS")
