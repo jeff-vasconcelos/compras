@@ -166,6 +166,7 @@ def vendas(cod_produto, id_empresa, periodo):
 
                 informacao_produto = pd.DataFrame(lista_prod)
             informacao_produto = informacao_produto.drop_duplicates(subset=['cod_filial'], keep='first')
+            vendas = vendas.drop_duplicates(subset=['data', 'cod_produto', 'cod_filial'], keep='first')
 
         return vendas, informacao_produto
 

@@ -92,7 +92,7 @@ def abc(cod_fornecedor, id_empresa, periodo):
                 for b in a:
                     lista_fim.append(b)
 
-            curva_abc = pd.DataFrame(lista_fim)
+        curva_abc = pd.DataFrame(lista_fim)
 
         return curva_abc
     else:

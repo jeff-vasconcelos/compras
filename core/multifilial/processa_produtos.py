@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from core.models.empresas_models import Filial
 from core.multifilial.curva_abc import abc
 from core.multifilial.estoque_atual import estoque_atual
 from core.multifilial.historico_estoque import historico_estoque
@@ -45,7 +47,7 @@ def processa_produtos_filiais(request, template_name='aplicacao/paginas/teste_re
     #lista_informacoes_vendas = informacoes.to_dict('records')
 
     teste = dados_produto(180, 16, 1, 15, 30)
-    print(teste)
+    # print(teste)
 
 
     #
@@ -91,7 +93,6 @@ def vendas_historico():
 
 
 def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
-    filial = 1
     cod_fornec = cod_forn
     cod_prod = cod_produto
     id_emp = id_empresa
@@ -107,25 +108,35 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     e_atual = estoque_atual(cod_prod, id_emp)
     vendas_p, info_produto = vendas_historico()
 
-    print(info_produto)
-
     lista_fornecedor = []
     lista_fornecedor.append(cod_fornec)
     curva = abc(lista_fornecedor, id_emp, parametros.periodo)
 
     # INFORMAÇÕES DE PRODUTO PARA AREA DE ANALISE
     # VALIDANDO DATAFRAMES
-    if info_produto is not None:
 
-        # VALIDANDO SE HOUVE ULTIMAS ENTRADAS
-        if u_entrada is None:
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+    print(filiais)
+
+    list = []
+    for filial in filiais:
+        print(filial)
+        pedidos_ = pedidos.query('cod_filial == @filial.cod_filial')
+        vendas_ = vendas_p.query('cod_filial == @filial.cod_filial')
+        entradas_ = u_entrada.query('cod_filial == @filial.cod_filial')
+        estoque_ = e_atual.query('cod_filial == @filial.cod_filial')
+        curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial.cod_filial')\
+            .reset_index(drop=True)
+
+
+        if entradas_.empty:
             dt_ult_entrada = "-"
             qt_ult_entrada = 0
             vl_ult_entrada = 0
         else:
-            dt_ult_entrada = u_entrada['data'].unique()
-            qt_ult_entrada = u_entrada['qt_ult_entrada'].unique()
-            vl_ult_entrada = u_entrada['vl_ult_entrada'].unique()
+            dt_ult_entrada = entradas_['data'].unique()
+            qt_ult_entrada = entradas_['qt_ult_entrada'].unique()
+            vl_ult_entrada = entradas_['vl_ult_entrada'].unique()
 
         # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
         media = info_produto.media[0]
@@ -133,13 +144,13 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         desvio = info_produto.desvio[0]
 
         # SOMANDO SALDO DE PEDIDOS
-        prod_resumo = pedidos.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
+        prod_resumo = pedidos_.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
 
         # INFORMAÇÕES DE PRODUTO
 
-        estoque_a = e_atual['qt_disponivel'].to_frame().reset_index(drop=True)
+        estoque_a = estoque_['qt_disponivel'].to_frame().reset_index(drop=True)
 
-        prod_resumo['avarias'] = e_atual['qt_indenizada'].sum()
+        prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
@@ -153,18 +164,16 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         curva_d = norm.ppf(parametros.curva_d / 100).round(3)
         curva_e = norm.ppf(parametros.curva_e / 100).round(3)
 
-        produto = curva.query('cod_produto == @cod_produto').reset_index(drop=True)
-
-        if produto.curva[0] == "A":
+        if curva_.curva[0] == "A":
             est_seg = curva_a * math.sqrt((leadtime + t_reposicao)) * desvio
 
-        elif produto.curva[0] == "B":
+        elif curva_.curva[0] == "B":
             est_seg = curva_b * math.sqrt((leadtime + t_reposicao)) * desvio
 
-        elif produto.curva[0] == "C":
+        elif curva_.curva[0] == "C":
             est_seg = curva_c * math.sqrt((leadtime + t_reposicao)) * desvio
 
-        elif produto.curva[0] == "D":
+        elif curva_.curva[0] == "D":
             est_seg = curva_d * math.sqrt((leadtime + t_reposicao)) * desvio
 
         else:
@@ -187,7 +196,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['media'] = media.round(2)
         prod_resumo['media_ajustada'] = media_ajustada
         prod_resumo['desvio'] = desvio
-        prod_resumo['curva'] = produto.curva[0]
+        prod_resumo['curva'] = curva_.curva[0]
         prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
 
         # PORCENTAGEM DA MEDIA
@@ -199,8 +208,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         # CALCULO DE MARGEM
         #TODO Verificar coluna nas outras funções
         #preco_custo = e_atual.preco_custo[0]
-        preco_custo = e_atual.custo_ult_ent[0]
-        preco_tabela = e_atual.preco_venda[0]
+        preco_custo = estoque_.custo_ult_ent[0]
+        preco_tabela = estoque_.preco_venda[0]
 
         m = preco_tabela - preco_custo
         m_ = m / preco_tabela
@@ -210,8 +219,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
 
         # DIAS SEM ESTOQUE / COM ESTOQUE / MEDIA DE PRECOS / PORCENTAGEM RUPTURA / DDE
-        total_linha = vendas_p.shape[0]
-        d_estoque = vendas_p['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
+        total_linha = vendas_.shape[0]
+        d_estoque = vendas_['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
         d_sem_estoque = total_linha - d_estoque
 
         media_preco = info_produto.media_preco_praticado[0].round(2)
@@ -251,7 +260,10 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         prod_resumo['condicao_estoque'] = condicao_estoque
 
+        print(prod_resumo)
+
         return prod_resumo
+
 
     else:
         return None

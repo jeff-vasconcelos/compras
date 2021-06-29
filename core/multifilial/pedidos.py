@@ -47,7 +47,7 @@ def pedidos_compra(cod_produto, id_empresa):
                 for b in a:
                     lista_fim.append(b)
 
-            pedidos = pd.DataFrame(lista_fim)
+        pedidos = pd.DataFrame(lista_fim)
 
         return pedidos
     else:
