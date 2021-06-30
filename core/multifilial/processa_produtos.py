@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from core.models.empresas_models import Filial
 from core.multifilial.curva_abc import abc
 from core.multifilial.estoque_atual import estoque_atual
@@ -91,7 +90,6 @@ def vendas_historico():
         return None, None
 
 
-
 def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     cod_fornec = cod_forn
     cod_prod = cod_produto
@@ -112,13 +110,10 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     lista_fornecedor.append(cod_fornec)
     curva = abc(lista_fornecedor, id_emp, parametros.periodo)
 
-    # INFORMAÇÕES DE PRODUTO PARA AREA DE ANALISE
-    # VALIDANDO DATAFRAMES
-
     filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
-    print(filiais)
 
-    list = []
+    lista_resumo = []
+
     for filial in filiais:
         print(filial)
         pedidos_ = pedidos.query('cod_filial == @filial.cod_filial')
@@ -127,7 +122,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         estoque_ = e_atual.query('cod_filial == @filial.cod_filial')
         curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial.cod_filial')\
             .reset_index(drop=True)
-
 
         if entradas_.empty:
             dt_ult_entrada = "-"
@@ -138,13 +132,24 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
             qt_ult_entrada = entradas_['qt_ult_entrada'].unique()
             vl_ult_entrada = entradas_['vl_ult_entrada'].unique()
 
+
         # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
         media = info_produto.media[0]
         media_ajustada = info_produto.media_ajustada[0]
         desvio = info_produto.desvio[0]
 
         # SOMANDO SALDO DE PEDIDOS
-        prod_resumo = pedidos_.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
+        if not pedidos_.empty:
+            prod_resumo = pedidos_.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
+        else:
+            pedido_vazio = {
+                'cod_filial': filial.cod_filial,
+                'saldo': 0
+            }
+
+            lista_pedido_vazio = [pedido_vazio]
+            prod_resumo = pd.DataFrame.from_dict(lista_pedido_vazio)
+
 
         # INFORMAÇÕES DE PRODUTO
 
@@ -205,11 +210,13 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         porcent_media = por * 100
         prod_resumo['porcent_media'] = porcent_media.round(2)
 
+
         # CALCULO DE MARGEM
         #TODO Verificar coluna nas outras funções
         #preco_custo = e_atual.preco_custo[0]
-        preco_custo = estoque_.custo_ult_ent[0]
-        preco_tabela = estoque_.preco_venda[0]
+
+        preco_custo = estoque_.custo_ult_ent
+        preco_tabela = estoque_.preco_venda
 
         m = preco_tabela - preco_custo
         m_ = m / preco_tabela
@@ -242,7 +249,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         #TODO Precisa validar como dividir a media ajustada, quando o ela for 0
 
-
         ruptura = locale.currency(ruptura, grouping=True)
         prod_resumo['ruptura'] = ruptura
         prod_resumo['dde'] = dde.round(2)
@@ -260,10 +266,18 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
 
         prod_resumo['condicao_estoque'] = condicao_estoque
 
-        print(prod_resumo)
+        resumo = prod_resumo.assign(**prod_resumo.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
 
-        return prod_resumo
+        lista_resumo.append(resumo)
 
+        lista_fim = []
+        for a in lista_resumo:
+            for b in a:
+                lista_fim.append(b)
+
+        resumo_produto = pd.DataFrame(lista_fim)
+
+        return resumo_produto
 
     else:
         return None
