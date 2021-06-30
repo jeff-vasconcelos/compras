@@ -17,12 +17,11 @@ def vendas(cod_produto, id_empresa, periodo):
         empresa__id__exact=id_empresa
     ).values())
     print("#################### vendas ###########3")
-    #print(vendas_df.info())
+
 
     if not vendas_df.empty:
         # TRATANDO DADOS
         vendas_df['data'] = pd.to_datetime(vendas_df['data'])
-        print(vendas_df.info())
         preco = vendas_df.groupby(['data'])['preco_unit'].mean().round(2).to_frame().reset_index()
         media_preco_vendas = preco['preco_unit'].mean(skipna=True)
         custo = vendas_df.groupby(['data'])['custo_fin'].mean().round(2).to_frame().reset_index()
@@ -34,7 +33,10 @@ def vendas(cod_produto, id_empresa, periodo):
             'qt_vendas'].sum().to_frame().reset_index()
 
         qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
+
         vendas_datas = pd.merge(datas, qtvendas_preco_custo, how="left", on=["data"])
+
+        vendas_datas = vendas_datas.drop_duplicates(subset=['data'], keep='first')
 
         cod_filial = vendas_datas['cod_filial'].unique()
         cod_prod = vendas_datas['cod_produto'].unique()
@@ -54,10 +56,13 @@ def vendas(cod_produto, id_empresa, periodo):
         vendas_datas.fillna(value=values, inplace=True)
 
         # ESTATISTICAS DE VENDAS
+        print("UNICA FILIAL")
+        print(vendas_datas)
 
         e_vendas = vendas_datas
         tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
         media = tratando_media.mean()
+
 
         maximo = e_vendas['qt_vendas'].max()
         d_padrao = tratando_media.std()
@@ -112,9 +117,6 @@ def vendas(cod_produto, id_empresa, periodo):
 
         lucro = vendas_lucro.groupby(['data'])[list_val_cus].sum().round(2).reset_index()
         e_vendas['lucro'] = vendas_lucro['vl_total_vendido'] - vendas_lucro['vl_total_custo']
-
-        print("VENDAS - OK")
-        print("##############################")
 
         return e_vendas, info_prod
 

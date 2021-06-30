@@ -592,3 +592,4 @@ def pedidos_pedentes(request):
 
             return JsonResponse({'data': pedid})
     return JsonResponse({})
+

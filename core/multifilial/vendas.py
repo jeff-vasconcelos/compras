@@ -1,6 +1,7 @@
 from api.models.venda import Venda
 from core.models.parametros_models import Parametro
 from core.models.empresas_models import Filial
+from core.multifilial.filiais import get_filiais
 from core.trata_dados.datas import dia_semana_mes_ano
 import pandas as pd
 import datetime
@@ -11,6 +12,8 @@ def vendas(cod_produto, id_empresa, periodo):
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano(id_empresa)
 
+
+
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
         cod_produto__exact=cod_produto,
@@ -18,7 +21,7 @@ def vendas(cod_produto, id_empresa, periodo):
         empresa__id__exact=id_empresa
     ).values())
 
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+    filiais = get_filiais(id_empresa)
 
     if not vendas_df.empty:
 
@@ -60,6 +63,8 @@ def vendas(cod_produto, id_empresa, periodo):
 
                 vendas_datas = pd.merge(datas, qtvendas_preco_custo, how="left", on=["data"])
 
+                vendas_datas = vendas_datas.drop_duplicates(subset=['data', 'cod_produto', 'cod_filial'], keep='first')
+
                 cod_filial = vendas_datas['cod_filial'].unique()
                 cod_prod = vendas_datas['cod_produto'].unique()
                 cod_fornec = vendas_datas['cod_fornecedor'].unique()
@@ -81,15 +86,17 @@ def vendas(cod_produto, id_empresa, periodo):
 
                 # ESTATISTICAS DE VENDAS
 
+
                 e_vendas = vendas_datas
                 tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
                 media = tratando_media.mean()
+
 
                 maximo = e_vendas['qt_vendas'].max()
                 d_padrao = tratando_media.std()
 
                 d_vendas = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else 1).sum()
-                d_sem_vendas = 120 - d_vendas
+                d_sem_vendas = periodo - d_vendas
 
                 d_m = d_padrao / media
                 d_m_dois = d_m * 2
