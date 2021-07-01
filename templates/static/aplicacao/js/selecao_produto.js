@@ -1,6 +1,7 @@
 console.log("selecao_produto")
 const listaProdutosSelecionar = document.getElementById('results-produtos')
-const tabelaInfo = document.getElementById('tabela-info-analise')
+const listaFiliais = document.getElementById('filtro-filial')
+const tabelaInfo = document.getElementById('body-tabela-analise')
 const tabelaPedidosPendentes = document.getElementById('pedidos-pendentes-modal')
 
 //CARDS
@@ -18,12 +19,13 @@ const leadtime = document.getElementById('leadtime')
 const t_reposicao = document.getElementById('tempo_reposicao')
 
 
-const sendSelectProd = (prod, lead, t_repo) => {
+const sendSelectProd = (codfilial, prod, lead, t_repo) => {
     $.ajax({
         type: 'POST',
         url: '/painel/select-prod/',
         data: {
             'csrfmiddlewaretoken': csrf,
+            'filial': codfilial,
             'produto': prod,
             'leadtime': lead,
             'tempo_reposicao': t_repo
@@ -32,6 +34,7 @@ const sendSelectProd = (prod, lead, t_repo) => {
             //VALIDANDO
             console.log(info_prod)
             const dados = info_prod.data
+
 
             if (dados === 0) {
 
@@ -42,6 +45,31 @@ const sendSelectProd = (prod, lead, t_repo) => {
                 valor_ruptura.innerHTML = ""
                 porc_ruptura.innerHTML = ""
                 tabelaInfo.innerHTML = ""
+                tabelaInfo.innerHTML = `
+                        <tr>
+                            <th class="tabela-info">Cód. Filial</th>
+                            <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Avaria</th>
+                            <th class="tabela-info">Ped. pendente</th>
+                            <th class="tabela-info">Dt. ult. Ent.</th>
+                            <th class="tabela-info">Qt. ult. Ent.</th>
+                            <th class="tabela-info">Vl. ult. Ent.</th>
+                            <th class="tabela-info">DDE</th>
+                            <th class="tabela-info">Est. seg.</th>
+                            <th class="tabela-info">Ponto rep.</th>
+                            <th class="tabela-info">Cx Fech.</th>
+                            <th class="tabela-info">Und Caixa</th>
+                            <th class="tabela-info">Sugestão Und</th>
+                            <th class="tabela-info">Pr. tabela</th>
+                            <th class="tabela-info">Margem</th>
+                            <!--                                <th>Qt digitada</th>-->
+                            <!--                                <th>Pr. compra</th>-->
+                            <!--                                <th>% margem</th>-->
+                            <!--                                <th>Pr. sugerido</th>-->
+                            <!--                                <th>DDE</th>-->
+
+                        </tr>
+                    `
                 porc_media.innerHTML = ""
                 valor_media_simples.innerHTML = ""
 
@@ -381,6 +409,31 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
+                    tabelaInfo.innerHTML = `
+                        <tr>
+                            <th class="tabela-info">Cód. Filial</th>
+                            <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Avaria</th>
+                            <th class="tabela-info">Ped. pendente</th>
+                            <th class="tabela-info">Dt. ult. Ent.</th>
+                            <th class="tabela-info">Qt. ult. Ent.</th>
+                            <th class="tabela-info">Vl. ult. Ent.</th>
+                            <th class="tabela-info">DDE</th>
+                            <th class="tabela-info">Est. seg.</th>
+                            <th class="tabela-info">Ponto rep.</th>
+                            <th class="tabela-info">Cx Fech.</th>
+                            <th class="tabela-info">Und Caixa</th>
+                            <th class="tabela-info">Sugestão Und</th>
+                            <th class="tabela-info">Pr. tabela</th>
+                            <th class="tabela-info">Margem</th>
+                            <!--                                <th>Qt digitada</th>-->
+                            <!--                                <th>Pr. compra</th>-->
+                            <!--                                <th>% margem</th>-->
+                            <!--                                <th>Pr. sugerido</th>-->
+                            <!--                                <th>DDE</th>-->
+
+                        </tr>
+                    `
                     porc_media.innerHTML = ""
                     valor_media_simples.innerHTML = ""
                 } else {
@@ -391,6 +444,31 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
+                    tabelaInfo.innerHTML = `
+                        <tr>
+                            <th class="tabela-info">Cód. Filial</th>
+                            <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Avaria</th>
+                            <th class="tabela-info">Ped. pendente</th>
+                            <th class="tabela-info">Dt. ult. Ent.</th>
+                            <th class="tabela-info">Qt. ult. Ent.</th>
+                            <th class="tabela-info">Vl. ult. Ent.</th>
+                            <th class="tabela-info">DDE</th>
+                            <th class="tabela-info">Est. seg.</th>
+                            <th class="tabela-info">Ponto rep.</th>
+                            <th class="tabela-info">Cx Fech.</th>
+                            <th class="tabela-info">Und Caixa</th>
+                            <th class="tabela-info">Sugestão Und</th>
+                            <th class="tabela-info">Pr. tabela</th>
+                            <th class="tabela-info">Margem</th>
+                            <!--                                <th>Qt digitada</th>-->
+                            <!--                                <th>Pr. compra</th>-->
+                            <!--                                <th>% margem</th>-->
+                            <!--                                <th>Pr. sugerido</th>-->
+                            <!--                                <th>DDE</th>-->
+
+                        </tr>
+                    `
                     porc_media.innerHTML = ""
                     valor_media_simples.innerHTML = ""
 
@@ -424,24 +502,30 @@ const sendSelectProd = (prod, lead, t_repo) => {
                     }
 
 
-                    tabelaInfo.innerHTML += `
-                        <td class="tabela-info">${data.filial}</td>
-                        <td class="tabela-info">Matriz</td>
-                        <td class="tabela-info">${data.estoque}</td>
-                        <td class="tabela-info">${data.avaria}</td>
-                        <td class="tabela-info">${data.saldo}</td>
-                        <td class="tabela-info">${data.dt_ult_entrada}</td>
-                        <td class="tabela-info">${data.qt_ult_entrada}</td>
-                        <td class="tabela-info">R$ ${data.vl_ult_entrada}</td>
-                        <td class="tabela-info">${data.dde}</td>
-                        <td class="tabela-info">${data.est_seguranca}</td>
-                        <td class="tabela-info">${data.p_reposicao}</td>
-                        <td class="tabela-info">${data.sugestao_caixa}</td>
-                        <td class="tabela-info">${data.sugestao_unidade}</td>
-                        <td class="tabela-info">${data.sugestao}</td>
-                        <td class="tabela-info">R$ ${data.preco_tabela}</td>
-                        <td class="tabela-info">${data.margem} %</td>
+                    if (Array.isArray(data)) {
+                        data.forEach(produto_info => {
+                            tabelaInfo.innerHTML += `
+                        
+                            <td class="tabela-info">${produto_info.filial}</td>
+                            <td class="tabela-info">${produto_info.estoque}</td>
+                            <td class="tabela-info">${produto_info.avaria}</td>
+                            <td class="tabela-info">${produto_info.saldo}</td>
+                            <td class="tabela-info">${produto_info.dt_ult_entrada}</td>
+                            <td class="tabela-info">${produto_info.qt_ult_entrada}</td>
+                            <td class="tabela-info">R$ ${produto_info.vl_ult_entrada}</td>
+                            <td class="tabela-info">${produto_info.dde}</td>
+                            <td class="tabela-info">${produto_info.est_seguranca}</td>
+                            <td class="tabela-info">${produto_info.p_reposicao}</td>
+                            <td class="tabela-info">${produto_info.sugestao_caixa}</td>
+                            <td class="tabela-info">${produto_info.sugestao_unidade}</td>
+                            <td class="tabela-info">${produto_info.sugestao}</td>
+                            <td class="tabela-info">R$ ${produto_info.preco_tabela}</td>
+                            <td class="tabela-info">${produto_info.margem} %</td>
+                          
                     `
+                        })
+                    }
+
 
                     valor_condicao_est.innerHTML += `
                         ${data.condicao_estoque}
@@ -480,6 +564,8 @@ listaProdutosSelecionar.addEventListener('change', e => {
     // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = e.target.value
 
+    const filialSelecionado = listaFiliais.value
+
     // PEGANDO LEADTIME
     const valorlead = leadtime.value
     var lead = 0
@@ -498,11 +584,49 @@ listaProdutosSelecionar.addEventListener('change', e => {
         t_repo = valor_treposicao
     }
 
+    console.log(filialSelecionado, "FILIAL SELECIONADA")
     console.log(produtoSelecionado, "PRODUTO SELECIONADO")
     console.log(lead, "LEADTIME")
     console.log(t_repo, "TEMPO DE REPOSICAO")
 
-    sendSelectProd(produtoSelecionado, lead, t_repo)
+    sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
+})
+
+// EXECUTA AO MUDAR DE FILIAL
+listaFiliais.addEventListener('change', e => {
+    resultsBoxFornec.classList.add('d-none')
+    resultsBoxProd.classList.add('d-none')
+
+    //PEGANDO FILIAL SELECIONADA
+    const filialSelecionada = e.target.value
+
+    // PEGANDO PRODUTO SELECIONADO
+    const produtoSelecionado = listaProdutosSelecionar.value
+
+
+    // PEGANDO LEADTIME
+    const valorlead = leadtime.value
+    var lead = 0
+    if (valorlead === "") {
+        lead = 0
+    } else {
+        lead = valorlead
+    }
+
+    // PEGANDO TEMPO DE REPOSIÇÃO
+    const valor_treposicao = t_reposicao.value
+    var t_repo = 0
+    if (valor_treposicao === "") {
+        t_repo = 0
+    } else {
+        t_repo = valor_treposicao
+    }
+
+    console.log(filialSelecionada, "FILIAL SELECIONADA")
+    console.log(lead, "LEADTIME")
+    console.log(t_repo, "TEMPO DE REPOSICAO")
+
+    sendSelectProd(filialSelecionada, produtoSelecionado, lead, t_repo)
 })
 
 // EXECUTA AO ALTERAR LEADTIME
@@ -511,8 +635,9 @@ leadtime.addEventListener('keyup', a => {
     resultsBoxProd.classList.add('d-none')
 
     // PEGANDO PRODUTO SELECIONADO
-
     const produtoSelecionado = listaProdutosSelecionar.value
+
+    const filialSelecionado = listaFiliais.value
 
     // PEGANDO LEADTIME
     const valorlead = leadtime.value
@@ -533,11 +658,12 @@ leadtime.addEventListener('keyup', a => {
         t_repo = valor_treposicao
     }
 
+    console.log(filialSelecionado, "FILIAL FILIAL")
     console.log(produtoSelecionado, "PRODUTO SELECIONADO")
     console.log(lead, "LEADTIME")
     console.log(t_repo, "TEMPO DE REPOSICAO")
 
-    sendSelectProd(produtoSelecionado, lead, t_repo)
+    sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
 })
 
 // EXECUTA AO ALTERAR TEMPO DE REPOSICAO
@@ -546,8 +672,9 @@ t_reposicao.addEventListener('keyup', a => {
     resultsBoxProd.classList.add('d-none')
 
     // PEGANDO PRODUTO SELECIONADO
-
     const produtoSelecionado = listaProdutosSelecionar.value
+
+    const filialSelecionado = listaFiliais.value
 
     // PEGANDO LEADTIME
     const valorlead = leadtime.value
@@ -569,10 +696,11 @@ t_reposicao.addEventListener('keyup', a => {
         t_repo = valor_treposicao
     }
 
+   console.log(filialSelecionado, "FILIAL FILIAL")
     console.log(produtoSelecionado, "PRODUTO SELECIONADO")
     console.log(lead, "LEADTIME")
     console.log(t_repo, "TEMPO DE REPOSICAO")
 
-    sendSelectProd(produtoSelecionado, lead, t_repo)
+    sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
 })
 

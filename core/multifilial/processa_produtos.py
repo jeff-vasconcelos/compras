@@ -18,62 +18,24 @@ import locale
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-def processa_produtos_filiais(request):
-    empresa = request.user.usuario.empresa_id
-    forn = [16]
-    produto = 180
-    produto_id = 7
-    leadtime = 15
-    t_reposicao = 30
-    #
-    # # CURVA ABC
-    # curva = abc(forn, empresa, 120)
-    # # lista_curva_abc = curva.to_dict('records')
-    #
-    # # ESTOQUE ATUAL
-    # est_atual_atual = estoque_atual(produto, empresa)
-    # # lista_est_atual = est_atual_atual.to_dict('records')
-    #
-    # # HISTORICO DE ESTOQUE
-    # h_estoque = historico_estoque(produto, empresa, 120)
-    # # lista_hist_estoq = h_estoque.to_dict('records')
-    #
-    # # PEDIDOS
-    # pedidos = pedidos_compra(produto, empresa)
-    # # lista_pedidos = pedidos.to_dict('records')
-    #
-    # # ULTIMAS ENTRADAS
-    # entradas = ultima_entrada(produto, empresa, 120)
-    # # lista_entradas = entradas.to_dict('records')
-    #
-    # # VENDAS
-    # venda, informacoes = vendas(produto, empresa, 120)
-    # # teste = venda.query("cod_filial == 1")
-    # # print(teste)
-    # # lista_informacoes_vendas = informacoes.to_dict('records')
-    #
-    # teste = dados_produto(180, 16, 1, 15, 30)
-    # # print(teste)
-    #
-    # #
-    # # contexto = {
-    # #     'curva': lista_curva_abc,
-    # #     'estoque': lista_est_atual,
-    # #     'historico': lista_hist_estoq,
-    # #     'vendas': lista_informacoes_vendas,
-    # #     'pedidos': lista_pedidos,
-    # #     'entradas': lista_entradas
-    # # }
+def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao):
+
+    produto_id = id_produto
+    leadtime = leadtime
+    temp_repo = t_reposicao
+    print(temp_repo)
 
 
-    qs = Produto.objects.get(id=produto_id, empresa__id=empresa)
+
+    qs = Produto.objects.get(id=produto_id, empresa__id=id_empresa)
 
     produto_codigo = qs.cod_produto
     fornecedor_codigo = qs.cod_fornecedor
 
-    filiais = get_filiais(empresa)
+    informacaoes_produto = dados_produto(produto_codigo, fornecedor_codigo, id_empresa, leadtime, temp_repo)
 
-    informacaoes_produto = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
+    filiais = get_filiais(id_empresa)
+
     contador = 0
     lista_resumo = []
 
@@ -178,7 +140,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     cod_prod = cod_produto
     id_emp = id_empresa
     leadtime = leadt
-    t_reposicao = t_reposicao
+    temp_repo = t_reposicao
 
     # BUSCANDO PARAMETROS DA EMPRESA DO USUARIO LOGADO
     parametros = Parametro.objects.get(empresa_id=id_emp)
@@ -255,19 +217,19 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         curva_e = norm.ppf(parametros.curva_e / 100).round(3)
 
         if curva_.curva[0] == "A":
-            est_seg = curva_a * math.sqrt((leadtime + t_reposicao)) * desvio
+            est_seg = curva_a * math.sqrt((leadtime + temp_repo)) * desvio
 
         elif curva_.curva[0] == "B":
-            est_seg = curva_b * math.sqrt((leadtime + t_reposicao)) * desvio
+            est_seg = curva_b * math.sqrt((leadtime + temp_repo)) * desvio
 
         elif curva_.curva[0] == "C":
-            est_seg = curva_c * math.sqrt((leadtime + t_reposicao)) * desvio
+            est_seg = curva_c * math.sqrt((leadtime + temp_repo)) * desvio
 
         elif curva_.curva[0] == "D":
-            est_seg = curva_d * math.sqrt((leadtime + t_reposicao)) * desvio
+            est_seg = curva_d * math.sqrt((leadtime + temp_repo)) * desvio
 
         else:
-            est_seg = curva_e * math.sqrt((leadtime + t_reposicao)) * desvio
+            est_seg = curva_e * math.sqrt((leadtime + temp_repo)) * desvio
 
         prod_resumo['estoque_segur'] = est_seg.round(0)
 
@@ -283,7 +245,7 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         #
         # CALCULANDO SUGESTAO DE COMPRAS
 
-        sugestao = ((media_ajustada * (leadtime + t_reposicao)) + estoque_segur) - (
+        sugestao = ((media_ajustada * (leadtime + temp_repo)) + estoque_segur) - (
                 prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
