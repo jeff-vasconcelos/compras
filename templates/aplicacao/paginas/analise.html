@@ -384,7 +384,7 @@
                     <label class="label-analise-tabela">Filiais</label>
                     <select class="form-control select-analise" id="filtro-filial">
                         {% for filial in filiais %}
-                            <option class="option-analise" value="{{ filial.pk }}">{{ filial.cod_filial }} - {{ filial.desc_filial }}</option>
+                            <option class="option-analise" value="{{ filial.cod_filial }}">{{ filial.cod_filial }} - {{ filial.desc_filial }}</option>
                         {% endfor %}
                     </select>
                 </div>

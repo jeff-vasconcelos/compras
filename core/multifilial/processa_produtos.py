@@ -18,13 +18,13 @@ import locale
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao):
+def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao, filialselecionada):
 
     produto_id = id_produto
     leadtime = leadtime
     temp_repo = t_reposicao
+    filial_select = filialselecionada
     print(temp_repo)
-
 
 
     qs = Produto.objects.get(id=produto_id, empresa__id=id_empresa)
@@ -32,7 +32,7 @@ def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao):
     produto_codigo = qs.cod_produto
     fornecedor_codigo = qs.cod_fornecedor
 
-    informacaoes_produto = dados_produto(produto_codigo, fornecedor_codigo, id_empresa, leadtime, temp_repo)
+    informacaoes_produto = dados_produto(produto_codigo, fornecedor_codigo, id_empresa, leadtime, temp_repo, filial_select)
 
     filiais = get_filiais(id_empresa)
 
@@ -40,7 +40,6 @@ def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao):
     lista_resumo = []
 
     for filial in filiais:
-        print(filial)
         produto_dados = informacaoes_produto.query('cod_filial == @filial.cod_filial')
 
         if produto_dados is None:
@@ -76,14 +75,14 @@ def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao):
                 'sugestao': float(produto_dados['sugestao']),
                 'sugestao_caixa': sug_cx,
                 'sugestao_unidade': sug_unit,
+                'preco_tabela': float(produto_dados['preco_venda_tabela'][contador]),
+                'margem': float(produto_dados['margem'][contador]),
                 'curva': str(produto_dados['curva'][contador]),
                 'media_ajustada': str(produto_dados['media_ajustada'][contador]),
                 'ruptura': str(produto_dados['ruptura'][contador]),
                 'ruptura_porc': float(produto_dados['ruptura_porc']),
                 'ruptura_cor': str(produto_dados['cor_ruptura'][contador]),
                 'condicao_estoque': str(produto_dados['condicao_estoque'][contador]),
-                'preco_tabela': float(produto_dados['preco_venda_tabela'][contador]),
-                'margem': float(produto_dados['margem'][contador]),
                 'porc_media': float(produto_dados['porcent_media'][contador]),
                 'media_simples': float(produto_dados['media'][contador]),
             }
@@ -99,8 +98,6 @@ def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao):
                     lista_fim.append(b)
 
     dados_produtos_filiais = pd.DataFrame(lista_fim)
-
-    print(dados_produtos_filiais)
 
     return dados_produtos_filiais
 
@@ -135,12 +132,13 @@ def vendas_historico():
         return None, None
 
 
-def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
+def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_selec):
     cod_fornec = cod_forn
     cod_prod = cod_produto
     id_emp = id_empresa
-    leadtime = leadt
-    temp_repo = t_reposicao
+
+    filialselecionada = filial_selec
+
 
     # BUSCANDO PARAMETROS DA EMPRESA DO USUARIO LOGADO
     parametros = Parametro.objects.get(empresa_id=id_emp)
@@ -158,11 +156,9 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
     filiais = get_filiais(id_empresa)
 
     lista_resumo = []
-    print(vendas_p['cod_filial'].unique())
 
     contador = 0
     for filial in filiais:
-        print(filial)
         pedidos_ = pedidos.query('cod_filial == @filial.cod_filial')
         vendas_ = vendas_p.query('cod_filial == @filial.cod_filial')
         entradas_ = u_entrada.query('cod_filial == @filial.cod_filial')
@@ -178,6 +174,14 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
             dt_ult_entrada = entradas_['data'].unique()
             qt_ult_entrada = entradas_['qt_ult_entrada'].unique()
             vl_ult_entrada = entradas_['vl_ult_entrada'].unique()
+
+
+        if filial.cod_filial != filialselecionada:
+            leadtime = 0
+            temp_repo = 0
+        else:
+            leadtime = leadt
+            temp_repo = t_reposicao
 
         # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
         media = info_produto.media[0]
@@ -252,8 +256,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         prod_resumo['media'] = media.round(2)
         prod_resumo['media_ajustada'] = media_ajustada
 
-        print("media: ", media)
-
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva[0]
         prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
@@ -276,9 +278,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         #O contador vai navegar pelo indice do dataframe sempre inicando por 0, conforme a quantidade de filiais
         contador = contador + 1
 
-        print("preco custo", preco_custo)
-        print("preco tabela", preco_tabela)
-
         m = preco_tabela - preco_custo
         m_ = m / preco_tabela
         margem = m_ * 100
@@ -295,10 +294,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao):
         media_preco = info_produto.media_preco_praticado[0].round(2)
         variavel = media * media_preco
         ruptura = variavel * d_sem_estoque
-
-        print("Ruptura", ruptura)
-        print("media preco", media_preco)
-
 
         if ruptura > 0:
             cor_ruptura = 'negativo'

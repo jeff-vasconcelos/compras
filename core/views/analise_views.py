@@ -357,21 +357,50 @@ def selecionar_produto(request):
         t_reposicao = int(request.POST.get('tempo_reposicao'))
         filialselecionada = int(request.POST.get('filial'))
 
-        print(filialselecionada)
+        infor_produtos_filiais = processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao, filialselecionada)
 
-        infor_produtos_fiiais = processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao)
+        df_filial_selecionada = infor_produtos_filiais.query('filial == @filialselecionada')
+        df_filial_selecionada = df_filial_selecionada.drop(columns=[
+            'filial','estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
+            'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela', 'margem'
+        ])
 
-        infor_produtos_fiiais = infor_produtos_fiiais.to_dict('records')
-        print(infor_produtos_fiiais)
+        item_filial_selecionada = df_filial_selecionada.to_dict('records')
+
+        for i in item_filial_selecionada:
+            print(i)
+            info_prod_filiais = i
+
+
+        # itens_inform = {
+        #     'curva': df_filial_selecionada.curva,
+        #     'media_ajustada': df_filial_selecionada.media_ajustada,
+        #     'ruptura_porc': df_filial_selecionada.ruptura_porc,
+        #     'ruptura_cor': df_filial_selecionada.ruptura_cor,
+        #     'condicao_estoque': df_filial_selecionada.condicao_estoque,
+        #     'porc_media': df_filial_selecionada.porc_media,
+        #     'media_simples': df_filial_selecionada.media_simples
+        # }
+
+
+        print(info_prod_filiais)
+
+
+
+
+        infor_produtos_filiais = infor_produtos_filiais.drop(columns=[
+            'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
+        ])
+        infor_produtos_filiais = infor_produtos_filiais.to_dict('records')
 
 
         data = []
 
         mapa = mapas_serie(id_empresa, id_produto)
 
-        data.append(infor_produtos_fiiais)  # 0
+        data.append(infor_produtos_filiais)  # 0
         data.append(mapa)  # 1
-
+        data.append(info_prod_filiais) #2
 
         return JsonResponse({'data': data})
 

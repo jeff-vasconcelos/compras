@@ -95,6 +95,9 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                 const data = dados[0]
                 const graficos = dados[1]
+                const informacoes = dados[2]
+
+                console.log(informacoes)
 
                 $("canvas#ChartSerieHist").remove();
                 $("canvas#ChartCobertura").remove();
@@ -473,31 +476,31 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     valor_media_simples.innerHTML = ""
 
                     // VALIDANDO COR DA RUPTURA
-                    if (data.ruptura_cor === 'positivo') {
+                    if (informacoes.ruptura_cor === 'positivo') {
                         valor_ruptura.style.color = "#707070"
-                    } else if (data.ruptura_cor === 'negativo') {
+                    } else if (informacoes.ruptura_cor === 'negativo') {
                         valor_ruptura.style.color = "#de200d"
                     }
 
                     // VALIDANDO COR DA SITUAÇÃO ESTOQUE
-                    if (data.condicao_estoque === 'NORMAL') {
+                    if (informacoes.condicao_estoque === 'NORMAL') {
                         valor_condicao_est.style.color = "#707070"
-                    } else if (data.condicao_estoque === 'PARCIAL') {
+                    } else if (informacoes.condicao_estoque === 'PARCIAL') {
                         valor_condicao_est.style.color = "#ff8518"
-                    } else if (data.condicao_estoque === 'RUPTURA') {
+                    } else if (informacoes.condicao_estoque === 'RUPTURA') {
                         valor_condicao_est.style.color = "#de200d"
                     }
 
                     // VALIDANDO COR DA CURVA
-                    if (data.curva === 'A') {
+                    if (informacoes.curva === 'A') {
                         valor_curva.style.color = "#3B8A44"
-                    } else if (data.curva === 'B') {
+                    } else if (informacoes.curva === 'B') {
                         valor_curva.style.color = "#0576E0"
-                    } else if (data.curva === 'C') {
+                    } else if (informacoes.curva === 'C') {
                         valor_curva.style.color = "#FFA500"
-                    }else if (data.curva === 'D') {
+                    }else if (informacoes.curva === 'D') {
                         valor_curva.style.color = "#a3a0fb"
-                    }else if (data.curva === 'E') {
+                    }else if (informacoes.curva === 'E') {
                         valor_curva.style.color = "#ec6666"
                     }
 
@@ -528,25 +531,25 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
 
                     valor_condicao_est.innerHTML += `
-                        ${data.condicao_estoque}
+                        ${informacoes.condicao_estoque}
                     `
                     valor_curva.innerHTML += `
-                        ${data.curva}
+                        ${informacoes.curva}
                     `
                     valor_media.innerHTML += `
-                        ${data.media_ajustada}
+                        ${informacoes.media_ajustada}
                     `
                     valor_media_simples.innerHTML += `
-                        ${data.media_simples}
+                        ${informacoes.media_simples}
                     `
                     porc_media.innerHTML += `
-                        ${data.porc_media} %
+                        ${informacoes.porc_media} %
                     `
                     valor_ruptura.innerHTML += `
-                        ${data.ruptura}
+                        ${informacoes.ruptura}
                     `
                     porc_ruptura.innerHTML += `
-                        ${data.ruptura_porc} %
+                        ${informacoes.ruptura_porc} %
                     `
 
                 }
