@@ -24,8 +24,6 @@ def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao, fil
     leadtime = leadtime
     temp_repo = t_reposicao
     filial_select = filialselecionada
-    print(temp_repo)
-
 
     qs = Produto.objects.get(id=produto_id, empresa__id=id_empresa)
 
@@ -148,196 +146,232 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
     u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
     e_atual = estoque_atual(cod_prod, id_emp)
     vendas_p, info_produto = vendas_historico()
-
     lista_fornecedor = []
     lista_fornecedor.append(cod_fornec)
     curva = abc(lista_fornecedor, id_emp, parametros.periodo)
-
     filiais = get_filiais(id_empresa)
-
     lista_resumo = []
-
     contador = 0
-    for filial in filiais:
-        pedidos_ = pedidos.query('cod_filial == @filial.cod_filial')
-        vendas_ = vendas_p.query('cod_filial == @filial.cod_filial')
-        entradas_ = u_entrada.query('cod_filial == @filial.cod_filial')
-        estoque_ = e_atual.query('cod_filial == @filial.cod_filial')
-        curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial.cod_filial') \
-            .reset_index(drop=True)
 
-        if entradas_.empty:
-            dt_ult_entrada = "-"
-            qt_ult_entrada = 0
-            vl_ult_entrada = 0
-        else:
-            dt_ult_entrada = entradas_['data'].unique()
-            qt_ult_entrada = entradas_['qt_ult_entrada'].unique()
-            vl_ult_entrada = entradas_['vl_ult_entrada'].unique()
+    if vendas_p is not None:
+        for filial in filiais:
+            vendas_ = vendas_p.query('cod_filial == @filial.cod_filial')
+            curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial.cod_filial') \
+                .reset_index(drop=True)
+            entradas_ = u_entrada.query('cod_filial == @filial.cod_filial')
+            estoque_ = e_atual.query('cod_filial == @filial.cod_filial')
 
+            if pedidos is not None:
+                pedidos_ = pedidos.query('cod_filial == @filial.cod_filial')
+            else:
+                listped = []
+                pedidos_ = pd.DataFrame(listped)
 
-        if filial.cod_filial != filialselecionada:
-            leadtime = 0
-            temp_repo = 0
-        else:
-            leadtime = leadt
-            temp_repo = t_reposicao
-
-        # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
-        media = info_produto.media[0]
-        media_ajustada = info_produto.media_ajustada[0]
-        desvio = info_produto.desvio[0]
-
-        # SOMANDO SALDO DE PEDIDOS
-        if not pedidos_.empty:
-            prod_resumo = pedidos_.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
-        else:
-            pedido_vazio = {
-                'cod_filial': filial.cod_filial,
-                'saldo': 0
-            }
-
-            lista_pedido_vazio = [pedido_vazio]
-            prod_resumo = pd.DataFrame.from_dict(lista_pedido_vazio)
+            #
+            # if u_entrada is not None:
+            #
+            # else:
+            #     listent = []
+            #     entradas_ = pd.DataFrame(listent)
+            #
+            #
+            # if e_atual is not None:
+            #
+            # else:
+            #     listest = []
+            #     estoque_ = pd.DataFrame(listest)
+            #
+            # print(estoque_)
 
 
-        # INFORMAÇÕES DE PRODUTO
-
-        estoque_a = estoque_['qt_disponivel'].to_frame().reset_index(drop=True)
-
-        prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
-        prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
-        prod_resumo['dt_ult_ent'] = dt_ult_entrada
-        prod_resumo['qt_ult_ent'] = qt_ult_entrada
-        prod_resumo['vl_ult_ent'] = vl_ult_entrada
-        prod_resumo['dias_estoque_estim'] = (prod_resumo['estoque_dispon'] / media).round(0)
+            if entradas_.empty:
+                dt_ult_entrada = "-"
+                qt_ult_entrada = 0
+                vl_ult_entrada = 0
+            else:
+                dt_ult_entrada = entradas_['data'].unique()
+                qt_ult_entrada = entradas_['qt_ult_entrada'].unique()
+                vl_ult_entrada = entradas_['vl_ult_entrada'].unique()
 
 
-        # CALCULANDO ESTOQUE DE SEGURANÇA
-        curva_a = norm.ppf(parametros.curva_a / 100).round(3)
-        curva_b = norm.ppf(parametros.curva_b / 100).round(3)
-        curva_c = norm.ppf(parametros.curva_c / 100).round(3)
-        curva_d = norm.ppf(parametros.curva_d / 100).round(3)
-        curva_e = norm.ppf(parametros.curva_e / 100).round(3)
+            if estoque_.empty:
+                estoque_vazio = {
+                    'cod_filial': filial.cod_filial,
+                    'qt_disponivel': 0,
+                    'qt_indenizada': 0
+                }
 
-        if curva_.curva[0] == "A":
-            est_seg = curva_a * math.sqrt((leadtime + temp_repo)) * desvio
-
-        elif curva_.curva[0] == "B":
-            est_seg = curva_b * math.sqrt((leadtime + temp_repo)) * desvio
-
-        elif curva_.curva[0] == "C":
-            est_seg = curva_c * math.sqrt((leadtime + temp_repo)) * desvio
-
-        elif curva_.curva[0] == "D":
-            est_seg = curva_d * math.sqrt((leadtime + temp_repo)) * desvio
-
-        else:
-            est_seg = curva_e * math.sqrt((leadtime + temp_repo)) * desvio
-
-        prod_resumo['estoque_segur'] = est_seg.round(0)
+                lista_est_vazio = [estoque_vazio]
+                estoque_ = pd.DataFrame.from_dict(lista_est_vazio)
 
 
+            if filial.cod_filial != filialselecionada:
+                leadtime = 0
+                temp_repo = 0
+            else:
+                leadtime = leadt
+                temp_repo = t_reposicao
 
-        # CALCULANDO PONTO DE REPOSIÇÃO
+            # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
+            media = info_produto.media[0]
+            media_ajustada = info_produto.media_ajustada[0]
+            desvio = info_produto.desvio[0]
 
-        estoque_segur = est_seg.round(0)
-        ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
-        prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
+            # SOMANDO SALDO DE PEDIDOS
+            if not pedidos_.empty:
+                prod_resumo = pedidos_.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
+            else:
+                pedido_vazio = {
+                    'cod_filial': filial.cod_filial,
+                    'saldo': 0
+                }
 
-
-        #
-        # CALCULANDO SUGESTAO DE COMPRAS
-
-        sugestao = ((media_ajustada * (leadtime + temp_repo)) + estoque_segur) - (
-                prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
-
-        prod_resumo['sugestao'] = sugestao[0].round(0)
-        prod_resumo['media'] = media.round(2)
-        prod_resumo['media_ajustada'] = media_ajustada
-
-        prod_resumo['desvio'] = desvio
-        prod_resumo['curva'] = curva_.curva[0]
-        prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
-
-        # PORCENTAGEM DA MEDIA
-        d_m = desvio / media
-        por = 1.0 - d_m
-        porcent_media = por * 100
-        prod_resumo['porcent_media'] = porcent_media.round(2)
+                lista_pedido_vazio = [pedido_vazio]
+                prod_resumo = pd.DataFrame.from_dict(lista_pedido_vazio)
 
 
+            # INFORMAÇÕES DE PRODUTO
 
-        # CALCULO DE MARGEM
-        # TODO Verificar coluna nas outras funções
-        # preco_custo = e_atual.preco_custo[0]
+            estoque_a = estoque_['qt_disponivel'].to_frame().reset_index(drop=True)
 
-        preco_custo = estoque_.custo_ult_ent[contador]
-        preco_tabela = estoque_.preco_venda[contador]
+            prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
+            prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
+            prod_resumo['dt_ult_ent'] = dt_ult_entrada
+            prod_resumo['qt_ult_ent'] = qt_ult_entrada
+            prod_resumo['vl_ult_ent'] = vl_ult_entrada
+            prod_resumo['dias_estoque_estim'] = (prod_resumo['estoque_dispon'] / media).round(0)
 
-        #O contador vai navegar pelo indice do dataframe sempre inicando por 0, conforme a quantidade de filiais
-        contador = contador + 1
 
-        m = preco_tabela - preco_custo
-        m_ = m / preco_tabela
-        margem = m_ * 100
-        prod_resumo['margem'] = margem.round(2)
-        prod_resumo['preco_venda_tabela'] = preco_tabela.round(2)
+            # CALCULANDO ESTOQUE DE SEGURANÇA
+            curva_a = norm.ppf(parametros.curva_a / 100).round(3)
+            curva_b = norm.ppf(parametros.curva_b / 100).round(3)
+            curva_c = norm.ppf(parametros.curva_c / 100).round(3)
+            curva_d = norm.ppf(parametros.curva_d / 100).round(3)
+            curva_e = norm.ppf(parametros.curva_e / 100).round(3)
+
+            print(curva_.curva)
+
+            if curva_.curva[0] == "A":
+                est_seg = curva_a * math.sqrt((leadtime + temp_repo)) * desvio
+
+            elif curva_.curva[0] == "B":
+                est_seg = curva_b * math.sqrt((leadtime + temp_repo)) * desvio
+
+            elif curva_.curva[0] == "C":
+                est_seg = curva_c * math.sqrt((leadtime + temp_repo)) * desvio
+
+            elif curva_.curva[0] == "D":
+                est_seg = curva_d * math.sqrt((leadtime + temp_repo)) * desvio
+
+            else:
+                est_seg = curva_e * math.sqrt((leadtime + temp_repo)) * desvio
+
+            prod_resumo['estoque_segur'] = est_seg.round(0)
 
 
 
-        # DIAS SEM ESTOQUE / COM ESTOQUE / MEDIA DE PRECOS / PORCENTAGEM RUPTURA / DDE
-        total_linha = vendas_.shape[0]
-        d_estoque = vendas_['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
-        d_sem_estoque = total_linha - d_estoque
+            # CALCULANDO PONTO DE REPOSIÇÃO
 
-        media_preco = info_produto.media_preco_praticado[0].round(2)
-        variavel = media * media_preco
-        ruptura = variavel * d_sem_estoque
+            estoque_segur = est_seg.round(0)
+            ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
+            prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
-        if ruptura > 0:
-            cor_ruptura = 'negativo'
-        else:
-            cor_ruptura = 'positivo'
 
-        prod_resumo['cor_ruptura'] = cor_ruptura
+            #
+            # CALCULANDO SUGESTAO DE COMPRAS
 
-        porcent_ruptura = (d_sem_estoque / total_linha) * 100
+            sugestao = ((media_ajustada * (leadtime + temp_repo)) + estoque_segur) - (
+                    prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
-        estoque_disponivel = prod_resumo.estoque_dispon[0]
-        # dde = estoque_disponivel / media_ajustada
-        dde = estoque_disponivel / 1
+            prod_resumo['sugestao'] = sugestao[0].round(0)
+            prod_resumo['media'] = media.round(2)
+            prod_resumo['media_ajustada'] = media_ajustada
 
-        # TODO Precisa validar como dividir a media ajustada, quando o ela for 0
+            prod_resumo['desvio'] = desvio
+            prod_resumo['curva'] = curva_.curva[0]
+            prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
 
-        ruptura = locale.currency(ruptura, grouping=True)
-        prod_resumo['ruptura'] = ruptura
-        prod_resumo['dde'] = dde.round(2)
-        prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
+            # PORCENTAGEM DA MEDIA
+            d_m = desvio / media
+            por = 1.0 - d_m
+            porcent_media = por * 100
+            prod_resumo['porcent_media'] = porcent_media.round(2)
 
 
 
-        dde_ponto_rep = ponto_reposicao / media
+            # CALCULO DE MARGEM
+            # TODO Verificar coluna nas outras funções
+            # preco_custo = e_atual.preco_custo[0]
 
-        # DIFININDO CONDIÇÃO DE ESTOQUE
-        if dde > dde_ponto_rep:
-            condicao_estoque = 'NORMAL'
-        elif dde_ponto_rep >= dde > 0:
-            condicao_estoque = 'PARCIAL'
-        else:
-            condicao_estoque = 'RUPTURA'
+            preco_custo = estoque_.custo_ult_ent[contador]
+            preco_tabela = estoque_.preco_venda[contador]
 
-        prod_resumo['condicao_estoque'] = condicao_estoque
+            #O contador vai navegar pelo indice do dataframe sempre inicando por 0, conforme a quantidade de filiais
+            contador = contador + 1
 
-        resumo = prod_resumo.assign(**prod_resumo.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
-            "records")
+            m = preco_tabela - preco_custo
+            m_ = m / preco_tabela
+            margem = m_ * 100
+            prod_resumo['margem'] = margem.round(2)
+            prod_resumo['preco_venda_tabela'] = preco_tabela.round(2)
 
-        lista_resumo.append(resumo)
 
-        lista_fim = []
-        for a in lista_resumo:
-            for b in a:
-                lista_fim.append(b)
-        resumo_produto = pd.DataFrame(lista_fim)
 
-    return resumo_produto
+            # DIAS SEM ESTOQUE / COM ESTOQUE / MEDIA DE PRECOS / PORCENTAGEM RUPTURA / DDE
+            total_linha = vendas_.shape[0]
+            d_estoque = vendas_['qt_estoque'].apply(lambda x: 0 if x <= 0 else 1).sum()
+            d_sem_estoque = total_linha - d_estoque
+
+            media_preco = info_produto.media_preco_praticado[0].round(2)
+            variavel = media * media_preco
+            ruptura = variavel * d_sem_estoque
+
+            if ruptura > 0:
+                cor_ruptura = 'negativo'
+            else:
+                cor_ruptura = 'positivo'
+
+            prod_resumo['cor_ruptura'] = cor_ruptura
+
+            porcent_ruptura = (d_sem_estoque / total_linha) * 100
+
+            estoque_disponivel = prod_resumo.estoque_dispon[0]
+            # dde = estoque_disponivel / media_ajustada
+            dde = estoque_disponivel / 1
+
+            # TODO Precisa validar como dividir a media ajustada, quando o ela for 0
+
+            ruptura = locale.currency(ruptura, grouping=True)
+            prod_resumo['ruptura'] = ruptura
+            prod_resumo['dde'] = dde.round(2)
+            prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
+
+
+
+            dde_ponto_rep = ponto_reposicao / media
+
+            # DIFININDO CONDIÇÃO DE ESTOQUE
+            if dde > dde_ponto_rep:
+                condicao_estoque = 'NORMAL'
+            elif dde_ponto_rep >= dde > 0:
+                condicao_estoque = 'PARCIAL'
+            else:
+                condicao_estoque = 'RUPTURA'
+
+            prod_resumo['condicao_estoque'] = condicao_estoque
+
+            resumo = prod_resumo.assign(**prod_resumo.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
+                "records")
+
+            lista_resumo.append(resumo)
+
+            lista_fim = []
+            for a in lista_resumo:
+                for b in a:
+                    lista_fim.append(b)
+            resumo_produto = pd.DataFrame(lista_fim)
+
+        return resumo_produto
+
+    else:
+        return None

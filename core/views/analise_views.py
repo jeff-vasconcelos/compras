@@ -1,30 +1,23 @@
-import csv
 from math import ceil
-from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.db.models import Q
 from api.models.produto import *
-import datetime
-
 from core.multifilial.processa_produtos import processa_produtos_filiais
-
+from core.multifilial.curva_abc import abc
 from core.trata_dados.curva_abc import abc
 from core.trata_dados.historico_estoque import historico_estoque
-from core.trata_dados.produto_dados import dados_produto
 from core.trata_dados.vendas import *
 from core.trata_dados.pedidos import *
 from core.models.empresas_models import Filial
+import csv
 import pandas as pd
-
-from core.multifilial.curva_abc import abc
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
     empresa = request.user.usuario.empresa_id
-    print(empresa)
     filiais = Filial.objects.filter(empresa__id__exact=empresa)
     context = {
         'filiais': filiais
@@ -322,12 +315,7 @@ def filtrar_produto_marca(request):
         for i in b:
             lista_fornecedor.append(int(i))
 
-        print(marca)
-        print(lista_fornecedor)
-
         qs = Produto.objects.filter(marca=marca, fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
-        print("####### RESULTADOS ###########")
-        print(qs)
 
         if len(qs) > 0:
             data = []
@@ -339,9 +327,7 @@ def filtrar_produto_marca(request):
                     'emb': prod.embalagem,
                 }
                 data.append(item)
-                print(data)
             res_fil_curva = data
-            print(res_fil_curva)
         else:
             res_fil_curva = "Nada encontrado!"
         return JsonResponse({'data': res_fil_curva})
@@ -414,8 +400,6 @@ def mapas_serie(empresa, produto, cod_filial):
     data_dia = data_day.dt.strftime('%d/%m/%Y')
 
     df_vendas['data_serie_hist'] = df_vendas['semana'].str.cat(data_dia, sep=" - ")
-
-    # print(df_vendas)
 
     data_max = list(df_vendas['max'])
     data_med = list(df_vendas['media'])
@@ -545,7 +529,6 @@ def pedidos_pedentes(request):
         produto_id = request.POST.get('produto')
 
         if produto_id == "0":
-            print("nenhum selecionado")
             res = "FALSE"
             return JsonResponse({'data': res})
 
@@ -567,73 +550,73 @@ def pedidos_pedentes(request):
     return JsonResponse({})
 
 
-def selecionar__produto(request):
-    empresa = request.user.usuario.empresa_id
-
-    if request.is_ajax():
-        info_prod = None
-        produto = request.POST.get('produto')
-        leadtime = int(request.POST.get('leadtime'))
-        t_reposicao = int(request.POST.get('tempo_reposicao'))
-
-        qs = Produto.objects.get(id=produto, empresa__id=empresa)
-
-        produto_codigo = qs.cod_produto
-        fornecedor_codigo = qs.cod_fornecedor
-
-        produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
-
-        if produto_dados is None:
-            return JsonResponse({'data': 0})
-
-        else:
-            dt_entrada = produto_dados['dt_ult_ent'][0]
-            if dt_entrada == '-':
-                dt_u_entrada = dt_entrada
-            else:
-                dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
-
-            sugestao = float(produto_dados['sugestao'])
-            qt_un_caixa = float(produto_dados['qt_unit_caixa'])
-
-            sug_cx = sugestao / qt_un_caixa
-            sug_cx = ceil(sug_cx)
-            sug_unit = sug_cx * qt_un_caixa
-
-            data = []
-            itens_analise = {
-                'filial': int(produto_dados['cod_filial']),
-                'estoque': int(produto_dados['estoque_dispon']),
-                'avaria': int(produto_dados['avarias']),
-                'saldo': int(produto_dados['saldo']),
-                'dt_ult_entrada': dt_u_entrada,
-                'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
-                'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
-                'dde': float(produto_dados['dde']),
-                'est_seguranca': float(produto_dados['estoque_segur']),
-                'p_reposicao': float(produto_dados['ponto_repo']),
-                'sugestao': float(produto_dados['sugestao']),
-                'sugestao_caixa': sug_cx,
-                'sugestao_unidade': sug_unit,
-                'curva': str(produto_dados['curva'][0]),
-                'media_ajustada': str(produto_dados['media_ajustada'][0]),
-                'ruptura': str(produto_dados['ruptura'][0]),
-                'ruptura_porc': float(produto_dados['ruptura_porc']),
-                'ruptura_cor': str(produto_dados['cor_ruptura'][0]),
-                'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
-                'preco_tabela': float(produto_dados['preco_venda_tabela'][0]),
-                'margem': float(produto_dados['margem'][0]),
-                'porc_media': float(produto_dados['porcent_media'][0]),
-                'media_simples': float(produto_dados['media'][0]),
-            }
-
-            mapa = mapas_serie(empresa, produto)
-
-            data.append(itens_analise)  # 0
-            data.append(mapa)  # 1
-
-
-            return JsonResponse({'data': data})
-
-    return JsonResponse({})
+# def selecionar__produto(request):
+#     empresa = request.user.usuario.empresa_id
+#
+#     if request.is_ajax():
+#         info_prod = None
+#         produto = request.POST.get('produto')
+#         leadtime = int(request.POST.get('leadtime'))
+#         t_reposicao = int(request.POST.get('tempo_reposicao'))
+#
+#         qs = Produto.objects.get(id=produto, empresa__id=empresa)
+#
+#         produto_codigo = qs.cod_produto
+#         fornecedor_codigo = qs.cod_fornecedor
+#
+#         produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
+#
+#         if produto_dados is None:
+#             return JsonResponse({'data': 0})
+#
+#         else:
+#             dt_entrada = produto_dados['dt_ult_ent'][0]
+#             if dt_entrada == '-':
+#                 dt_u_entrada = dt_entrada
+#             else:
+#                 dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
+#
+#             sugestao = float(produto_dados['sugestao'])
+#             qt_un_caixa = float(produto_dados['qt_unit_caixa'])
+#
+#             sug_cx = sugestao / qt_un_caixa
+#             sug_cx = ceil(sug_cx)
+#             sug_unit = sug_cx * qt_un_caixa
+#
+#             data = []
+#             itens_analise = {
+#                 'filial': int(produto_dados['cod_filial']),
+#                 'estoque': int(produto_dados['estoque_dispon']),
+#                 'avaria': int(produto_dados['avarias']),
+#                 'saldo': int(produto_dados['saldo']),
+#                 'dt_ult_entrada': dt_u_entrada,
+#                 'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
+#                 'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
+#                 'dde': float(produto_dados['dde']),
+#                 'est_seguranca': float(produto_dados['estoque_segur']),
+#                 'p_reposicao': float(produto_dados['ponto_repo']),
+#                 'sugestao': float(produto_dados['sugestao']),
+#                 'sugestao_caixa': sug_cx,
+#                 'sugestao_unidade': sug_unit,
+#                 'curva': str(produto_dados['curva'][0]),
+#                 'media_ajustada': str(produto_dados['media_ajustada'][0]),
+#                 'ruptura': str(produto_dados['ruptura'][0]),
+#                 'ruptura_porc': float(produto_dados['ruptura_porc']),
+#                 'ruptura_cor': str(produto_dados['cor_ruptura'][0]),
+#                 'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
+#                 'preco_tabela': float(produto_dados['preco_venda_tabela'][0]),
+#                 'margem': float(produto_dados['margem'][0]),
+#                 'porc_media': float(produto_dados['porcent_media'][0]),
+#                 'media_simples': float(produto_dados['media'][0]),
+#             }
+#
+#             mapa = mapas_serie(empresa, produto)
+#
+#             data.append(itens_analise)  # 0
+#             data.append(mapa)  # 1
+#
+#
+#             return JsonResponse({'data': data})
+#
+#     return JsonResponse({})
 

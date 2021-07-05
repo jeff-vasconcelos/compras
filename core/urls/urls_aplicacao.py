@@ -5,6 +5,7 @@ from core.views.usuario_views import *
 from core.views.academy_views import *
 from core.views.home_views import *
 from core.views.analise_views import *
+from core.views.alertas_views import *
 
 from core.multifilial.processa_produtos import processa_produtos_filiais
 
@@ -31,6 +32,8 @@ urlpatterns = [
 
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),
+    path('alertas/', alerta_painel, name='alertas_painel'),
+
 
     path('academy/', academy, name='academy'),
     path('academy/<slug>', video_academy, name='academy-video'),
