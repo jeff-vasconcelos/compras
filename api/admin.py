@@ -35,7 +35,7 @@ class Historico(admin.ModelAdmin):
 
 
 class Vendas(admin.ModelAdmin):
-    list_display = ('id', 'cod_produto', 'desc_produto', 'fornecedor', 'empresa')
+    list_display = ('id', 'cod_produto', 'desc_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto', 'desc_produto')
     search_fields = ('cod_produto', 'desc_produto',)
     list_filter = ('fornecedor', 'empresa',)

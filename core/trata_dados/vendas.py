@@ -5,7 +5,7 @@ import pandas as pd
 import datetime
 
 
-def vendas(cod_produto, id_empresa, periodo):
+def vendas(cod_produto, id_empresa, periodo, cod_filial):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano(id_empresa)
@@ -14,7 +14,8 @@ def vendas(cod_produto, id_empresa, periodo):
     vendas_df = pd.DataFrame(Venda.objects.filter(
         cod_produto__exact=cod_produto,
         data__range=[data_fim, data_inicio],
-        empresa__id__exact=id_empresa
+        empresa__id__exact=id_empresa,
+        filial__cod_filial=cod_filial
     ).values())
     print("#################### vendas ###########3")
 

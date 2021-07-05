@@ -368,25 +368,7 @@ def selecionar_produto(request):
         item_filial_selecionada = df_filial_selecionada.to_dict('records')
 
         for i in item_filial_selecionada:
-            print(i)
             info_prod_filiais = i
-
-
-        # itens_inform = {
-        #     'curva': df_filial_selecionada.curva,
-        #     'media_ajustada': df_filial_selecionada.media_ajustada,
-        #     'ruptura_porc': df_filial_selecionada.ruptura_porc,
-        #     'ruptura_cor': df_filial_selecionada.ruptura_cor,
-        #     'condicao_estoque': df_filial_selecionada.condicao_estoque,
-        #     'porc_media': df_filial_selecionada.porc_media,
-        #     'media_simples': df_filial_selecionada.media_simples
-        # }
-
-
-        print(info_prod_filiais)
-
-
-
 
         infor_produtos_filiais = infor_produtos_filiais.drop(columns=[
             'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
@@ -396,7 +378,7 @@ def selecionar_produto(request):
 
         data = []
 
-        mapa = mapas_serie(id_empresa, id_produto)
+        mapa = mapas_serie(id_empresa, id_produto, filialselecionada)
 
         data.append(infor_produtos_filiais)  # 0
         data.append(mapa)  # 1
@@ -407,13 +389,13 @@ def selecionar_produto(request):
     return JsonResponse({})
 
 
-def mapas_serie(empresa, produto):
+def mapas_serie(empresa, produto, cod_filial):
     info_prod = None
     qs = Produto.objects.get(id=produto, empresa__id=empresa)
     produto_codigo = qs.cod_produto
 
     parametros = Parametro.objects.get(empresa_id=empresa)
-    df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo)
+    df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo, cod_filial)
 
     datas = dia_semana_mes_ano(empresa)
     df_historico = historico_estoque(produto_codigo, empresa, parametros.periodo)
