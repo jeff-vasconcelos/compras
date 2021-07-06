@@ -17,9 +17,12 @@ def alertas():
         for produto in produtos:
             print(produto.desc_produto)
             infor_produtos_filiais = processa_produtos_filiais(produto.id, id_empresa, leadtime, t_reposicao)
-            alertas_produtos = infor_produtos_filiais.to_dict('records')
+
+            if infor_produtos_filiais is not None:
+                alertas_produtos = infor_produtos_filiais.to_dict('records')
     lista_alertas.append(alertas_produtos)
     print(lista_alertas)
 
 def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
+    alertas()
     return render(request, template_name)

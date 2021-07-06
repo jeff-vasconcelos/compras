@@ -10,8 +10,6 @@ def vendas(cod_produto, id_empresa, periodo):
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano(id_empresa)
 
-
-
     # CONSULTANDO VENDAS NO BANCO DE DADOS
     vendas_df = pd.DataFrame(Venda.objects.filter(
         cod_produto__exact=cod_produto,
@@ -175,7 +173,4 @@ def vendas(cod_produto, id_empresa, periodo):
         return vendas, informacao_produto
 
     if vendas_df.empty:
-        print("VENDAS - NÃO HÁ VENDAS")
-        print("##############################")
-
-        return None, None
+       return None, None
