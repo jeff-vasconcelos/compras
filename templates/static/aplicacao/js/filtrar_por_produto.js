@@ -12,12 +12,36 @@ const filterProd = (prod) => {
         contentType: false,
         success: (res_fil_prod) => {
             console.log(res_fil_prod)
-            const data_p = res_fil_prod.data
+            const data = res_fil_prod.data
+
+            const data_p = data[0]
+            const marcas = data[1]
+
             if (Array.isArray(data_p)) {
-                resultadosPProdutos.innerHTML = `<option class="option-analise" selected>Selecione o produto</option>`
+                resultadosPProdutos.innerHTML = `<option class="option-analise" value="0" selected>Selecione o produto</option>`
+                listaCurvaSelecionar.innerHTML = `
+                    <select class="form-control select-analise" id="curva_abc_select">
+                        <option class="option-analise" selected value="0">Selecione</option>
+                        <option class="option-analise" value="A">A</option>
+                        <option class="option-analise" value="B">B</option>
+                        <option class="option-analise" value="C">C</option>
+                        <option class="option-analise" value="D">D</option>
+                        <option class="option-analise" value="E">E</option>
+                    </select>
+                `
                 data_p.forEach(prod => {
                     resultadosPProdutos.innerHTML += `
                         <option name="option-product" class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>
+                    `
+                })
+            }
+            if (Array.isArray(marcas)){
+                listaMarcaSelecionar.innerHTML = `<option class="option-analise" value="0" selected>Selecione</option>`
+
+                marcas.forEach(p_marcas=> {
+
+                    listaMarcaSelecionar.innerHTML += `
+                        <option class="option-analise" value="${p_marcas.marca_p}">${p_marcas.marca_p}</option>
                     `
                 })
             }
@@ -43,6 +67,7 @@ function selecao_produto() {
             }
         }
     }
+    console.log(checkProduto)
     const produtos_selecionados = new FormData()
     produtos_selecionados.append('csrfmiddlewaretoken', csrf)
     produtos_selecionados.append('produto', checkProduto)

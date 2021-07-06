@@ -1,6 +1,6 @@
 from django.db import models
 from core.models.empresas_models import Empresa
-from api.models.fornecedor_models import Fornecedor
+from api.models.fornecedor import Fornecedor
 
 
 class Produto(models.Model):
@@ -10,7 +10,6 @@ class Produto(models.Model):
     quantidade_un_cx = models.FloatField(blank=True, null=True)
     marca = models.CharField(max_length=255, blank=True, null=True)
     peso_liq = models.CharField(max_length=255, blank=True, null=True)
-    cod_filial = models.IntegerField(null=True, blank=True)
     cod_fornecedor = models.IntegerField(null=True, blank=True)
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_produto',
                                 blank=True, null=True)

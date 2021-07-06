@@ -1,12 +1,11 @@
 from rest_framework import serializers
 from api.validator import *
-from api.models.produto_models import *
-from api.models.avarias_models import *
-from api.models.estoque_atual_models import *
-from api.models.hist_estoque_models import *
-from api.models.p_compras_models import *
-from api.models.ultima_entrada_models import *
-from api.models.vendas_models import *
+from api.models.produto import *
+from api.models.estoque_atual import *
+from api.models.historico_estoque import *
+from api.models.pedido_compra import *
+from api.models.ultima_entrada import *
+from api.models.venda import *
 
 
 class ProdutoSerializer(serializers.ModelSerializer):
@@ -39,30 +38,6 @@ class FornecedorSerializer(serializers.ModelSerializer):
         return data
 
 
-class AvariaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Avaria
-        fields = '__all__'
-
-    def validate(self, data):
-        if not valida_avaria(data):
-            raise serializers.ValidationError({'avaria': "registro já existe!"})
-
-        fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
-
-        produto = data['cod_produto']
-        produt = Produto.objects.filter(cod_produto=produto)
-
-        if not fornec:
-            raise serializers.ValidationError({'fornecedor': "registro não existente"})
-
-        if not produt:
-            raise serializers.ValidationError({'produto': "registro não existente"})
-
-        return data
-
-
 class EstoqueAtualSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstoqueAtual
@@ -88,7 +63,7 @@ class EstoqueAtualSerializer(serializers.ModelSerializer):
 
 class HistEstoqueSerializer(serializers.ModelSerializer):
     class Meta:
-        model = HistEstoque
+        model = HistoricoEstoque
         fields = '__all__'
 
     def validate(self, data):
@@ -112,7 +87,7 @@ class HistEstoqueSerializer(serializers.ModelSerializer):
 
 class PedidoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PedidoCompras
+        model = Pedido
         fields = '__all__'
 
     def validate(self, data):

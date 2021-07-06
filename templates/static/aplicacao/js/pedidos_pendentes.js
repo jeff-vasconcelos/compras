@@ -10,10 +10,29 @@ const verPedidosPendentes = (produto) => {
             'produto': produto
         },
         success: (pedidos_pendentes) => {
-            console.log(pedidos_pendentes.data)
 
             const data = pedidos_pendentes.data
             console.log(data)
+            if (data === 'FALSE'){
+
+                mensagemErro.innerHTML += `
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                            <use xlink:href="#exclamation-triangle-fill"/>
+                        </svg>
+                        <div>
+                            &nbsp; Por favor selecione um produto!
+                        </div>
+                    </div>
+                `
+                $(document).ready(function () {
+                    // show the alert
+                    setTimeout(function () {
+                        $(".alert").alert('close');
+                    }, 5000);
+                });
+            }
+
             if (Array.isArray(data)){
                 resultsPedidosPendentes.innerHTML = ""
                 data.forEach(prod=> {

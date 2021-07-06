@@ -1,11 +1,11 @@
-from api.models.vendas_models import Venda
+from api.models.venda import Venda
 from core.models.parametros_models import Parametro
 from core.trata_dados.datas import dia_semana_mes_ano
 import pandas as pd
 import datetime
 
 
-def vendas(cod_produto, id_empresa, periodo):
+def vendas(cod_produto, id_empresa, periodo, cod_filial):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano(id_empresa)
@@ -14,8 +14,11 @@ def vendas(cod_produto, id_empresa, periodo):
     vendas_df = pd.DataFrame(Venda.objects.filter(
         cod_produto__exact=cod_produto,
         data__range=[data_fim, data_inicio],
-        empresa__id__exact=id_empresa
+        empresa__id__exact=id_empresa,
+        filial__cod_filial=cod_filial
     ).values())
+    print("#################### vendas ###########3")
+
 
     if not vendas_df.empty:
         # TRATANDO DADOS
@@ -31,7 +34,10 @@ def vendas(cod_produto, id_empresa, periodo):
             'qt_vendas'].sum().to_frame().reset_index()
 
         qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
+
         vendas_datas = pd.merge(datas, qtvendas_preco_custo, how="left", on=["data"])
+
+        vendas_datas = vendas_datas.drop_duplicates(subset=['data'], keep='first')
 
         cod_filial = vendas_datas['cod_filial'].unique()
         cod_prod = vendas_datas['cod_produto'].unique()
@@ -51,10 +57,13 @@ def vendas(cod_produto, id_empresa, periodo):
         vendas_datas.fillna(value=values, inplace=True)
 
         # ESTATISTICAS DE VENDAS
+        print("UNICA FILIAL")
+        print(vendas_datas)
 
         e_vendas = vendas_datas
         tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
         media = tratando_media.mean()
+
 
         maximo = e_vendas['qt_vendas'].max()
         d_padrao = tratando_media.std()
@@ -109,9 +118,6 @@ def vendas(cod_produto, id_empresa, periodo):
 
         lucro = vendas_lucro.groupby(['data'])[list_val_cus].sum().round(2).reset_index()
         e_vendas['lucro'] = vendas_lucro['vl_total_vendido'] - vendas_lucro['vl_total_custo']
-
-        print("VENDAS - OK")
-        print("##############################")
 
         return e_vendas, info_prod
 

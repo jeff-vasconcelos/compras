@@ -6,12 +6,17 @@ const inputMargemDigitada = document.getElementById('porc_margem')
 // const inputDDEDigitada = document.getElementById('dde')
 const inputQtDigitada = document.getElementById('qt_digit')
 
+const botaoExportarPedido = document.getElementById('btn-expo-modal-analise')
 const botaoPedidoSessao = document.getElementById('add_pedido_sessao')
 const botaoVerPedidoSessao = document.getElementById('ver_pedido_sessao')
 const resultPedidoSessao = document.getElementById('tbody_pedidos_sessao')
 
 const botaoRemoverPedidoSessao = document.getElementsByName('botao_remover_prod_sessao')
 const modalPedidosSessao = document.getElementById('modal-ver-pedido-geral')
+
+const mensagemSucesso = document.getElementById('div-mensagem-sucesso')
+const mensagemAlerta = document.getElementById('div-mensagem-alerta')
+const mensagemErro = document.getElementById('div-mensagem-erro')
 
 
 // ADD PRODUTO AO PEDIDO NA SESSAO
@@ -27,9 +32,45 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra) => {
         },
         success: (pedido_sessao) => {
             console.log(pedido_sessao.data)
-            inputQtDigitada.value = ""
-            inputPrCompraDigitada.value = ""
-            location.reload();
+            const resposta = pedido_sessao.data
+
+            if( resposta === "SUCESSO"){
+                inputQtDigitada.value = ""
+                inputPrCompraDigitada.value = ""
+                mensagemSucesso.innerHTML += `
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                            <use xlink:href="#check-circle-fill"/>
+                        </svg>
+                        <div>
+                            &nbsp; Produto <strong>adicionado</strong> ao pedido com sucesso!
+                        </div>
+                    </div>
+                `
+
+            } else {
+                inputQtDigitada.value = ""
+                inputPrCompraDigitada.value = ""
+                mensagemAlerta.innerHTML += `
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                            <use xlink:href="#exclamation-triangle-fill"/>
+                        </svg>
+                        <div>
+                            &nbsp; Por favor selecione um produto!
+                        </div>
+                    </div>
+                `
+            }
+            $(document).ready(function () {
+                // show the alert
+                setTimeout(function () {
+                    $(".alert").alert('close');
+                }, 5000);
+            });
+
+            // location.reload();
+
         }
     });
 }
@@ -55,6 +96,7 @@ botaoPedidoSessao.addEventListener('click', e => {
     } else {
         p_compra = p_comp
     }
+
 
     // PEGANDO MARGEM
     // const mar = inputMargemDigitada.value
@@ -102,6 +144,13 @@ const verPedidoSessao = () => {
 
             const data = pedido_sessao.data
             console.log(data)
+
+            if (data === "FALSE"){
+                botaoExportarPedido.style.display = 'none'
+            } else {
+                botaoExportarPedido.style.display = 'block'
+            }
+
             if (Array.isArray(data)){
                 resultPedidoSessao.innerHTML = ""
                 data.forEach(prod=> {
@@ -141,7 +190,28 @@ const rmPedidoSessao = (produto) => {
         },
         success: (pedido_sessao) => {
             console.log(pedido_sessao.data)
-            location.reload();
+            mensagemSucesso.innerHTML += `
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                            <use xlink:href="#check-circle-fill"/>
+                        </svg>
+                        <div>
+                            &nbsp; Produto <strong>removido</strong> do pedido com sucesso!
+                        </div>
+                    </div>
+                `
+            resultPedidoSessao.innerHTML = ""
+            // location.reload();
+            $(".modal-pedido").modal('hide');
+
+            $(document).ready(function () {
+                // show the alert
+                setTimeout(function () {
+                    $(".alert").alert('close');
+                }, 5000);
+            });
+
+
         }
     });
 

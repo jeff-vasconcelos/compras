@@ -1,11 +1,13 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from core.views.usuarios_views import *
+from core.views.usuario_views import *
 from core.views.academy_views import *
 from core.views.home_views import *
 from core.views.analise_views import *
+from core.views.alertas_views import *
 
+from core.multifilial.processa_produtos import processa_produtos_filiais
 
 urlpatterns = [
     path('search/prod', buscar_produto, name='results-produto'),
@@ -13,6 +15,7 @@ urlpatterns = [
     path('filter-fornec/', filtrar_produto_fornecedor, name='filter-fornecedor'),
     path('filter-prod/', filtrar_produto_produto, name='filter-produto'),
     path('filter-curva/', filtrar_produto_curva, name='filter-curva'),
+    path('filter-marca/', filtrar_produto_marca, name='filter-marca'),
     path('select-prod/', selecionar_produto, name='filter-produto'),
     # TODO remover path de url
     path('graficos-prod-selec/', export_csv, name='graficos-prod-selec'),
@@ -29,6 +32,8 @@ urlpatterns = [
 
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),
+    path('alertas/', alerta_painel, name='alertas_painel'),
+
 
     path('academy/', academy, name='academy'),
     path('academy/<slug>', video_academy, name='academy-video'),
@@ -38,6 +43,9 @@ urlpatterns = [
     path('editar/usuario/<int:pk>', editar_usuario, name='editar-usuario'),
     path('listar/usuarios', lista_usuarios, name='listar-usuarios'),
     path('inativar/usuarios/<int:pk>', inativar_usuario, name='inativar-usuarios'),
+
+    #TODO rota de testes
+    path('testando', processa_produtos_filiais, name='testando'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

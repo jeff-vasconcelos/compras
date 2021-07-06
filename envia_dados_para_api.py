@@ -118,9 +118,6 @@ def pedidos():
     pedidos_df['empresa'] = 1
     pedidos_df['cod_fornecedor'] = 16
 
-    #pedidos_df = pedidos_df.query('cod_produto == 183')
-    pedidos_df = pedidos_df.query('cod_produto == 182')
-
     p_compras = pedidos_df.assign(**pedidos_df.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
 
     dados = p_compras
@@ -157,7 +154,6 @@ def entradas():
     entradas_df = df_entradas_prod
     entradas_df['empresa'] = 1
     entradas_df['cod_fornecedor'] = 16
-    entradas_df = entradas_df.query('cod_produto == 182')
 
     entradas = entradas_df.assign(**entradas_df.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
         "records")

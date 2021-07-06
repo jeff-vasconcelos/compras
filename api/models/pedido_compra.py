@@ -1,20 +1,21 @@
 from django.db import models
-from api.models.fornecedor_models import Fornecedor
-from core.models.empresas_models import Empresa
-from api.models.produto_models import Produto
+from api.models.fornecedor import Fornecedor
+from core.models.empresas_models import Empresa, Filial
+from api.models.produto import Produto
 
 
-class PedidoCompras(models.Model):
+class Pedido(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
     desc_produto = models.CharField(max_length=255, null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)
+    filial = models.ForeignKey(Filial, on_delete=models.CASCADE, null=True, blank=True, related_name='filial_pedidos')
     cod_fornecedor = models.IntegerField(null=True, blank=True)
 
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_pcompras',
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_pedidos',
                                 blank=True, null=True)
-    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_pcompras',
+    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_pedidos',
                                    blank=True, null=True)
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_pcompras',
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_pedidos',
                                 blank=True, null=True)
     saldo = models.IntegerField(null=True, blank=True)
     num_pedido = models.IntegerField(null=True, blank=True)
@@ -29,8 +30,10 @@ class PedidoCompras(models.Model):
         if not self.fornecedor:
             fornecedor = Fornecedor.objects.get(cod_fornecedor=self.cod_fornecedor, empresa=self.empresa)
             produto = Produto.objects.get(cod_produto=self.cod_produto, empresa=self.empresa)
+            filial = Filial.objects.get(cod_filial=self.cod_filial, empresa=self.empresa)
             self.fornecedor = fornecedor
             self.produto = produto
+            self.filial = filial
 
         super().save(*args, **kwargs)
 

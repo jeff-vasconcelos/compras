@@ -10,7 +10,6 @@ class Parametro(models.Model):
     curva_c = models.FloatField(null=True, blank=True)
     curva_d = models.FloatField(null=True, blank=True)
     curva_e = models.FloatField(null=True, blank=True)
-    curva_x = models.FloatField(null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='parametros',
                                 blank=True, null=True)
 
