@@ -1,6 +1,7 @@
 from core.alertas.fornecedor_alertas import get_fornecedores
 from core.alertas.produto_alertas import get_produtos
 from core.alertas.processa_produtos_alertas import *
+from core.alertas.vendas_alertas import *
 
 
 def alertas():
@@ -24,5 +25,5 @@ def alertas():
     print(lista_alertas)
 
 def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
-    alertas()
+    vendas(10, 1, 30)
     return render(request, template_name)
