@@ -11,14 +11,10 @@ def vendas(cod_produto, id_empresa, periodo):
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano(id_empresa)
 
-    # CONSULTANDO VENDAS NO BANCO DE DADOS
-
-
     filiais = get_filiais(id_empresa)
 
     list = []
     for filial in filiais:
-        print('FILIAL', filial.cod_filial)
         vendas_df = pd.DataFrame(Venda.objects.filter(
             cod_produto__exact=cod_produto,
             cod_filial__exact=filial.cod_filial,
@@ -27,17 +23,15 @@ def vendas(cod_produto, id_empresa, periodo):
         ).values())
         if not vendas_df.empty:
             vendas_ = vendas_df
-            # vendas_ = vendas_.query('cod_filial == @filial.cod_filial')
             lista = vendas_.values.tolist()
             list.append(lista)
-    # print(list)
+
     list_vendas = []
     lista_fim_vendas = []
     lista_prod = []
     list_inf_prod = []
 
     for i in list:
-        # print(i)
         if i:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "cod_filial", "filial_id",
                                           "cod_fornecedor", "produto_id", "fornecedor_id", "empresa_id", "qt_vendas",
@@ -70,7 +64,7 @@ def vendas(cod_produto, id_empresa, periodo):
             desc_prod = vendas_datas['desc_produto'].unique()
             qt_un_caixa = vendas_datas['qt_unit_caixa'].unique()
 
-            if vendas_df.size != 1:
+            if vendas_df.size == 1:
                 values = {'cod_produto': cod_prod[0], 'desc_produto': desc_prod[0], 'cod_filial': cod_filial[0],
                           'cod_fornecedor': cod_fornec[0], 'qt_unit_caixa': qt_un_caixa[0], 'qt_vendas': 0,
                           'custo_fin': 0,
@@ -173,7 +167,7 @@ def vendas(cod_produto, id_empresa, periodo):
             informacao_produto = informacao_produto.drop_duplicates(subset=['cod_filial'], keep='first')
             vendas = vendas.drop_duplicates(subset=['data', 'cod_produto', 'cod_filial'], keep='first')
 
-    # print(vendas)
+    print('VENDAS')
     print(informacao_produto)
 
     return vendas, informacao_produto
