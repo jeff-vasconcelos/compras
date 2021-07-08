@@ -19,32 +19,33 @@
                         <th>Cód. Filial</th>
                         <th>Cód. Produto</th>
                         <th>Desc. Produto</th>
-                        <th>Saldo em Estoque</th>
-                        <th>Previsão de Estoque</th>
-                        <th>Previsão de Estoque</th>
+                        <th>Saldo</th>
+                        <th>Condição de Estoque</th>
                         <th>Curva</th>
-                        <th>Cód. Fornecedor</th>
                         <th>Fornecedor</th>
+                        <th>Cód. Fornecedor</th>
                     </tr>
                     </thead>
 
                     <tbody>
+                    {% for produto in produtos %}
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{ produto.filial }}</td>
+                            <td>{{ produto.cod_produto }}</td>
+                            <td>{{ produto.desc_produto }}</td>
+                            <td>{{ produto.saldo }}</td>
+                            <td>{{ produto.condicao_estoque }}</td>
+                            <td>{{ produto.curva }}</td>
+                            <td>{{ produto.fornecedor }}</td>
+                            <td>{{ produto.cod_fornecedor }}</td>
                         </tr>
+                    {% endfor %}
                     </tbody>
 
                 </table>
             </div>
         </div>
     </div>
+
 
 {% endblock %}

@@ -1,15 +1,10 @@
 from core.alertas.processa_produtos_alertas import *
-from core.alertas.vendas_alertas import *
-from core.alertas.curva_abc_alertas import *
-from core.alertas.estoque_atual_alertas import *
-from core.alertas.historico_estoque_alertas import *
-from core.alertas.pedidos_alertas import *
-
 from core.alertas.verificador import *
+import numpy as np
 
 
 def alertas():
-    global alertas_produtos, infor_produtos_filiais
+    global alertas_produtos, infor_produtos_filiais, condicao
     id_empresa = 1
     lista_alertas = []
     parametros = Parametro.objects.get(empresa_id=id_empresa)
@@ -37,23 +32,28 @@ def alertas():
                     parametros.periodo
                 )
 
-                alertas_produtos = infor_produtos_filiais.to_dict('records')
-                lista_alertas.append(alertas_produtos)
-            else:
-                print('não tem vendas')
-    print(lista_alertas)
+                infor_produtos_filiais['cod_produto'] = produto.cod_produto
+                infor_produtos_filiais['desc_produto'] = produto.desc_produto
+                infor_produtos_filiais['fornecedor'] = fornecedor.desc_fornecedor
+                infor_produtos_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
+
+                condicao = ['FALSE' if x == 'NORMAL' else 'TRUE' for x in infor_produtos_filiais['condicao_estoque']]
+
+                if "FALSE" in condicao:
+                    print("vai para o alerta")
+                    alertas_produtos = infor_produtos_filiais.to_dict('records')
+                    lista_alertas.append(alertas_produtos)
+
+    return lista_alertas
+
 
 def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
-    # vendas(10, 1, 30)
-    alertas()
-    # abc([11], 1, 30)
-    # estoque_atual(13, 1)
-    # historico_estoque(13, 1, 30)
-    # pedidos_compra(10, 1)
-    # ultima_entrada(13, 1, 30)
+    produtos = alertas()
+    lista_alerta = []
+    for i in produtos:
+        produto = i
+        for a in produto:
+            lista_alerta.append(a)
+    print(lista_alerta)
 
-    # vendas_historico(13, 1, 30)
-    # dados_produto(10, 11, 1, 15, 10, 30)
-    # processa_produtos_filiais(10, 11, 1, 15, 30, 30)
-
-    return render(request, template_name)
+    return render(request, template_name, {'produtos': lista_alerta})
