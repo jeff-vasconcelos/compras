@@ -1,7 +1,7 @@
 from api.models.venda import Venda
 import pandas as pd
 import datetime
-from core.alertas.filiais_alertas import get_filiais
+from core.alertas.verificador import get_filiais
 
 
 def abc(cod_fornecedor, id_empresa, periodo):
@@ -89,7 +89,5 @@ def abc(cod_fornecedor, id_empresa, periodo):
                 lista_fim.append(b)
 
     curva_abc = pd.DataFrame(lista_fim)
-    print('CURVA ABC')
-    print(curva_abc)
 
     return curva_abc

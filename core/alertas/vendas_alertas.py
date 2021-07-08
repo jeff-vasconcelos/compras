@@ -1,5 +1,5 @@
 from api.models.venda import Venda
-from core.alertas.filiais_alertas import get_filiais
+from core.alertas.verificador import get_filiais
 from core.trata_dados.datas import dia_semana_mes_ano
 import pandas as pd
 import datetime
@@ -167,7 +167,5 @@ def vendas(cod_produto, id_empresa, periodo):
             informacao_produto = informacao_produto.drop_duplicates(subset=['cod_filial'], keep='first')
             vendas = vendas.drop_duplicates(subset=['data', 'cod_produto', 'cod_filial'], keep='first')
 
-    print('VENDAS')
-    print(informacao_produto)
 
     return vendas, informacao_produto

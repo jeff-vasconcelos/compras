@@ -1,13 +1,12 @@
 import dateutil.utils
-
-from core.alertas.filiais_alertas import get_filiais
-from core.models.empresas_models import Filial
+from core.alertas.verificador import get_filiais
 from api.models.estoque_atual import EstoqueAtual
 import pandas as pd
 import datetime
 
 
 def estoque_atual(cod_produto, id_empresa):
+    global disponivel
     hoje = datetime.date.today()
 
     filiais = get_filiais(id_empresa)
@@ -23,8 +22,7 @@ def estoque_atual(cod_produto, id_empresa):
         ).order_by('-id').values())
 
         if not estoque_a.empty:
-            estoque_a = estoque_a.drop_duplicates(subset=['cod_filial'], keep='first')
-            estoque_ = estoque_a
+            estoque_ = estoque_a.drop_duplicates(subset=['cod_filial'], keep='first')
             lista = estoque_.values.tolist()
             list.append(lista)
 
@@ -47,7 +45,5 @@ def estoque_atual(cod_produto, id_empresa):
                 lista_fim.append(b)
 
         disponivel = pd.DataFrame(lista_fim)
-        print('ESTOQUE ATUAL')
-        print(disponivel)
 
     return disponivel

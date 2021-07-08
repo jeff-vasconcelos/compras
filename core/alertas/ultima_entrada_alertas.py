@@ -1,6 +1,5 @@
 from api.models.ultima_entrada import UltimaEntrada
-from core.alertas.filiais_alertas import get_filiais
-from core.models.empresas_models import Filial
+from core.alertas.verificador import get_filiais
 import pandas as pd
 import datetime
 
@@ -46,8 +45,6 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
                     lista_fim.append(b)
 
             entrada = pd.DataFrame(lista_fim)
-            print("ENTRADAS")
-            print(entrada)
 
         return entrada
 

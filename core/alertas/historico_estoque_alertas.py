@@ -1,11 +1,11 @@
 from api.models.historico_estoque import HistoricoEstoque
-from core.alertas.filiais_alertas import get_filiais
-from core.models.empresas_models import Filial
+from core.alertas.verificador import get_filiais
 import pandas as pd
 import datetime
 
 
 def historico_estoque(cod_produto, id_empresa, periodo):
+    global historico
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
 
@@ -43,7 +43,6 @@ def historico_estoque(cod_produto, id_empresa, periodo):
                 lista_fim.append(b)
 
         historico = pd.DataFrame(lista_fim)
-        print('HISTORICO DE ESTOQUE')
-        print(historico)
+
 
     return historico

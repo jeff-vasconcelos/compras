@@ -1,14 +1,13 @@
 from django.shortcuts import render
 
 from api.models.produto import Produto
-from core.models.empresas_models import Filial
 from core.alertas.curva_abc_alertas import abc
 from core.alertas.estoque_atual_alertas import estoque_atual
 from core.alertas.historico_estoque_alertas import historico_estoque
 from core.alertas.pedidos_alertas import pedidos_compra
 from core.alertas.ultima_entrada_alertas import ultima_entrada
 from core.alertas.vendas_alertas import vendas
-from core.alertas.filiais_alertas import get_filiais
+from core.alertas.verificador import get_filiais
 from core.models.parametros_models import Parametro
 from scipy.stats import norm
 import pandas as pd
@@ -18,92 +17,79 @@ import locale
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao):
-    produto_id = id_produto
-    leadtime = leadtime
-    tempo_reposicao = t_reposicao
+def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
+    informacaoes_produto = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo)
 
-    qs = Produto.objects.get(id=produto_id, empresa__id=id_empresa)
-
-    produto_codigo = qs.cod_produto
-    fornecedor_codigo = qs.cod_fornecedor
-
-    informacaoes_produto = dados_produto(produto_codigo, fornecedor_codigo, id_empresa, leadtime, tempo_reposicao)
-
-    # print(informacaoes_produto)
-    # print(produto_codigo)
-
-    filiais = get_filiais(id_empresa)
+    # filiais = get_filiais(id_empresa)
 
     contador = 0
     lista_resumo = []
 
-    if informacaoes_produto is not None:
+    filiais = []
+    for i, v in informacaoes_produto.cod_filial.iteritems():
+        filiais.append(v)
 
-        for filial in filiais:
-            produto_dados = informacaoes_produto.query('cod_filial == @filial.cod_filial')
 
-            if produto_dados is None:
-                vazio = {'data': 0}
-                return vazio
+    for filial in filiais:
+        produto_dados = informacaoes_produto.query('cod_filial == @filial')
 
-            else:
-                dt_entrada = produto_dados['dt_ult_ent'][contador]
-                if dt_entrada == '-':
-                    dt_u_entrada = dt_entrada
-                else:
-                    dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
+        dt_entrada = produto_dados['dt_ult_ent'][contador]
+        if dt_entrada == '-':
+            dt_u_entrada = dt_entrada
+        else:
+            dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
 
-                sugestao = float(produto_dados['sugestao'])
-                qt_un_caixa = float(produto_dados['qt_unit_caixa'])
+        sugestao = float(produto_dados['sugestao'])
+        qt_un_caixa = float(produto_dados['qt_unit_caixa'])
 
-                sug_cx = sugestao / qt_un_caixa
-                sug_cx = math.ceil(sug_cx)
-                sug_unit = sug_cx * qt_un_caixa
+        sug_cx = sugestao / qt_un_caixa
+        sug_cx = math.ceil(sug_cx)
+        sug_unit = sug_cx * qt_un_caixa
 
-                data = []
-                itens_analise = {
-                    'filial': int(produto_dados['cod_filial']),
-                    'estoque': int(produto_dados['estoque_dispon']),
-                    'avaria': int(produto_dados['avarias']),
-                    'saldo': int(produto_dados['saldo']),
-                    'dt_ult_entrada': dt_u_entrada,
-                    'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
-                    'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
-                    'dde': float(produto_dados['dde']),
-                    'est_seguranca': float(produto_dados['estoque_segur']),
-                    'p_reposicao': float(produto_dados['ponto_repo']),
-                    'sugestao': float(produto_dados['sugestao']),
-                    'sugestao_caixa': sug_cx,
-                    'sugestao_unidade': sug_unit,
-                    'preco_tabela': float(produto_dados['preco_venda_tabela'][contador]),
-                    'margem': float(produto_dados['margem'][contador]),
-                    'curva': str(produto_dados['curva'][contador]),
-                    'media_ajustada': str(produto_dados['media_ajustada'][contador]),
-                    'ruptura': str(produto_dados['ruptura'][contador]),
-                    'ruptura_porc': float(produto_dados['ruptura_porc']),
-                    'ruptura_cor': str(produto_dados['cor_ruptura'][contador]),
-                    'condicao_estoque': str(produto_dados['condicao_estoque'][contador]),
-                    'porc_media': float(produto_dados['porcent_media'][contador]),
-                    'media_simples': float(produto_dados['media'][contador]),
-                }
+        data = []
+        itens_analise = {
+            'filial': int(produto_dados['cod_filial']),
+            'estoque': int(produto_dados['estoque_dispon']),
+            'avaria': int(produto_dados['avarias']),
+            'saldo': int(produto_dados['saldo']),
+            'dt_ult_entrada': dt_u_entrada,
+            'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
+            'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
+            'dde': float(produto_dados['dde']),
+            'est_seguranca': float(produto_dados['estoque_segur']),
+            'p_reposicao': float(produto_dados['ponto_repo']),
+            'sugestao': float(produto_dados['sugestao']),
+            'sugestao_caixa': sug_cx,
+            'sugestao_unidade': sug_unit,
+            'preco_tabela': float(produto_dados['preco_venda_tabela'][contador]),
+            'margem': float(produto_dados['margem'][contador]),
+            'curva': str(produto_dados['curva'][contador]),
+            'media_ajustada': str(produto_dados['media_ajustada'][contador]),
+            'ruptura': str(produto_dados['ruptura'][contador]),
+            'ruptura_porc': float(produto_dados['ruptura_porc']),
+            'ruptura_cor': str(produto_dados['cor_ruptura'][contador]),
+            'condicao_estoque': str(produto_dados['condicao_estoque'][contador]),
+            'porc_media': float(produto_dados['porcent_media'][contador]),
+            'media_simples': float(produto_dados['media'][contador]),
+        }
 
-                data.append(itens_analise)
-                contador = contador + 1
+        data.append(itens_analise)
+        contador = contador + 1
 
-                lista_resumo.append(data)
+        lista_resumo.append(data)
 
-                lista_fim = []
-                for a in lista_resumo:
-                    for b in a:
-                        lista_fim.append(b)
-        dados_produtos_filiais = pd.DataFrame(lista_fim)
-        return dados_produtos_filiais
-    else:
-        return None
+        lista_fim = []
+        for a in lista_resumo:
+            for b in a:
+                lista_fim.append(b)
+
+    dados_produtos_filiais = pd.DataFrame(lista_fim)
+
+    return dados_produtos_filiais
 
 
 def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
+    global resumo_produto
     parametros = Parametro.objects.get(empresa_id=id_empresa)
 
     pedidos = pedidos_compra(cod_produto, id_empresa)
@@ -117,27 +103,27 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     lista_fornecedor.append(cod_fornecedor)
     curva = abc(lista_fornecedor, id_empresa, periodo)
 
-    filiais = get_filiais(id_empresa)
+    filiais = []
+    for i, v in info_produto.cod_filial.iteritems():
+        filiais.append(v)
 
     contador = 0
     for filial in filiais:
-
+        print('filial', filial)
         if pedidos is not None:
-            pedidos_ = pedidos.query('cod_filial == @filial.cod_filial')
+            pedidos_ = pedidos.query('cod_filial == @filial')
         else:
             pedidos_ = pd.DataFrame()
 
         if u_entrada is not None:
-           entradas_ = u_entrada.query('cod_filial == @filial.cod_filial')
+            entradas_ = u_entrada.query('cod_filial == @filial')
         else:
             entradas_ = pd.DataFrame()
 
+        vendas_ = vendas_p.query('cod_filial == @filial')
 
-        vendas_ = vendas_p.query('cod_filial == @filial.cod_filial')
-
-
-        estoque_ = e_atual.query('cod_filial == @filial.cod_filial')
-        curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial.cod_filial') \
+        estoque_ = e_atual.query('cod_filial == @filial')
+        curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial') \
             .reset_index(drop=True)
 
         if entradas_.empty:
@@ -159,7 +145,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             prod_resumo = pedidos_.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()
         else:
             pedido_vazio = {
-                'cod_filial': filial.cod_filial,
+                'cod_filial': filial,
                 'saldo': 0
             }
 
@@ -184,7 +170,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         curva_d = norm.ppf(parametros.curva_d / 100).round(3)
         curva_e = norm.ppf(parametros.curva_e / 100).round(3)
 
-
         if curva_.curva.all() == "A":
             est_seg = curva_a * math.sqrt((leadtime + tempo_reposicao)) * desvio
 
@@ -203,16 +188,15 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         prod_resumo['estoque_segur'] = est_seg.round(0)
 
         # CALCULANDO PONTO DE REPOSIÇÃO
-
         estoque_segur = est_seg.round(0)
         ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
         prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
-        #
-        # CALCULANDO SUGESTAO DE COMPRAS
 
+        # CALCULANDO SUGESTAO DE COMPRAS
         sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (
                 prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
         prod_resumo['media'] = media.round(2)
@@ -260,22 +244,14 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['cor_ruptura'] = cor_ruptura
 
-
         porcent_ruptura = (d_sem_estoque / total_linha) * 100
 
-        print('d_sem_estoque')
-        print(d_sem_estoque)
-        print('total_linha')
-        print(total_linha)
-        print('porcent_ruptura')
-        print(porcent_ruptura)
-
-
         estoque_disponivel = prod_resumo.estoque_dispon[0]
-        # dde = estoque_disponivel / media_ajustada
-        dde = estoque_disponivel / 1
 
-        # TODO Precisa validar como dividir a media ajustada, quando o ela for 0
+        if media_ajustada <= 0:
+            dde = estoque_disponivel / media
+        else:
+            dde = estoque_disponivel / media_ajustada
 
         ruptura = locale.currency(ruptura, grouping=True)
         prod_resumo['ruptura'] = ruptura
@@ -325,7 +301,5 @@ def vendas_historico(cod_produto, id_empresa, periodo):
     df_ven_hist.drop(
         columns=['id', 'produto_id', 'fornecedor_id', 'empresa_id', 'created_at', 'cod_fornecedor_y', 'filial_id'],
         inplace=True)
-
-    print(df_ven_hist, informacoes_produto)
 
     return df_ven_hist, informacoes_produto

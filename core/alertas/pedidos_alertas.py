@@ -1,7 +1,6 @@
 from django.db.models import Count
 from api.models.pedido_compra import Pedido
-from core.alertas.filiais_alertas import get_filiais
-from core.models.empresas_models import Filial
+from core.alertas.verificador import get_filiais
 import pandas as pd
 import datetime
 
@@ -52,8 +51,7 @@ def pedidos_compra(cod_produto, id_empresa):
                     lista_fim.append(b)
 
         pedidos = pd.DataFrame(lista_fim)
-        print('PEDIDOS')
-        print(pedidos)
+
         return pedidos
     else:
         return None
