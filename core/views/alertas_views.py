@@ -1,6 +1,10 @@
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
 import numpy as np
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 def alertas():
@@ -54,6 +58,36 @@ def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
         produto = i
         for a in produto:
             lista_alerta.append(a)
-    print(lista_alerta)
+
+    email_alerta()
 
     return render(request, template_name, {'produtos': lista_alerta})
+
+
+def email_alerta():
+
+    produtos = alertas()
+    lista_alerta = []
+    for i in produtos:
+        produto = i
+        for a in produto:
+            lista_alerta.append(a)
+
+
+    to = "wellesoncolares@gmail.com"
+
+    context = {
+        'produtos': lista_alerta
+    }
+
+    html_content = render_to_string("email_template.html", context)
+    text_content = strip_tags(html_content)
+
+    email = EmailMultiAlternatives(
+        "Alerta - Ruptura de Estoque",
+        text_content,
+        settings.EMAIL_HOST_USER,
+        [to]
+    )
+    email.attach_alternative(html_content, "text/html")
+    email.send()
