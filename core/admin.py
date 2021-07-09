@@ -9,4 +9,5 @@ admin.site.register(Filial)
 admin.site.register(Usuario)
 admin.site.register(Academy)
 admin.site.register(Parametro)
+admin.site.register(Alerta)
 

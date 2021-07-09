@@ -30,11 +30,11 @@
                     <tbody>
                     {% for produto in produtos %}
                         <tr>
-                            <td>{{ produto.filial }}</td>
+                            <td>{{ produto.cod_filial }}</td>
                             <td>{{ produto.cod_produto }}</td>
                             <td>{{ produto.desc_produto }}</td>
                             <td>{{ produto.saldo }}</td>
-                            <td>{{ produto.condicao_estoque }}</td>
+                            <td>{{ produto.estado_estoque }}</td>
                             <td>{{ produto.curva }}</td>
                             <td>{{ produto.fornecedor }}</td>
                             <td>{{ produto.cod_fornecedor }}</td>

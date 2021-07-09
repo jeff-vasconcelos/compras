@@ -5,11 +5,12 @@ from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from core.models.empresas_models import *
 
 
 def alertas():
     global alertas_produtos, infor_produtos_filiais, condicao
-    id_empresa = 1
+    id_empresa = 1 #TODO Automatizar empresa
     lista_alertas = []
     parametros = Parametro.objects.get(empresa_id=id_empresa)
 
@@ -43,7 +44,7 @@ def alertas():
 
                 condicao = ['FALSE' if x == 'NORMAL' else 'TRUE' for x in infor_produtos_filiais['condicao_estoque']]
 
-                if "FALSE" in condicao:
+                if "TRUE" in condicao:
                     print("vai para o alerta")
                     alertas_produtos = infor_produtos_filiais.to_dict('records')
                     lista_alertas.append(alertas_produtos)
@@ -52,16 +53,40 @@ def alertas():
 
 
 def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
+    id_empresa = request.user.usuario.empresa_id
+    produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
+
+    return render(request, template_name, {'produtos': produtos})
+
+
+def executar_alerta():
     produtos = alertas()
-    lista_alerta = []
+    id_empresa = 1  # TODO Automatizar empresa
+
+    itens = Alerta.objects.all().filter(
+        empresa__id__exact=id_empresa
+    )
+    if itens:
+        itens.delete()
+
     for i in produtos:
         produto = i
         for a in produto:
-            lista_alerta.append(a)
-
-    email_alerta()
-
-    return render(request, template_name, {'produtos': lista_alerta})
+            # lista_alerta.append(a)
+            print(a['filial'])
+            empresa = Empresa.objects.get(id=id_empresa)
+            b = Alerta.objects.create(
+                cod_filial=a['filial'],
+                cod_produto=a['cod_produto'],
+                desc_produto=a['desc_produto'],
+                saldo=a['filial'],
+                estado_estoque=a['condicao_estoque'],
+                curva=a['curva'],
+                fornecedor=a['fornecedor'],
+                cod_fornecedor=a['cod_fornecedor'],
+                empresa=empresa
+                )
+            b.save()
 
 
 def email_alerta():
@@ -80,7 +105,7 @@ def email_alerta():
         'produtos': lista_alerta
     }
 
-    html_content = render_to_string("email_template.html", context)
+    html_content = render_to_string("email_template_alerta.html", context)
     text_content = strip_tags(html_content)
 
     email = EmailMultiAlternatives(

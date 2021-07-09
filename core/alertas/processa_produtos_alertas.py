@@ -84,7 +84,7 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
                 lista_fim.append(b)
 
     dados_produtos_filiais = pd.DataFrame(lista_fim)
-
+    print(dados_produtos_filiais)
     return dados_produtos_filiais
 
 
@@ -280,7 +280,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             for b in a:
                 lista_fim.append(b)
         resumo_produto = pd.DataFrame(lista_fim)
-
+    print(resumo_produto)
     return resumo_produto
 
 
