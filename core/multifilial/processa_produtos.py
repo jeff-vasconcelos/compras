@@ -101,9 +101,9 @@ def processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao, fil
 
 
 
-def vendas_historico():
-    df_vendas, informacoes_produto = vendas(180, 1, 120)
-    df_historico = historico_estoque(180, 1, 120)
+def vendas_historico(cod_prod, id_emp, periodo):
+    df_vendas, informacoes_produto = vendas(cod_prod, id_emp, periodo)
+    df_historico = historico_estoque(cod_prod, id_emp, periodo)
 
     if df_vendas is not None:
         df_vendas['data'] = pd.to_datetime(df_vendas['data'], format='%Y-%m-%d')
@@ -145,13 +145,14 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
     pedidos = pedidos_compra(cod_prod, id_emp)
     u_entrada = ultima_entrada(cod_prod, id_emp, parametros.periodo)
     e_atual = estoque_atual(cod_prod, id_emp)
-    vendas_p, info_produto = vendas_historico()
+    vendas_p, info_produto = vendas_historico(cod_prod, id_emp, parametros.periodo)
     lista_fornecedor = []
     lista_fornecedor.append(cod_fornec)
     curva = abc(lista_fornecedor, id_emp, parametros.periodo)
     filiais = get_filiais(id_empresa)
     lista_resumo = []
     contador = 0
+    media = 0
 
     if vendas_p is not None:
         for filial in filiais:
@@ -324,6 +325,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
 
             media_preco = info_produto.media_preco_praticado[0].round(2)
             variavel = media * media_preco
+            print(d_estoque)
+            print(total_linha)
             ruptura = variavel * d_sem_estoque
 
             if ruptura > 0:
@@ -336,8 +339,8 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
             porcent_ruptura = (d_sem_estoque / total_linha) * 100
 
             estoque_disponivel = prod_resumo.estoque_dispon[0]
-            # dde = estoque_disponivel / media_ajustada
-            dde = estoque_disponivel / 1
+            dde = estoque_disponivel / media_ajustada
+            # dde = estoque_disponivel / 1
 
             # TODO Precisa validar como dividir a media ajustada, quando o ela for 0
 
@@ -345,6 +348,11 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
             prod_resumo['ruptura'] = ruptura
             prod_resumo['dde'] = dde.round(2)
             prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
+
+            print(ruptura)
+            print(sugestao)
+            print(media_ajustada)
+            print(media)
 
 
 

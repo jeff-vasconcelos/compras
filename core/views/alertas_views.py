@@ -1,3 +1,4 @@
+from core.alertas.gerar_pdf import pdf_alerta_gerar
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
 import numpy as np
@@ -112,7 +113,9 @@ def email_alerta():
         "Alerta - Ruptura de Estoque",
         text_content,
         settings.EMAIL_HOST_USER,
-        [to]
+        [to],
+
     )
     email.attach_alternative(html_content, "text/html")
+    email.attach_file('design.png', context)
     email.send()

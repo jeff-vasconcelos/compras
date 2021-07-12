@@ -7,6 +7,8 @@ from core.views.home_views import *
 from core.views.analise_views import *
 from core.views.alertas_views import *
 
+from core.alertas.gerar_pdf import pdf_alerta_gerar
+
 from core.multifilial.processa_produtos import processa_produtos_filiais
 
 urlpatterns = [
@@ -45,7 +47,8 @@ urlpatterns = [
     path('inativar/usuarios/<int:pk>', inativar_usuario, name='inativar-usuarios'),
 
     #TODO rota de testes
-    path('testando', processa_produtos_filiais, name='testando'),
+    path('testando', pdf_alerta_gerar, name='testando'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
