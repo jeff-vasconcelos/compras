@@ -57,6 +57,8 @@ def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     id_empresa = request.user.usuario.empresa_id
     produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
 
+    email_alerta(request)
+
     return render(request, template_name, {'produtos': produtos})
 
 
@@ -90,16 +92,19 @@ def executar_alerta():
             b.save()
 
 
-def email_alerta():
+def email_alerta(request):
+    pdf = pdf_alerta_gerar(request)
 
-    produtos = alertas()
-    lista_alerta = []
-    for i in produtos:
-        produto = i
-        for a in produto:
-            lista_alerta.append(a)
+    # produtos = alertas()
+    # lista_alerta = []
+    # for i in produtos:
+    #     produto = i
+    #     for a in produto:
+    #         lista_alerta.append(a)
 
+    lista_alerta = [{'filial': 1, 'cod_produto': 10, 'desc_produto': 'produto top'}]
 
+    # print(pdf)
     to = "wellesoncolares@gmail.com"
 
     context = {
@@ -116,6 +121,8 @@ def email_alerta():
         [to],
 
     )
+
     email.attach_alternative(html_content, "text/html")
-    email.attach_file('design.png', context)
+    email.attach_file(pdf, 'application/pdf')
     email.send()
+

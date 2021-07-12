@@ -7,7 +7,7 @@ import datetime
 
 def estoque_atual(cod_produto, id_empresa):
     global disponivel
-    hoje = datetime.date.today()
+    # hoje = datetime.date.today()
 
     filiais = get_filiais(id_empresa)
 
@@ -17,9 +17,8 @@ def estoque_atual(cod_produto, id_empresa):
         estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
             cod_produto__exact=cod_produto,
             cod_filial__exact=filial.cod_filial,
-            data=hoje,
             empresa__id__exact=id_empresa
-        ).order_by('-id').values())
+        )[:1].values())
 
         if not estoque_a.empty:
             estoque_ = estoque_a.drop_duplicates(subset=['cod_filial'], keep='first')
