@@ -137,15 +137,21 @@ def email_alerta(request):
     email.send()
 
 
+def mm(valor):
+    return valor/0.352777
+
+
 def pdf_generate(request):
+    hoje = timezone.now().strftime('%d-%m-%Y')
     buffer = BytesIO()
 
-    logo = ImageReader('media/imagens_usuarios/c48ee8cc-e170-4c79-ab82-cfeb2055add3.jpg')
+    logo = ImageReader('templates/static/aplicacao/img/logo1.png')
     p = canvas.Canvas(buffer, pagesize=A4)
     p.setFont('Helvetica', 12)
-    p.drawImage(logo, 10, 10)
-    p.drawString(10, 10, "texto")
-    p.line(10, 20, 30, 20)
+    p.drawImage(logo, mm(83), mm(270), height=40, width=130)
+    p.drawString(mm(60), mm(250), f'ALERTA INSIGHT {hoje}', charSpace=2)
+    p.drawString(mm(10), mm(10), "texto")
+    p.line(mm(10), mm(10), mm(10), mm(10))
 
     p.showPage()
     p.save()
