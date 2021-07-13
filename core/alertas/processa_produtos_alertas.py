@@ -41,10 +41,21 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
 
         sugestao = float(produto_dados['sugestao'])
         qt_un_caixa = float(produto_dados['qt_unit_caixa'])
+        custo = float(produto_dados['custo'])
 
         sug_cx = sugestao / qt_un_caixa
         sug_cx = math.ceil(sug_cx)
         sug_unit = sug_cx * qt_un_caixa
+
+        #valor da sugestao
+        if sug_unit <= 0:
+            m_sugestao = sug_unit * -1
+            excesso = "TRUE"
+        else:
+            m_sugestao = sug_unit
+            excesso = "FALSE"
+
+        valor_sugestao = m_sugestao * custo
 
         data = []
         itens_analise = {
@@ -61,6 +72,8 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
             'sugestao': float(produto_dados['sugestao']),
             'sugestao_caixa': sug_cx,
             'sugestao_unidade': sug_unit,
+            'excesso_estoque': excesso,
+            'valor_sugestao': valor_sugestao,
             'preco_tabela': float(produto_dados['preco_venda_tabela'][contador]),
             'margem': float(produto_dados['margem'][contador]),
             'curva': str(produto_dados['curva'][contador]),
@@ -84,7 +97,7 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
                 lista_fim.append(b)
 
     dados_produtos_filiais = pd.DataFrame(lista_fim)
-    print(dados_produtos_filiais)
+
     return dados_produtos_filiais
 
 
@@ -155,6 +168,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         # INFORMAÇÕES DE PRODUTO
 
         estoque_a = estoque_['qt_disponivel'].to_frame().reset_index(drop=True)
+        prod_resumo['custo'] = estoque_['custo_ult_ent']
+
 
         prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
@@ -280,7 +295,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             for b in a:
                 lista_fim.append(b)
         resumo_produto = pd.DataFrame(lista_fim)
-    print(resumo_produto)
+
     return resumo_produto
 
 

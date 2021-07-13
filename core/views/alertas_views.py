@@ -1,22 +1,12 @@
 from django.utils import timezone
-
-from core.alertas.gerar_pdf import pdf_alerta_gerar
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
-import numpy as np
-from django.core.mail import send_mail, EmailMultiAlternatives
-from django.conf import settings
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from core.models.empresas_models import *
-
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
-
 from django.core.mail import EmailMessage
-
 
 
 def alertas():
@@ -54,10 +44,11 @@ def alertas():
                 infor_produtos_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
 
                 condicao = ['FALSE' if x == 'NORMAL' else 'TRUE' for x in infor_produtos_filiais['condicao_estoque']]
+                # excesso_estoque = ['FALSE' if x > 0  else 'TRUE' for x in infor_produtos_filiais['sugestao_unidade']]
 
-                if "TRUE" in condicao:
-                    print("vai para o alerta")
+                if "TRUE" in condicao or "TRUE" in infor_produtos_filiais['excesso_estoque']:
                     alertas_produtos = infor_produtos_filiais.to_dict('records')
+
                     lista_alertas.append(alertas_produtos)
 
     return lista_alertas
@@ -67,14 +58,13 @@ def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     id_empresa = request.user.usuario.empresa_id
     produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
 
+
     send_email_alerta(request)
 
     return render(request, template_name, {'produtos': produtos})
 
 
-def executar_alerta():
-    produtos = alertas()
-    id_empresa = 1  # TODO Automatizar empresa
+def executar_alerta(id_empresa, produtos):
 
     itens = Alerta.objects.all().filter(
         empresa__id__exact=id_empresa
@@ -85,14 +75,12 @@ def executar_alerta():
     for i in produtos:
         produto = i
         for a in produto:
-            # lista_alerta.append(a)
-            print(a['filial'])
             empresa = Empresa.objects.get(id=id_empresa)
             b = Alerta.objects.create(
                 cod_filial=a['filial'],
                 cod_produto=a['cod_produto'],
                 desc_produto=a['desc_produto'],
-                saldo=a['filial'],
+                saldo=a['saldo'],
                 estado_estoque=a['condicao_estoque'],
                 curva=a['curva'],
                 fornecedor=a['fornecedor'],
@@ -101,63 +89,16 @@ def executar_alerta():
                 )
             b.save()
 
-#TODO Remover
-def email_alerta(request):
-    pdf = pdf_alerta_gerar(request)
 
-    # produtos = alertas()
-    # lista_alerta = []
-    # for i in produtos:
-    #     produto = i
-    #     for a in produto:
-    #         lista_alerta.append(a)
-
-    lista_alerta = [{'filial': 1, 'cod_produto': 10, 'desc_produto': 'produto top'}]
-
-    # print(pdf)
-    to = "wellesoncolares@gmail.com"
-
-    context = {
-        'produtos': lista_alerta
-    }
-
-    html_content = render_to_string("email_template_alerta.html", context)
-    text_content = strip_tags(html_content)
-
-    email = EmailMultiAlternatives(
-        "Alerta - Ruptura de Estoque",
-        text_content,
-        settings.EMAIL_HOST_USER,
-        [to],
-
-    )
-
-    email.attach_alternative(html_content, "text/html")
-    email.attach_file(pdf, 'application/pdf')
-    email.send()
+def teste(request, template_name='testando_alerta.html'):
+    produtos = alertas()
+    executar_alerta(1, produtos)
+    send_email_alerta(request)
+    return render(request, template_name)
 
 
 def mm(valor):
-    return valor/0.352777
-
-
-def pdf_generate(request):
-    hoje = timezone.now().strftime('%d-%m-%Y')
-    buffer = BytesIO()
-
-    logo = ImageReader('templates/static/aplicacao/img/logo1.png')
-    p = canvas.Canvas(buffer, pagesize=A4)
-    p.setFont('Helvetica', 12)
-    p.drawImage(logo, mm(83), mm(270), height=40, width=130)
-    p.drawString(mm(60), mm(250), f'ALERTA INSIGHT {hoje}', charSpace=2)
-    p.drawString(mm(10), mm(10), "texto")
-    p.line(mm(10), mm(10), mm(10), mm(10))
-
-    p.showPage()
-    p.save()
-    pdf = buffer.getvalue()
-    buffer.close()
-    return pdf
+    return valor / 0.352777
 
 
 def send_email_alerta(request):
@@ -177,3 +118,45 @@ def send_email_alerta(request):
     msg.attach(f'alerta-insight-{hoje}', pdf, 'application/pdf')
     msg.content_subtype = 'html'
     msg.send()
+
+
+
+def pdf_generate(request):
+
+    itens = Alerta.objects.all().filter(
+        empresa__id__exact=1
+    )
+
+    hoje = timezone.now().strftime('%d/%m/%Y')
+    buffer = BytesIO()
+
+    logo = ImageReader('templates/static/aplicacao/img/logo1.png')
+    p = canvas.Canvas(buffer, pagesize=A4)
+    p.setFont('Helvetica', 12)
+    p.drawImage(logo, mm(83), mm(270), height=40, width=130)
+    p.drawString(mm(70), mm(250), f'ALERTA INSIGHT {hoje}', charSpace=2)
+
+    p.setFont('Times-Roman', 10)
+    p.drawString(mm(10), mm(240), "FILIAL")
+    p.drawString(mm(30), mm(240), "PRODUTO")
+    p.drawString(mm(130), mm(240), "PREVISÃO ESTOQUE")
+    p.drawString(mm(175), mm(240), "VALOR")
+
+    p.line(mm(10), mm(238), mm(200), mm(238))
+
+    contador_y = 235
+    for prod in itens:
+        contador_y = contador_y - 5
+        print(contador_y)
+        print(prod.cod_produto)
+        p.drawString(mm(13), mm(contador_y), f'{prod.cod_filial}')
+        p.drawString(mm(31), mm(contador_y), f'{prod.cod_produto} - {prod.desc_produto}')
+        p.drawString(mm(135), mm(contador_y), f'{prod.estado_estoque}')
+        p.drawString(mm(176), mm(contador_y), f'{prod.cod_produto}')
+
+
+    p.showPage()
+    p.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    return pdf
