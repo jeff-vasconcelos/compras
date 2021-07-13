@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from core.alertas.gerar_pdf import pdf_alerta_gerar
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
@@ -7,6 +9,14 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from core.models.empresas_models import *
+
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader
+
+from django.core.mail import EmailMessage
+
 
 
 def alertas():
@@ -57,7 +67,7 @@ def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     id_empresa = request.user.usuario.empresa_id
     produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
 
-    email_alerta(request)
+    send_email_alerta(request)
 
     return render(request, template_name, {'produtos': produtos})
 
@@ -91,7 +101,7 @@ def executar_alerta():
                 )
             b.save()
 
-
+#TODO Remover
 def email_alerta(request):
     pdf = pdf_alerta_gerar(request)
 
@@ -126,3 +136,38 @@ def email_alerta(request):
     email.attach_file(pdf, 'application/pdf')
     email.send()
 
+
+def pdf_generate(request):
+    buffer = BytesIO()
+
+    logo = ImageReader('media/imagens_usuarios/c48ee8cc-e170-4c79-ab82-cfeb2055add3.jpg')
+    p = canvas.Canvas(buffer, pagesize=A4)
+    p.setFont('Helvetica', 12)
+    p.drawImage(logo, 10, 10)
+    p.drawString(10, 10, "texto")
+    p.line(10, 20, 30, 20)
+
+    p.showPage()
+    p.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    return pdf
+
+
+def send_email_alerta(request):
+    pdf = pdf_generate(request)
+    hoje = timezone.now().strftime('%d-%m-%Y')
+
+    lista_email = ['wellesonlukas@gmail.com']
+    lista_email_cc = ['wellesoncolares@gmail.com']
+
+    msg = EmailMessage(
+        'Alerta de Ruptura',
+        '*Este é um e-mail automático, por favor, não responda.',
+        to=lista_email,
+        cc=lista_email_cc
+    )
+
+    msg.attach(f'alerta-insight-{hoje}', pdf, 'application/pdf')
+    msg.content_subtype = 'html'
+    msg.send()
