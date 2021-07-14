@@ -270,7 +270,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
             prod_resumo['estoque_segur'] = est_seg.round(0)
 
 
-
             # CALCULANDO PONTO DE REPOSIÇÃO
 
             estoque_segur = est_seg.round(0)
@@ -278,7 +277,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
             prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
 
-            #
             # CALCULANDO SUGESTAO DE COMPRAS
 
             sugestao = ((media_ajustada * (leadtime + temp_repo)) + estoque_segur) - (

@@ -7,7 +7,9 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
+import locale
 
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def alertas():
     global alertas_produtos, infor_produtos_filiais, condicao
@@ -23,7 +25,7 @@ def alertas():
         produtos = get_produtos(id_empresa, fornecedor.id)
 
         for produto in produtos:
-
+            print(produto.desc_produto)
             verif_produto = verifica_produto(produto.cod_produto, id_empresa, parametros.periodo)
 
             if verif_produto == True:
@@ -81,14 +83,18 @@ def executar_alerta(id_empresa, produtos):
                 status = "EXCESSO"
             else:
                 status = a['condicao_estoque']
-
+            valor = round(a['valor_sugestao'], 0)
+            valor_sug = locale.currency(valor, grouping=True)
 
             b = Alerta.objects.create(
                 cod_filial=a['filial'],
                 cod_produto=a['cod_produto'],
                 desc_produto=a['desc_produto'],
-                saldo=a['saldo'],
+                saldo=round(a['saldo'], 0),
                 estado_estoque=status,
+                valor=valor_sug,
+                sugestao=round(a['sugestao_unidade'], 0),
+                estoque=round(a['estoque'], 0),
                 curva=a['curva'],
                 fornecedor=a['fornecedor'],
                 cod_fornecedor=a['cod_fornecedor'],
@@ -143,24 +149,28 @@ def pdf_generate(request):
     p.drawImage(logo, mm(83), mm(270), height=40, width=130)
     p.drawString(mm(70), mm(255), f'ALERTA INSIGHT {hoje}', charSpace=2)
 
-    p.setFont('Times-Roman', 10)
-    p.drawString(mm(10), mm(245), "FILIAL")
-    p.drawString(mm(30), mm(245), "PRODUTO")
-    p.drawString(mm(130), mm(245), "PREVISÃO ESTOQUE")
-    p.drawString(mm(175), mm(245), "VALOR")
+    p.setFont('Times-Roman', 8)
+    p.drawString(mm(6), mm(245), "FILIAL")
+    p.drawString(mm(20), mm(245), "PRODUTO")
+    p.drawString(mm(100), mm(245), "PREV. ESTOQUE")
+    p.drawString(mm(128), mm(245), "ESTOQUE")
+    p.drawString(mm(150), mm(245), "QT. SUGERIDA")
+    p.drawString(mm(175), mm(245), "VALOR PED. SUG.")
 
-    p.line(mm(10), mm(240), mm(200), mm(240))
+    p.line(mm(6), mm(243), mm(205), mm(243))
 
-    contador_y = 235
+    contador_y = 240
     for prod in itens:
         contador_y = contador_y - 5
-        p.drawString(mm(13), mm(contador_y), f'{prod.cod_filial}')
-        p.drawString(mm(31), mm(contador_y), f'{prod.cod_produto} - {prod.desc_produto}')
-        p.drawString(mm(135), mm(contador_y), f'{prod.estado_estoque}')
-        p.drawString(mm(176), mm(contador_y), f'{prod.cod_produto}')
+        p.drawString(mm(8), mm(contador_y), f'{prod.cod_filial}')
+        p.drawString(mm(21), mm(contador_y), f'{prod.cod_produto} - {prod.desc_produto}')
+        p.drawString(mm(101), mm(contador_y), f'{prod.estado_estoque}')
+        p.drawString(mm(129), mm(contador_y), f'{prod.estoque}')
+        p.drawString(mm(151), mm(contador_y), f'{prod.sugestao}')
+        p.drawString(mm(176), mm(contador_y), f'{prod.valor}')
         if contador_y <= 10:
             p.showPage()
-            p.setFont('Times-Roman', 10)
+            p.setFont('Times-Roman', 8)
             contador_y = 285
 
 
