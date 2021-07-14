@@ -58,6 +58,8 @@ class Alerta(models.Model):
     cod_produto = models.IntegerField(blank=True, null=False)
     desc_produto = models.CharField(max_length=255, blank=True, null=True)
     saldo = models.FloatField(blank=True, null=True)
+    sugestao = models.FloatField(blank=True, null=True)
+    valor = models.FloatField(blank=True, null=True)
     estado_estoque = models.CharField(max_length=255, blank=True, null=True)
     curva = models.CharField(max_length=255, blank=True, null=True)
     fornecedor = models.CharField(max_length=255, blank=True, null=True)

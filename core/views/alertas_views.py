@@ -1,3 +1,4 @@
+from django.core.mail import EmailMessage
 from django.utils import timezone
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
@@ -6,7 +7,6 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
-from django.core.mail import EmailMessage
 
 
 def alertas():
@@ -18,13 +18,11 @@ def alertas():
     fornecedores = get_fornecedores(id_empresa)
 
     for fornecedor in fornecedores:
-        print(fornecedor)
         leadtime = fornecedor.leadtime
         t_reposicao = fornecedor.ciclo_reposicao
         produtos = get_produtos(id_empresa, fornecedor.id)
 
         for produto in produtos:
-            print(produto.desc_produto)
 
             verif_produto = verifica_produto(produto.cod_produto, id_empresa, parametros.periodo)
 
@@ -44,9 +42,9 @@ def alertas():
                 infor_produtos_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
 
                 condicao = ['FALSE' if x == 'NORMAL' else 'TRUE' for x in infor_produtos_filiais['condicao_estoque']]
-                # excesso_estoque = ['FALSE' if x > 0  else 'TRUE' for x in infor_produtos_filiais['sugestao_unidade']]
+                excesso_estoque = ['FALSE' if x > 0  else 'TRUE' for x in infor_produtos_filiais['sugestao_unidade']]
 
-                if "TRUE" in condicao or "TRUE" in infor_produtos_filiais['excesso_estoque']:
+                if "TRUE" in condicao or "TRUE" in excesso_estoque:
                     alertas_produtos = infor_produtos_filiais.to_dict('records')
 
                     lista_alertas.append(alertas_produtos)
@@ -69,19 +67,28 @@ def executar_alerta(id_empresa, produtos):
     itens = Alerta.objects.all().filter(
         empresa__id__exact=id_empresa
     )
+
+    empresa = Empresa.objects.get(id=id_empresa)
+
     if itens:
         itens.delete()
 
     for i in produtos:
         produto = i
         for a in produto:
-            empresa = Empresa.objects.get(id=id_empresa)
+
+            if a['excesso_estoque'] == "TRUE":
+                status = "EXCESSO"
+            else:
+                status = a['condicao_estoque']
+
+
             b = Alerta.objects.create(
                 cod_filial=a['filial'],
                 cod_produto=a['cod_produto'],
                 desc_produto=a['desc_produto'],
                 saldo=a['saldo'],
-                estado_estoque=a['condicao_estoque'],
+                estado_estoque=status,
                 curva=a['curva'],
                 fornecedor=a['fornecedor'],
                 cod_fornecedor=a['cod_fornecedor'],
@@ -134,25 +141,27 @@ def pdf_generate(request):
     p = canvas.Canvas(buffer, pagesize=A4)
     p.setFont('Helvetica', 12)
     p.drawImage(logo, mm(83), mm(270), height=40, width=130)
-    p.drawString(mm(70), mm(250), f'ALERTA INSIGHT {hoje}', charSpace=2)
+    p.drawString(mm(70), mm(255), f'ALERTA INSIGHT {hoje}', charSpace=2)
 
     p.setFont('Times-Roman', 10)
-    p.drawString(mm(10), mm(240), "FILIAL")
-    p.drawString(mm(30), mm(240), "PRODUTO")
-    p.drawString(mm(130), mm(240), "PREVISÃO ESTOQUE")
-    p.drawString(mm(175), mm(240), "VALOR")
+    p.drawString(mm(10), mm(245), "FILIAL")
+    p.drawString(mm(30), mm(245), "PRODUTO")
+    p.drawString(mm(130), mm(245), "PREVISÃO ESTOQUE")
+    p.drawString(mm(175), mm(245), "VALOR")
 
-    p.line(mm(10), mm(238), mm(200), mm(238))
+    p.line(mm(10), mm(240), mm(200), mm(240))
 
     contador_y = 235
     for prod in itens:
         contador_y = contador_y - 5
-        print(contador_y)
-        print(prod.cod_produto)
         p.drawString(mm(13), mm(contador_y), f'{prod.cod_filial}')
         p.drawString(mm(31), mm(contador_y), f'{prod.cod_produto} - {prod.desc_produto}')
         p.drawString(mm(135), mm(contador_y), f'{prod.estado_estoque}')
         p.drawString(mm(176), mm(contador_y), f'{prod.cod_produto}')
+        if contador_y <= 10:
+            p.showPage()
+            p.setFont('Times-Roman', 10)
+            contador_y = 285
 
 
     p.showPage()
