@@ -128,7 +128,8 @@ def editar_perfil(request, template_name="aplicacao/paginas/usuarios/usuario_edi
 @login_required
 def lista_usuarios(request, template_name="aplicacao/paginas/usuarios/usuarios.html"):
     if request.user.usuario.tipo == "Administrador":
-        usuario = Usuario.objects.all()
+        empresa = request.user.usuario.empresa
+        usuario = Usuario.objects.filter(empresa__id=empresa.pk)
         usuarios = {'usuarios': usuario}
         return render(request, template_name, usuarios)
     else:

@@ -39,6 +39,7 @@ urlpatterns = [
     path('configuracoes/', configuracao_painel, name='configuracao_painel'),
 
     path('configuracoes/editar/fornecedor/<int:pk>', editar_fornecedor_conf, name='config_edit_forn'),
+    path('configuracoes/editar/parametros/<int:pk>', editar_parametro_conf, name='config_edit_param'),
 
 
     path('academy/', academy, name='academy'),

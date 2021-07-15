@@ -2,6 +2,9 @@
 
 {% block conteudo %}
 
+    <h2>Editar Fornecedor - {{ fornecedor.desc_fornecedor }}</h2>
+    <hr>
+
     <form method="POST" class="post-form">
         {% csrf_token %}
         <div class="row">

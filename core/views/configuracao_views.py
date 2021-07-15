@@ -25,7 +25,6 @@ def editar_fornecedor_conf(request, pk, template_name='aplicacao/paginas/configu
     if request.user.usuario.tipo == "Administrador":
         fornecedor = Fornecedor.objects.get(pk=pk)
         if request.method == 'POST':
-            # empresa = request.user.usuario.empresa
             form = FornecedorForm(request.POST, instance=fornecedor)
             if form.is_valid():
                 fornecedor = form.save(commit=False)
@@ -33,10 +32,10 @@ def editar_fornecedor_conf(request, pk, template_name='aplicacao/paginas/configu
                 messages.success(request, "Fornecedor atualizado com sucesso!")
                 return redirect('configuracao_painel')
             else:
-                messages.error(request, "Ops, não foi possivel cadastrar a empresa")
+                messages.error(request, "Ops, não foi possivel atualizar")
         else:
             form = FornecedorForm(instance=fornecedor)
-        return render(request, template_name, {'form': form})
+        return render(request, template_name, {'form': form, 'fornecedor': fornecedor})
     else:
         messages.error(request, "Ops, o usuário não tem permissão!")
         return redirect('index')
@@ -46,19 +45,18 @@ def editar_fornecedor_conf(request, pk, template_name='aplicacao/paginas/configu
 @login_required
 def editar_parametro_conf(request, pk, template_name='aplicacao/paginas/configuracao/param_edit.html'):
     if request.user.usuario.tipo == "Administrador":
-        fornecedor = Fornecedor.objects.get(pk=pk)
+        parametro = Parametro.objects.get(pk=pk)
         if request.method == 'POST':
-            # empresa = request.user.usuario.empresa
-            form = FornecedorForm(request.POST, instance=fornecedor)
+            form = ParametroForm(request.POST, instance=parametro)
             if form.is_valid():
-                fornecedor = form.save(commit=False)
-                fornecedor.save()
-                messages.success(request, "Fornecedor atualizado com sucesso!")
+                parametro = form.save(commit=False)
+                parametro.save()
+                messages.success(request, "Parametros atualizados com sucesso!")
                 return redirect('configuracao_painel')
             else:
-                messages.error(request, "Ops, não foi possivel cadastrar a empresa")
+                messages.error(request, "Ops, não foi possivel atualizar")
         else:
-            form = FornecedorForm(instance=fornecedor)
+            form = ParametroForm(instance=parametro)
         return render(request, template_name, {'form': form})
     else:
         messages.error(request, "Ops, o usuário não tem permissão!")

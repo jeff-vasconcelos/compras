@@ -1,6 +1,9 @@
 {% extends 'aplicacao/base.html' %}
 
 {% block conteudo %}
+    <h2>Configurações</h2>
+    <hr>
+
     <div class="row">
         <div class="col-4">
 
@@ -21,7 +24,7 @@
                     <h6>Curva D: <b>{{ parametro.curva_d|floatformat:0 }}</b> % de segurança</h6>
                     <h6>Curva E: <b>{{ parametro.curva_e|floatformat:0 }}</b> % de segurança</h6>
 
-                    <a href="#"
+                    <a href="{% url 'config_edit_param' parametro.pk %}"
                        class="float-right btn btn-secondary btn-sm" role="button" aria-pressed="true">
                         <i class="fas fa-pencil-alt"></i> Editar Parametros
                     </a>

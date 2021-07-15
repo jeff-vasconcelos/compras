@@ -45,12 +45,13 @@
         </a>
     </li>
 
-    <!-- PEDIDOS -->
+    <!-- PEDIDOS
     <li id="pedi-lat" class="nav-item">
         <a id="link-pedi-lat" class="nav-link" href="">
             <i id="icone-pedi" class="fas fa-fw fa-file-alt"></i>
             <span>Pedidos</span></a>
     </li>
+    -->
 
     <!-- USUÁRIOS -->
     {% if request.user.usuario.tipo == "Administrador" %}
@@ -61,19 +62,21 @@
         </li>
     {% endif %}
 
-    <!-- CICLO DE REPOSIÇÃO -->
+    <!-- CICLO DE REPOSIÇÃO
     <li id="repo-lat" class="nav-item">
         <a id="link-repo-lat" class="nav-link" href="#">
             <i id="icone-repo" class="fas fa-fw fa-calendar-minus"></i>
             <span>Ciclo de Reposição</span></a>
     </li>
+    -->
 
-    <!-- ACADEMY -->
+    <!-- ACADEMY
     <li id="acad-lat" class="nav-item">
         <a id="link-acad-lat" class="nav-link" href="#">
             <i id="icone-acad" class="fas fa-fw fa-graduation-cap"></i>
             <span>Academy</span></a>
     </li>
+    -->
 
     {% if request.user.usuario.tipo == "Administrador" %}
         <!-- CONFIGURAÇÕES -->
