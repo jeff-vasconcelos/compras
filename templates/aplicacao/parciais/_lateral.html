@@ -78,7 +78,7 @@
     {% if request.user.usuario.tipo == "Administrador" %}
         <!-- CONFIGURAÇÕES -->
         <li id="conf-lat" class="nav-item">
-            <a id="link-conf-lat" class="nav-link" href="#">
+            <a id="link-conf-lat" class="nav-link" href="{% url 'configuracao_painel' %}">
                 <i id="icone-conf" class="fas fa-fw fa-cog"></i>
                 <span>Configurações</span></a>
         </li>

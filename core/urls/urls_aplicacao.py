@@ -6,6 +6,7 @@ from core.views.academy_views import *
 from core.views.home_views import *
 from core.views.analise_views import *
 from core.views.alertas_views import *
+from core.views.configuracao_views import *
 
 
 from core.multifilial.processa_produtos import processa_produtos_filiais
@@ -18,6 +19,7 @@ urlpatterns = [
     path('filter-curva/', filtrar_produto_curva, name='filter-curva'),
     path('filter-marca/', filtrar_produto_marca, name='filter-marca'),
     path('select-prod/', selecionar_produto, name='filter-produto'),
+
     # TODO remover path de url
     path('graficos-prod-selec/', export_csv, name='graficos-prod-selec'),
 
@@ -34,6 +36,9 @@ urlpatterns = [
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),
     path('alertas/', alerta_painel, name='alertas_painel'),
+    path('configuracoes/', configuracao_painel, name='configuracao_painel'),
+
+    path('configuracoes/editar/fornecedor/<int:pk>', editar_fornecedor_conf, name='config_edit_forn'),
 
 
     path('academy/', academy, name='academy'),

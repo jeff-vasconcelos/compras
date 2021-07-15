@@ -1,0 +1,37 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block conteudo %}
+
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group col-md-12">
+                    <label for="leadtime">Leadtime</label>
+                    {{ form.leadtime }}
+                    <div class="invalid-feedback">
+                        {{ form.leadtime.errors }}
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="ciclo_reposicao">Ciclo de Reposição</label>
+                    {{ form.ciclo_reposicao }}
+                    <div class="invalid-feedback">
+                        {{ form.ciclo_reposicao.errors }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+            <div class="col-8">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi atque distinctio dolorum, eos eum ex
+                    explicabo libero mollitia, necessitatibus neque praesentium quisquam quo quos ratione ullam unde
+                    veniam
+                    voluptate voluptates!</p>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
