@@ -295,19 +295,19 @@
             <div class="row">
                 <div class="col-md-10" id="div-tabela">
                     <table id="tabela-analise">
+
                         <thead>
                         <tr>
-                            <th class="tabela-info-th" colspan="5">Dados filiais</th>
+                            <th class="tabela-info-th" colspan="4">Dados filiais</th>
                             <th class="tabela-info-th" colspan="3">Dados de entrada</th>
                             <th class="tabela-info-th" colspan="6">Dados estatísticos</th>
                             <th class="tabela-info-th" colspan="2">Preço prat.</th>
                             <!--                                <th class="tabela-info-th-d" colspan="4">Digitar pedido de compra</th>-->
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="body-tabela-analise">
                         <tr>
-                            <th class="tabela-info">Cód</th>
-                            <th class="tabela-info">Filial</th>
+                            <th class="tabela-info">Cód. Filial</th>
                             <th class="tabela-info">Estoque</th>
                             <th class="tabela-info">Avaria</th>
                             <th class="tabela-info">Ped. pendente</th>
@@ -380,7 +380,16 @@
                     </table>
                 </div>
 
-                <div class="col-md-12 botoes-analise-tabela">
+                <div class="col-md-3" style="margin-bottom: 15px">
+                    <label class="label-analise-tabela">Filiais</label>
+                    <select class="form-control select-analise" id="filtro-filial">
+                        {% for filial in filiais %}
+                            <option class="option-analise" value="{{ filial.cod_filial }}">{{ filial.cod_filial }} - {{ filial.desc_filial }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-9 botoes-analise-tabela">
                     <button id="ver_pedidos_pendentes" class="btn btn-secondary btn-sm ver-pendentes"
                             type="button"
                             data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes

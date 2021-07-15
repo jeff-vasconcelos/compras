@@ -1,0 +1,98 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-4">
+
+            <div class="card shadow mb-4">
+
+                <div class="card-header py-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="m-0 font-weight-bold">Parametros da sugestão de estoque</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6>Periodo da análise: <b>{{ parametro.periodo }}</b> dias</h6>
+                    <h6>Curva A: <b>{{ parametro.curva_a|floatformat:0 }}</b> % de segurança</h6>
+                    <h6>Curva B: <b>{{ parametro.curva_b|floatformat:0 }}</b> % de segurança</h6>
+                    <h6>Curva C: <b>{{ parametro.curva_c|floatformat:0 }}</b> % de segurança</h6>
+                    <h6>Curva D: <b>{{ parametro.curva_d|floatformat:0 }}</b> % de segurança</h6>
+                    <h6>Curva E: <b>{{ parametro.curva_e|floatformat:0 }}</b> % de segurança</h6>
+
+                    <a href="#"
+                       class="float-right btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                        <i class="fas fa-pencil-alt"></i> Editar Parametros
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <div class="card shadow mb-4">
+
+                <div class="card-header py-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6 class="m-0 font-weight-bold">Fornecedores</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Fornecedor</th>
+                                <th>Leadtime</th>
+                                <th>C. reposição</th>
+                                <th>Ações</th>
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td>
+                                    {{ fornecedor.cod_fornecedor }} - {{ fornecedor.desc_fornecedor }}
+                                </td>
+
+                                {% if fornecedor.leadtime %}
+                                    <td>{{ fornecedor.leadtime }}</td>
+                                {% else %}
+                                    <td><i class="fas fa-times-circle"></i></td>
+                                {% endif %}
+
+                                {% if fornecedor.ciclo_reposicao %}
+                                    <td>{{ fornecedor.ciclo_reposicao }}</td>
+                                {% else %}
+                                    <td><i class="fas fa-times-circle"></i></td>
+                                {% endif %}
+
+                                <td>
+                                    <a href="{% url 'config_edit_forn'  fornecedor.pk %}"
+                                       class="btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                                        <i class="fas fa-pencil-alt"></i> Editar
+                                    </a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+{% endblock %}

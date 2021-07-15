@@ -11,20 +11,6 @@ def get_file_path(instance, filename):
     return os.path.join("imagens_usuarios", filename)
 
 
-""" Modelo de permissões de usuarios """
-class Permissao(models.Model):
-    meta = models.BooleanField(default=False, verbose_name='Permitir cadastrar/alterar metas')
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True,
-                                   related_name='usuario_permissao')
-
-    class Meta:
-        verbose_name = 'Permissão'
-        verbose_name_plural = 'Permissões'
-
-    def __str__(self):
-        return self.usuario.username
-
-
 """ Modelo de usuário relacionado a empresas """
 class Usuario(models.Model):
     TIPO = (

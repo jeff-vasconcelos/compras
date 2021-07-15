@@ -1,0 +1,73 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block conteudo %}
+
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group col-md-12">
+                    <label for="periodo">Periodo</label>
+                    {{ form.periodo }}
+                    <div class="invalid-feedback">
+                        {{ form.periodo.errors }}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label for="curva_a">Curva A</label>
+                    {{ form.curva_a }}
+                    <div class="invalid-feedback">
+                        {{ form.curva_a.errors }}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label for="curva_b">Curva B</label>
+                    {{ form.curva_b }}
+                    <div class="invalid-feedback">
+                        {{ form.curva_b.errors }}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label for="curva_c">Curva C</label>
+                    {{ form.curva_c }}
+                    <div class="invalid-feedback">
+                        {{ form.curva_c.errors }}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label for="curva_d">Curva D</label>
+                    {{ form.curva_d }}
+                    <div class="invalid-feedback">
+                        {{ form.curva_a.errors }}
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label for="curva_e">Curva E</label>
+                    {{ form.curva_e }}
+                    <div class="invalid-feedback">
+                        {{ form.curva_e.errors }}
+                    </div>
+                </div>
+
+
+
+                <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+
+            <div class="col-8">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi atque distinctio dolorum, eos eum ex
+                    explicabo libero mollitia, necessitatibus neque praesentium quisquam quo quos ratione ullam unde
+                    veniam
+                    voluptate voluptates!</p>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

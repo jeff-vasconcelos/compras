@@ -1,4 +1,4 @@
-from api.models.vendas_models import Venda
+from api.models.venda import Venda
 import pandas as pd
 import datetime
 
@@ -61,6 +61,8 @@ def abc(cod_fornecedor, id_empresa, periodo):
 
             lista_curva.append(curva)
         abc['curva'] = lista_curva
+
+        print(abc)
 
         return abc
     else:
