@@ -36,7 +36,7 @@
 
     <!-- ALERTAS -->
     <li id="alert-lat" class="nav-item">
-        <a id="link-alert-lat" class="nav-link" href="">
+        <a id="link-alert-lat" class="nav-link" href="{% url 'alertas_painel' %}">
             <i id="icone-alert" class="fas fa-fw fa-envelope"></i>
 
             <span>Alertas
@@ -78,7 +78,7 @@
     {% if request.user.usuario.tipo == "Administrador" %}
         <!-- CONFIGURAÇÕES -->
         <li id="conf-lat" class="nav-item">
-            <a id="link-conf-lat" class="nav-link" href="#">
+            <a id="link-conf-lat" class="nav-link" href="{% url 'configuracao_painel' %}">
                 <i id="icone-conf" class="fas fa-fw fa-cog"></i>
                 <span>Configurações</span></a>
         </li>

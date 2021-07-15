@@ -7,13 +7,64 @@
 <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/filtrar_por_curva.js' %}" defer></script>
+<script src="{% static 'aplicacao/js/filtrar_por_marca.js' %}" defer></script>
+
 <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/pedido_sessao.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/pedidos_pendentes.js' %}" defer></script>
+<script src="{% static 'aplicacao/js/mascara_preco.js' %}" defer></script>
+
+<script>
+    $(document).ready(function () {
+        // show the alert
+        setTimeout(function () {
+            $(".alert").alert('close');
+        }, 5000);
+    });
+</script>
 {% endblock scripts %}
 
 {% block conteudo %}
+<div class="div-mensagem-sucesso" id="div-mensagem-sucesso">
+    <!--
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+            <use xlink:href="#check-circle-fill"/>
+        </svg>
+        <div>
+            &nbsp; An example success alert with an icon
+        </div>
+    </div>
+    -->
+</div>
+<div class="div-mensagem-erro" id="div-mensagem-erro">
+    <!--
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+            <use xlink:href="#exclamation-triangle-fill"/>
+        </svg>
+        <div>
+            &nbsp; An example danger alert with an icon
+        </div>
+    </div>
+    -->
+</div>
+
+<div class="div-mensagem-alerta" id="div-mensagem-alerta">
+    <!--
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+            <use xlink:href="#exclamation-triangle-fill"/>
+        </svg>
+        <div>
+            &nbsp; An example warning alert with an icon
+        </div>
+    </div>
+    -->
+</div>
+
+
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
@@ -190,7 +241,7 @@
                     <div class="form-group">
                         <label class="label-analise-tabela">Produto</label>
                         <select class="form-control select-analise" name="produtos" id="results-produtos">
-                            <option selected>Selecione o produto</option>
+                            <!--<option class="option-analise" value="0" selected>Selecione o produto</option>-->
                         </select>
                     </div>
                 </div>
@@ -215,44 +266,48 @@
                 <div class="col-md-2 analise-div">
                     <div class="form-group">
                         <label class="label-analise-tabela">Curva</label>
+
                         <select class="form-control select-analise" id="curva_abc_select">
-                            <option class="option-analise" selected value="">Selecione</option>
+                            <!--
+                            <option class="option-analise" selected value="0">Selecione</option>
                             <option class="option-analise" value="A">A</option>
                             <option class="option-analise" value="B">B</option>
                             <option class="option-analise" value="C">C</option>
                             <option class="option-analise" value="D">D</option>
                             <option class="option-analise" value="E">E</option>
+                            -->
                         </select>
+
                     </div>
                 </div>
-                <!--
+
                 <div class="col-md-2 analise-div">
                     <div class="form-group">
                         <label class="label-analise-tabela" for="marca">Marca</label>
-                        <select class="form-control select-analise" name="marca" id="marca">
-                            <option class="option-analise" value="volvo">Selecione</option>
+                        <select class="form-control select-analise" name="marca" id="filtro_marca">
+                            <!--<option class="option-analise" value="0" selected>Selecione</option>-->
                         </select>
                     </div>
                 </div>
-                -->
+
             </div>
 
             <div class="row">
                 <div class="col-md-10" id="div-tabela">
                     <table id="tabela-analise">
+
                         <thead>
                         <tr>
-                            <th class="tabela-info-th" colspan="5">Dados filiais</th>
+                            <th class="tabela-info-th" colspan="4">Dados filiais</th>
                             <th class="tabela-info-th" colspan="3">Dados de entrada</th>
                             <th class="tabela-info-th" colspan="6">Dados estatísticos</th>
                             <th class="tabela-info-th" colspan="2">Preço prat.</th>
                             <!--                                <th class="tabela-info-th-d" colspan="4">Digitar pedido de compra</th>-->
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="body-tabela-analise">
                         <tr>
-                            <th class="tabela-info">Cód</th>
-                            <th class="tabela-info">Filial</th>
+                            <th class="tabela-info">Cód. Filial</th>
                             <th class="tabela-info">Estoque</th>
                             <th class="tabela-info">Avaria</th>
                             <th class="tabela-info">Ped. pendente</th>
@@ -281,8 +336,8 @@
                     </table>
                 </div>
 
-                <div class="col-md-2" id="div-tabela" style="padding-left: 0px; padding-right: 0px">
-                    <table id="tabela-analise">
+                <div class="col-md-2" id="div-tabela-digite" style="padding-left: 0px; padding-right: 0px">
+                    <table id="tabela-analise-digite">
                         <thead>
                         <tr>
                             <th class="tabela-info-th-d" colspan="5">Digitar pedido de compra</th>
@@ -292,40 +347,49 @@
                         <tr>
                             <th>Qt digitada</th>
                             <th>Pr. compra</th>
-                            {#
+                            <!--
                             <th>% margem</th>
-                            #}
-                            {#
-                            <th>Pr. sugerido</th>
-                            #}
-                            {#
-                            <th>DDE</th>
-                            #}
 
+                            <th>Pr. sugerido</th>
+
+                            <th>DDE</th>
+                            -->
                         </tr>
                         <tr>
                             <td class="tabela-form">
                                 <input class="input-tabela-analise" name="qt_digitada" id="qt_digit">
                             </td>
                             <td class="tabela-form">
-                                <input class="input-tabela-analise" name="pr_compra" id="pr_compra">
+                                <input type="Text" class="input-tabela-analise" name="pr_compra" id="pr_compra"
+                                       onKeyUp="mascaraMoeda(this, event)" value="">
                             </td>
-                            <!--                                <td class="tabela-form">-->
-                            <!--                                    <input class="input-tabela-analise" name="porc_margem" id="porc_margem">-->
-                            <!--                                </td>-->
-                            <!--                                <td class="tabela-form">-->
-                            <!--                                    <input class="input-tabela-analise" name="pr_sugerido" id="pr_sugerido">-->
-                            <!--                                </td>-->
-                            <!--                                <td class="tabela-form">-->
-                            <!--                                    <input class="input-tabela-analise" name="dde" id="dde">-->
-                            <!--                                </td>-->
+                            <!--
+                            <td class="tabela-form">
+                                <input class="input-tabela-analise" name="porc_margem" id="porc_margem">
+                            </td>
+                            <td class="tabela-form">
+                                <input class="input-tabela-analise" name="pr_sugerido" id="pr_sugerido">
+                            </td>
+                            <td class="tabela-form">
+                                <input class="input-tabela-analise" name="dde" id="dde">
+                            </td>
+                            -->
                         </tr>
                         </tbody>
 
                     </table>
                 </div>
 
-                <div class="col-md-12 botoes-analise-tabela">
+                <div class="col-md-3" style="margin-bottom: 15px">
+                    <label class="label-analise-tabela">Filiais</label>
+                    <select class="form-control select-analise" id="filtro-filial">
+                        {% for filial in filiais %}
+                            <option class="option-analise" value="{{ filial.cod_filial }}">{{ filial.cod_filial }} - {{ filial.desc_filial }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-9 botoes-analise-tabela">
                     <button id="ver_pedidos_pendentes" class="btn btn-secondary btn-sm ver-pendentes"
                             type="button"
                             data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes
@@ -413,7 +477,7 @@
 </div>
 
 <!-- MODAL PEDIDOS PENDENTES -->
-<div class="modal fade modal-pendentes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div class="modal fade modal-pendentes" id="modal-pendentes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" id="modal-ver-pedido-p">
         <div class="modal-content">

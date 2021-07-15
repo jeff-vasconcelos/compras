@@ -1,12 +1,11 @@
 from django.contrib import admin
-from api.models.avarias_models import Avaria
-from api.models.estoque_atual_models import EstoqueAtual
-from api.models.fornecedor_models import Fornecedor
-from api.models.hist_estoque_models import HistEstoque
-from api.models.p_compras_models import PedidoCompras
-from api.models.produto_models import Produto
-from api.models.ultima_entrada_models import UltimaEntrada
-from api.models.vendas_models import Venda
+from api.models.estoque_atual import EstoqueAtual
+from api.models.fornecedor import Fornecedor
+from api.models.historico_estoque import HistoricoEstoque
+from api.models.pedido_compra import Pedido
+from api.models.produto import Produto
+from api.models.ultima_entrada import UltimaEntrada
+from api.models.venda import Venda
 
 """ Adicionando dados da API de Produtos no Admin do DJANGO """
 
@@ -36,7 +35,7 @@ class Historico(admin.ModelAdmin):
 
 
 class Vendas(admin.ModelAdmin):
-    list_display = ('id', 'cod_produto', 'desc_produto', 'fornecedor', 'empresa')
+    list_display = ('id', 'cod_produto', 'desc_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto', 'desc_produto')
     search_fields = ('cod_produto', 'desc_produto',)
     list_filter = ('fornecedor', 'empresa',)
@@ -60,10 +59,9 @@ class UltEntrada(admin.ModelAdmin):
 
 
 admin.site.register(Produto, Produtos)
-admin.site.register(Avaria)
 admin.site.register(EstoqueAtual, Estoque)
 admin.site.register(Fornecedor)
-admin.site.register(HistEstoque, Historico)
-admin.site.register(PedidoCompras, Pedidos)
+admin.site.register(HistoricoEstoque, Historico)
+admin.site.register(Pedido, Pedidos)
 admin.site.register(UltimaEntrada, UltEntrada)
 admin.site.register(Venda, Vendas)

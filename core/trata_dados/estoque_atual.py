@@ -1,4 +1,4 @@
-from api.models.estoque_atual_models import EstoqueAtual
+from api.models.estoque_atual import EstoqueAtual
 import pandas as pd
 import datetime
 

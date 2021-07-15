@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'crispy_forms',
 
+    #TODO Remover app debug_toolbar
+    'debug_toolbar',
+
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -57,6 +60,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #TODO Remover middleware debug_toolbar
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -150,18 +156,23 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'asm.demandas@gmail.com'
 EMAIL_HOST_PASSWORD = '@asm2170'
-
 """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'br198.hostgator.com.br'
+EMAIL_HOST = 'mail.ecluster.com.br'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'contato@ecluster.com.br'
-EMAIL_HOST_PASSWORD = 'Faith*9090'
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'contato-insight@ecluster.com.br'
+EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
 """
 
 # Sessão em dias: 60s * 60m * 24h * 1d
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 1
+SESSION_COOKIE_AGE = 60 * 60 * 12 * 1
 
 # Salvar a cada requisição
 SESSION_SAVE_EVERY_REQUEST = False
+
+#TODO Remover debug_toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

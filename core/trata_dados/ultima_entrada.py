@@ -1,4 +1,4 @@
-from api.models.ultima_entrada_models import UltimaEntrada
+from api.models.ultima_entrada import UltimaEntrada
 import pandas as pd
 import datetime
 
