@@ -1,5 +1,4 @@
 from api.models.produto_models import *
-from api.models.avarias_models import *
 from api.models.estoque_atual_models import *
 from api.models.hist_estoque_models import *
 from api.models.p_compras_models import *
@@ -39,21 +38,6 @@ def valida_fornecedor(data):
     else:
         return False
 
-
-def valida_avaria(data):
-    cod_produto = data['cod_produto']
-    cod_empresa = data['empresa']
-    data_avaria = data['data']
-    print("codigo da empresa ", cod_empresa)
-
-    avaria = Avaria.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa
-    ).exists()
-
-    if avaria == False:
-        return True
-    else:
-        return False
 
 
 def valida_estoque_atual(data):

@@ -27,7 +27,11 @@ class Venda(models.Model):
     num_nota = models.IntegerField(null=True, blank=True)
     cod_usur = models.IntegerField(null=True, blank=True)
     cod_fab = models.IntegerField(null=True, blank=True)
-    desc_dois = models.CharField(max_length=255, null=True, blank=True)
+    
+
+    cod_aux = models.IntegerField(null=True, blank=True)
+    desc_dept = models.CharField(max_length=255, null=True, blank=True)
+    secao = models.CharField(max_length=255, null=True, blank=True)
     supervisor = models.CharField(max_length=255, null=True, blank=True)
 
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)

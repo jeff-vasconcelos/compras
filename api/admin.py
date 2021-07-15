@@ -1,5 +1,4 @@
 from django.contrib import admin
-from api.models.avarias_models import Avaria
 from api.models.estoque_atual_models import EstoqueAtual
 from api.models.fornecedor_models import Fornecedor
 from api.models.hist_estoque_models import HistEstoque
@@ -60,7 +59,6 @@ class UltEntrada(admin.ModelAdmin):
 
 
 admin.site.register(Produto, Produtos)
-admin.site.register(Avaria)
 admin.site.register(EstoqueAtual, Estoque)
 admin.site.register(Fornecedor)
 admin.site.register(HistEstoque, Historico)
