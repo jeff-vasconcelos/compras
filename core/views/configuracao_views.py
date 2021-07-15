@@ -61,3 +61,15 @@ def editar_parametro_conf(request, pk, template_name='aplicacao/paginas/configur
     else:
         messages.error(request, "Ops, o usuário não tem permissão!")
         return redirect('index')
+
+
+def adicionar_email_conf():
+    pass
+
+
+def ver_email_conf():
+    pass
+
+
+def remover_email_conf():
+    pass

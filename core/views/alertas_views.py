@@ -59,7 +59,7 @@ def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
 
 
-    send_email_alerta(request)
+    # send_email_alerta(request)
 
     return render(request, template_name, {'produtos': produtos})
 
