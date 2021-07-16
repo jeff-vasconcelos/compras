@@ -1,14 +1,45 @@
 {% extends 'aplicacao/base.html' %}
 
 {% block conteudo %}
+    <style>
+        div.card_curvas {
+            margin-left: auto;
+            margin-right: auto;
+            width: 10%;
+        }
+        h6.curvas_text {
+            font-size: 14px;
+        }
+
+        th.tabela-home-head {
+            border-bottom: solid 1px black;
+            border-right: solid 1px black;
+            text-align: center;
+        }
+        td.tabela-home-body {
+            border-right: solid 1px black;
+            text-align: center;
+        }
+        th.tabela-home-foot {
+            border-right: solid 1px black;
+            text-align: center;
+        }
+        th.tabela-home-last, td.tabela-home-last {
+            text-align: center;
+        }
+        #excesso-table-home{
+            border-bottom: solid 1px black;
+        }
+    </style>
+
     <!-- CARDS -->
     <div class="row">
-        <div class="col-xl-3 col-lg-3">
+        <div class="card_curvas col">
             <div class="card shadow mb-4 cards-home-info">
                 <div class="card-body">
-                    <div class="row" >
+                    <div class="row">
                         <div class="col-12" style="text-align: center">
-                            <h6>Curva A</h6>
+                            <h5>Curva A</h5>
                         </div>
                     </div>
                     <div class="row">
@@ -19,93 +50,215 @@
                         </div>
                     </div>
                     <div class="row" style="margin-top: 23px; padding-top: 20px">
-                        <div class="col-12" style="text-align: justify">
-                            <h6>Normal R$ 1.000,00</h6>
-                            <h6>Parcial R$ 1.000,00</h6>
-                            <h6>Excesso R$ 1.000,00</h6>
-                            <h6>Total Est. R$ 1.000,00</h6>
+
+                        <div class="col-5">
+                            <h6 class="curvas_text">Normal:</h6>
+                            <h6 class="curvas_text">Parcial:</h6>
+                            <h6 class="curvas_text">Excesso:</h6>
+                            <h6 class="curvas_text">Total Est.:</h6>
+                        </div>
+
+                        <div class="col-7 text-right">
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card_curvas col">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12" style="text-align: center">
+                            <h5>Curva B</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="margin-right: auto; margin-left: auto">
+                            <div class="chart-pie pt-4">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 23px; padding-top: 20px">
+
+                        <div class="col-5">
+                            <h6 class="curvas_text">Normal:</h6>
+                            <h6 class="curvas_text">Parcial:</h6>
+                            <h6 class="curvas_text">Excesso:</h6>
+                            <h6 class="curvas_text">Total Est.:</h6>
+                        </div>
+
+                        <div class="col-7 text-right">
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card_curvas col">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12" style="text-align: center">
+                            <h5>Curva C</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="margin-right: auto; margin-left: auto">
+                            <div class="chart-pie pt-4">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 23px; padding-top: 20px">
+
+                        <div class="col-5">
+                            <h6 class="curvas_text">Normal:</h6>
+                            <h6 class="curvas_text">Parcial:</h6>
+                            <h6 class="curvas_text">Excesso:</h6>
+                            <h6 class="curvas_text">Total Est.:</h6>
+                        </div>
+
+                        <div class="col-7 text-right">
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card_curvas col">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12" style="text-align: center">
+                            <h5>Curva D</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="margin-right: auto; margin-left: auto">
+                            <div class="chart-pie pt-4">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 23px; padding-top: 20px">
+
+                        <div class="col-5">
+                            <h6 class="curvas_text">Normal:</h6>
+                            <h6 class="curvas_text">Parcial:</h6>
+                            <h6 class="curvas_text">Excesso:</h6>
+                            <h6 class="curvas_text">Total Est.:</h6>
+                        </div>
+
+                        <div class="col-7 text-right">
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card_curvas col">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12" style="text-align: center">
+                            <h5>Curva E</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="margin-right: auto; margin-left: auto">
+                            <div class="chart-pie pt-4">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 23px; padding-top: 20px">
+
+                        <div class="col-5">
+                            <h6 class="curvas_text">Normal:</h6>
+                            <h6 class="curvas_text">Parcial:</h6>
+                            <h6 class="curvas_text">Excesso:</h6>
+                            <h6 class="curvas_text">Total Est.:</h6>
+                        </div>
+
+                        <div class="col-7 text-right">
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">R$ 1.000,00</h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Total Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
-                        </div>
-                        <div class="col-10 cards-home-valor">
-                             999.7M
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Total Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
-                        </div>
-                        <div class="col-10 cards-home-valor">
-                             999.7M
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Total Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
-                        </div>
-                        <div class="col-10 cards-home-valor">
-                             999.7M
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- GRAFICO -->
     <div class="row">
-        <div class="col-xl-12 col-lg-12">
+
+        <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <p>Faturamento x Margem</p>
+                    <h6>Dados Estoque</h6>
+
+                    <table width="100%">
+                        <thead>
+                            <tr>
+                                <th class="tabela-home-head">Curva</th>
+                                <th class="tabela-home-head">SKU's</th>
+                                <th class="tabela-home-head">Normal</th>
+                                <th class="tabela-home-head">Ruptura Parc.</th>
+                                <th class="tabela-home-head">Ruptura</th>
+                                <th class="tabela-home-last" id="excesso-table-home">Excesso</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td class="tabela-home-body">A</td>
+                                <td class="tabela-home-body">956</td>
+                                <td class="tabela-home-body">3</td>
+                                <td class="tabela-home-body">59</td>
+                                <td class="tabela-home-body">98</td>
+                                <td class="tabela-home-last">98</td>
+                            </tr>
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <th class="tabela-home-foot">Total</th>
+                                <th class="tabela-home-foot">250</th>
+                                <th class="tabela-home-foot">32</th>
+                                <th class="tabela-home-foot">10</th>
+                                <th class="tabela-home-foot">20</th>
+                                <th class="tabela-home-last">1000051</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <p>Ruptura x Curva</p>
                     <div class="chart-bar">
                         <canvas id="myAreaChart"></canvas>
                     </div>
@@ -114,223 +267,6 @@
         </div>
     </div>
 
-    <!-- RUPTURA POR CURVA -->
-    <div class="row">
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <p>Ruptura por curva ABCDEX</p>
-                    <div class="row curva-home">
-{#                        <div class="col-5">#}
-{#                            <div class="chart-pie pt-4">#}
-{#                                <canvas id="myPieChart"></canvas>#}
-{#                            </div>#}
-{#                        </div>#}
-                        <div class="col-7 curva-home-info">
-
-                            <!-- CURVA A -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-a"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="#">
-                                                Curva A
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA B -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-b"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="#">
-                                                Curva B
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA C -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-c"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva C
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA D -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-d"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva D
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
 
 
-                            <!-- CURVA E -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-e"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva E
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA X -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-x"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva X
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- TABELA PEDIDOS PENDENTES -->
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <p>Pedidos pendentes por fornecedor</p>
-                    <table class="tabela-home">
-                        <tr>
-                            <th>Seq.</th>
-                            <th>Cód. Fornec</th>
-                            <th>Fornecedor</th>
-                            <th>Quntidade</th>
-                            <th>Qt. Itens</th>
-                            <th>Vl. Total</th>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 303,00</td>
-                        </tr>
-                    </table>
-                    <div class="row" style="margin-top: 30px">
-                        <div class="col-12 ver-fornec-home">
-                            <a href="#">
-                                Ver fornecedores <i class="far fa-caret-square-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock conteudo %}
