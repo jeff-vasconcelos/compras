@@ -6,12 +6,17 @@ import datetime
 
 
 def estoque_atual(cod_produto, id_empresa):
-    hoje = datetime.date.today()
+    # hoje = datetime.date.today()
     estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
         cod_produto__exact=cod_produto,
         empresa__id__exact=id_empresa,
-        data=hoje
-    ).order_by('-id').values())
+    )[:1].values())
+
+    # estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
+    #     cod_produto__exact=cod_produto,
+    #     empresa__id__exact=id_empresa,
+    #     data=hoje
+    # ).order_by('-id').values())
 
     filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
 

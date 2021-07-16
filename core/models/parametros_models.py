@@ -13,3 +13,11 @@ class Parametro(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='parametros',
                                 blank=True, null=True)
 
+
+class Email(models.Model):
+    email = models.EmailField(null=True, blank=True)
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='email_empresa',
+                                blank=True, null=True)
+
+    def __str__(self):
+        return self.empresa.nome_fantasia
