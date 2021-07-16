@@ -13,7 +13,7 @@
                         <div class="card-header py-3">
                             <div class="row">
                                 <div class="col-12">
-                                    <h6 class="m-0 font-weight-bold">Parametros da sugestão de estoque</h6>
+                                    <h6 class="m-0 font-weight-bold">Parametros de estoque de segurança</h6>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                         {% else %}
                             <h6>Nenhum email cadastrado</h6>
                         {% endif %}
-                            <a href="{% url 'config_edit_param' parametro.pk %}"
+                            <a href="{% url 'config_ver_email' %}"
                                class="float-right btn btn-secondary btn-sm" role="button" aria-pressed="true">
                                 <i class="fas fa-pencil-alt"></i> Gerenciar
                             </a>

@@ -8,5 +8,5 @@ class EmailForm(forms.ModelForm):
         fields = ['email']
 
         widgets = {
-            'periodo': forms.TextInput(attrs={'class': 'form-control'})
+            'email': forms.TextInput(attrs={'class': 'form-control'})
         }

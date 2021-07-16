@@ -41,9 +41,10 @@ urlpatterns = [
     path('configuracoes/editar/fornecedor/<int:pk>', editar_fornecedor_conf, name='config_edit_forn'),
     path('configuracoes/editar/parametros/<int:pk>', editar_parametro_conf, name='config_edit_param'),
 
-    path('configuracoes/adicionar/email/', adicionar_email_conf, name='config_edit_param'),
-    path('configuracoes/ver/email/', ver_email_conf, name='config_edit_param'),
-    path('configuracoes/remover/email/<int:pk>', remover_email_conf, name='config_edit_param'),
+    path('configuracoes/adicionar/email/', adicionar_email_conf, name='config_add_email'),
+    path('configuracoes/ver/email/', ver_emails_conf, name='config_ver_email'),
+    path('configuracoes/remover/email/<int:pk>', remover_email_conf, name='config_remove_email'),
+    path('configuracoes/editar/email/<int:pk>', editar_email_conf, name='config_editar_email'),
 
 
     path('academy/', academy, name='academy'),

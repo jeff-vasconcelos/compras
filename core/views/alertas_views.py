@@ -7,6 +7,8 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
+from core.models.parametros_models import Email
+from core.models.usuarios_models import User
 import locale
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
@@ -118,14 +120,29 @@ def send_email_alerta(request):
     pdf = pdf_generate(request)
     hoje = timezone.now().strftime('%d-%m-%Y')
 
-    lista_email = ['wellesonlukas@gmail.com']
-    lista_email_cc = ['wellesoncolares@gmail.com']
+    lista_email = []
+    #TODO Altomatizar id empresa
+    emails_cad = Email.objects.filter(empresa__id=1)
+    usuarios = User.objects.filter(usuario__empresa__id=1)
+
+    for i in usuarios:
+        email = i.email
+
+        lista_email.append(email)
+
+    if emails_cad:
+        for a in emails_cad:
+            email = a.email
+            lista_email.append(email)
+
+
+    # lista_email_cc = ['wellesoncolares@gmail.com']
 
     msg = EmailMessage(
         'Alerta de Ruptura',
         '*Este é um e-mail automático, por favor, não responda.',
         to=lista_email,
-        cc=lista_email_cc
+        # cc=lista_email_cc
     )
 
     msg.attach(f'alerta-insight-{hoje}', pdf, 'application/pdf')
@@ -138,7 +155,7 @@ def pdf_generate(request):
 
     itens = Alerta.objects.all().filter(
         empresa__id__exact=1
-    )
+    ).order_by('estado_estoque')
 
     hoje = timezone.now().strftime('%d/%m/%Y')
     buffer = BytesIO()
