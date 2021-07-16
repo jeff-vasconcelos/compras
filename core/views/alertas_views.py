@@ -121,7 +121,7 @@ def send_email_alerta(request):
     hoje = timezone.now().strftime('%d-%m-%Y')
 
     lista_email = []
-    #TODO Altomatizar id empresa
+    #TODO Automatizar id empresa
     emails_cad = Email.objects.filter(empresa__id=1)
     usuarios = User.objects.filter(usuario__empresa__id=1)
 
