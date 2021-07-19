@@ -1,6 +1,6 @@
 import dateutil.utils
 from core.alertas.verificador import get_filiais
-from api.models.estoque_atual import EstoqueAtual
+from api.models.estoque_atual import Estoque
 import pandas as pd
 import datetime
 
@@ -14,7 +14,7 @@ def estoque_atual(cod_produto, id_empresa):
     list = []
     for filial in filiais:
 
-        estoque_a = pd.DataFrame(EstoqueAtual.objects.filter(
+        estoque_a = pd.DataFrame(Estoque.objects.filter(
             cod_produto__exact=cod_produto,
             cod_filial__exact=filial.cod_filial,
             empresa__id__exact=id_empresa
@@ -27,11 +27,9 @@ def estoque_atual(cod_produto, id_empresa):
 
     list_est_atual = []
     for i in list:
-        df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "embalagem", "cod_filial", "filial_id",
-                                      "cod_fornecedor", "produto_id", "fornecedor_id", "empresa_id",
-                                      "qt_estoque_geral", "qt_indenizada", "qt_reservada", "qt_pendente",
-                                      "qt_bloqueada", "qt_disponivel", "custo_ult_ent", "preco_venda", "data",
-                                      "created_at"])
+        df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "filial_id", "cod_fornecedor", "produto_id",
+                                      "fornecedor_id", "empresa_id", "qt_geral", "qt_indenizada", "qt_reservada",
+                                      "qt_pendente", "qt_bloqueada", "qt_disponivel", "data", "created_at"])
         disponivel = df
         disponiveis = disponivel.assign(
             **disponivel.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")

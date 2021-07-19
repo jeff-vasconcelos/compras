@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from core.models.parametros_models import DadosEstoque
+from core.alertas.vendas_alertas import vendas
 
 from core.views.alertas_views import alertas
 
@@ -34,3 +35,10 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
         'totais_dados_estoque': totais_dados_estoque
     }
     return render(request, template_name, contexto)
+
+
+def testandoviews(request, template_name='testando_alerta.html'):
+    resultado = vendas(180, 1, 30)
+
+    print(resultado)
+    return render(request, template_name)

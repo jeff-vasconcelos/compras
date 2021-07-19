@@ -58,6 +58,7 @@ urlpatterns = [
 
     #TODO rota de testes
     path('testando/', teste, name='testando'),
+    path('teste/', testandoviews, name='testando_views'),
 
 ]
 

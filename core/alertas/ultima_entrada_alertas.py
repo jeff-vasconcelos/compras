@@ -1,4 +1,4 @@
-from api.models.ultima_entrada import UltimaEntrada
+from api.models.ultima_entrada import Entrada
 from core.alertas.verificador import get_filiais
 import pandas as pd
 import datetime
@@ -15,7 +15,7 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
     list_entradas = []
     for filial in filiais:
 
-        u_entrada_df = pd.DataFrame(UltimaEntrada.objects.filter(
+        u_entrada_df = pd.DataFrame(Entrada.objects.filter(
             cod_produto__exact=cod_produto,
             cod_filial__exact=filial.cod_filial,
             data__range=[data_fim, data_inicio],

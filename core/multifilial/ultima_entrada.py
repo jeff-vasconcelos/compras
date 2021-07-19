@@ -1,4 +1,4 @@
-from api.models.ultima_entrada import UltimaEntrada
+from api.models.ultima_entrada import Entrada
 from core.models.empresas_models import Filial
 import pandas as pd
 import datetime
@@ -8,7 +8,7 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
 
-    u_entrada_df = pd.DataFrame(UltimaEntrada.objects.filter(
+    u_entrada_df = pd.DataFrame(Entrada.objects.filter(
         cod_produto__exact=cod_produto,
         empresa__id__exact=id_empresa,
         data__range=[data_fim, data_inicio]

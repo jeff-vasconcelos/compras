@@ -5,6 +5,7 @@ from core.alertas.verificador import get_filiais
 
 
 def abc(cod_fornecedor, id_empresa, periodo):
+    global lista_fim
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
 
@@ -25,11 +26,10 @@ def abc(cod_fornecedor, id_empresa, periodo):
 
     list_curva = []
     for i in list:
-        df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "cod_filial", "filial_id", "cod_fornecedor",
-                                      "produto_id", "fornecedor_id", "empresa_id", "qt_vendas", "qt_unit_caixa",
-                                      "preco_unit", "custo_fin", "data", "cliente", "marca", "peso_liquido",
-                                      "cod_depto",
-                                      "num_nota", "cod_usur", "cod_fab", "desc_dois", "supervisor", "created_at"])
+        df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "filial_id", "cod_fornecedor",
+                                      "produto_id", "fornecedor_id", "empresa_id", "qt_vendas", "preco_unit",
+                                      "custo_fin", "data", "cliente", "marca", "cod_depto", "num_nota", "cod_usur",
+                                      "supervisor", "created_at"])
 
         df['vl_total_vendido'] = df['qt_vendas'] * df['preco_unit']
         df['vl_total_custo'] = df['qt_vendas'] * df['custo_fin']

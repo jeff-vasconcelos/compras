@@ -9,7 +9,14 @@ class Produto(models.Model):
     embalagem = models.CharField(max_length=255, null=True, blank=True)
     quantidade_un_cx = models.FloatField(blank=True, null=True)
     marca = models.CharField(max_length=255, blank=True, null=True)
-    peso_liq = models.CharField(max_length=255, blank=True, null=True)
+    peso_liquido = models.CharField(max_length=255, blank=True, null=True)
+
+    cod_fabrica = models.IntegerField(null=True, blank=True)
+    cod_auxiliar = models.IntegerField(null=True, blank=True)
+    cod_depto = models.IntegerField(null=True, blank=True)
+    desc_departamento = models.CharField(max_length=255, null=True, blank=True)
+    desc_secao = models.CharField(max_length=255, null=True, blank=True)
+
     cod_fornecedor = models.IntegerField(null=True, blank=True)
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_produto',
                                 blank=True, null=True)

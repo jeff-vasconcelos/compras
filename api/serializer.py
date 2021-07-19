@@ -40,7 +40,7 @@ class FornecedorSerializer(serializers.ModelSerializer):
 
 class EstoqueAtualSerializer(serializers.ModelSerializer):
     class Meta:
-        model = EstoqueAtual
+        model = Estoque
         fields = '__all__'
 
     def validate(self, data):
@@ -111,7 +111,7 @@ class PedidoSerializer(serializers.ModelSerializer):
 
 class UltEntradaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UltimaEntrada
+        model = Entrada
         fields = '__all__'
 
     def validate(self, data):
