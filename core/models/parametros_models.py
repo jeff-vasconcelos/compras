@@ -39,3 +39,26 @@ class DadosEstoque(models.Model):
 
     def __str__(self):
         return self.empresa.nome_fantasia
+
+
+class GraficoCurva(models.Model):
+    curva = models.CharField(max_length=255, blank=True, null=True)
+    normal = models.FloatField(null=True, blank=True)
+    parcial = models.FloatField(null=True, blank=True)
+    excesso = models.FloatField(null=True, blank=True)
+    total = models.FloatField(null=True, blank=True)
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='grafcurva_empresa',
+                                blank=True, null=True)
+
+    def __str__(self):
+        return self.empresa.nome_fantasia
+
+
+class GraficoRuptura(models.Model):
+    curva = models.CharField(max_length=255, blank=True, null=True)
+    total = models.FloatField(null=True, blank=True)
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='grafruptura_empresa',
+                                blank=True, null=True)
+
+    def __str__(self):
+        return self.empresa.nome_fantasia
