@@ -7,6 +7,7 @@
             margin-right: auto;
             width: 10%;
         }
+
         h6.curvas_text {
             font-size: 14px;
         }
@@ -16,18 +17,22 @@
             border-right: solid 1px black;
             text-align: center;
         }
+
         td.tabela-home-body {
             border-right: solid 1px black;
             text-align: center;
         }
+
         th.tabela-home-foot {
             border-right: solid 1px black;
             text-align: center;
         }
+
         th.tabela-home-last, td.tabela-home-last {
             text-align: center;
         }
-        #excesso-table-home{
+
+        #excesso-table-home {
             border-bottom: solid 1px black;
         }
     </style>
@@ -45,7 +50,7 @@
                     <div class="row">
                         <div class="col-12" style="margin-right: auto; margin-left: auto">
                             <div class="chart-pie pt-4">
-                                <canvas id="myPieChart"></canvas>
+                                <canvas id="chartCurvaA"></canvas>
                             </div>
                         </div>
                     </div>
@@ -79,7 +84,7 @@
                     <div class="row">
                         <div class="col-12" style="margin-right: auto; margin-left: auto">
                             <div class="chart-pie pt-4">
-                                <canvas id="myPieChart"></canvas>
+                                <canvas id="chartCurvaB"></canvas>
                             </div>
                         </div>
                     </div>
@@ -113,7 +118,7 @@
                     <div class="row">
                         <div class="col-12" style="margin-right: auto; margin-left: auto">
                             <div class="chart-pie pt-4">
-                                <canvas id="myPieChart"></canvas>
+                                <canvas id="chartCurvaC"></canvas>
                             </div>
                         </div>
                     </div>
@@ -147,7 +152,7 @@
                     <div class="row">
                         <div class="col-12" style="margin-right: auto; margin-left: auto">
                             <div class="chart-pie pt-4">
-                                <canvas id="myPieChart"></canvas>
+                                <canvas id="chartCurvaD"></canvas>
                             </div>
                         </div>
                     </div>
@@ -181,7 +186,7 @@
                     <div class="row">
                         <div class="col-12" style="margin-right: auto; margin-left: auto">
                             <div class="chart-pie pt-4">
-                                <canvas id="myPieChart"></canvas>
+                                <canvas id="chartCurvaE"></canvas>
                             </div>
                         </div>
                     </div>
@@ -218,36 +223,42 @@
 
                     <table width="100%">
                         <thead>
-                            <tr>
-                                <th class="tabela-home-head">Curva</th>
-                                <th class="tabela-home-head">SKU's</th>
-                                <th class="tabela-home-head">Normal</th>
-                                <th class="tabela-home-head">Ruptura Parc.</th>
-                                <th class="tabela-home-head">Ruptura</th>
-                                <th class="tabela-home-last" id="excesso-table-home">Excesso</th>
-                            </tr>
+                        <tr>
+                            <th class="tabela-home-head">Curva</th>
+                            <th class="tabela-home-head">SKU's</th>
+                            <th class="tabela-home-head">Normal</th>
+                            <th class="tabela-home-head">Ruptura Parc.</th>
+                            <th class="tabela-home-head">Ruptura</th>
+                            <th class="tabela-home-last" id="excesso-table-home">Excesso</th>
+                        </tr>
                         </thead>
 
                         <tbody>
-                            <tr>
-                                <td class="tabela-home-body">A</td>
-                                <td class="tabela-home-body">956</td>
-                                <td class="tabela-home-body">3</td>
-                                <td class="tabela-home-body">59</td>
-                                <td class="tabela-home-body">98</td>
-                                <td class="tabela-home-last">98</td>
-                            </tr>
+                        {% if dadosestoque %}
+                            {% for dados in dadosestoque %}
+                                <tr>
+                                    <td class="tabela-home-body">{{ dados.curva }}</td>
+                                    <td class="tabela-home-body">{{ dados.skus }}</td>
+                                    <td class="tabela-home-body">{{ dados.normal }}</td>
+                                    <td class="tabela-home-body">{{ dados.parcial }}</td>
+                                    <td class="tabela-home-body">{{ dados.ruptura }}</td>
+                                    <td class="tabela-home-last">{{ dados.excesso }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                         </tbody>
 
                         <tfoot>
-                            <tr>
-                                <th class="tabela-home-foot">Total</th>
-                                <th class="tabela-home-foot">250</th>
-                                <th class="tabela-home-foot">32</th>
-                                <th class="tabela-home-foot">10</th>
-                                <th class="tabela-home-foot">20</th>
-                                <th class="tabela-home-last">1000051</th>
-                            </tr>
+
+                        <tr>
+                            <th class="tabela-home-foot">Total</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_skus }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_normal }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_parcial }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_ruptura }}</th>
+                            <th class="tabela-home-last">{{ totais_dados_estoque.t_excesso }}</th>
+                        </tr>
+
                         </tfoot>
                     </table>
 
@@ -260,7 +271,7 @@
                 <div class="card-body">
                     <p>Ruptura x Curva</p>
                     <div class="chart-bar">
-                        <canvas id="myAreaChart"></canvas>
+                        <canvas id="chartRupturaxCurva"></canvas>
                     </div>
                 </div>
             </div>
