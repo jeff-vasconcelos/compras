@@ -109,6 +109,7 @@ def teste(request, template_name='testando_alerta.html'):
     produtos = alertas()
     executar_alerta(1, produtos)
     send_email_alerta(request)
+    print(produtos)
     return render(request, template_name)
 
 
@@ -148,6 +149,7 @@ def send_email_alerta(request):
     msg.attach(f'alerta-insight-{hoje}', pdf, 'application/pdf')
     msg.content_subtype = 'html'
     msg.send()
+    print("é pra enviar o email")
 
 
 

@@ -60,6 +60,8 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
             excesso = "FALSE"
 
         valor_sugestao = m_sugestao * custo
+        curva = str(produto_dados['curva'].unique()).strip('[]')
+        ruptura = str(produto_dados['ruptura'].unique()).strip('[]')
 
         data = []
         itens_analise = {
@@ -80,9 +82,9 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
             'valor_sugestao': valor_sugestao,
             'preco_tabela': float(produto_dados['preco_venda_tabela'].unique()),
             'margem': float(produto_dados['margem'].unique()),
-            'curva': str(produto_dados['curva'].unique()).strip('[]'),
+            'curva': curva.replace("'", ""),
             'media_ajustada': str(produto_dados['media_ajustada'].unique()).strip('[]'),
-            'ruptura': str(produto_dados['ruptura'].unique()).strip('[]'),
+            'ruptura': ruptura.replace("'", ""),
             'ruptura_porc': float(produto_dados['ruptura_porc'].unique()),
             'ruptura_cor': str(produto_dados['cor_ruptura'].unique()).strip('[]'),
             'condicao_estoque': str(produto_dados['condicao_estoque'].unique()).strip('[]'),
@@ -101,8 +103,6 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
                 lista_fim.append(b)
 
     dados_produtos_filiais = pd.DataFrame(lista_fim)
-
-    print(dados_produtos_filiais.ruptura)
 
     return dados_produtos_filiais
 
