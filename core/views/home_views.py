@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from core.alertas.processa_produtos_alertas import *
 from core.models.parametros_models import DadosEstoque
 from core.alertas.vendas_alertas import vendas
 
@@ -38,7 +40,10 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
 
 def testandoviews(request, template_name='testando_alerta.html'):
-    resultado = vendas(180, 1, 30)
+    # resultado = vendas(180, 1, 30)
+    # dados_produto(180, 16, 1, 15, 30, 30)
+    # processa_produtos_filiais(180, 16, 1, 15, 30, 30)
+    resultado = processa_produtos_filiais(180, 16, 1, 15, 30, 30)
 
-    print(resultado)
+    # print(resultado)
     return render(request, template_name)

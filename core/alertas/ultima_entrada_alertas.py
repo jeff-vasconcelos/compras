@@ -30,9 +30,10 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
 
     if list:
         for i in list:
-            df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "cod_filial", "filial_id",
-                                          "cod_fornecedor", "produto_id", "fornecedor_id", "empresa_id",
-                                          "qt_ult_entrada", "vl_ult_entrada", "data", "created_at"])
+            df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_ult_entrada",
+                                          "vl_ult_entrada", "data", "created_at", "produto_id", "fornecedor_id",
+                                          "filial_id", "empresa_id"
+                                          ])
             entrada = df
             entradas = entrada.assign(
                 **entrada.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")

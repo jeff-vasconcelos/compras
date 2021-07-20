@@ -14,8 +14,8 @@ class Estoque(models.Model):
     qt_pendente = models.IntegerField(null=True, blank=True)
     qt_bloqueada = models.IntegerField(null=True, blank=True)
     qt_disponivel = models.IntegerField(null=True, blank=True)
-    # custo_ult_ent = models.FloatField(null=True, blank=True)
-    # preco_venda = models.FloatField(null=True, blank=True)
+    custo_ult_entrada = models.FloatField(null=True, blank=True)
+    preco_venda = models.FloatField(null=True, blank=True)
     data = models.DateField(null=True, blank=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
@@ -44,4 +44,4 @@ class Estoque(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.cod_produto
+        return self.produto.desc_produto

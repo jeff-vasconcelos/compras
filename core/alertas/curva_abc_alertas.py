@@ -26,10 +26,9 @@ def abc(cod_fornecedor, id_empresa, periodo):
 
     list_curva = []
     for i in list:
-        df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "filial_id", "cod_fornecedor",
-                                      "produto_id", "fornecedor_id", "empresa_id", "qt_vendas", "preco_unit",
-                                      "custo_fin", "data", "cliente", "marca", "cod_depto", "num_nota", "cod_usur",
-                                      "supervisor", "created_at"])
+        df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_vendas", "preco_unit",
+                                          "custo_fin", "data", "cliente", "num_nota", "cod_usur", "supervisor", "created_at",
+                                          "produto_id", "fornecedor_id", "filial_id", "empresa_id"])
 
         df['vl_total_vendido'] = df['qt_vendas'] * df['preco_unit']
         df['vl_total_custo'] = df['qt_vendas'] * df['custo_fin']

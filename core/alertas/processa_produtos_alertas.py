@@ -1,3 +1,6 @@
+from datetime import time
+
+import numpy as np
 from django.shortcuts import render
 
 from api.models.produto import Produto
@@ -18,30 +21,31 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
+    global dt_u_entrada
     informacaoes_produto = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo)
 
-    # filiais = get_filiais(id_empresa)
-
-    contador = 0
     lista_resumo = []
 
     filiais = []
     for i, v in informacaoes_produto.cod_filial.iteritems():
         filiais.append(v)
 
-
+    contador = 0
     for filial in filiais:
         produto_dados = informacaoes_produto.query('cod_filial == @filial')
 
-        dt_entrada = produto_dados['dt_ult_ent'][contador]
+        dt_entrada = produto_dados['dt_ult_ent'].unique()
+
         if dt_entrada == '-':
             dt_u_entrada = dt_entrada
         else:
-            dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
+            t = pd.to_datetime(dt_entrada)
+            dt_u_entrada = t.strftime('%d/%m/%Y')
 
-        sugestao = float(produto_dados['sugestao'])
-        qt_un_caixa = float(produto_dados['qt_unit_caixa'])
-        custo = float(produto_dados['custo'])
+
+        sugestao = float(produto_dados['sugestao'].unique())
+        qt_un_caixa = float(produto_dados['qt_unit_caixa'].unique())
+        custo = float(produto_dados['custo'].unique())
 
         sug_cx = sugestao / qt_un_caixa
         sug_cx = math.ceil(sug_cx)
@@ -59,31 +63,31 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
 
         data = []
         itens_analise = {
-            'filial': int(produto_dados['cod_filial']),
-            'estoque': int(produto_dados['estoque_dispon']),
-            'avaria': int(produto_dados['avarias']),
-            'saldo': int(produto_dados['saldo']),
-            'dt_ult_entrada': dt_u_entrada,
-            'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
-            'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
-            'dde': float(produto_dados['dde']),
-            'est_seguranca': float(produto_dados['estoque_segur']),
-            'p_reposicao': float(produto_dados['ponto_repo']),
-            'sugestao': float(produto_dados['sugestao']),
+            'filial': int(produto_dados['cod_filial'].unique()),
+            'estoque': int(produto_dados['estoque_dispon'].unique()),
+            'avaria': int(produto_dados['avarias'].unique()),
+            'saldo': int(produto_dados['saldo'].unique()),
+            'dt_ult_entrada': dt_u_entrada[0],
+            'qt_ult_entrada': int(produto_dados['qt_ult_ent'].unique()),
+            'vl_ult_entrada': float(produto_dados['vl_ult_ent'].unique()),
+            'dde': float(produto_dados['dde'].unique()),
+            'est_seguranca': float(produto_dados['estoque_segur'].unique()),
+            'p_reposicao': float(produto_dados['ponto_repo'].unique()),
+            'sugestao': float(produto_dados['sugestao'].unique()),
             'sugestao_caixa': sug_cx,
             'sugestao_unidade': sug_unit,
             'excesso_estoque': excesso,
             'valor_sugestao': valor_sugestao,
-            'preco_tabela': float(produto_dados['preco_venda_tabela'][contador]),
-            'margem': float(produto_dados['margem'][contador]),
-            'curva': str(produto_dados['curva'][contador]),
-            'media_ajustada': str(produto_dados['media_ajustada'][contador]),
-            'ruptura': str(produto_dados['ruptura'][contador]),
-            'ruptura_porc': float(produto_dados['ruptura_porc']),
-            'ruptura_cor': str(produto_dados['cor_ruptura'][contador]),
-            'condicao_estoque': str(produto_dados['condicao_estoque'][contador]),
-            'porc_media': float(produto_dados['porcent_media'][contador]),
-            'media_simples': float(produto_dados['media'][contador]),
+            'preco_tabela': float(produto_dados['preco_venda_tabela'].unique()),
+            'margem': float(produto_dados['margem'].unique()),
+            'curva': str(produto_dados['curva'].unique()).strip('[]'),
+            'media_ajustada': str(produto_dados['media_ajustada'].unique()).strip('[]'),
+            'ruptura': str(produto_dados['ruptura'].unique()).strip('[]'),
+            'ruptura_porc': float(produto_dados['ruptura_porc'].unique()),
+            'ruptura_cor': str(produto_dados['cor_ruptura'].unique()).strip('[]'),
+            'condicao_estoque': str(produto_dados['condicao_estoque'].unique()).strip('[]'),
+            'porc_media': float(produto_dados['porcent_media'].unique()),
+            'media_simples': float(produto_dados['media'].unique()),
         }
 
         data.append(itens_analise)
@@ -98,6 +102,8 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
 
     dados_produtos_filiais = pd.DataFrame(lista_fim)
 
+    print(dados_produtos_filiais.ruptura)
+
     return dados_produtos_filiais
 
 
@@ -108,7 +114,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     pedidos = pedidos_compra(cod_produto, id_empresa)
     u_entrada = ultima_entrada(cod_produto, id_empresa, periodo)
     e_atual = estoque_atual(cod_produto, id_empresa)
-    vendas_p, info_produto = vendas_historico(cod_produto, id_empresa, periodo)
+    vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo)
+    # df_vendas, informacoes_produto = vendas(cod_produto, id_empresa, periodo)
 
     lista_fornecedor = []
     lista_resumo = []
@@ -120,7 +127,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     for i, v in info_produto.cod_filial.iteritems():
         filiais.append(v)
 
-    contador = 0
     for filial in filiais:
         print('filial', filial)
         if pedidos is not None:
@@ -144,9 +150,9 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             qt_ult_entrada = 0
             vl_ult_entrada = 0
         else:
-            dt_ult_entrada = entradas_['data']
-            qt_ult_entrada = entradas_['qt_ult_entrada']
-            vl_ult_entrada = entradas_['vl_ult_entrada']
+            dt_ult_entrada = entradas_['data'].unique()
+            qt_ult_entrada = entradas_['qt_ult_entrada'].unique()
+            vl_ult_entrada = entradas_['vl_ult_entrada'].unique()
 
         # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
         media = info_produto.media[0]
@@ -168,8 +174,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         # INFORMAÇÕES DE PRODUTO
 
         estoque_a = estoque_['qt_disponivel'].to_frame().reset_index(drop=True)
-        prod_resumo['custo'] = estoque_['custo_ult_ent']
-
+        prod_resumo['custo'] = estoque_['custo_ult_entrada'].unique()
 
         prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
@@ -219,7 +224,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
-        prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
+        prod_resumo['qt_unit_caixa'] = info_produto.quantidade_un_caixa.unique()
 
         # PORCENTAGEM DA MEDIA
         d_m = desvio / media
@@ -231,11 +236,9 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         # TODO Verificar coluna nas outras funções
         # preco_custo = e_atual.preco_custo[0]
 
-        preco_custo = estoque_.custo_ult_ent
-        preco_tabela = estoque_.preco_venda
+        preco_custo = estoque_.custo_ult_entrada.unique()
+        preco_tabela = estoque_.preco_venda.unique()
 
-        # O contador vai navegar pelo indice do dataframe sempre inicando por 0, conforme a quantidade de filiais
-        contador = contador + 1
 
         m = preco_tabela - preco_custo
         m_ = m / preco_tabela
@@ -296,25 +299,27 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
                 lista_fim.append(b)
         resumo_produto = pd.DataFrame(lista_fim)
 
+    # print(resumo_produto.info())
+
     return resumo_produto
 
-
-def vendas_historico(cod_produto, id_empresa, periodo):
-    df_vendas, informacoes_produto = vendas(cod_produto, id_empresa, periodo)
-    df_historico = historico_estoque(cod_produto, id_empresa, periodo)
-
-    df_vendas['data'] = pd.to_datetime(df_vendas['data'], format='%Y-%m-%d')
-    df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
-
-    df_ven_hist = pd.merge(df_vendas, df_historico, how="left",
-                           on=["data", "cod_produto", "cod_filial", "desc_produto"])
-    embalagem = df_historico['embalagem'][0]
-
-    values = {'embalagem': embalagem, 'qt_est_disponivel': 0, 'qt_estoque': 0}
-
-    df_ven_hist.fillna(value=values, inplace=True)
-    df_ven_hist.drop(
-        columns=['id', 'produto_id', 'fornecedor_id', 'empresa_id', 'created_at', 'cod_fornecedor_y', 'filial_id'],
-        inplace=True)
-
-    return df_ven_hist, informacoes_produto
+#
+# def vendas_historico(cod_produto, id_empresa, periodo):
+#     df_vendas, informacoes_produto = vendas(cod_produto, id_empresa, periodo)
+#     df_historico = historico_estoque(cod_produto, id_empresa, periodo)
+#
+#     df_vendas['data'] = pd.to_datetime(df_vendas['data'], format='%Y-%m-%d')
+#     df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
+#
+#     df_ven_hist = pd.merge(df_vendas, df_historico, how="left",
+#                            on=["data", "cod_produto", "cod_filial", "desc_produto"])
+#     embalagem = df_historico['embalagem'][0]
+#
+#     values = {'embalagem': embalagem, 'qt_est_disponivel': 0, 'qt_estoque': 0}
+#
+#     df_ven_hist.fillna(value=values, inplace=True)
+#     df_ven_hist.drop(
+#         columns=['id', 'produto_id', 'fornecedor_id', 'empresa_id', 'created_at', 'cod_fornecedor_y', 'filial_id'],
+#         inplace=True)
+#
+#     return df_ven_hist, informacoes_produto
