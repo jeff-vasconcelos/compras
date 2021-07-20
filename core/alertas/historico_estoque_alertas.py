@@ -28,8 +28,8 @@ def historico_estoque(cod_produto, id_empresa, periodo):
 
     list_est_histor = []
     for i in list:
-        df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "filial_id", "cod_fornecedor", "produto_id",
-                                      "fornecedor_id", "empresa_id", "qt_estoque", "data", "created_at"])
+        df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_estoque", "data",
+                                      "created_at", "produto_id", "fornecedor_id", "filial_id", "empresa_id"])
         historico = df
         hist_estoque = historico.assign(
             **historico.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")

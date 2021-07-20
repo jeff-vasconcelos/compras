@@ -8,7 +8,7 @@ import datetime
 
 
 def vendas(cod_produto, id_empresa, periodo):
-    global vendas, informacao_produto
+    global vendas, informacao_produto, produto_qs
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
     datas = dia_semana_mes_ano(id_empresa)
@@ -29,10 +29,8 @@ def vendas(cod_produto, id_empresa, periodo):
             cod_produto__exact=cod_produto,
             empresa__id__exact=id_empresa
         )
-        print(produto_qs)
 
         if not vendas_df.empty:
-            vendas_df['quantidade_un_caixa'] = produto_qs.quantidade_un_cx
             vendas_ = vendas_df
             lista = vendas_.values.tolist()
             list.append(lista)
@@ -44,12 +42,13 @@ def vendas(cod_produto, id_empresa, periodo):
 
     for i in list:
         if i:
-            df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "filial_id", "cod_fornecedor", "produto_id",
-                                          "fornecedor_id", "empresa_id", "qt_vendas", "preco_unit", "custo_fin", "data",
-                                          "cliente", "num_nota", "cod_usur", "supervisor", "created_at", "quantidade_un_caixa"])
+            df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_vendas", "preco_unit",
+                                          "custo_fin", "data", "cliente", "num_nota", "cod_usur", "supervisor", "created_at",
+                                          "produto_id", "fornecedor_id", "filial_id", "empresa_id"])
+
             vendas_df = df
 
-            # vendas_df['data'] = pd.to_datetime(vendas_df['data'])
+            vendas_df['data'] = pd.to_datetime(vendas_df['data'])
 
             preco = vendas_df.groupby(['data'])['preco_unit'].mean().round(2).to_frame().reset_index()
             media_preco_vendas = preco['preco_unit'].mean(skipna=True)
@@ -59,7 +58,7 @@ def vendas(cod_produto, id_empresa, periodo):
 
             qtvendas = \
                 vendas_df.groupby(
-                    ['data', 'cod_produto', 'cod_filial', 'cod_fornecedor', 'quantidade_un_caixa'])[
+                    ['data', 'cod_produto', 'cod_filial', 'cod_fornecedor'])[
                     'qt_vendas'].sum().to_frame().reset_index()
 
             qtvendas_preco_custo = pd.merge(qtvendas, preco_custo, how="left", on=["data"])
@@ -69,30 +68,33 @@ def vendas(cod_produto, id_empresa, periodo):
 
             #MERGE VENDAS X HISTORICO
             df_historico = historico_estoque(cod_produto, id_empresa, periodo)
+            df_historico['data'] = pd.to_datetime(df_historico['data'])
+
             vendas_datas = pd.merge(vendas_datas, df_historico, how="left",
                            on=["data", "cod_produto", "cod_filial"])
 
             vendas_datas = vendas_datas.drop_duplicates(subset=['data', 'cod_produto', 'cod_filial'], keep='first')
 
             cod_filial = vendas_datas['cod_filial'].unique()
-            cod_prod = vendas_datas['cod_produto'].unique()
-            cod_fornec = vendas_datas['cod_fornecedor'].unique()
 
             # qt_un_caixa = vendas_datas['quantidade_un_caixa'].unique()
 
             if vendas_df.size == 1:
-                values = {'cod_produto': cod_prod[0], 'cod_filial': cod_filial[0],
-                          'cod_fornecedor': cod_fornec[0], 'qt_vendas': 0,
+                values = {'cod_produto': produto_qs.cod_produto, 'cod_filial': cod_filial[0],
+                          'cod_fornecedor': produto_qs.cod_fornecedor, 'qt_vendas': 0,
                           'custo_fin': 0,
-                          'preco_unit': 0}
+                          'preco_unit': 0,
+                          'quantidade_un_caixa': produto_qs.quantidade_un_cx
+                          }
             else:
-                values = {'cod_produto': cod_prod[1], 'cod_filial': cod_filial[1],
-                          'cod_fornecedor': cod_fornec[1], 'qt_vendas': 0,
+                values = {'cod_produto': produto_qs.cod_produto, 'cod_filial': cod_filial[1],
+                          'cod_fornecedor': produto_qs.cod_fornecedor, 'qt_vendas': 0,
                           'custo_fin': 0,
-                          'preco_unit': 0}
+                          'preco_unit': 0,
+                          'quantidade_un_caixa': produto_qs.quantidade_un_cx
+                          }
 
             vendas_datas.fillna(value=values, inplace=True)
-
 
             e_vendas = vendas_datas
             tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
@@ -139,7 +141,7 @@ def vendas(cod_produto, id_empresa, periodo):
                 'media': [media.round(2)], 'maximo': [maximo], 'desvio': [d_padrao.round(2)],
                 'max_media': [max_media.round(2)],
                 'media_ajustada': [media_ajustada.round(2)],
-                'quantidade_un_caixa': e_vendas['quantidade_un_caixa'][0],
+                'quantidade_un_caixa': produto_qs.quantidade_un_cx,
                 'media_preco_praticado': media_preco_vendas
             }
             info_prod = pd.DataFrame(info_p)
@@ -183,5 +185,6 @@ def vendas(cod_produto, id_empresa, periodo):
             informacao_produto = informacao_produto.drop_duplicates(subset=['cod_filial'], keep='first')
             vendas = vendas.drop_duplicates(subset=['data', 'cod_produto', 'cod_filial'], keep='first')
 
-
+    print(vendas)
+    print(informacao_produto)
     return vendas, informacao_produto
