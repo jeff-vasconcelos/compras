@@ -4,16 +4,20 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.db.models import Q
 from api.models.produto import *
+from api.models.venda import Venda
 from core.alertas.verificador import verifica_produto
-from core.multifilial.processa_produtos import processa_produtos_filiais
+from core.models.parametros_models import Parametro
+from core.multifilial.processa_produtos import a_multifiliais
 from core.multifilial.curva_abc import abc
 from core.trata_dados.curva_abc import abc
-from core.trata_dados.historico_estoque import historico_estoque
-from core.trata_dados.vendas import *
+from core.trata_dados.datas import dia_semana_mes_ano
+from core.multifilial.historico_estoque import historico_estoque
+# from core.trata_dados.vendas import *
 from core.trata_dados.pedidos import *
 from core.models.empresas_models import Filial
 import csv
 import pandas as pd
+from core.multifilial.vendas import vendas
 
 
 @login_required
@@ -340,43 +344,63 @@ def selecionar_produto(request):
     id_empresa = request.user.usuario.empresa_id
 
     if request.is_ajax():
+
+        #DADOS DA REQUISIÇÃO
         id_produto = int(request.POST.get('produto'))
         leadtime = int(request.POST.get('leadtime'))
         t_reposicao = int(request.POST.get('tempo_reposicao'))
-        filialselecionada = int(request.POST.get('filial'))
+        filial_selecionada = int(request.POST.get('filial'))
 
+        #VERIFICANDO SE HOUVE VENDAS NO PERIODO INDEPENDE DA FILIAL
         qs = Produto.objects.get(id=id_produto, empresa__id=id_empresa)
-
         parametros = Parametro.objects.get(empresa_id=id_empresa)
-
         verif_produto = verifica_produto(qs.cod_produto, id_empresa, parametros.periodo)
+        lista_filiais = []
+
+        cod_produto = qs.cod_produto
+        cod_fornecedor = qs.cod_fornecedor
+        periodo = parametros.periodo
 
         if verif_produto == True:
 
-            infor_produtos_filiais = processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao, filialselecionada)
+            #VERIFCANDO FILIAIS COM VENDAS DO PRODUTO
+            se_vendas = Venda.objects.filter(
+                empresa__id__exact=id_empresa,
+                produto__id__exact=id_produto,
+            )
+            filiais_cod = se_vendas.values_list('cod_filial', flat=True).distinct()
 
-            df_filial_selecionada = infor_produtos_filiais.query('filial == @filialselecionada')
+
+            for filial in filiais_cod:
+                f = filial
+                lista_filiais.append(f)
+
+            inf_filiais = a_multifiliais(cod_produto, cod_fornecedor, id_empresa,
+                                         leadtime, t_reposicao, periodo, lista_filiais)
+
+
+            df_filial_selecionada = inf_filiais.query('filial == @filial_selecionada')
             df_filial_selecionada = df_filial_selecionada.drop(columns=[
                 'filial','estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
                 'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela', 'margem'
             ])
 
-            item_filial_selecionada = df_filial_selecionada.to_dict('records')
+            i_filial_selec = df_filial_selecionada.to_dict('records')
 
-            for i in item_filial_selecionada:
+            for i in i_filial_selec:
                 info_prod_filiais = i
 
-            infor_produtos_filiais = infor_produtos_filiais.drop(columns=[
+            inf_filiais = inf_filiais.drop(columns=[
                 'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
             ])
-            infor_produtos_filiais = infor_produtos_filiais.to_dict('records')
 
+            inf_filiais = inf_filiais.to_dict('records')
 
             data = []
 
-            mapa = mapas_serie(id_empresa, id_produto, filialselecionada)
+            mapa = mapas_serie(id_empresa, cod_produto, filial_selecionada, periodo)
 
-            data.append(infor_produtos_filiais)  # 0
+            data.append(inf_filiais)  # 0
             data.append(mapa)  # 1
             data.append(info_prod_filiais) #2
 
@@ -388,25 +412,29 @@ def selecionar_produto(request):
     return JsonResponse({})
 
 
-def mapas_serie(empresa, produto, cod_filial):
+def mapas_serie(id_empresa, cod_produto, cod_filial, periodo):
     info_prod = None
-    qs = Produto.objects.get(id=produto, empresa__id=empresa)
-    produto_codigo = qs.cod_produto
+    lista_filiais = []
+    lista_filiais.append(cod_filial)
 
-    parametros = Parametro.objects.get(empresa_id=empresa)
-    df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo, cod_filial)
+    df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
 
-    datas = dia_semana_mes_ano(empresa)
 
-    df_historico = historico_estoque(produto_codigo, empresa, parametros.periodo)
+    # df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo, cod_filial)
+
+    datas = dia_semana_mes_ano(id_empresa)
+
+    df_historico = historico_estoque(cod_produto, id_empresa, periodo, lista_filiais)
+
     df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
-    hist_estoque = pd.merge(datas, df_historico, how="left", on=["data"])
-    hist_estoque['qt_estoque'].fillna(0, inplace=True)
-    hist_estoque = hist_estoque.sort_values(by=['data'], ascending=True)
+    serie_estoque = pd.merge(datas, df_historico, how="left", on=["data"])
 
-    data_day_est = hist_estoque['data'].copy()
+    serie_estoque['qt_estoque'].fillna(0, inplace=True)
+    serie_estoque = serie_estoque.sort_values(by=['data'], ascending=True)
+
+    data_day_est = serie_estoque['data'].copy()
     data_dia_est = data_day_est.dt.strftime('%d/%m/%Y')
-    hist_estoque['data_serie_hist_est'] = hist_estoque['semana'].str.cat(data_dia_est, sep=" - ")
+    serie_estoque['data_serie_hist_est'] = serie_estoque['semana'].str.cat(data_dia_est, sep=" - ")
 
 
     df_vendas = df_vendas.sort_values(by=['data'], ascending=True)
@@ -424,8 +452,8 @@ def mapas_serie(empresa, produto, cod_filial):
     data_qtvenda = list((df_vendas['qt_vendas']))
     label_dt_serie = list(df_vendas['data_serie_hist'])
 
-    qt_estoque = list(hist_estoque['qt_estoque'])
-    label_dt_serie_est = list(hist_estoque['data_serie_hist_est'])
+    qt_estoque = list(serie_estoque['qt_estoque'])
+    label_dt_serie_est = list(serie_estoque['data_serie_hist_est'])
 
     graf_prod = []
     item = {
@@ -448,7 +476,7 @@ def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
         if produto_id != "0":
-            # TODO Aumatizar filial
+            # TODO Automatizar filial
             cod_filial = 1
 
             qt_digitada = request.POST.get('qt_digitada')

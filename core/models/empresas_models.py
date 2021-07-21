@@ -54,7 +54,6 @@ class Filial(models.Model):
 
 class Alerta(models.Model):
     cod_filial = models.IntegerField(blank=True, null=False)
-    desc_filial = models.CharField(max_length=255, blank=True, null=True)
     cod_produto = models.IntegerField(blank=True, null=False)
     desc_produto = models.CharField(max_length=255, blank=True, null=True)
     saldo = models.FloatField(blank=True, null=True)
@@ -62,6 +61,8 @@ class Alerta(models.Model):
     valor = models.CharField(max_length=255, blank=True, null=True)
     estado_estoque = models.CharField(max_length=255, blank=True, null=True)
     estoque = models.FloatField(blank=True, null=True)
+    qt_excesso = models.FloatField(blank=True, null=True)
+    vl_excesso = models.CharField(max_length=255, blank=True, null=True)
     curva = models.CharField(max_length=255, blank=True, null=True)
     fornecedor = models.CharField(max_length=255, blank=True, null=True)
     cod_fornecedor = models.IntegerField(blank=True, null=False)

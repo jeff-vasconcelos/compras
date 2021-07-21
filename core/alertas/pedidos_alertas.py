@@ -23,8 +23,8 @@ def pedidos_compra(cod_produto, id_empresa):
         ).order_by('-id').values())
 
         if not df.empty:
-            pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
-            pedido_ = pedidos_df
+            # pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
+            pedido_ = df
             lista = pedido_.values.tolist()
             list.append(lista)
 
@@ -34,8 +34,8 @@ def pedidos_compra(cod_produto, id_empresa):
 
 
         for i in list:
-            df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "filial_id", "cod_fornecedor", "produto_id",
-                                          "fornecedor_id", "empresa_id", "saldo", "num_pedido", "data", "created_at"])
+            df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "saldo", "num_pedido",
+                                          "data", "created_at","produto_id", "fornecedor_id", "filial_id", "empresa_id"])
 
             pedidos = df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
@@ -50,6 +50,7 @@ def pedidos_compra(cod_produto, id_empresa):
                     lista_fim.append(b)
 
         pedidos = pd.DataFrame(lista_fim)
+        pedidos = pedidos.drop_duplicates(subset=['cod_filial'], keep='first')
 
         return pedidos
     else:

@@ -3,34 +3,39 @@ from core.models.empresas_models import Filial
 import pandas as pd
 import datetime
 
+from core.multifilial.filiais import get_filiais
 
-def ultima_entrada(cod_produto, id_empresa, periodo):
+
+def ultima_entrada(cod_produto, id_empresa, periodo, lista_filiais):
+    global entrada
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
 
-    u_entrada_df = pd.DataFrame(Entrada.objects.filter(
-        cod_produto__exact=cod_produto,
-        empresa__id__exact=id_empresa,
-        data__range=[data_fim, data_inicio]
-    ).order_by('-id').values())
+    # filiais = get_filiais(id_empresa)
 
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+    list = []
+    list_entradas = []
+    for filial in lista_filiais:
 
-    if not u_entrada_df.empty:
-        u_entrada_df = u_entrada_df.drop_duplicates(subset=['cod_filial'], keep='first')
+        u_entrada_df = pd.DataFrame(Entrada.objects.filter(
+            cod_produto__exact=cod_produto,
+            cod_filial__exact=filial,
+            data__range=[data_fim, data_inicio],
+            empresa__id__exact=id_empresa
+        ).order_by('-id').values())
 
-        list = []
-        for filial in filiais:
+        if not u_entrada_df.empty:
+            u_entrada_df = u_entrada_df.drop_duplicates(subset=['cod_filial'], keep='first')
             u_entrada_ = u_entrada_df
-            u_entrada_ = u_entrada_.query('cod_filial == @filial.cod_filial')
             lista = u_entrada_.values.tolist()
             list.append(lista)
 
-        list_entradas = []
+    if list:
         for i in list:
-            df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "cod_filial", "filial_id",
-                                          "cod_fornecedor", "produto_id", "fornecedor_id", "empresa_id",
-                                          "qt_ult_entrada", "vl_ult_entrada", "data", "created_at"])
+            df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_ult_entrada",
+                                          "vl_ult_entrada", "data", "created_at", "produto_id", "fornecedor_id",
+                                          "filial_id", "empresa_id"
+                                          ])
             entrada = df
             entradas = entrada.assign(
                 **entrada.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
@@ -45,5 +50,6 @@ def ultima_entrada(cod_produto, id_empresa, periodo):
             entrada = pd.DataFrame(lista_fim)
 
         return entrada
+
     else:
         return None
