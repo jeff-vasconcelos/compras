@@ -397,6 +397,7 @@ def mapas_serie(empresa, produto, cod_filial):
     df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo, cod_filial)
 
     datas = dia_semana_mes_ano(empresa)
+
     df_historico = historico_estoque(produto_codigo, empresa, parametros.periodo)
     df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
     hist_estoque = pd.merge(datas, df_historico, how="left", on=["data"])
