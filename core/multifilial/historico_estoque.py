@@ -5,6 +5,7 @@ import datetime
 
 
 def historico_estoque(cod_produto, id_empresa, periodo):
+    global historico
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=periodo - 1)  # Aqui sempre será o periodo informado -1
 

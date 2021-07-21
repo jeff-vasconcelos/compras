@@ -1,12 +1,20 @@
 {% extends 'aplicacao/base.html' %}
 
 {% block conteudo %}
+    <h2>Alertas</h2>
+    <hr>
     <div class="card shadow mb-4">
 
         <div class="card-header py-3">
             <div class="row">
                 <div class="col-6">
                     <h6 class="m-0 font-weight-bold">Alertas</h6>
+                </div>
+
+                <div class="col-6">
+                    <h6 class="float-right">
+                        Atualizado em:
+                    </h6>
                 </div>
             </div>
         </div>
@@ -29,47 +37,49 @@
                     </thead>
 
                     <tbody>
-                    {% for produto in produtos %}
-                        {% if produto.estado_estoque == "EXCESSO" %}
-                            <tr class="excesso">
-                                <td class="status">{{ produto.cod_filial }}</td>
-                                <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
-                                <td class="status excesso">{{ produto.estado_estoque }}</td>
-                                <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.valor }}</td>
-                                <td class="curva">{{ produto.curva }}</td>
-                                <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                    {% if produtos %}
+                        {% for produto in produtos %}
+                            {% if produto.estado_estoque == "EXCESSO" %}
+                                <tr class="excesso">
+                                    <td class="status">{{ produto.cod_filial }}</td>
+                                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                    <td class="status excesso">{{ produto.estado_estoque }}</td>
+                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.valor }}</td>
+                                    <td class="curva">{{ produto.curva }}</td>
+                                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
 
-                            </tr>
-                        {% elif produto.estado_estoque == "PARCIAL" %}
-                            <tr class="parcial">
-                                <td class="status">{{ produto.cod_filial }}</td>
-                                <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
-                                <td class="status parcial">{{ produto.estado_estoque }}</td>
-                                <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.valor }}</td>
-                                <td class="curva">{{ produto.curva }}</td>
-                                <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
-                            </tr>
+                                </tr>
+                            {% elif produto.estado_estoque == "PARCIAL" %}
+                                <tr class="parcial">
+                                    <td class="status">{{ produto.cod_filial }}</td>
+                                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                    <td class="status parcial">{{ produto.estado_estoque }}</td>
+                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.valor }}</td>
+                                    <td class="curva">{{ produto.curva }}</td>
+                                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                </tr>
 
-                        {% elif produto.estado_estoque == "RUPTURA" %}
-                            <tr class="ruptura">
-                                <td class="status">{{ produto.cod_filial }}</td>
-                                <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
-                                <td class="status ruptura">{{ produto.estado_estoque }}</td>
-                                <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.valor }}</td>
-                                <td class="curva">{{ produto.curva }}</td>
-                                <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
+                            {% elif produto.estado_estoque == "RUPTURA" %}
+                                <tr class="ruptura">
+                                    <td class="status">{{ produto.cod_filial }}</td>
+                                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                    <td class="status ruptura">{{ produto.estado_estoque }}</td>
+                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.valor }}</td>
+                                    <td class="curva">{{ produto.curva }}</td>
+                                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     </tbody>
 
                 </table>
@@ -78,30 +88,32 @@
     </div>
     <style>
 
-    tr.excesso, tr.ruptura, tr.parcial {
-        font-size: 12px;
-    }
+        tr.excesso, tr.ruptura, tr.parcial {
+            font-size: 12px;
+        }
 
-    td.excesso {
-        background-color: #F42E15;
-        color: #FFFFFF;
-    }
-    td.ruptura {
-        background-color: #7d7b7a;
-        color: #FFFFFF;
-    }
-    td.parcial {
-        background-color: #ffa500;
-        color: #FFFFFF;
-    }
+        td.excesso {
+            background-color: #F42E15;
+            color: #FFFFFF;
+        }
 
-    td.numero {
-        text-align: right;
-    }
+        td.ruptura {
+            background-color: #7d7b7a;
+            color: #FFFFFF;
+        }
 
-    td.curva, td.status {
-        text-align: center;
-    }
+        td.parcial {
+            background-color: #ffa500;
+            color: #FFFFFF;
+        }
+
+        td.numero {
+            text-align: right;
+        }
+
+        td.curva, td.status {
+            text-align: center;
+        }
 
     </style>
 

@@ -1,7 +1,36 @@
 from django.shortcuts import render
+from core.models.parametros_models import DadosEstoque
 
 from core.views.alertas_views import alertas
 
 
 def home_painel(request, template_name='aplicacao/paginas/home.html'):
-    return render(request, template_name)
+    dados_estoque = DadosEstoque.objects.filter(empresa__id=1)
+
+    t_skus = 0
+    t_normal = 0
+    t_parcial = 0
+    t_ruptura = 0
+    t_excesso = 0
+
+    for dados in dados_estoque:
+        t_skus = t_skus + dados.skus
+        t_normal = t_normal + dados.normal
+        t_parcial = t_parcial + dados.parcial
+        t_ruptura = t_ruptura + dados.ruptura
+        t_excesso = t_excesso + dados.excesso
+
+
+    totais_dados_estoque = {
+        't_skus': t_skus,
+        't_normal': t_normal,
+        't_parcial': t_parcial,
+        't_ruptura': t_ruptura,
+        't_excesso': t_excesso
+    }
+
+    contexto = {
+        'dadosestoque': dados_estoque,
+        'totais_dados_estoque': totais_dados_estoque
+    }
+    return render(request, template_name, contexto)

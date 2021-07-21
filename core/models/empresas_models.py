@@ -66,6 +66,7 @@ class Alerta(models.Model):
     fornecedor = models.CharField(max_length=255, blank=True, null=True)
     cod_fornecedor = models.IntegerField(blank=True, null=False)
     empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='alerta_empresa')
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Alerta'

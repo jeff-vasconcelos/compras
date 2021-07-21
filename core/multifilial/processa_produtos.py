@@ -168,23 +168,6 @@ def dados_produto(cod_produto, cod_forn, id_empresa, leadt, t_reposicao, filial_
                 listped = []
                 pedidos_ = pd.DataFrame(listped)
 
-            #
-            # if u_entrada is not None:
-            #
-            # else:
-            #     listent = []
-            #     entradas_ = pd.DataFrame(listent)
-            #
-            #
-            # if e_atual is not None:
-            #
-            # else:
-            #     listest = []
-            #     estoque_ = pd.DataFrame(listest)
-            #
-            # print(estoque_)
-
-
             if entradas_.empty:
                 dt_ult_entrada = "-"
                 qt_ult_entrada = 0
