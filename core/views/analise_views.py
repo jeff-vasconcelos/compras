@@ -476,9 +476,8 @@ def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
         if produto_id != "0":
-            # TODO Automatizar filial
-            cod_filial = 1
 
+            cod_filial = request.POST.get('filial')
             qt_digitada = request.POST.get('qt_digitada')
             pr_compra = request.POST.get('pr_compra')
 
@@ -565,10 +564,10 @@ def export_csv(request):
 
 def pedidos_pedentes(request):
     empresa = request.user.usuario.empresa_id
-    filial = 1
 
     if request.is_ajax():
         produto_id = request.POST.get('produto')
+        filial = request.POST.get('filial')
 
         if produto_id == "0":
             res = "FALSE"

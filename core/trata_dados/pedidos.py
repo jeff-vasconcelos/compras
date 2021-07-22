@@ -36,6 +36,7 @@ def pedidos_todos(cod_produto, id_empresa, cod_filial):
 
         pedidos = pedidos.drop_duplicates(subset=['num_pedido'], keep='first')
 
+        print(pedidos)
         return pedidos
     else:
         return None

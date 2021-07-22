@@ -47,5 +47,5 @@ def testandoviews(request, template_name='testando_alerta.html'):
     # teste = pedidos_compra(180, 1)
     # teste = ultima_entrada(180, 1, 30)
     # teste = a_multifiliais(180, 16, 1, 15, 30, 30, [1, 2])
-    print(teste)
+    # print(teste)
     return render(request, template_name)

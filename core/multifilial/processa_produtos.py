@@ -59,6 +59,7 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
         valor_sugestao = m_sugestao * custo
         curva = str(produto_dados['curva'].unique()).strip('[]')
         ruptura = str(produto_dados['ruptura'].unique()).strip('[]')
+        condicao_estoque = str(produto_dados['condicao_estoque'].unique()).strip('[]')
 
         data = []
         itens_analise = {
@@ -84,7 +85,7 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
             'ruptura': ruptura.replace("'", ""),
             'ruptura_porc': float(produto_dados['ruptura_porc'].unique()),
             'ruptura_cor': str(produto_dados['cor_ruptura'].unique()).strip('[]'),
-            'condicao_estoque': str(produto_dados['condicao_estoque'].unique()).strip('[]'),
+            'condicao_estoque': condicao_estoque.replace("'", ""),
             'porc_media': float(produto_dados['porcent_media'].unique()),
             'media_simples': float(produto_dados['media'].unique()),
         }

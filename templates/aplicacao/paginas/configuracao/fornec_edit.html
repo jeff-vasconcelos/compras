@@ -23,6 +23,13 @@
                         {{ form.ciclo_reposicao.errors }}
                     </div>
                 </div>
+                <div class="form-group col-md-12">
+                    <label for="tempo_estoque">Tempo de Estoque</label>
+                    {{ form.tempo_estoque }}
+                    <div class="invalid-feedback">
+                        {{ form.tempo_estoque.errors }}
+                    </div>
+                </div>
 
                 <button type="submit" class="btn btn-success btn-sm">
                     <i class="fas fa-save"></i> Salvar
