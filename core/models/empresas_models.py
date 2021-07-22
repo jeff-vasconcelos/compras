@@ -34,6 +34,7 @@ class Empresa(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     envia_email = models.BooleanField(default=True, verbose_name='Enviar E-mails de alerta')
+    principio_ativo = models.BooleanField(default=False, verbose_name='Considerar Princípio Ativo')
 
     def __str__(self):
         return self.nome_fantasia

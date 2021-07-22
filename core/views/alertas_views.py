@@ -46,8 +46,8 @@ def alertas():
 
 
                 for index, row in infor_filiais.iterrows():
-                    if row.qt_excesso > 0 or row.condicao_estoque != "NORMAL":
 
+                    if row.qt_excesso > 0 or row.condicao_estoque != "NORMAL":
                         alertas_produtos = {
                             'filial': row.filial,
                             'cod_produto': row.cod_produto,
@@ -62,10 +62,10 @@ def alertas():
                             'curva': row.curva,
                             'fornecedor': row.fornecedor,
                             'cod_fornecedor': row.cod_fornecedor,
-                            'excesso_estoque': row.excesso_estoque
+                            'excesso_estoque': row.excesso_estoque,
                         }
 
-                lista_alertas.append(alertas_produtos)
+                        lista_alertas.append(alertas_produtos)
     return lista_alertas
 
 
@@ -117,6 +117,7 @@ def executar_alerta(id_empresa, produtos):
 
 def teste(request, template_name='testando_alerta.html'):
     produtos = alertas()
+    print(produtos)
     executar_alerta(1, produtos)
     # send_email_alerta(request)
     return render(request, template_name)

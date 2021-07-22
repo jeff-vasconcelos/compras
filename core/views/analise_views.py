@@ -22,10 +22,21 @@ from core.multifilial.vendas import vendas
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    empresa = request.user.usuario.empresa_id
-    filiais = Filial.objects.filter(empresa__id__exact=empresa)
+    id_empresa = request.user.usuario.empresa_id
+    empresa = Empresa.objects.get(id=id_empresa)
+
+    if empresa.principio_ativo == True:
+        p_ativo = True
+        print("tem principio ativo")
+    else:
+        p_ativo = False
+        print("não tem principio ativo")
+
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
     context = {
-        'filiais': filiais
+        'filiais': filiais,
+        'p_ativo': p_ativo
     }
     return render(request, template_name, context)
 

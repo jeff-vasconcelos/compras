@@ -10,7 +10,7 @@ class Produto(models.Model):
     quantidade_un_cx = models.FloatField(blank=True, null=True)
     marca = models.CharField(max_length=255, blank=True, null=True)
     peso_liquido = models.CharField(max_length=255, blank=True, null=True)
-
+    principio_ativo = models.CharField(max_length=255, null=True, blank=True)
     cod_fabrica = models.IntegerField(null=True, blank=True)
     cod_auxiliar = models.IntegerField(null=True, blank=True)
     cod_depto = models.IntegerField(null=True, blank=True)
