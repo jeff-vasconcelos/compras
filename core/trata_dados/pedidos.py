@@ -1,40 +1,41 @@
 from django.db.models import Count
 from api.models.pedido_compra import Pedido
+from api.models.produto import Produto
+from core.models.empresas_models import Filial
 import pandas as pd
 import datetime
 
+from core.multifilial.filiais import get_filiais
 
-def pedidos_compras(cod_produto, id_empresa, cod_filial):
 
+def pedidos_todos(cod_produto, id_empresa, cod_filial):
+    global lista_fim
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=90 - 1) #Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=90 - 1)  # Aqui sempre será o periodo informado -1
 
     df = pd.DataFrame(Pedido.objects.all().filter(
         cod_produto__exact=cod_produto,
-        empresa__id__exact=id_empresa,
-        cod_filial=cod_filial,
-        data__range=[data_fim, data_inicio]
+        cod_filial__exact=cod_filial,
+        data__range=[data_fim, data_inicio],
+        empresa__id__exact=id_empresa
     ).order_by('-id').values())
 
-    pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
+    if not df.empty:
 
-    if not pedidos_df.empty:
-        pedidos_all = pedidos_df.sort_values(by=['data'], ascending=False)
+        produto = Produto.objects.get(
+            cod_produto__exact=cod_produto,
+            empresa__id__exact=id_empresa
+        )
 
-        indexNames = pedidos_all[(pedidos_all['saldo'] == 0)].index
-        pedidos_all.drop(indexNames, inplace=True)
+        pedidos = df.sort_values(by=['data'], ascending=False)
 
-        pedidos = pedidos_df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
+        indexNames = pedidos[(pedidos['saldo'] == 0)].index
+        pedidos.drop(indexNames, inplace=True)
 
-        return pedidos, pedidos_all
+        pedidos['desc_produto'] = produto.desc_produto
+
+        pedidos = pedidos.drop_duplicates(subset=['num_pedido'], keep='first')
+
+        return pedidos
     else:
-        pedido_vazio = {
-            'cod_produto': cod_produto, 'cod_filial': cod_filial, 'saldo': 0
-        }
-        pedido_todos_vazio = {
-
-        }
-        pedido_vazio_df = pd.DataFrame([pedido_vazio])
-        pedido_todos_vazio_df = pd.DataFrame([pedido_todos_vazio])
-
-    return pedido_vazio_df, pedido_todos_vazio_df
+        return None

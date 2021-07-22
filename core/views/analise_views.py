@@ -9,11 +9,11 @@ from core.alertas.verificador import verifica_produto
 from core.models.parametros_models import Parametro
 from core.multifilial.processa_produtos import a_multifiliais
 from core.multifilial.curva_abc import abc
-from core.trata_dados.curva_abc import abc
+from core.trata_dados.curva_abc import curva_abc
 from core.trata_dados.datas import dia_semana_mes_ano
 from core.multifilial.historico_estoque import historico_estoque
 # from core.trata_dados.vendas import *
-from core.trata_dados.pedidos import *
+from core.trata_dados.pedidos import pedidos_todos
 from core.models.empresas_models import Filial
 import csv
 import pandas as pd
@@ -182,7 +182,7 @@ def filtrar_produto_produto(request):
 
 
 def filtrar_produto_curva(request):
-    empresa = request.user.usuario.empresa_id
+    id_empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         res_fil_curva = None
         id_fornecedor = request.POST.get('fornecedor')
@@ -190,7 +190,7 @@ def filtrar_produto_curva(request):
 
         curva = request.POST.get('curva')
 
-        parametros = Parametro.objects.get(empresa_id=empresa)
+        parametros = Parametro.objects.get(empresa_id=id_empresa)
         if curva == '0':
             return JsonResponse({})
         else:
@@ -215,7 +215,8 @@ def filtrar_produto_curva(request):
                     cod_fornec = i.cod_fornecedor
                     list_fornec.append(cod_fornec)
 
-                curva_f = abc(list_fornec, empresa, parametros.periodo)
+                curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                # (cod_fornecedor, id_empresa, periodo, lista_filiais)
                 curva_f = curva_f.query('curva== @curva')
 
                 if not curva_f.empty:
@@ -224,7 +225,7 @@ def filtrar_produto_curva(request):
                     for items in codprod.iteritems():
                         list_produto.append(int(items[1]))
 
-                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=empresa).order_by(
+                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=id_empresa).order_by(
                         'cod_produto')
 
                     if len(qs) > 0 and len(list_produto) > 0:
@@ -266,7 +267,7 @@ def filtrar_produto_curva(request):
                     cod_fornec = i.fornecedor.cod_fornecedor
                     list_fornec.append(cod_fornec)
 
-                curva_f = abc(list_fornec, empresa, parametros.periodo)
+                curva_f = abc(list_fornec, id_empresa, parametros.periodo)
                 curva_f = curva_f.query('curva== @curva')
 
                 if not curva_f.empty:
@@ -416,29 +417,29 @@ def mapas_serie(id_empresa, cod_produto, cod_filial, periodo):
     info_prod = None
     lista_filiais = []
     lista_filiais.append(cod_filial)
-
-    df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
-
-
     # df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo, cod_filial)
 
+    df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
     datas = dia_semana_mes_ano(id_empresa)
-
     df_historico = historico_estoque(cod_produto, id_empresa, periodo, lista_filiais)
 
     df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
+    df_vendas['data'] = pd.to_datetime(df_vendas['data'], format='%Y-%m-%d')
+
     serie_estoque = pd.merge(datas, df_historico, how="left", on=["data"])
 
     serie_estoque['qt_estoque'].fillna(0, inplace=True)
     serie_estoque = serie_estoque.sort_values(by=['data'], ascending=True)
 
     data_day_est = serie_estoque['data'].copy()
-    data_dia_est = data_day_est.dt.strftime('%d/%m/%Y')
-    serie_estoque['data_serie_hist_est'] = serie_estoque['semana'].str.cat(data_dia_est, sep=" - ")
 
+    data_dia_est = data_day_est.dt.strftime('%d/%m/%Y')
+
+    serie_estoque['data_serie_hist_est'] = serie_estoque['semana'].str.cat(data_dia_est, sep=" - ")
 
     df_vendas = df_vendas.sort_values(by=['data'], ascending=True)
     data_day = df_vendas['data'].copy()
+
     data_dia = data_day.dt.strftime('%d/%m/%Y')
 
     df_vendas['data_serie_hist'] = df_vendas['semana'].str.cat(data_dia, sep=" - ")
@@ -451,7 +452,6 @@ def mapas_serie(id_empresa, cod_produto, cod_filial, periodo):
     data_lucro = list(df_vendas['lucro'])
     data_qtvenda = list((df_vendas['qt_vendas']))
     label_dt_serie = list(df_vendas['data_serie_hist'])
-
     qt_estoque = list(serie_estoque['qt_estoque'])
     label_dt_serie_est = list(serie_estoque['data_serie_hist_est'])
 
@@ -578,7 +578,7 @@ def pedidos_pedentes(request):
             prod_qs = Produto.objects.get(id=produto_id)
             produto_codigo = prod_qs.cod_produto
 
-            p, pedidos = pedidos_compras(produto_codigo, empresa, filial)
+            pedidos = pedidos_todos(produto_codigo, empresa, filial)
 
             pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
             pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
