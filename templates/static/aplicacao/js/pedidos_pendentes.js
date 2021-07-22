@@ -1,13 +1,14 @@
 const botaoVerPedidosPendentes = document.getElementById('ver_pedidos_pendentes')
 const resultsPedidosPendentes = document.getElementById('pedidos-pendentes-modal')
 
-const verPedidosPendentes = (produto) => {
+const verPedidosPendentes = (produto, filial) => {
     $.ajax({
         type: 'POST',
         url: '/painel/ver-pedido-pendentes/',
         data: {
             'csrfmiddlewaretoken': csrf,
-            'produto': produto
+            'produto': produto,
+            'filial':filial
         },
         success: (pedidos_pendentes) => {
 
@@ -53,5 +54,6 @@ const verPedidosPendentes = (produto) => {
 }
 botaoVerPedidosPendentes.addEventListener('click', e => {
     const produtoSelecionado = listaProdutosSelecionar.value
-    verPedidosPendentes(produtoSelecionado)
+    const filialSelecionado = listaFiliais.value
+    verPedidosPendentes(produtoSelecionado, filialSelecionado)
 })

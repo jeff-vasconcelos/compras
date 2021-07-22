@@ -4,30 +4,29 @@ from core.models.empresas_models import Empresa, Filial
 from api.models.produto import Produto
 
 
-class EstoqueAtual(models.Model):
+class Estoque(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
-    desc_produto = models.CharField(max_length=255, null=True, blank=True)
-    embalagem = models.CharField(max_length=255, null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)
-    filial = models.ForeignKey(Filial, on_delete=models.CASCADE, null=True, blank=True, related_name='filial_estoqueatual')
     cod_fornecedor = models.IntegerField(null=True, blank=True)
-
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_estoqueatual',
-                                blank=True, null=True)
-    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_estoqueatual',
-                                   blank=True, null=True)
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_estoqueatual',
-                                blank=True, null=True)
-    qt_estoque_geral = models.IntegerField(null=True, blank=True)
+    qt_geral = models.IntegerField(null=True, blank=True)
     qt_indenizada = models.IntegerField(null=True, blank=True)
     qt_reservada = models.IntegerField(null=True, blank=True)
     qt_pendente = models.IntegerField(null=True, blank=True)
     qt_bloqueada = models.IntegerField(null=True, blank=True)
     qt_disponivel = models.IntegerField(null=True, blank=True)
-    custo_ult_ent = models.FloatField(null=True, blank=True)
+    custo_ult_entrada = models.FloatField(null=True, blank=True)
     preco_venda = models.FloatField(null=True, blank=True)
     data = models.DateField(null=True, blank=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_estoqueatual',
+                                blank=True, null=True)
+    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_estoqueatual',
+                                   blank=True, null=True)
+    filial = models.ForeignKey(Filial, on_delete=models.CASCADE, null=True, blank=True,
+                               related_name='filial_estoqueatual')
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_estoqueatual',
+                                blank=True, null=True)
 
     class Meta:
         verbose_name = 'Estoque atual'
@@ -45,4 +44,4 @@ class EstoqueAtual(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.desc_produto
+        return self.produto.desc_produto

@@ -84,6 +84,7 @@
                                 <th>Fornecedor</th>
                                 <th>Leadtime</th>
                                 <th>C. reposição</th>
+                                <th>T. Estoque</th>
                                 <th>Ações</th>
 
                             </tr>
@@ -104,6 +105,12 @@
 
                                 {% if fornecedor.ciclo_reposicao %}
                                     <td>{{ fornecedor.ciclo_reposicao }}</td>
+                                {% else %}
+                                    <td><i class="fas fa-times-circle"></i></td>
+                                {% endif %}
+
+                                {% if fornecedor.tempo_estoque %}
+                                    <td>{{ fornecedor.tempo_estoque }}</td>
                                 {% else %}
                                     <td><i class="fas fa-times-circle"></i></td>
                                 {% endif %}

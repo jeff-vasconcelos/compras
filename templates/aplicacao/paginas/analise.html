@@ -66,13 +66,13 @@
 
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col">
         <div class="form-group">
             <form id="search-f" autocomplete="off">
 
                 <input id="search-fornec" type="text" class="form-control"
                        name="p_fornecedor"
-                       placeholder="Pesquisar por fornecedor">
+                       placeholder="Pesquisar por Fornecedor">
 
                 <div class="row">
                     <div class="col check-div-fornec">
@@ -86,12 +86,12 @@
 
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col">
         <div class="form-group">
             <form id="search-p" autocomplete="off">
                 {% csrf_token %}
                 <input id="search-prod" type="text" class="form-control" name="p_produto"
-                       placeholder="Pesquisar por produto">
+                       placeholder="Pesquisar por Produto">
 
                 <div class="row">
                     <div class="col check-div-prod">
@@ -103,6 +103,29 @@
             </form>
         </div>
     </div>
+    {% if p_ativo == True %}
+    <div class="col">
+        <div class="form-group">
+            <form id="search-f" autocomplete="off">
+
+                <input id="search-fornec" type="text" class="form-control"
+                       name="p_principio_ativo"
+                       placeholder="Pesquisar por Princípio Ativo">
+
+                <div class="row">
+                    <div class="col check-div-fornec">
+                        <div class="form-check" id="results-box-fornec">
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+    <div class="row">
 
     <div class="col-xl-2 col-lg-2">
         <div class="card shadow mb-4 cards-home-info">
@@ -135,12 +158,6 @@
                     <div class="col-8">
                         Curva
                     </div>
-                    <!--
-                    <div class="col-4 cards-home-porc" id="porc_curva">
-                        92%
-
-                    </div>
-                    -->
                 </div>
                 <div class="row cards-home-valores">
                     <div class="col-1 cards-home-sifrao">

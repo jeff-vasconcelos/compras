@@ -48,7 +48,7 @@ def valida_estoque_atual(data):
     cod_empresa = data['empresa']
     data = data['data']
 
-    estoqueatual = EstoqueAtual.objects.filter(
+    estoqueatual = Estoque.objects.filter(
         cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_estoque_geral=quantidade
     ).exists()
 
@@ -97,7 +97,7 @@ def valida_ultentrada(data):
     cod_empresa = data['empresa']
     data = data['data']
 
-    ultentrada = UltimaEntrada.objects.filter(
+    ultentrada = Entrada.objects.filter(
         cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data
     ).exists()
 

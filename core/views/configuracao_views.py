@@ -79,10 +79,8 @@ def adicionar_email_conf(request, template_name='aplicacao/paginas/configuracao/
                     email.empresa = empresa
                     email.save()
                     messages.success(request, "E-mail cadastrado com sucesso!")
-                    print('valido')
                     return redirect('configuracao_painel')
                 else:
-                    print('não valido')
                     messages.error(request, "Ops, não foi possivel cadastrar e-mail")
             else:
                 form = EmailForm()

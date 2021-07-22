@@ -4,23 +4,39 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.db.models import Q
 from api.models.produto import *
-from core.multifilial.processa_produtos import processa_produtos_filiais
+from api.models.venda import Venda
+from core.alertas.verificador import verifica_produto
+from core.models.parametros_models import Parametro
+from core.multifilial.processa_produtos import a_multifiliais
 from core.multifilial.curva_abc import abc
-from core.trata_dados.curva_abc import abc
-from core.trata_dados.historico_estoque import historico_estoque
-from core.trata_dados.vendas import *
-from core.trata_dados.pedidos import *
+from core.trata_dados.curva_abc import curva_abc
+from core.trata_dados.datas import dia_semana_mes_ano
+from core.multifilial.historico_estoque import historico_estoque
+# from core.trata_dados.vendas import *
+from core.trata_dados.pedidos import pedidos_todos
 from core.models.empresas_models import Filial
 import csv
 import pandas as pd
+from core.multifilial.vendas import vendas
 
 
 @login_required
 def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
-    empresa = request.user.usuario.empresa_id
-    filiais = Filial.objects.filter(empresa__id__exact=empresa)
+    id_empresa = request.user.usuario.empresa_id
+    empresa = Empresa.objects.get(id=id_empresa)
+
+    if empresa.principio_ativo == True:
+        p_ativo = True
+        print("tem principio ativo")
+    else:
+        p_ativo = False
+        print("não tem principio ativo")
+
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
     context = {
-        'filiais': filiais
+        'filiais': filiais,
+        'p_ativo': p_ativo
     }
     return render(request, template_name, context)
 
@@ -177,7 +193,7 @@ def filtrar_produto_produto(request):
 
 
 def filtrar_produto_curva(request):
-    empresa = request.user.usuario.empresa_id
+    id_empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         res_fil_curva = None
         id_fornecedor = request.POST.get('fornecedor')
@@ -185,7 +201,7 @@ def filtrar_produto_curva(request):
 
         curva = request.POST.get('curva')
 
-        parametros = Parametro.objects.get(empresa_id=empresa)
+        parametros = Parametro.objects.get(empresa_id=id_empresa)
         if curva == '0':
             return JsonResponse({})
         else:
@@ -210,7 +226,8 @@ def filtrar_produto_curva(request):
                     cod_fornec = i.cod_fornecedor
                     list_fornec.append(cod_fornec)
 
-                curva_f = abc(list_fornec, empresa, parametros.periodo)
+                curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                # (cod_fornecedor, id_empresa, periodo, lista_filiais)
                 curva_f = curva_f.query('curva== @curva')
 
                 if not curva_f.empty:
@@ -219,7 +236,7 @@ def filtrar_produto_curva(request):
                     for items in codprod.iteritems():
                         list_produto.append(int(items[1]))
 
-                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=empresa).order_by(
+                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=id_empresa).order_by(
                         'cod_produto')
 
                     if len(qs) > 0 and len(list_produto) > 0:
@@ -261,7 +278,7 @@ def filtrar_produto_curva(request):
                     cod_fornec = i.fornecedor.cod_fornecedor
                     list_fornec.append(cod_fornec)
 
-                curva_f = abc(list_fornec, empresa, parametros.periodo)
+                curva_f = abc(list_fornec, id_empresa, parametros.periodo)
                 curva_f = curva_f.query('curva== @curva')
 
                 if not curva_f.empty:
@@ -335,68 +352,105 @@ def filtrar_produto_marca(request):
 
 
 def selecionar_produto(request):
+    global info_prod_filiais
     id_empresa = request.user.usuario.empresa_id
 
     if request.is_ajax():
+
+        #DADOS DA REQUISIÇÃO
         id_produto = int(request.POST.get('produto'))
         leadtime = int(request.POST.get('leadtime'))
         t_reposicao = int(request.POST.get('tempo_reposicao'))
-        filialselecionada = int(request.POST.get('filial'))
+        filial_selecionada = int(request.POST.get('filial'))
 
-        infor_produtos_filiais = processa_produtos_filiais(id_produto, id_empresa, leadtime, t_reposicao, filialselecionada)
+        #VERIFICANDO SE HOUVE VENDAS NO PERIODO INDEPENDE DA FILIAL
+        qs = Produto.objects.get(id=id_produto, empresa__id=id_empresa)
+        parametros = Parametro.objects.get(empresa_id=id_empresa)
+        verif_produto = verifica_produto(qs.cod_produto, id_empresa, parametros.periodo)
+        lista_filiais = []
 
-        df_filial_selecionada = infor_produtos_filiais.query('filial == @filialselecionada')
-        df_filial_selecionada = df_filial_selecionada.drop(columns=[
-            'filial','estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
-            'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela', 'margem'
-        ])
+        cod_produto = qs.cod_produto
+        cod_fornecedor = qs.cod_fornecedor
+        periodo = parametros.periodo
 
-        item_filial_selecionada = df_filial_selecionada.to_dict('records')
+        if verif_produto == True:
 
-        for i in item_filial_selecionada:
-            info_prod_filiais = i
-
-        infor_produtos_filiais = infor_produtos_filiais.drop(columns=[
-            'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
-        ])
-        infor_produtos_filiais = infor_produtos_filiais.to_dict('records')
+            #VERIFCANDO FILIAIS COM VENDAS DO PRODUTO
+            se_vendas = Venda.objects.filter(
+                empresa__id__exact=id_empresa,
+                produto__id__exact=id_produto,
+            )
+            filiais_cod = se_vendas.values_list('cod_filial', flat=True).distinct()
 
 
-        data = []
+            for filial in filiais_cod:
+                f = filial
+                lista_filiais.append(f)
 
-        mapa = mapas_serie(id_empresa, id_produto, filialselecionada)
+            inf_filiais = a_multifiliais(cod_produto, cod_fornecedor, id_empresa,
+                                         leadtime, t_reposicao, periodo, lista_filiais)
 
-        data.append(infor_produtos_filiais)  # 0
-        data.append(mapa)  # 1
-        data.append(info_prod_filiais) #2
 
-        return JsonResponse({'data': data})
+            df_filial_selecionada = inf_filiais.query('filial == @filial_selecionada')
+            df_filial_selecionada = df_filial_selecionada.drop(columns=[
+                'filial','estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
+                'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela', 'margem'
+            ])
+
+            i_filial_selec = df_filial_selecionada.to_dict('records')
+
+            for i in i_filial_selec:
+                info_prod_filiais = i
+
+            inf_filiais = inf_filiais.drop(columns=[
+                'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
+            ])
+
+            inf_filiais = inf_filiais.to_dict('records')
+
+            data = []
+
+            mapa = mapas_serie(id_empresa, cod_produto, filial_selecionada, periodo)
+
+            data.append(inf_filiais)  # 0
+            data.append(mapa)  # 1
+            data.append(info_prod_filiais) #2
+
+            return JsonResponse({'data': data})
+
+        else:
+            return JsonResponse({'data': 0})
 
     return JsonResponse({})
 
 
-def mapas_serie(empresa, produto, cod_filial):
+def mapas_serie(id_empresa, cod_produto, cod_filial, periodo):
     info_prod = None
-    qs = Produto.objects.get(id=produto, empresa__id=empresa)
-    produto_codigo = qs.cod_produto
+    lista_filiais = []
+    lista_filiais.append(cod_filial)
+    # df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo, cod_filial)
 
-    parametros = Parametro.objects.get(empresa_id=empresa)
-    df_vendas, info_produto = vendas(produto_codigo, empresa, parametros.periodo, cod_filial)
+    df_vendas, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
+    datas = dia_semana_mes_ano(id_empresa)
+    df_historico = historico_estoque(cod_produto, id_empresa, periodo, lista_filiais)
 
-    datas = dia_semana_mes_ano(empresa)
-    df_historico = historico_estoque(produto_codigo, empresa, parametros.periodo)
     df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
-    hist_estoque = pd.merge(datas, df_historico, how="left", on=["data"])
-    hist_estoque['qt_estoque'].fillna(0, inplace=True)
-    hist_estoque = hist_estoque.sort_values(by=['data'], ascending=True)
+    df_vendas['data'] = pd.to_datetime(df_vendas['data'], format='%Y-%m-%d')
 
-    data_day_est = hist_estoque['data'].copy()
+    serie_estoque = pd.merge(datas, df_historico, how="left", on=["data"])
+
+    serie_estoque['qt_estoque'].fillna(0, inplace=True)
+    serie_estoque = serie_estoque.sort_values(by=['data'], ascending=True)
+
+    data_day_est = serie_estoque['data'].copy()
+
     data_dia_est = data_day_est.dt.strftime('%d/%m/%Y')
-    hist_estoque['data_serie_hist_est'] = hist_estoque['semana'].str.cat(data_dia_est, sep=" - ")
 
+    serie_estoque['data_serie_hist_est'] = serie_estoque['semana'].str.cat(data_dia_est, sep=" - ")
 
     df_vendas = df_vendas.sort_values(by=['data'], ascending=True)
     data_day = df_vendas['data'].copy()
+
     data_dia = data_day.dt.strftime('%d/%m/%Y')
 
     df_vendas['data_serie_hist'] = df_vendas['semana'].str.cat(data_dia, sep=" - ")
@@ -409,9 +463,8 @@ def mapas_serie(empresa, produto, cod_filial):
     data_lucro = list(df_vendas['lucro'])
     data_qtvenda = list((df_vendas['qt_vendas']))
     label_dt_serie = list(df_vendas['data_serie_hist'])
-
-    qt_estoque = list(hist_estoque['qt_estoque'])
-    label_dt_serie_est = list(hist_estoque['data_serie_hist_est'])
+    qt_estoque = list(serie_estoque['qt_estoque'])
+    label_dt_serie_est = list(serie_estoque['data_serie_hist_est'])
 
     graf_prod = []
     item = {
@@ -434,9 +487,8 @@ def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
         if produto_id != "0":
-            # TODO Aumatizar filial
-            cod_filial = 1
 
+            cod_filial = request.POST.get('filial')
             qt_digitada = request.POST.get('qt_digitada')
             pr_compra = request.POST.get('pr_compra')
 
@@ -523,10 +575,10 @@ def export_csv(request):
 
 def pedidos_pedentes(request):
     empresa = request.user.usuario.empresa_id
-    filial = 1
 
     if request.is_ajax():
         produto_id = request.POST.get('produto')
+        filial = request.POST.get('filial')
 
         if produto_id == "0":
             res = "FALSE"
@@ -536,7 +588,7 @@ def pedidos_pedentes(request):
             prod_qs = Produto.objects.get(id=produto_id)
             produto_codigo = prod_qs.cod_produto
 
-            p, pedidos = pedidos_compras(produto_codigo, empresa, filial)
+            pedidos = pedidos_todos(produto_codigo, empresa, filial)
 
             pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
             pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
@@ -548,75 +600,3 @@ def pedidos_pedentes(request):
 
             return JsonResponse({'data': pedid})
     return JsonResponse({})
-
-
-# def selecionar__produto(request):
-#     empresa = request.user.usuario.empresa_id
-#
-#     if request.is_ajax():
-#         info_prod = None
-#         produto = request.POST.get('produto')
-#         leadtime = int(request.POST.get('leadtime'))
-#         t_reposicao = int(request.POST.get('tempo_reposicao'))
-#
-#         qs = Produto.objects.get(id=produto, empresa__id=empresa)
-#
-#         produto_codigo = qs.cod_produto
-#         fornecedor_codigo = qs.cod_fornecedor
-#
-#         produto_dados = dados_produto(produto_codigo, fornecedor_codigo, empresa, leadtime, t_reposicao)
-#
-#         if produto_dados is None:
-#             return JsonResponse({'data': 0})
-#
-#         else:
-#             dt_entrada = produto_dados['dt_ult_ent'][0]
-#             if dt_entrada == '-':
-#                 dt_u_entrada = dt_entrada
-#             else:
-#                 dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
-#
-#             sugestao = float(produto_dados['sugestao'])
-#             qt_un_caixa = float(produto_dados['qt_unit_caixa'])
-#
-#             sug_cx = sugestao / qt_un_caixa
-#             sug_cx = ceil(sug_cx)
-#             sug_unit = sug_cx * qt_un_caixa
-#
-#             data = []
-#             itens_analise = {
-#                 'filial': int(produto_dados['cod_filial']),
-#                 'estoque': int(produto_dados['estoque_dispon']),
-#                 'avaria': int(produto_dados['avarias']),
-#                 'saldo': int(produto_dados['saldo']),
-#                 'dt_ult_entrada': dt_u_entrada,
-#                 'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
-#                 'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
-#                 'dde': float(produto_dados['dde']),
-#                 'est_seguranca': float(produto_dados['estoque_segur']),
-#                 'p_reposicao': float(produto_dados['ponto_repo']),
-#                 'sugestao': float(produto_dados['sugestao']),
-#                 'sugestao_caixa': sug_cx,
-#                 'sugestao_unidade': sug_unit,
-#                 'curva': str(produto_dados['curva'][0]),
-#                 'media_ajustada': str(produto_dados['media_ajustada'][0]),
-#                 'ruptura': str(produto_dados['ruptura'][0]),
-#                 'ruptura_porc': float(produto_dados['ruptura_porc']),
-#                 'ruptura_cor': str(produto_dados['cor_ruptura'][0]),
-#                 'condicao_estoque': str(produto_dados['condicao_estoque'][0]),
-#                 'preco_tabela': float(produto_dados['preco_venda_tabela'][0]),
-#                 'margem': float(produto_dados['margem'][0]),
-#                 'porc_media': float(produto_dados['porcent_media'][0]),
-#                 'media_simples': float(produto_dados['media'][0]),
-#             }
-#
-#             mapa = mapas_serie(empresa, produto)
-#
-#             data.append(itens_analise)  # 0
-#             data.append(mapa)  # 1
-#
-#
-#             return JsonResponse({'data': data})
-#
-#     return JsonResponse({})
-

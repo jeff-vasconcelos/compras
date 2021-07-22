@@ -9,7 +9,7 @@ from core.views.alertas_views import *
 from core.views.configuracao_views import *
 
 
-from core.multifilial.processa_produtos import processa_produtos_filiais
+from core.multifilial.processa_produtos import a_multifiliais
 
 urlpatterns = [
     path('search/prod', buscar_produto, name='results-produto'),
@@ -58,6 +58,7 @@ urlpatterns = [
 
     #TODO rota de testes
     path('testando/', teste, name='testando'),
+    path('teste/', testandoviews, name='testando_views'),
 
 ]
 

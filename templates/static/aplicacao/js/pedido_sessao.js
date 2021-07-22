@@ -28,7 +28,8 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra) => {
             'csrfmiddlewaretoken': csrf,
             'produto': produto,
             'qt_digitada': qt_digitada,
-            'pr_compra': pr_compra
+            'pr_compra': pr_compra,
+            'filial': filial
         },
         success: (pedido_sessao) => {
             console.log(pedido_sessao.data)
@@ -77,6 +78,7 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra) => {
 botaoPedidoSessao.addEventListener('click', e => {
     // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = ProdutosSelecionar.value
+    const filialSelecionado = listaFiliais.value
 
 
     // PEGANDO QT DIGITADA
@@ -130,7 +132,7 @@ botaoPedidoSessao.addEventListener('click', e => {
     console.log(p_compra, "PRECO DE COMPRA")
 
 
-    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra)
+    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, filialSelecionado)
 })
 
 

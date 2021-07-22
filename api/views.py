@@ -25,7 +25,7 @@ class FornecedorViewSet(viewsets.ModelViewSet):
 
 class EstoqueAtualViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = EstoqueAtual.objects.all()
+    queryset = Estoque.objects.all()
     serializer_class = EstoqueAtualSerializer
 
 
@@ -43,7 +43,7 @@ class PedidoViewSet(viewsets.ModelViewSet):
 
 class UltEntradaViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = UltimaEntrada.objects.all()
+    queryset = Entrada.objects.all()
     serializer_class = UltEntradaSerializer
 
 

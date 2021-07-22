@@ -4,36 +4,40 @@ from core.models.empresas_models import Filial
 import pandas as pd
 import datetime
 
+from core.multifilial.filiais import get_filiais
 
-def pedidos_compra(cod_produto, id_empresa):
 
+def pedidos_compra(cod_produto, id_empresa, lista_filiais):
+    global lista_fim
     data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=90 - 1) #Aqui sempre será o periodo informado -1
+    data_fim = data_inicio - datetime.timedelta(days=90 - 1)  # Aqui sempre será o periodo informado -1
 
-    df = pd.DataFrame(Pedido.objects.all().filter(
-        cod_produto__exact=cod_produto,
-        empresa__id__exact=id_empresa,
-        data__range=[data_fim, data_inicio]
-    ).order_by('-id').values())
+    # filiais = get_filiais(id_empresa)
 
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+    list = []
+    for filial in lista_filiais:
 
-    pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
+        df = pd.DataFrame(Pedido.objects.all().filter(
+            cod_produto__exact=cod_produto,
+            cod_filial__exact=filial,
+            data__range=[data_fim, data_inicio],
+            empresa__id__exact=id_empresa
+        ).order_by('-id').values())
 
-    if not pedidos_df.empty:
-
-        list = []
-        for filial in filiais:
-            pedido_ = pedidos_df
-            pedido_ = pedido_.query('cod_filial == @filial.cod_filial')
+        if not df.empty:
+            # pedidos_df = df.drop_duplicates(subset=['num_pedido'], keep='first')
+            pedido_ = df
             lista = pedido_.values.tolist()
             list.append(lista)
 
-        list_pedidos = []
+    lista_fim = []
+    list_pedidos = []
+    if list:
+
+
         for i in list:
-            df = pd.DataFrame(i, columns=["id", "cod_produto", "desc_produto", "cod_filial", "filial_id",
-                                          "cod_fornecedor", "produto_id", "fornecedor_id", "empresa_id", "saldo",
-                                          "num_pedido", "data", "created_at"])
+            df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "saldo", "num_pedido",
+                                          "data", "created_at","produto_id", "fornecedor_id", "filial_id", "empresa_id"])
 
             pedidos = df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
@@ -42,12 +46,13 @@ def pedidos_compra(cod_produto, id_empresa):
 
             list_pedidos.append(pedidos_)
 
-            lista_fim = []
+
             for a in list_pedidos:
                 for b in a:
                     lista_fim.append(b)
 
         pedidos = pd.DataFrame(lista_fim)
+        pedidos = pedidos.drop_duplicates(subset=['cod_filial'], keep='first')
 
         return pedidos
     else:
