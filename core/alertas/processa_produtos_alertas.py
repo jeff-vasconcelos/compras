@@ -269,21 +269,9 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         dde_ponto_rep = ponto_reposicao / media
 
-        # # DIFININDO CONDIÇÃO DE ESTOQUE
-        # if dde > dde_ponto_rep:
-        #     condicao_estoque = 'NORMAL'
-        # elif dde_ponto_rep >= dde > 0:
-        #     condicao_estoque = 'PARCIAL'
-        # else:
-        #     condicao_estoque = 'RUPTURA'
-        #
-        # prod_resumo['condicao_estoque'] = condicao_estoque
-
-        # temp_est = fornecedor.tempo_estoque
+        temp_est = fornecedor.tempo_estoque
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
-        #TODO AUTOMATIZAR POR FORNECEDOR
-        temp_est = 30
 
         if temp_est < dde:
             tamanho = media_ajustada * temp_est
