@@ -64,10 +64,5 @@ admin.site.register(Estoque, EstoqueAtual)
 admin.site.register(Fornecedor)
 admin.site.register(HistoricoEstoque, Historico)
 admin.site.register(Pedido, Pedidos)
-<<<<<<< HEAD
-admin.site.register(UltimaEntrada, UltEntrada)
-admin.site.register(Venda, Vendas)
-=======
 admin.site.register(Entrada, UltEntrada)
 admin.site.register(Venda, Vendas)
->>>>>>> fae30a94b11a8b32c965225780ef85483efe3b5d

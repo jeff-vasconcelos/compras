@@ -12,8 +12,10 @@ class Produto(models.Model):
     peso_liquido = models.CharField(max_length=255, blank=True, null=True)
     principio_ativo = models.CharField(max_length=255, null=True, blank=True)
     cod_fabrica = models.IntegerField(null=True, blank=True)
+    cod_ncm = models.CharField(max_length=255, null=True, blank=True)
     cod_auxiliar = models.IntegerField(null=True, blank=True)
     cod_depto = models.IntegerField(null=True, blank=True)
+    cod_sec = models.IntegerField(null=True, blank=True)
     desc_departamento = models.CharField(max_length=255, null=True, blank=True)
     desc_secao = models.CharField(max_length=255, null=True, blank=True)
 

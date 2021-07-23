@@ -44,12 +44,12 @@ def valida_fornecedor(data):
 def valida_estoque_atual(data):
     cod_produto = data['cod_produto']
     cod_filial = data['cod_filial']
-    quantidade = data['qt_estoque_geral']
+    quantidade = data['qt_geral']
     cod_empresa = data['empresa']
     data = data['data']
 
     estoqueatual = Estoque.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_estoque_geral=quantidade
+        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_geral=quantidade
     ).exists()
 
     if estoqueatual == False:
@@ -112,13 +112,13 @@ def valida_venda(data):
     cod_empresa = data['empresa']
     cod_filial = data['cod_filial']
     dt = data['data']
-    qt = data['qt_vendas']
+    qt = data['qt_venda']
     preco = data['preco_unit']
     cli = data['cliente']
     nf = data['num_nota']
 
     venda = Venda.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa, cod_filial=cod_filial ,data=dt, qt_vendas=qt, preco_unit=preco, cliente=cli, num_nota=nf
+        cod_produto=cod_produto, empresa=cod_empresa, cod_filial=cod_filial ,data=dt, qt_venda=qt, preco_unit=preco, cliente=cli, num_nota=nf
     ).exists()
 
     if venda == False:

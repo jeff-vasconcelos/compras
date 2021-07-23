@@ -14,7 +14,7 @@ class Venda(models.Model):
     data = models.DateField(null=True, blank=True)
     cliente = models.CharField(max_length=255, null=True, blank=True)
     num_nota = models.IntegerField(null=True, blank=True)
-    cod_usur = models.IntegerField(null=True, blank=True)
+    rca = models.CharField(max_length=255, null=True, blank=True)
     supervisor = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
@@ -38,8 +38,5 @@ class Venda(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-<<<<<<< HEAD
-        return f'{self.cod_produto} - {self.empresa.razao_social}'
-=======
         return f'{self.cod_produto} - {self.empresa.nome_fantasia}'
->>>>>>> fae30a94b11a8b32c965225780ef85483efe3b5d
+
