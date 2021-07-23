@@ -11,6 +11,8 @@ from core.models.parametros_models import Email
 from core.models.usuarios_models import User
 import locale
 
+from core.trata_dados.home_abc import *
+
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def alertas():
@@ -60,9 +62,9 @@ def alertas():
                             'qt_excesso': row.qt_excesso,
                             'vl_excesso': row.vl_excesso,
                             'curva': row.curva,
+                            'custo': row.custo,
                             'fornecedor': row.fornecedor,
                             'cod_fornecedor': row.cod_fornecedor,
-                            'excesso_estoque': row.excesso_estoque,
                         }
 
                         lista_alertas.append(alertas_produtos)
@@ -76,21 +78,17 @@ def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     return render(request, template_name, {'produtos': produtos})
 
 
-def executar_alerta(id_empresa, produtos):
+def alerta_db(id_empresa, produtos):
 
     itens = Alerta.objects.all().filter(
         empresa__id__exact=id_empresa
     )
-
     empresa = Empresa.objects.get(id=id_empresa)
     if itens:
         itens.delete()
 
+
     for i in produtos:
-        if i['excesso_estoque'] == "TRUE":
-            status = "EXCESSO"
-        else:
-            status = i['condicao_estoque']
 
         valor = round(i['valor_sugestao'], 0)
         valor_excesso = i['vl_excesso']
@@ -101,7 +99,7 @@ def executar_alerta(id_empresa, produtos):
             cod_produto=i['cod_produto'],
             desc_produto=i['desc_produto'],
             saldo=round(i['saldo'], 0),
-            estado_estoque=status,
+            estado_estoque=i['condicao_estoque'],
             valor=valor_sug,
             sugestao=round(i['sugestao_unidade'], 0),
             estoque=round(i['estoque'], 0),
@@ -116,9 +114,18 @@ def executar_alerta(id_empresa, produtos):
 
 
 def teste(request, template_name='testando_alerta.html'):
+
     produtos = alertas()
-    print(produtos)
-    executar_alerta(1, produtos)
+
+    grafico_um = processa_grafico_um(produtos)
+    dados_estoque = dados_estoque_home(produtos)
+
+    print(teste)
+    alerta_db(1, produtos)
+
+    db_grafico_um(1, grafico_um)
+    db_dados_estoque(1, dados_estoque)
+
     # send_email_alerta(request)
     return render(request, template_name)
 
@@ -206,3 +213,4 @@ def pdf_generate(request):
     pdf = buffer.getvalue()
     buffer.close()
     return pdf
+

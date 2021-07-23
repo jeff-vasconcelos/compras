@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from core.models.parametros_models import DadosEstoque
+from core.models.parametros_models import DadosEstoque, GraficoCurva
 from core.multifilial.pedidos import pedidos_compra
 from core.multifilial.processa_produtos import a_multifiliais
 from core.multifilial.ultima_entrada import ultima_entrada
@@ -10,6 +10,7 @@ from core.multifilial.estoque_atual import estoque_atual
 
 def home_painel(request, template_name='aplicacao/paginas/home.html'):
     dados_estoque = DadosEstoque.objects.filter(empresa__id=1) #TODO automatizar empresa
+    grafico_um = GraficoCurva.objects.filter(empresa__id=1)
 
     t_skus = 0
     t_normal = 0
@@ -35,7 +36,8 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
     contexto = {
         'dadosestoque': dados_estoque,
-        'totais_dados_estoque': totais_dados_estoque
+        'totais_dados_estoque': totais_dados_estoque,
+        'grafico_um':grafico_um
     }
     return render(request, template_name, contexto)
 
