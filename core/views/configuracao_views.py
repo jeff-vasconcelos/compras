@@ -13,12 +13,12 @@ from core.models.parametros_models import Email
 def configuracao_painel(request, template_name='aplicacao/paginas/configuracao/configuracao.html'):
     empresa = request.user.usuario.empresa
     parametros = Parametro.objects.get(empresa__id=empresa.pk)
-    fornecedor = Fornecedor.objects.get(empresa__id=empresa.pk)
+    fornecedores = Fornecedor.objects.filter(empresa__id=empresa.pk)
     emails = Email.objects.filter(empresa__id=empresa.pk)
 
     contexto = {
         'parametro': parametros,
-        'fornecedor': fornecedor,
+        'fornecedores': fornecedores,
         'emails': emails
     }
     return render(request, template_name, contexto)
