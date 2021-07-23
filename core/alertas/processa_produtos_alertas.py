@@ -279,8 +279,11 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         #
         # prod_resumo['condicao_estoque'] = condicao_estoque
 
-        temp_est = fornecedor.tempo_estoque
+        # temp_est = fornecedor.tempo_estoque
         est_disponivel = prod_resumo['estoque_dispon'].unique()
+
+        #TODO AUTOMATIZAR POR FORNECEDOR
+        temp_est = 30
 
         if temp_est < dde:
             tamanho = media_ajustada * temp_est
