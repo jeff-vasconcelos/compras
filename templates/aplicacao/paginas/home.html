@@ -39,18 +39,20 @@
 
     <!-- CARDS -->
     <div class="row">
+        {% if grafico_um %}
+            {% for g_um in grafico_um %}
         <div class="card_curvas col">
             <div class="card shadow mb-4 cards-home-info">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12" style="text-align: center">
-                            <h5>Curva A</h5>
+                            <h5>Curva {{ g_um.curva }}</h5>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12" style="margin-right: auto; margin-left: auto">
                             <div class="chart-pie pt-4">
-                                <canvas id="chartCurvaA"></canvas>
+                                <canvas id="chartCurva{{ g_um.curva }}"></canvas>
                             </div>
                         </div>
                     </div>
@@ -64,153 +66,17 @@
                         </div>
 
                         <div class="col-7 text-right">
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
+                            <h6 class="curvas_text">{{ g_um.normal }}</h6>
+                            <h6 class="curvas_text">{{ g_um.parcial }}</h6>
+                            <h6 class="curvas_text">{{ g_um.excesso }}</h6>
+                            <h6 class="curvas_text">{{ g_um.total }}</h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card_curvas col">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12" style="text-align: center">
-                            <h5>Curva B</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" style="margin-right: auto; margin-left: auto">
-                            <div class="chart-pie pt-4">
-                                <canvas id="chartCurvaB"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 23px; padding-top: 20px">
-
-                        <div class="col-5">
-                            <h6 class="curvas_text">Normal:</h6>
-                            <h6 class="curvas_text">Parcial:</h6>
-                            <h6 class="curvas_text">Excesso:</h6>
-                            <h6 class="curvas_text">Total Est.:</h6>
-                        </div>
-
-                        <div class="col-7 text-right">
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card_curvas col">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12" style="text-align: center">
-                            <h5>Curva C</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" style="margin-right: auto; margin-left: auto">
-                            <div class="chart-pie pt-4">
-                                <canvas id="chartCurvaC"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 23px; padding-top: 20px">
-
-                        <div class="col-5">
-                            <h6 class="curvas_text">Normal:</h6>
-                            <h6 class="curvas_text">Parcial:</h6>
-                            <h6 class="curvas_text">Excesso:</h6>
-                            <h6 class="curvas_text">Total Est.:</h6>
-                        </div>
-
-                        <div class="col-7 text-right">
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card_curvas col">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12" style="text-align: center">
-                            <h5>Curva D</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" style="margin-right: auto; margin-left: auto">
-                            <div class="chart-pie pt-4">
-                                <canvas id="chartCurvaD"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 23px; padding-top: 20px">
-
-                        <div class="col-5">
-                            <h6 class="curvas_text">Normal:</h6>
-                            <h6 class="curvas_text">Parcial:</h6>
-                            <h6 class="curvas_text">Excesso:</h6>
-                            <h6 class="curvas_text">Total Est.:</h6>
-                        </div>
-
-                        <div class="col-7 text-right">
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card_curvas col">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12" style="text-align: center">
-                            <h5>Curva E</h5>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" style="margin-right: auto; margin-left: auto">
-                            <div class="chart-pie pt-4">
-                                <canvas id="chartCurvaE"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 23px; padding-top: 20px">
-
-                        <div class="col-5">
-                            <h6 class="curvas_text">Normal:</h6>
-                            <h6 class="curvas_text">Parcial:</h6>
-                            <h6 class="curvas_text">Excesso:</h6>
-                            <h6 class="curvas_text">Total Est.:</h6>
-                        </div>
-
-                        <div class="col-7 text-right">
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                            <h6 class="curvas_text">R$ 1.000,00</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
+            {% endfor %}
+        {% endif %}
     </div>
 
     <!-- GRAFICO -->

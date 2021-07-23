@@ -14,7 +14,7 @@ class Venda(models.Model):
     data = models.DateField(null=True, blank=True)
     cliente = models.CharField(max_length=255, null=True, blank=True)
     num_nota = models.IntegerField(null=True, blank=True)
-    cod_usur = models.IntegerField(null=True, blank=True)
+    rca = models.CharField(max_length=255, null=True, blank=True)
     supervisor = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 

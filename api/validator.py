@@ -110,13 +110,13 @@ def valida_venda(data):
     cod_empresa = data['empresa']
     cod_filial = data['cod_filial']
     dt = data['data']
-    qt = data['qt_vendas']
+    qt = data['qt_venda']
     preco = data['preco_unit']
     cli = data['cliente']
     nf = data['num_nota']
 
     venda = Venda.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa, cod_filial=cod_filial ,data=dt, qt_vendas=qt, preco_unit=preco, cliente=cli, num_nota=nf
+        cod_produto=cod_produto, empresa=cod_empresa, cod_filial=cod_filial ,data=dt, qt_venda=qt, preco_unit=preco, cliente=cli, num_nota=nf
     ).exists()
 
     if venda == False:

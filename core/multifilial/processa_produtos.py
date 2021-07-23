@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from api.models.fornecedor import Fornecedor
 from api.models.produto import Produto
 from core.models.empresas_models import Filial
 from core.multifilial.curva_abc import abc
@@ -23,11 +24,6 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
 
     lista_resumo = []
 
-    # filiais = []
-    # for i, v in informacaoes_produto.cod_filial.iteritems():
-    #     filiais.append(v)
-
-    # contador = 0
     for filial in lista_filiais:
         produto_dados = informacaoes_produto.query('cod_filial == @filial')
 
@@ -48,18 +44,12 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
         sug_cx = math.ceil(sug_cx)
         sug_unit = sug_cx * qt_un_caixa
 
-        #valor da sugestao
-        if sug_unit <= 0:
-            m_sugestao = sug_unit * -1
-            excesso = "TRUE"
-        else:
-            m_sugestao = sug_unit
-            excesso = "FALSE"
+        valor_sugestao = sug_unit * custo
 
-        valor_sugestao = m_sugestao * custo
         curva = str(produto_dados['curva'].unique()).strip('[]')
         ruptura = str(produto_dados['ruptura'].unique()).strip('[]')
-        condicao_estoque = str(produto_dados['condicao_estoque'].unique()).strip('[]')
+        condicao_est = str(produto_dados['condicao_estoque'].unique()).strip('[]')
+        valor_excesso = str(produto_dados['vl_excesso'].unique()).strip('[]')
 
         data = []
         itens_analise = {
@@ -76,7 +66,6 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
             'sugestao': float(produto_dados['sugestao'].unique()),
             'sugestao_caixa': sug_cx,
             'sugestao_unidade': sug_unit,
-            'excesso_estoque': excesso,
             'valor_sugestao': valor_sugestao,
             'preco_tabela': float(produto_dados['preco_venda_tabela'].unique()),
             'margem': float(produto_dados['margem'].unique()),
@@ -85,13 +74,14 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
             'ruptura': ruptura.replace("'", ""),
             'ruptura_porc': float(produto_dados['ruptura_porc'].unique()),
             'ruptura_cor': str(produto_dados['cor_ruptura'].unique()).strip('[]'),
-            'condicao_estoque': condicao_estoque.replace("'", ""),
+            'condicao_estoque': condicao_est.replace("'", ""),
             'porc_media': float(produto_dados['porcent_media'].unique()),
             'media_simples': float(produto_dados['media'].unique()),
+            'qt_excesso': float(produto_dados['qt_excesso'].unique()),
+            'vl_excesso': valor_excesso.replace("'", ""),
         }
 
         data.append(itens_analise)
-        # contador = contador + 1
 
         lista_resumo.append(data)
 
@@ -112,6 +102,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     u_entrada = ultima_entrada(cod_produto, id_empresa, periodo, lista_filiais)
     e_atual = estoque_atual(cod_produto, id_empresa, lista_filiais)
     vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
+    fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor)
     # df_vendas, informacoes_produto = vendas(cod_produto, id_empresa, periodo)
 
     lista_fornecedor = []
@@ -274,12 +265,50 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         dde_ponto_rep = ponto_reposicao / media
 
-        # DIFININDO CONDIÇÃO DE ESTOQUE
-        if dde > dde_ponto_rep:
+        # # DIFININDO CONDIÇÃO DE ESTOQUE
+        # if dde > dde_ponto_rep:
+        #     condicao_estoque = 'NORMAL'
+        # elif dde_ponto_rep >= dde > 0:
+        #     condicao_estoque = 'PARCIAL'
+        # else:
+        #     condicao_estoque = 'RUPTURA'
+        #
+        # prod_resumo['condicao_estoque'] = condicao_estoque
+
+        temp_est = fornecedor.tempo_estoque
+        est_disponivel = prod_resumo['estoque_dispon'].unique()
+
+        if temp_est < dde:
+            tamanho = media_ajustada * temp_est
+            qt_excesso = est_disponivel - tamanho
+            valor_e = qt_excesso * preco_custo
+
+            vl_e = valor_e.round(2)
+            vl_excesso = locale.currency(vl_e, grouping=True)
+
+            prod_resumo['qt_excesso'] = qt_excesso.round(0)
+            prod_resumo['vl_excesso'] = vl_excesso
+            condicao_estoque = 'EXCESSO'
+
+        elif temp_est >= dde > dde_ponto_rep:
+            vl_e = 0
+            vl_excesso = locale.currency(vl_e, grouping=True)
+            prod_resumo['qt_excesso'] = 0
+            prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'NORMAL'
+
         elif dde_ponto_rep >= dde > 0:
+            vl_e = 0
+            vl_excesso = locale.currency(vl_e, grouping=True)
+            prod_resumo['qt_excesso'] = 0
+            prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'PARCIAL'
+
         else:
+            vl_e = 0
+            vl_excesso = locale.currency(vl_e, grouping=True)
+            prod_resumo['qt_excesso'] = 0
+            prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'RUPTURA'
 
         prod_resumo['condicao_estoque'] = condicao_estoque
