@@ -266,10 +266,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         dde_ponto_rep = ponto_reposicao / media
 
 
-        # temp_est = fornecedor.tempo_estoque
+        temp_est = fornecedor.tempo_estoque
 
-        # TODO AUTOMATIZAR POR FORNECEDOR
-        temp_est = 30
 
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
