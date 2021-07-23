@@ -17,5 +17,17 @@ class Fornecedor(models.Model):
         verbose_name = 'Fornecedor'
         verbose_name_plural = 'Fornecedor'
 
+    def save(self, *args, **kwargs):
+        if not self.leadtime:
+            leadtime = 25
+            ciclo_reposicao = 30
+            tempo_estoque = 30
+
+            self.leadtime = leadtime
+            self.ciclo_reposicao = ciclo_reposicao
+            self.tempo_estoque = tempo_estoque
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.desc_fornecedor
