@@ -24,8 +24,13 @@ def alertas():
     fornecedores = get_fornecedores(id_empresa)
 
     for fornecedor in fornecedores:
-        leadtime = fornecedor.leadtime
-        t_reposicao = fornecedor.ciclo_reposicao
+        # leadtime = fornecedor.leadtime
+        # t_reposicao = fornecedor.ciclo_reposicao
+
+        # TODO AUTOMATIZAR POR FORNECEDOR
+        leadtime = 25
+        t_reposicao = 30
+
         produtos = get_produtos(id_empresa, fornecedor.id)
 
         for produto in produtos:
