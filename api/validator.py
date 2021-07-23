@@ -42,12 +42,12 @@ def valida_fornecedor(data):
 def valida_estoque_atual(data):
     cod_produto = data['cod_produto']
     cod_filial = data['cod_filial']
-    quantidade = data['qt_estoque_geral']
+    quantidade = data['qt_geral']
     cod_empresa = data['empresa']
     data = data['data']
 
     estoqueatual = Estoque.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_estoque_geral=quantidade
+        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_geral=quantidade
     ).exists()
 
     if estoqueatual == False:
