@@ -1,7 +1,7 @@
 import locale
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 from core.models.empresas_models import Empresa
-from core.models.parametros_models import GraficoCurva, DadosEstoque
+from core.models.parametros_models import GraficoCurva, DadosEstoque, GraficoRuptura
 
 
 def processa_grafico_um(produtos):
@@ -41,6 +41,15 @@ def processa_grafico_um(produtos):
 
             curva.append(i)
 
+        elif i['condicao_estoque'] == "RUPTURA":
+            i['valor_parcial'] = i['estoque'] * i['custo']
+
+            i['valor_excesso'] = 0
+            i['valor_normal'] = 0
+            i['valor_ruptura'] = 0
+
+            curva.append(i)
+
 
     #CURVA A
     for a in curva:
@@ -48,22 +57,26 @@ def processa_grafico_um(produtos):
             lista_normal.append(a['valor_normal'])
             lista_excesso.append(a['valor_excesso'])
             lista_parcial.append(a['valor_parcial'])
+            lista_ruptura.append(a['valor_ruptura'])
 
 
     total_normal = sum(lista_normal)
     total_excesso = sum(lista_excesso)
     total_parcial = sum(lista_parcial)
+    total_ruptura = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
     lista_parcial.clear()
+    lista_ruptura.clear()
 
 
     curva_a = {
         'curva': 'A',
         'total_normal':total_normal,
         'total_excesso':total_excesso,
-        'total_parcial':total_parcial
+        'total_parcial':total_parcial,
+        'total_ruptura':total_ruptura
     }
 
     # CURVA B
@@ -72,20 +85,24 @@ def processa_grafico_um(produtos):
             lista_normal.append(b['valor_normal'])
             lista_excesso.append(b['valor_excesso'])
             lista_parcial.append(b['valor_parcial'])
+            lista_ruptura.append(b['valor_ruptura'])
 
-    total_normal = sum(lista_normal)
-    total_excesso = sum(lista_excesso)
-    total_parcial = sum(lista_parcial)
+        total_normal = sum(lista_normal)
+        total_excesso = sum(lista_excesso)
+        total_parcial = sum(lista_parcial)
+        total_ruptura = sum(lista_ruptura)
 
-    lista_normal.clear()
-    lista_excesso.clear()
-    lista_parcial.clear()
+        lista_normal.clear()
+        lista_excesso.clear()
+        lista_parcial.clear()
+        lista_ruptura.clear()
 
     curva_b = {
         'curva': 'B',
         'total_normal': total_normal,
         'total_excesso': total_excesso,
-        'total_parcial': total_parcial
+        'total_parcial': total_parcial,
+        'total_ruptura': total_ruptura
     }
 
     # CURVA C
@@ -94,20 +111,24 @@ def processa_grafico_um(produtos):
             lista_normal.append(c['valor_normal'])
             lista_excesso.append(c['valor_excesso'])
             lista_parcial.append(c['valor_parcial'])
+            lista_ruptura.append(c['valor_ruptura'])
 
     total_normal = sum(lista_normal)
     total_excesso = sum(lista_excesso)
     total_parcial = sum(lista_parcial)
+    total_ruptura = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
     lista_parcial.clear()
+    lista_ruptura.clear()
 
     curva_c = {
         'curva': 'C',
         'total_normal': total_normal,
         'total_excesso': total_excesso,
-        'total_parcial': total_parcial
+        'total_parcial': total_parcial,
+        'total_ruptura': total_ruptura
     }
 
     # CURVA D
@@ -116,20 +137,24 @@ def processa_grafico_um(produtos):
             lista_normal.append(d['valor_normal'])
             lista_excesso.append(d['valor_excesso'])
             lista_parcial.append(d['valor_parcial'])
+            lista_ruptura.append(d['valor_ruptura'])
 
     total_normal = sum(lista_normal)
     total_excesso = sum(lista_excesso)
     total_parcial = sum(lista_parcial)
+    total_ruptura = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
     lista_parcial.clear()
+    lista_ruptura.clear()
 
     curva_d = {
         'curva': 'D',
         'total_normal': total_normal,
         'total_excesso': total_excesso,
-        'total_parcial': total_parcial
+        'total_parcial': total_parcial,
+        'total_ruptura': total_ruptura
     }
 
     # CURVA E
@@ -138,20 +163,24 @@ def processa_grafico_um(produtos):
             lista_normal.append(e['valor_normal'])
             lista_excesso.append(e['valor_excesso'])
             lista_parcial.append(e['valor_parcial'])
+            lista_ruptura.append(e['valor_ruptura'])
 
     total_normal = sum(lista_normal)
     total_excesso = sum(lista_excesso)
     total_parcial = sum(lista_parcial)
+    total_ruptura = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
     lista_parcial.clear()
+    lista_ruptura.clear()
 
     curva_e = {
         'curva': 'E',
         'total_normal': total_normal,
         'total_excesso': total_excesso,
-        'total_parcial': total_parcial
+        'total_parcial': total_parcial,
+        'total_ruptura': total_ruptura
     }
 
     lista_status = [curva_a, curva_b, curva_c, curva_d, curva_e]
@@ -161,18 +190,24 @@ def processa_grafico_um(produtos):
 
 def db_grafico_um(id_empresa, produtos):
 
-    itens = GraficoCurva.objects.all().filter(
-        empresa__id__exact=id_empresa
-    )
+    itens = GraficoCurva.objects.all().filter(empresa__id__exact=id_empresa)
+    itens_rupt = GraficoRuptura.objects.all().filter(empresa__id__exact=id_empresa)
+
     empresa = Empresa.objects.get(id=id_empresa)
+
     if itens:
         itens.delete()
+
+    if itens_rupt:
+        itens_rupt.delete()
 
 
     for i in produtos:
         normal = i['total_normal']
         excesso = i['total_excesso']
         parcial = i['total_parcial']
+        ruptura = i['total_ruptura']
+
         total = normal + excesso + parcial
 
         normal = locale.currency(normal, grouping=True)
@@ -188,7 +223,15 @@ def db_grafico_um(id_empresa, produtos):
             total=total,
             empresa=empresa
         )
+
+        r = GraficoRuptura.objects.create(
+            curva=i['curva'],
+            total=ruptura,
+            empresa=empresa
+        )
+
         b.save()
+        r.save()
 
 
 def dados_estoque_home(produtos):
