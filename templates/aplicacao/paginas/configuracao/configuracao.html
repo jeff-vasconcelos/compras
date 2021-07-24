@@ -92,6 +92,7 @@
 
                             <tbody>
                             {% for fornecedor in fornecedores %}
+
                             <tr>
                                 <td>
                                     {{ fornecedor.cod_fornecedor }} - {{ fornecedor.desc_fornecedor }}
@@ -122,7 +123,9 @@
                                     </a>
                                 </td>
                             </tr>
+
 			    {% endfor %}
+
                             </tbody>
                         </table>
                     </div>
