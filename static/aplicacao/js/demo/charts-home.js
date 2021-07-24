@@ -31,7 +31,7 @@ var ChartCurvaA = new Chart(ctx1, {
         legend: {
             display: false
         },
-        cutoutPercentage: 80,
+        cutoutPercentage: 90,
     },
 });
 
@@ -64,7 +64,7 @@ var ChartCurvaB = new Chart(ctx2, {
         legend: {
             display: false
         },
-        cutoutPercentage: 80,
+        cutoutPercentage: 90,
     },
 });
 
@@ -96,7 +96,7 @@ var chartCurvaC = new Chart(ctx3, {
         legend: {
             display: false
         },
-        cutoutPercentage: 80,
+        cutoutPercentage: 90,
     },
 });
 
@@ -128,7 +128,7 @@ var chartCurvaD = new Chart(ctx4, {
         legend: {
             display: false
         },
-        cutoutPercentage: 80,
+        cutoutPercentage: 90,
     },
 });
 
@@ -160,7 +160,7 @@ var chartCurvaE = new Chart(ctx5, {
         legend: {
             display: false
         },
-        cutoutPercentage: 80,
+        cutoutPercentage:90,
     },
 });
 
@@ -170,13 +170,13 @@ var ctx6 = document.getElementById("chartRupturaxCurva");
 var chartRupturaxCurva = new Chart(ctx6, {
     type: 'bar',
     data: {
-        labels: ["January", "February", "March", "April", "May", "June"],
+        labels: ["A", "B", "C", "D", "E"],
         datasets: [{
             label: "Revenue",
             backgroundColor: "#4e73df",
             hoverBackgroundColor: "#2e59d9",
             borderColor: "#4e73df",
-            data: [4215, 5312, 6251, 7841, 9821, 14984],
+            data: [4215, 5312, 6251, 7841, 9821],
         }],
     },
     options: {
