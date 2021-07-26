@@ -13,12 +13,12 @@ from core.models.parametros_models import Email
 def configuracao_painel(request, template_name='aplicacao/paginas/configuracao/configuracao.html'):
     empresa = request.user.usuario.empresa
     parametros = Parametro.objects.get(empresa__id=empresa.pk)
-    fornecedor = Fornecedor.objects.get(empresa__id=empresa.pk)
+    fornecedores = Fornecedor.objects.filter(empresa__id=empresa.pk)
     emails = Email.objects.filter(empresa__id=empresa.pk)
 
     contexto = {
         'parametro': parametros,
-        'fornecedor': fornecedor,
+        'fornecedores': fornecedores,
         'emails': emails
     }
     return render(request, template_name, contexto)
@@ -79,10 +79,8 @@ def adicionar_email_conf(request, template_name='aplicacao/paginas/configuracao/
                     email.empresa = empresa
                     email.save()
                     messages.success(request, "E-mail cadastrado com sucesso!")
-                    print('valido')
                     return redirect('configuracao_painel')
                 else:
-                    print('não valido')
                     messages.error(request, "Ops, não foi possivel cadastrar e-mail")
             else:
                 form = EmailForm()

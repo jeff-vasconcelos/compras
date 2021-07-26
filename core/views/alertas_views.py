@@ -11,10 +11,12 @@ from core.models.parametros_models import Email
 from core.models.usuarios_models import User
 import locale
 
+from core.trata_dados.home_abc import *
+
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def alertas():
-    global alertas_produtos, infor_produtos_filiais, condicao
+    global alertas_produtos, infor_filiais, condicao
     id_empresa = 1 #TODO Automatizar empresa
     lista_alertas = []
     parametros = Parametro.objects.get(empresa_id=id_empresa)
@@ -24,14 +26,15 @@ def alertas():
     for fornecedor in fornecedores:
         leadtime = fornecedor.leadtime
         t_reposicao = fornecedor.ciclo_reposicao
+
+
         produtos = get_produtos(id_empresa, fornecedor.id)
 
         for produto in produtos:
-            print(produto.desc_produto)
             verif_produto = verifica_produto(produto.cod_produto, id_empresa, parametros.periodo)
 
             if verif_produto == True:
-                infor_produtos_filiais = processa_produtos_filiais(
+                infor_filiais = processa_produtos_filiais(
                     produto.cod_produto,
                     fornecedor.cod_fornecedor,
                     id_empresa,
@@ -40,19 +43,33 @@ def alertas():
                     parametros.periodo
                 )
 
-                infor_produtos_filiais['cod_produto'] = produto.cod_produto
-                infor_produtos_filiais['desc_produto'] = produto.desc_produto
-                infor_produtos_filiais['fornecedor'] = fornecedor.desc_fornecedor
-                infor_produtos_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
+                infor_filiais['cod_produto'] = produto.cod_produto
+                infor_filiais['desc_produto'] = produto.desc_produto
+                infor_filiais['fornecedor'] = fornecedor.desc_fornecedor
+                infor_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
 
-                condicao = ['FALSE' if x == 'NORMAL' else 'TRUE' for x in infor_produtos_filiais['condicao_estoque']]
-                excesso_estoque = ['FALSE' if x > 0  else 'TRUE' for x in infor_produtos_filiais['sugestao_unidade']]
 
-                if "TRUE" in condicao or "TRUE" in excesso_estoque:
-                    alertas_produtos = infor_produtos_filiais.to_dict('records')
+                for index, row in infor_filiais.iterrows():
 
-                    lista_alertas.append(alertas_produtos)
+                    if row.qt_excesso > 0 or row.condicao_estoque != "NORMAL":
+                        alertas_produtos = {
+                            'filial': row.filial,
+                            'cod_produto': row.cod_produto,
+                            'desc_produto': row.desc_produto,
+                            'saldo': row.saldo,
+                            'sugestao_unidade': row.sugestao,
+                            'valor_sugestao': row.valor_sugestao,
+                            'condicao_estoque': row.condicao_estoque,
+                            'estoque': row.estoque,
+                            'qt_excesso': row.qt_excesso,
+                            'vl_excesso': row.vl_excesso,
+                            'curva': row.curva,
+                            'custo': row.custo,
+                            'fornecedor': row.fornecedor,
+                            'cod_fornecedor': row.cod_fornecedor,
+                        }
 
+                        lista_alertas.append(alertas_produtos)
     return lista_alertas
 
 
@@ -60,55 +77,58 @@ def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     id_empresa = request.user.usuario.empresa_id
     produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
 
-
-    # send_email_alerta(request)
-
     return render(request, template_name, {'produtos': produtos})
 
 
-def executar_alerta(id_empresa, produtos):
+def alerta_db(id_empresa, produtos):
 
     itens = Alerta.objects.all().filter(
         empresa__id__exact=id_empresa
     )
-
     empresa = Empresa.objects.get(id=id_empresa)
-
     if itens:
         itens.delete()
 
+
     for i in produtos:
-        produto = i
-        for a in produto:
 
-            if a['excesso_estoque'] == "TRUE":
-                status = "EXCESSO"
-            else:
-                status = a['condicao_estoque']
-            valor = round(a['valor_sugestao'], 0)
-            valor_sug = locale.currency(valor, grouping=True)
+        valor = round(i['valor_sugestao'], 0)
+        valor_excesso = i['vl_excesso']
+        valor_sug = locale.currency(valor, grouping=True)
 
-            b = Alerta.objects.create(
-                cod_filial=a['filial'],
-                cod_produto=a['cod_produto'],
-                desc_produto=a['desc_produto'],
-                saldo=round(a['saldo'], 0),
-                estado_estoque=status,
-                valor=valor_sug,
-                sugestao=round(a['sugestao_unidade'], 0),
-                estoque=round(a['estoque'], 0),
-                curva=a['curva'],
-                fornecedor=a['fornecedor'],
-                cod_fornecedor=a['cod_fornecedor'],
-                empresa=empresa
-                )
-            b.save()
+        b = Alerta.objects.create(
+            cod_filial=i['filial'],
+            cod_produto=i['cod_produto'],
+            desc_produto=i['desc_produto'],
+            saldo=round(i['saldo'], 0),
+            estado_estoque=i['condicao_estoque'],
+            valor=valor_sug,
+            sugestao=round(i['sugestao_unidade'], 0),
+            estoque=round(i['estoque'], 0),
+            qt_excesso=round(i['qt_excesso'], 0),
+            vl_excesso=valor_excesso.replace("'", ""),
+            curva=i['curva'],
+            fornecedor=i['fornecedor'],
+            cod_fornecedor=i['cod_fornecedor'],
+            empresa=empresa
+        )
+        b.save()
 
 
 def teste(request, template_name='testando_alerta.html'):
+
     produtos = alertas()
-    executar_alerta(1, produtos)
+
+    grafico_um = processa_grafico_um(produtos)
+    dados_estoque = dados_estoque_home(produtos)
+
+    alerta_db(1, produtos)
+
+    db_grafico_um(1, grafico_um)
+    db_dados_estoque(1, dados_estoque)
+
     send_email_alerta(request)
+
     return render(request, template_name)
 
 
@@ -148,7 +168,6 @@ def send_email_alerta(request):
     msg.attach(f'alerta-insight-{hoje}', pdf, 'application/pdf')
     msg.content_subtype = 'html'
     msg.send()
-
 
 
 def pdf_generate(request):
@@ -196,3 +215,18 @@ def pdf_generate(request):
     pdf = buffer.getvalue()
     buffer.close()
     return pdf
+
+
+def rotina_alerta_home(request):
+    produtos = alertas()
+
+    grafico_um = processa_grafico_um(produtos)
+    dados_estoque = dados_estoque_home(produtos)
+
+    alerta_db(1, produtos)
+
+    db_grafico_um(1, grafico_um)
+    db_dados_estoque(1, dados_estoque)
+
+    send_email_alerta(request)
+

@@ -13,6 +13,9 @@ class Parametro(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='parametros',
                                 blank=True, null=True)
 
+    def __str__(self):
+        return self.empresa.nome_fantasia
+
 
 class Email(models.Model):
     email = models.EmailField(null=True, blank=True)
@@ -43,10 +46,11 @@ class DadosEstoque(models.Model):
 
 class GraficoCurva(models.Model):
     curva = models.CharField(max_length=255, blank=True, null=True)
-    normal = models.FloatField(null=True, blank=True)
-    parcial = models.FloatField(null=True, blank=True)
-    excesso = models.FloatField(null=True, blank=True)
-    total = models.FloatField(null=True, blank=True)
+    normal = models.CharField(max_length=255, null=True, blank=True)
+    parcial = models.CharField(max_length=255, null=True, blank=True)
+    excesso = models.CharField(max_length=255, null=True, blank=True)
+    total = models.CharField(max_length=255, null=True, blank=True)
+
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='grafcurva_empresa',
                                 blank=True, null=True)
 

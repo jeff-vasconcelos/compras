@@ -1,9 +1,11 @@
+
 from api.models.produto import *
 from api.models.estoque_atual import *
 from api.models.historico_estoque import *
 from api.models.pedido_compra import *
 from api.models.ultima_entrada import *
 from api.models.venda import *
+
 
 
 """ Função responsável por verificar se ja existe o registro no BD web, não permitindo duplicar
@@ -42,12 +44,12 @@ def valida_fornecedor(data):
 def valida_estoque_atual(data):
     cod_produto = data['cod_produto']
     cod_filial = data['cod_filial']
-    quantidade = data['qt_estoque_geral']
+    quantidade = data['qt_geral']
     cod_empresa = data['empresa']
     data = data['data']
 
-    estoqueatual = EstoqueAtual.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_estoque_geral=quantidade
+    estoqueatual = Estoque.objects.filter(
+        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_geral=quantidade
     ).exists()
 
     if estoqueatual == False:
@@ -95,7 +97,7 @@ def valida_ultentrada(data):
     cod_empresa = data['empresa']
     data = data['data']
 
-    ultentrada = UltimaEntrada.objects.filter(
+    ultentrada = Entrada.objects.filter(
         cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data
     ).exists()
 
@@ -110,13 +112,13 @@ def valida_venda(data):
     cod_empresa = data['empresa']
     cod_filial = data['cod_filial']
     dt = data['data']
-    qt = data['qt_vendas']
+    qt = data['qt_venda']
     preco = data['preco_unit']
     cli = data['cliente']
     nf = data['num_nota']
 
     venda = Venda.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa, cod_filial=cod_filial ,data=dt, qt_vendas=qt, preco_unit=preco, cliente=cli, num_nota=nf
+        cod_produto=cod_produto, empresa=cod_empresa, cod_filial=cod_filial ,data=dt, qt_venda=qt, preco_unit=preco, cliente=cli, num_nota=nf
     ).exists()
 
     if venda == False:

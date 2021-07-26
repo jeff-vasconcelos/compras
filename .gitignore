@@ -9,9 +9,9 @@
 .idea/
 /media
 /venv
-#*.sqlite3
-#db.sqlite3
-
+*.sqlite3
+db.sqlite3
+/static
 
 
 

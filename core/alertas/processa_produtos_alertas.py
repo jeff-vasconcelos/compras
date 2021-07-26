@@ -1,5 +1,9 @@
+from datetime import time
+
+import numpy as np
 from django.shortcuts import render
 
+from api.models.fornecedor import Fornecedor
 from api.models.produto import Produto
 from core.alertas.curva_abc_alertas import abc
 from core.alertas.estoque_atual_alertas import estoque_atual
@@ -18,76 +22,74 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
+    global dt_u_entrada
     informacaoes_produto = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo)
 
-    # filiais = get_filiais(id_empresa)
-
-    contador = 0
     lista_resumo = []
 
     filiais = []
     for i, v in informacaoes_produto.cod_filial.iteritems():
         filiais.append(v)
 
-
     for filial in filiais:
         produto_dados = informacaoes_produto.query('cod_filial == @filial')
 
-        dt_entrada = produto_dados['dt_ult_ent'][contador]
+        dt_entrada = produto_dados['dt_ult_ent'].unique()
+
         if dt_entrada == '-':
             dt_u_entrada = dt_entrada
         else:
-            dt_u_entrada = dt_entrada.strftime('%d/%m/%Y')
+            t = pd.to_datetime(dt_entrada)
+            dt_u_entrada = t.strftime('%d/%m/%Y')
 
-        sugestao = float(produto_dados['sugestao'])
-        qt_un_caixa = float(produto_dados['qt_unit_caixa'])
-        custo = float(produto_dados['custo'])
+
+        sugestao = float(produto_dados['sugestao'].unique())
+        qt_un_caixa = float(produto_dados['qt_unit_caixa'].unique())
+        custo = float(produto_dados['custo'].unique())
 
         sug_cx = sugestao / qt_un_caixa
         sug_cx = math.ceil(sug_cx)
         sug_unit = sug_cx * qt_un_caixa
 
-        #valor da sugestao
-        if sug_unit <= 0:
-            m_sugestao = sug_unit * -1
-            excesso = "TRUE"
-        else:
-            m_sugestao = sug_unit
-            excesso = "FALSE"
+        valor_sugestao = sug_unit * custo
 
-        valor_sugestao = m_sugestao * custo
+        curva = str(produto_dados['curva'].unique()).strip('[]')
+        ruptura = str(produto_dados['ruptura'].unique()).strip('[]')
+        condicao_est = str(produto_dados['condicao_estoque'].unique()).strip('[]')
+        valor_excesso = str(produto_dados['vl_excesso'].unique()).strip('[]')
 
         data = []
         itens_analise = {
-            'filial': int(produto_dados['cod_filial']),
-            'estoque': int(produto_dados['estoque_dispon']),
-            'avaria': int(produto_dados['avarias']),
-            'saldo': int(produto_dados['saldo']),
-            'dt_ult_entrada': dt_u_entrada,
-            'qt_ult_entrada': int(produto_dados['qt_ult_ent']),
-            'vl_ult_entrada': float(produto_dados['vl_ult_ent']),
-            'dde': float(produto_dados['dde']),
-            'est_seguranca': float(produto_dados['estoque_segur']),
-            'p_reposicao': float(produto_dados['ponto_repo']),
-            'sugestao': float(produto_dados['sugestao']),
+            'filial': int(produto_dados['cod_filial'].unique()),
+            'estoque': int(produto_dados['estoque_dispon'].unique()),
+            'avaria': int(produto_dados['avarias'].unique()),
+            'saldo': int(produto_dados['saldo'].unique()),
+            'dt_ult_entrada': dt_u_entrada[0],
+            'qt_ult_entrada': int(produto_dados['qt_ult_ent'].unique()),
+            'vl_ult_entrada': float(produto_dados['vl_ult_ent'].unique()),
+            'dde': float(produto_dados['dde'].unique()),
+            'est_seguranca': float(produto_dados['estoque_segur'].unique()),
+            'p_reposicao': float(produto_dados['ponto_repo'].unique()),
+            'sugestao': float(produto_dados['sugestao'].unique()),
             'sugestao_caixa': sug_cx,
             'sugestao_unidade': sug_unit,
-            'excesso_estoque': excesso,
             'valor_sugestao': valor_sugestao,
-            'preco_tabela': float(produto_dados['preco_venda_tabela'][contador]),
-            'margem': float(produto_dados['margem'][contador]),
-            'curva': str(produto_dados['curva'][contador]),
-            'media_ajustada': str(produto_dados['media_ajustada'][contador]),
-            'ruptura': str(produto_dados['ruptura'][contador]),
-            'ruptura_porc': float(produto_dados['ruptura_porc']),
-            'ruptura_cor': str(produto_dados['cor_ruptura'][contador]),
-            'condicao_estoque': str(produto_dados['condicao_estoque'][contador]),
-            'porc_media': float(produto_dados['porcent_media'][contador]),
-            'media_simples': float(produto_dados['media'][contador]),
+            'preco_tabela': float(produto_dados['preco_venda_tabela'].unique()),
+            'custo':custo,
+            'margem': float(produto_dados['margem'].unique()),
+            'curva': curva.replace("'", ""),
+            'media_ajustada': str(produto_dados['media_ajustada'].unique()).strip('[]'),
+            'ruptura': ruptura.replace("'", ""),
+            'ruptura_porc': float(produto_dados['ruptura_porc'].unique()),
+            'ruptura_cor': str(produto_dados['cor_ruptura'].unique()).strip('[]'),
+            'condicao_estoque': condicao_est.replace("'", ""),
+            'porc_media': float(produto_dados['porcent_media'].unique()),
+            'media_simples': float(produto_dados['media'].unique()),
+            'qt_excesso': float(produto_dados['qt_excesso'].unique()),
+            'vl_excesso': valor_excesso.replace("'", ""),
         }
 
         data.append(itens_analise)
-        contador = contador + 1
 
         lista_resumo.append(data)
 
@@ -102,13 +104,13 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
 
 
 def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
-    global resumo_produto
+    global resumo_produto, qt_excesso, vl_excesso
     parametros = Parametro.objects.get(empresa_id=id_empresa)
-
+    fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor)
     pedidos = pedidos_compra(cod_produto, id_empresa)
     u_entrada = ultima_entrada(cod_produto, id_empresa, periodo)
     e_atual = estoque_atual(cod_produto, id_empresa)
-    vendas_p, info_produto = vendas_historico(cod_produto, id_empresa, periodo)
+    vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo)
 
     lista_fornecedor = []
     lista_resumo = []
@@ -120,9 +122,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     for i, v in info_produto.cod_filial.iteritems():
         filiais.append(v)
 
-    contador = 0
     for filial in filiais:
-        print('filial', filial)
+        # print('filial', filial)
         if pedidos is not None:
             pedidos_ = pedidos.query('cod_filial == @filial')
         else:
@@ -144,14 +145,16 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             qt_ult_entrada = 0
             vl_ult_entrada = 0
         else:
-            dt_ult_entrada = entradas_['data']
-            qt_ult_entrada = entradas_['qt_ult_entrada']
-            vl_ult_entrada = entradas_['vl_ult_entrada']
+            dt_ult_entrada = entradas_['data'].unique()
+            qt_ult_entrada = entradas_['qt_ult_entrada'].unique()
+            vl_ult_entrada = entradas_['vl_ult_entrada'].unique()
 
         # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
-        media = info_produto.media[0]
-        media_ajustada = info_produto.media_ajustada[0]
-        desvio = info_produto.desvio[0]
+        info = info_produto.query('cod_filial == @filial')
+
+        media = info.media.unique()
+        media_ajustada = info.media_ajustada.unique()
+        desvio = info.desvio.unique()
 
         # SOMANDO SALDO DE PEDIDOS
         if not pedidos_.empty:
@@ -168,8 +171,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         # INFORMAÇÕES DE PRODUTO
 
         estoque_a = estoque_['qt_disponivel'].to_frame().reset_index(drop=True)
-        prod_resumo['custo'] = estoque_['custo_ult_ent']
-
+        prod_resumo['custo'] = estoque_['custo_ult_entrada'].unique()
 
         prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
@@ -207,11 +209,9 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
         prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
-
         # CALCULANDO SUGESTAO DE COMPRAS
         sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (
                 prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
-
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
         prod_resumo['media'] = media.round(2)
@@ -219,7 +219,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
-        prod_resumo['qt_unit_caixa'] = info_produto.qt_unit_caixa[0]
+        prod_resumo['qt_unit_caixa'] = info.quantidade_un_caixa.unique()
 
         # PORCENTAGEM DA MEDIA
         d_m = desvio / media
@@ -228,14 +228,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         prod_resumo['porcent_media'] = porcent_media.round(2)
 
         # CALCULO DE MARGEM
-        # TODO Verificar coluna nas outras funções
-        # preco_custo = e_atual.preco_custo[0]
-
-        preco_custo = estoque_.custo_ult_ent
-        preco_tabela = estoque_.preco_venda
-
-        # O contador vai navegar pelo indice do dataframe sempre inicando por 0, conforme a quantidade de filiais
-        contador = contador + 1
+        preco_custo = estoque_.custo_ult_entrada.unique()
+        preco_tabela = estoque_.preco_venda.unique()
 
         m = preco_tabela - preco_custo
         m_ = m / preco_tabela
@@ -275,12 +269,41 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         dde_ponto_rep = ponto_reposicao / media
 
-        # DIFININDO CONDIÇÃO DE ESTOQUE
-        if dde > dde_ponto_rep:
+        temp_est = fornecedor.tempo_estoque
+        est_disponivel = prod_resumo['estoque_dispon'].unique()
+
+
+        if temp_est < dde:
+            tamanho = media_ajustada * temp_est
+            qt_excesso = est_disponivel - tamanho
+            valor_e = qt_excesso * preco_custo
+
+            vl_e = valor_e.round(2)
+            vl_excesso = locale.currency(vl_e, grouping=True)
+
+            prod_resumo['qt_excesso'] = qt_excesso.round(0)
+            prod_resumo['vl_excesso'] = vl_excesso
+            condicao_estoque = 'EXCESSO'
+
+        elif temp_est >= dde > dde_ponto_rep:
+            vl_e = 0
+            vl_excesso = locale.currency(vl_e, grouping=True)
+            prod_resumo['qt_excesso'] = 0
+            prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'NORMAL'
+
         elif dde_ponto_rep >= dde > 0:
+            vl_e = 0
+            vl_excesso = locale.currency(vl_e, grouping=True)
+            prod_resumo['qt_excesso'] = 0
+            prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'PARCIAL'
+
         else:
+            vl_e = 0
+            vl_excesso = locale.currency(vl_e, grouping=True)
+            prod_resumo['qt_excesso'] = 0
+            prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'RUPTURA'
 
         prod_resumo['condicao_estoque'] = condicao_estoque
@@ -297,24 +320,3 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         resumo_produto = pd.DataFrame(lista_fim)
 
     return resumo_produto
-
-
-def vendas_historico(cod_produto, id_empresa, periodo):
-    df_vendas, informacoes_produto = vendas(cod_produto, id_empresa, periodo)
-    df_historico = historico_estoque(cod_produto, id_empresa, periodo)
-
-    df_vendas['data'] = pd.to_datetime(df_vendas['data'], format='%Y-%m-%d')
-    df_historico['data'] = pd.to_datetime(df_historico['data'], format='%Y-%m-%d')
-
-    df_ven_hist = pd.merge(df_vendas, df_historico, how="left",
-                           on=["data", "cod_produto", "cod_filial", "desc_produto"])
-    embalagem = df_historico['embalagem'][0]
-
-    values = {'embalagem': embalagem, 'qt_est_disponivel': 0, 'qt_estoque': 0}
-
-    df_ven_hist.fillna(value=values, inplace=True)
-    df_ven_hist.drop(
-        columns=['id', 'produto_id', 'fornecedor_id', 'empresa_id', 'created_at', 'cod_fornecedor_y', 'filial_id'],
-        inplace=True)
-
-    return df_ven_hist, informacoes_produto

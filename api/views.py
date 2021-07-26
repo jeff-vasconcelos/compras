@@ -1,6 +1,7 @@
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from api.serializer import *
+
 from api.models.produto import *
 from api.models.estoque_atual import *
 from api.models.historico_estoque import *
@@ -24,7 +25,7 @@ class FornecedorViewSet(viewsets.ModelViewSet):
 
 class EstoqueAtualViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = EstoqueAtual.objects.all()
+    queryset = Estoque.objects.all()
     serializer_class = EstoqueAtualSerializer
 
 
@@ -42,7 +43,7 @@ class PedidoViewSet(viewsets.ModelViewSet):
 
 class UltEntradaViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = UltimaEntrada.objects.all()
+    queryset = Entrada.objects.all()
     serializer_class = UltEntradaSerializer
 
 
