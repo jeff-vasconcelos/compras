@@ -122,13 +122,13 @@ def teste(request, template_name='testando_alerta.html'):
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
 
-    print(teste)
     alerta_db(1, produtos)
 
     db_grafico_um(1, grafico_um)
     db_dados_estoque(1, dados_estoque)
 
-    # send_email_alerta(request)
+    send_email_alerta(request)
+
     return render(request, template_name)
 
 
@@ -215,4 +215,18 @@ def pdf_generate(request):
     pdf = buffer.getvalue()
     buffer.close()
     return pdf
+
+
+def rotina_alerta_home(request):
+    produtos = alertas()
+
+    grafico_um = processa_grafico_um(produtos)
+    dados_estoque = dados_estoque_home(produtos)
+
+    alerta_db(1, produtos)
+
+    db_grafico_um(1, grafico_um)
+    db_dados_estoque(1, dados_estoque)
+
+    send_email_alerta(request)
 
