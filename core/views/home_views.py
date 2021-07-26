@@ -1,3 +1,4 @@
+from chartjs.views.lines import BaseLineChartView
 from django.shortcuts import render
 from core.models.parametros_models import DadosEstoque, GraficoCurva
 from core.multifilial.pedidos import pedidos_compra
@@ -51,3 +52,20 @@ def testandoviews(request, template_name='testando_alerta.html'):
     # teste = a_multifiliais(180, 16, 1, 15, 30, 30, [1, 2])
     # print(teste)
     return render(request, template_name)
+
+class DadosGrafico(BaseLineChartView):
+    def get_data(self):
+        dados = [
+            10,
+            30,
+            40,
+            50
+        ]
+        return dados
+    def get_labels(self):
+        labels = [
+            "um",
+            "dois",
+            "tres",
+            "quatro"
+        ]

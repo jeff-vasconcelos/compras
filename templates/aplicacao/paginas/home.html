@@ -1,148 +1,181 @@
 {% extends 'aplicacao/base.html' %}
+{% load static %}
+
+{% block scripts %}
+
+<script src="{% static 'aplicacao/js/demo/charts-home.js' %}" defer></script>
+
+<script type="text/javascript">
+    $.get('{% url "graf_curva_a" %}', function (data) {
+        console.log(data)
+        console.log("funcionou o grafico de home")
+        var ctx_um = $("#grafico_a").get(0).getContext("2d");
+        new Chart(ctx_um, {
+            type: 'bar',
+            data: data,
+            options: {
+                title: {
+                    display: true,
+                    text: 'Grafico'
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock scripts %}
 
 {% block conteudo %}
-    <style>
-        div.card_curvas {
-            margin-left: auto;
-            margin-right: auto;
-            width: 10%;
-        }
+<style>
+    div.card_curvas {
+        margin-left: auto;
+        margin-right: auto;
+        width: 10%;
+    }
 
-        h6.curvas_text {
-            font-size: 14px;
-        }
+    h6.curvas_text {
+        font-size: 14px;
+    }
 
-        th.tabela-home-head {
-            border-bottom: solid 1px black;
-            border-right: solid 1px black;
-            text-align: center;
-        }
+    th.tabela-home-head {
+        border-bottom: solid 1px black;
+        border-right: solid 1px black;
+        text-align: center;
+    }
 
-        td.tabela-home-body {
-            border-right: solid 1px black;
-            text-align: center;
-        }
+    td.tabela-home-body {
+        border-right: solid 1px black;
+        text-align: center;
+    }
 
-        th.tabela-home-foot {
-            border-right: solid 1px black;
-            text-align: center;
-        }
+    th.tabela-home-foot {
+        border-right: solid 1px black;
+        text-align: center;
+    }
 
-        th.tabela-home-last, td.tabela-home-last {
-            text-align: center;
-        }
+    th.tabela-home-last, td.tabela-home-last {
+        text-align: center;
+    }
 
-        #excesso-table-home {
-            border-bottom: solid 1px black;
-        }
-    </style>
+    #excesso-table-home {
+        border-bottom: solid 1px black;
+    }
+</style>
 
 
-    <!-- CARDS -->
-    <div class="row">
-        {% if grafico_um %}
-            {% for g_um in grafico_um %}
-        <div class="card_curvas col">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12" style="text-align: center">
-                            <h5>Curva {{ g_um.curva }}</h5>
-                        </div>
+<!-- CARDS -->
+<div class="row">
+    {% if grafico_um %}
+    {% for g_um in grafico_um %}
+    <div class="card_curvas col">
+        <div class="card shadow mb-4 cards-home-info">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        <h5>Curva {{ g_um.curva }}</h5>
                     </div>
-                    <div class="row">
-                        <div class="col-12" style="margin-right: auto; margin-left: auto">
-                            <div class="chart-pie pt-4">
-                                <canvas id="chartCurva{{ g_um.curva }}"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 23px; padding-top: 20px">
-
-                        <div class="col-5">
-                            <h6 class="curvas_text">Normal:</h6>
-                            <h6 class="curvas_text">Parcial:</h6>
-                            <h6 class="curvas_text">Excesso:</h6>
-                            <h6 class="curvas_text">Total Est.:</h6>
-                        </div>
-
-                        <div class="col-7 text-right">
-                            <h6 class="curvas_text">{{ g_um.normal }}</h6>
-                            <h6 class="curvas_text">{{ g_um.parcial }}</h6>
-                            <h6 class="curvas_text">{{ g_um.excesso }}</h6>
-                            <h6 class="curvas_text">{{ g_um.total }}</h6>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="margin-right: auto; margin-left: auto">
+                        <div class="chart-pie pt-4">
+                            <canvas id="chartCurva{{ g_um.curva }}"></canvas>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-            {% endfor %}
-        {% endif %}
-    </div>
+                <div class="row" style="margin-top: 23px; padding-top: 20px">
 
-    <!-- GRAFICO -->
-    <div class="row">
+                    <div class="col-5">
+                        <h6 class="curvas_text">Normal:</h6>
+                        <h6 class="curvas_text">Parcial:</h6>
+                        <h6 class="curvas_text">Excesso:</h6>
+                        <h6 class="curvas_text">Total Est.:</h6>
+                    </div>
 
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <h6>Dados Estoque</h6>
-
-                    <table width="100%">
-                        <thead>
-                        <tr>
-                            <th class="tabela-home-head">Curva</th>
-                            <th class="tabela-home-head">SKU's</th>
-                            <th class="tabela-home-head">Normal</th>
-                            <th class="tabela-home-head">Ruptura Parc.</th>
-                            <th class="tabela-home-head">Ruptura</th>
-                            <th class="tabela-home-last" id="excesso-table-home">Excesso</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        {% if dadosestoque %}
-                            {% for dados in dadosestoque %}
-                                <tr>
-                                    <td class="tabela-home-body">{{ dados.curva }}</td>
-                                    <td class="tabela-home-body">{{ dados.skus }}</td>
-                                    <td class="tabela-home-body">{{ dados.normal }}</td>
-                                    <td class="tabela-home-body">{{ dados.parcial }}</td>
-                                    <td class="tabela-home-body">{{ dados.ruptura }}</td>
-                                    <td class="tabela-home-last">{{ dados.excesso }}</td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        </tbody>
-
-                        <tfoot>
-
-                        <tr>
-                            <th class="tabela-home-foot">Total</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_skus }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_normal }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_parcial }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_ruptura }}</th>
-                            <th class="tabela-home-last">{{ totais_dados_estoque.t_excesso }}</th>
-                        </tr>
-
-                        </tfoot>
-                    </table>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <p>Ruptura x Curva</p>
-                    <div class="chart-bar">
-                        <canvas id="chartRupturaxCurva"></canvas>
+                    <div class="col-7 text-right">
+                        <h6 class="curvas_text">{{ g_um.normal }}</h6>
+                        <h6 class="curvas_text">{{ g_um.parcial }}</h6>
+                        <h6 class="curvas_text">{{ g_um.excesso }}</h6>
+                        <h6 class="curvas_text">{{ g_um.total }}</h6>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<!-- GRAFICO -->
+<div class="row">
+
+    <div class="col-xl-6 col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h6>Dados Estoque</h6>
+
+                <table width="100%">
+                    <thead>
+                    <tr>
+                        <th class="tabela-home-head">Curva</th>
+                        <th class="tabela-home-head">SKU's</th>
+                        <th class="tabela-home-head">Normal</th>
+                        <th class="tabela-home-head">Ruptura Parc.</th>
+                        <th class="tabela-home-head">Ruptura</th>
+                        <th class="tabela-home-last" id="excesso-table-home">Excesso</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if dadosestoque %}
+                    {% for dados in dadosestoque %}
+                    <tr>
+                        <td class="tabela-home-body">{{ dados.curva }}</td>
+                        <td class="tabela-home-body">{{ dados.skus }}</td>
+                        <td class="tabela-home-body">{{ dados.normal }}</td>
+                        <td class="tabela-home-body">{{ dados.parcial }}</td>
+                        <td class="tabela-home-body">{{ dados.ruptura }}</td>
+                        <td class="tabela-home-last">{{ dados.excesso }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                    <tfoot>
+
+                    <tr>
+                        <th class="tabela-home-foot">Total</th>
+                        <th class="tabela-home-foot">{{ totais_dados_estoque.t_skus }}</th>
+                        <th class="tabela-home-foot">{{ totais_dados_estoque.t_normal }}</th>
+                        <th class="tabela-home-foot">{{ totais_dados_estoque.t_parcial }}</th>
+                        <th class="tabela-home-foot">{{ totais_dados_estoque.t_ruptura }}</th>
+                        <th class="tabela-home-last">{{ totais_dados_estoque.t_excesso }}</th>
+                    </tr>
+
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6 col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <p>Ruptura x Curva</p>
+                <div class="chart-bar">
+                    <canvas id="chartRupturaxCurva"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12" style="margin-right: auto; margin-left: auto">
+        <div class="chart-pie pt-4">
+            <canvas id="grafico_a"></canvas>
+        </div>
+    </div>
+</div>
 
 {% endblock conteudo %}

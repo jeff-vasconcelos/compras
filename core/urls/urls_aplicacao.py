@@ -60,6 +60,8 @@ urlpatterns = [
     path('testando/', teste, name='testando'),
     path('teste/', testandoviews, name='testando_views'),
 
+    path('graf_curva_a', DadosGrafico.as_view(),name='graf_curva_a')
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
