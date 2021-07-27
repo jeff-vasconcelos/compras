@@ -60,7 +60,7 @@ urlpatterns = [
     path('testando/', teste, name='testando'),
     path('teste/', testandoviews, name='testando_views'),
 
-    path('graf_curva_a', DadosGrafico.as_view(),name='graf_curva_a')
+    path('graficos_home', DadosGrafico, name='graficos_home')
 
 ]
 
