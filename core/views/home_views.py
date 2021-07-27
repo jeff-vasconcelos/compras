@@ -10,7 +10,7 @@ from core.multifilial.estoque_atual import estoque_atual
 
 
 def home_painel(request, template_name='aplicacao/paginas/home.html'):
-    dados_estoque = DadosEstoque.objects.filter(empresa__id=1) #TODO automatizar empresa
+    dados_estoque = DadosEstoque.objects.filter(empresa__id=1) # TODO automatizar empresa
     grafico_um = GraficoCurva.objects.filter(empresa__id=1)
 
     t_skus = 0
