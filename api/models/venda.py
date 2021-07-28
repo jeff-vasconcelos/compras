@@ -18,7 +18,7 @@ class Venda(models.Model):
     supervisor = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
-    produto = models.ForeignKemax_length=255y(Produto, on_delete=models.CASCADE, related_name='produto_venda',
+    produto = models.ForeignKemax_length=255(Produto, on_delete=models.CASCADE, related_name='produto_venda',
                                 blank=True, null=True)
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_venda',
                                    blank=True, null=True)
