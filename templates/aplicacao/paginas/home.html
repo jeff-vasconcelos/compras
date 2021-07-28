@@ -5,23 +5,6 @@
 
 <script src="{% static 'aplicacao/js/demo/charts-home.js' %}" defer></script>
 
-<script type="text/javascript">
-    $.get('{% url "graf_curva_a" %}', function (data) {
-        console.log(data)
-        console.log("funcionou o grafico de home")
-        var ctx_um = $("#grafico_a").get(0).getContext("2d");
-        new Chart(ctx_um, {
-            type: 'bar',
-            data: data,
-            options: {
-                title: {
-                    display: true,
-                    text: 'Grafico'
-                }
-            }
-        });
-    });
-</script>
 
 {% endblock scripts %}
 

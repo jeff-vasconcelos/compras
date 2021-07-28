@@ -60,7 +60,7 @@ urlpatterns = [
     path('testando/', teste, name='testando'),
     path('teste/', testandoviews, name='testando_views'),
 
-    path('graficos_home', DadosGrafico, name='graficos_home')
+    #path('graficos_home', DadosGrafico, name='graficos_home')
 
 ]
 
