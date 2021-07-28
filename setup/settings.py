@@ -26,11 +26,11 @@ SECRET_KEY = 'pc#&s_x-+hi7ly1li$9z=&)z^9*iu(w)wruukoddo=t4ue-183'
 #SECRET_KEY = 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['insight-dev.com.br', '192.168.1.121']
+ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['insight-dev.com.br', '192.168.1.121']
 
 
 LOGIN_URL = '/acesso/login'
