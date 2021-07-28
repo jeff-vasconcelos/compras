@@ -5,13 +5,13 @@ from api.models.produto import Produto
 
 
 class Venda(models.Model):
-    cod_produto = models.IntegerField(null=True, blank=True)
-    cod_filial = models.IntegerField(null=True, blank=True)
-    cod_fornecedor = models.IntegerField(null=True, blank=True)
-    qt_venda = models.IntegerField(null=True, blank=True)
-    preco_unit = models.FloatField(null=True, blank=True)
-    custo_fin = models.FloatField(null=True, blank=True)
-    data = models.DateField(null=True, blank=True)
+    cod_produto = models.IntegerField(null=False, blank=False)
+    cod_filial = models.IntegerField(null=False, blank=False)
+    cod_fornecedor = models.IntegerField(null=False, blank=False)
+    qt_venda = models.IntegerField(null=False, blank=False)
+    preco_unit = models.FloatField(null=False, blank=False)
+    custo_fin = models.FloatField(null=False, blank=False)
+    data = models.DateField(null=False, blank=False)
     cliente = models.CharField(max_length=255, null=True, blank=True)
     num_nota = models.IntegerField(null=True, blank=True)
     rca = models.CharField(max_length=255, null=True, blank=True)
@@ -25,6 +25,10 @@ class Venda(models.Model):
     filial = models.ForeignKey(Filial, on_delete=models.CASCADE, null=True, blank=True, related_name='filial_venda')
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_venda',
                                 blank=True, null=True)
+    
+    campo_um = models.CharField(max_length=255, blank=True, null=True)
+    campo_dois = models.CharField(max_length=255, blank=True, null=True)
+    campo_tres = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:
