@@ -19,7 +19,7 @@ greenlet==1.1.0
 gunicorn==20.0.4
 importlib-metadata==4.6.1
 kombu==5.1.0
-l==0.11.0
+l==0.11.0cd
 Markdown==3.3.4
 numpy==1.19.5
 pandas==1.1.5
