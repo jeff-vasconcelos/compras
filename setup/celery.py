@@ -6,7 +6,7 @@ from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'setup.settings')
-app = Celery('setup', broker="redis://localhost:6379", backend="redis://localhost:6379")
+app = Celery('setup', broker="redis://redis:6379", backend="redis://redis:6379")
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.
