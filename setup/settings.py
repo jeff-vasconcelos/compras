@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'crispy_forms',
     'django_celery_beat',
+    'django_crontab',
 
     #TODO Remover app debug_toolbar
     'debug_toolbar',
