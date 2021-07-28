@@ -3,8 +3,8 @@ from core.models.empresas_models import Empresa
 
 
 class Fornecedor(models.Model):
-    cod_fornecedor = models.IntegerField(null=True, blank=True)
-    desc_fornecedor = models.CharField(max_length=255, null=True, blank=True)
+    cod_fornecedor = models.IntegerField(null=False, blank=False)
+    desc_fornecedor = models.CharField(max_length=255, null=False, blank=False)
     cnpj = models.CharField(max_length=255, null=True, blank=True)
     iestadual = models.CharField(max_length=255, null=True, blank=True)
     leadtime = models.IntegerField(null=True, blank=True)
@@ -12,6 +12,10 @@ class Fornecedor(models.Model):
     tempo_estoque = models.IntegerField(null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='fonecedor_empresa',
                                 blank=True, null=True)
+    
+    campo_um = models.CharField(max_lenght=255, null=True, blank=True)
+    campo_dois = models.CharField(max_lenght=255, null=True, blank=True)
+    campo_tres = models.CharField(max_lenght=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Fornecedor'
