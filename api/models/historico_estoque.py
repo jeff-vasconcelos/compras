@@ -5,11 +5,11 @@ from api.models.produto import Produto
 
 
 class HistoricoEstoque(models.Model):
-    cod_produto = models.IntegerField(null=True, blank=True)
-    cod_filial = models.IntegerField(null=True, blank=True)
-    cod_fornecedor = models.IntegerField(null=True, blank=True)
-    qt_estoque = models.IntegerField(null=True, blank=True)
-    data = models.DateField(null=True, blank=True)
+    cod_produto = models.IntegerField(null=False, blank=False)
+    cod_filial = models.IntegerField(null=False, blank=False)
+    cod_fornecedor = models.IntegerField(null=False, blank=False)
+    qt_estoque = models.IntegerField(null=False, blank=False)
+    data = models.DateField(null=False, blank=False)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_historicoestoque',
@@ -20,6 +20,10 @@ class HistoricoEstoque(models.Model):
                                related_name='filial_historicoestoque')
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_historicoestoque',
                                 blank=True, null=True)
+    
+    campo_um = models.CharField(max_lenght=255, null=True, blank=True)
+    campo_dois = models.CharField(max_lenght=255, null=True, blank=True)
+    campo_tres = models.CharField(max_lenght=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Histórico de estoque'
