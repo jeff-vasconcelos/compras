@@ -5,18 +5,18 @@ from api.models.produto import Produto
 
 
 class Estoque(models.Model):
-    cod_produto = models.IntegerField(null=True, blank=True)
-    cod_filial = models.IntegerField(null=True, blank=True)
-    cod_fornecedor = models.IntegerField(null=True, blank=True)
-    qt_geral = models.IntegerField(null=True, blank=True)
-    qt_indenizada = models.IntegerField(null=True, blank=True)
-    qt_reservada = models.IntegerField(null=True, blank=True)
-    qt_pendente = models.IntegerField(null=True, blank=True)
-    qt_bloqueada = models.IntegerField(null=True, blank=True)
-    qt_disponivel = models.IntegerField(null=True, blank=True)
-    preco_venda = models.FloatField(null=True, blank=True)
-    custo_ult_entrada = models.FloatField(null=True, blank=True)
-    data = models.DateField(null=True, blank=True)
+    cod_produto = models.IntegerField(null=False, blank=False)
+    cod_filial = models.IntegerField(null=False, blank=False)
+    cod_fornecedor = models.IntegerField(null=False, blank=False)
+    qt_geral = models.IntegerField(null=False, blank=False)
+    qt_indenizada = models.IntegerField(null=False, blank=False)
+    qt_reservada = models.IntegerField(null=False, blank=False)
+    qt_pendente = models.IntegerField(null=False, blank=False)
+    qt_bloqueada = models.IntegerField(null=False, blank=False)
+    qt_disponivel = models.IntegerField(null=False, blank=False)
+    preco_venda = models.FloatField(null=False, blank=False)
+    custo_ult_entrada = models.FloatField(null=False, blank=False)
+    data = models.DateField(null=False, blank=False)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
 
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_estoqueatual',
@@ -27,6 +27,10 @@ class Estoque(models.Model):
                                related_name='filial_estoqueatual')
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_estoqueatual',
                                 blank=True, null=True)
+    
+    campo_um = models.CharField(max_lenght=255, null=True, blank=True)
+    campo_dois = models.CharField(max_lenght=255, null=True, blank=True)
+    campo_tres = models.CharField(max_lenght=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Estoque atual'
