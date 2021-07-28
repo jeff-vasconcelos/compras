@@ -49,6 +49,7 @@ def testandoviews(request, template_name='testando_alerta.html'):
 
     return render(request, template_name)
 
+'''
 
 def DadosGrafico(request):
     id_empresa = request.user.usuario.empresa_id
@@ -72,3 +73,5 @@ def DadosGrafico(request):
 
         return JsonResponse({'data': data})
     return JsonResponse({})
+    
+'''

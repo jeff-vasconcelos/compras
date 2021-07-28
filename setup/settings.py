@@ -30,6 +30,7 @@ DEBUG = False
 #ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['insight-dev.com.br', '192.168.1.121']
 
+
 LOGIN_URL = '/acesso/login'
 
 
