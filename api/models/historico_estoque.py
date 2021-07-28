@@ -21,9 +21,9 @@ class HistoricoEstoque(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_historicoestoque',
                                 blank=True, null=True)
     
-    campo_um = models.CharField(max_lenght=255, null=True, blank=True)
-    campo_dois = models.CharField(max_lenght=255, null=True, blank=True)
-    campo_tres = models.CharField(max_lenght=255, null=True, blank=True)
+    campo_um = models.CharField(max_length=255, null=True, blank=True)
+    campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Histórico de estoque'
