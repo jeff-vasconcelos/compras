@@ -217,7 +217,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         # CALCULANDO PONTO DE REPOSIÇÃO
         estoque_segur = est_seg.round(0)
 
-        if valida_media == True:
+        if valida_media == False:
             ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
             prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
@@ -232,18 +232,18 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             sugestao = ((media * (leadtime + tempo_reposicao)) + estoque_segur) - (
                     prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
-        print('produto')
-        print(cod_produto)
-        print("saldo")
-        print(prod_resumo['saldo'])
-        print("estoque disponivel")
-        print(prod_resumo['estoque_dispon'])
-        print("media ajustada")
-        print(media_ajustada)
-        print("media")
-        print(media)
-        print("estoque seg")
-        print(estoque_segur)
+        # print('produto')
+        # print(cod_produto)
+        # print("saldo")
+        # print(prod_resumo['saldo'])
+        # print("estoque disponivel")
+        # print(prod_resumo['estoque_dispon'])
+        # print("media ajustada")
+        # print(media_ajustada)
+        # print("media")
+        # print(media)
+        # print("estoque seg")
+        # print(estoque_segur)
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
         prod_resumo['media'] = media.round(2)
