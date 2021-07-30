@@ -155,7 +155,7 @@ def send_email_alerta(request):
             email = a.email
             lista_email.append(email)
 
-
+    print(lista_email)
     # lista_email_cc = ['wellesoncolares@gmail.com']
 
     msg = EmailMessage(
