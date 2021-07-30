@@ -212,14 +212,25 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['estoque_segur'] = est_seg.round(0)
 
+        valida_media = math.isnan(media_ajustada)
+
         # CALCULANDO PONTO DE REPOSIÇÃO
         estoque_segur = est_seg.round(0)
-        ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
-        prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
-        # CALCULANDO SUGESTAO DE COMPRAS
-        sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (
-                prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+        if valida_media == True:
+            ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
+            prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
+
+            # CALCULANDO SUGESTAO DE COMPRAS
+            sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (
+                    prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+        else:
+            ponto_reposicao = (media * leadtime) + estoque_segur
+            prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
+
+            # CALCULANDO SUGESTAO DE COMPRAS
+            sugestao = ((media * (leadtime + tempo_reposicao)) + estoque_segur) - (
+                    prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
         print("saldo")
         print(prod_resumo['saldo'])
