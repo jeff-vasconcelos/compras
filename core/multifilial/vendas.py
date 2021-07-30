@@ -48,7 +48,9 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
         if i:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_vendas", "preco_unit",
                                           "custo_fin", "data", "cliente", "num_nota", "cod_usur", "supervisor", "created_at",
-                                          "produto_id", "fornecedor_id", "filial_id", "empresa_id"])
+                                          "produto_id", "fornecedor_id", "filial_id", "empresa_id", "campo_um",
+                                          "campo_dois", "campo_tres"
+                                          ])
 
             vendas_df = df
 
@@ -114,7 +116,8 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
             e_vendas.fillna(value=values, inplace=True)
             e_vendas.drop(
                 columns=['id', 'produto_id', 'fornecedor_id', 'empresa_id', 'created_at', 'cod_fornecedor_y',
-                         'filial_id'],
+                         'filial_id', "campo_um", "campo_dois", "campo_tres"
+                         ],
                 inplace=True)
 
             cont_ajustada = 0

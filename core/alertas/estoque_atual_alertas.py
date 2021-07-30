@@ -30,8 +30,10 @@ def estoque_atual(cod_produto, id_empresa):
         df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial",  "cod_fornecedor", "qt_geral", "qt_indenizada",
                                       "qt_reservada", "qt_pendente", "qt_bloqueada", "qt_disponivel", "custo_ult_entrada",
                                       "preco_venda", "data", "created_at", "produto_id", "fornecedor_id", "filial_id",
-                                      "empresa_id"
+                                      "empresa_id", "campo_um", "campo_dois", "campo_tres"
                                       ])
+        df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
+
         disponivel = df
         disponiveis = disponivel.assign(
             **disponivel.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")

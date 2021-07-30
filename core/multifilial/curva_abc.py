@@ -30,7 +30,9 @@ def abc(cod_fornecedor, id_empresa, periodo, lista_filiais):
     for i in list:
         df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_vendas", "preco_unit",
                                           "custo_fin", "data", "cliente", "num_nota", "cod_usur", "supervisor", "created_at",
-                                          "produto_id", "fornecedor_id", "filial_id", "empresa_id"])
+                                          "produto_id", "fornecedor_id", "filial_id", "empresa_id", "campo_um", "campo_dois", "campo_tres"])
+
+        df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
 
         df['vl_total_vendido'] = df['qt_vendas'] * df['preco_unit']
         df['vl_total_custo'] = df['qt_vendas'] * df['custo_fin']

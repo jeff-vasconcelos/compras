@@ -37,7 +37,11 @@ def pedidos_compra(cod_produto, id_empresa, lista_filiais):
 
         for i in list:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "saldo", "num_pedido",
-                                          "data", "created_at","produto_id", "fornecedor_id", "filial_id", "empresa_id"])
+                                          "data", "created_at","produto_id", "fornecedor_id", "filial_id", "empresa_id",
+                                          "campo_um", "campo_dois", "campo_tres"
+                                          ])
+
+            df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
 
             pedidos = df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
