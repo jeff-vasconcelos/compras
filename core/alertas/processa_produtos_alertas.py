@@ -48,8 +48,11 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
         custo = float(produto_dados['custo'].unique())
 
         sug_cx = sugestao / qt_un_caixa
+        print('sugestao')
         print(sugestao)
+        print('qt_un_caixa')
         print(qt_un_caixa)
+        print('sug_cx')
         print(sug_cx)
 
         sug_cx = math.ceil(sug_cx)
@@ -217,6 +220,15 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         # CALCULANDO SUGESTAO DE COMPRAS
         sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (
                 prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+
+        print("saldo")
+        print(prod_resumo['saldo'])
+        print("estoque disponivel")
+        print(prod_resumo['estoque_dispon'])
+        print("media ajustada")
+        print(media_ajustada)
+        print("estoque seg")
+        print(estoque_segur)
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
         prod_resumo['media'] = media.round(2)
