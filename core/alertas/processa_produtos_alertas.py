@@ -48,7 +48,12 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
         custo = float(produto_dados['custo'].unique())
 
         sug_cx = sugestao / qt_un_caixa
+        print(sugestao)
+        print(qt_un_caixa)
+        print(sug_cx)
+
         sug_cx = math.ceil(sug_cx)
+
         sug_unit = sug_cx * qt_un_caixa
 
         valor_sugestao = sug_unit * custo
