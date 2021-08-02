@@ -73,7 +73,7 @@
                     <th>Previsão Est.</th>
                     <th>Estoque</th>
                     <th>Pedido Pend.</th>
-                    <th>Sugestão</th>
+                    <th>Quantidade</th>
                     <th>Valor</th>
                     <th>Curva</th>
                     <th>Fornecedor</th>
@@ -90,8 +90,8 @@
                     <td class="status excesso">{{ produto.estado_estoque }}</td>
                     <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
                     <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.valor }}</td>
+                    <td class="numero">{{ produto.qt_excesso|floatformat:0 }}</td>
+                    <td class="numero">{{ produto.vl_excesso }}</td>
                     <td class="curva">{{ produto.curva }}</td>
                     <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
 

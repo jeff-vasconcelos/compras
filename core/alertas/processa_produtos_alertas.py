@@ -261,7 +261,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         # CALCULO DE MARGEM
         preco_custo = estoque_.custo_ult_entrada.unique()
-        preco_tabela = estoque_.preco_venda.unique()
+        preco_tabela = vendas_.preco_unit.unique()
+        # preco_tabela = estoque_.preco_venda.unique()
 
         m = preco_tabela - preco_custo
         m_ = m / preco_tabela

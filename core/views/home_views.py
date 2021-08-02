@@ -2,18 +2,14 @@ from chartjs.views.lines import BaseLineChartView
 from django.http import JsonResponse
 from django.shortcuts import render
 from core.models.parametros_models import DadosEstoque, GraficoCurva, GraficoRuptura
-from core.multifilial.pedidos import pedidos_compra
-from core.multifilial.processa_produtos import a_multifiliais
-from core.multifilial.ultima_entrada import ultima_entrada
-from core.multifilial.vendas import vendas
-from core.multifilial.curva_abc import abc
-from core.multifilial.estoque_atual import estoque_atual
 
 
 def home_painel(request, template_name='aplicacao/paginas/home.html'):
-    # TODO automatizar empresa
-    dados_estoque = DadosEstoque.objects.filter(empresa__id=1)
-    grafico_um = GraficoCurva.objects.filter(empresa__id=1)
+
+    id_empresa = request.user.usuario.empresa_id
+
+    dados_estoque = DadosEstoque.objects.filter(empresa__id=id_empresa)
+    grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa)
 
     t_skus = 0
     t_normal = 0

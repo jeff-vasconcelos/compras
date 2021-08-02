@@ -20,7 +20,7 @@ const mensagemErro = document.getElementById('div-mensagem-erro')
 
 
 // ADD PRODUTO AO PEDIDO NA SESSAO
-const addPedidoSessao = (produto, qt_digitada, pr_compra) => {
+const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
     $.ajax({
         type: 'POST',
         url: '/painel/add-produto-pedido/',
@@ -126,10 +126,6 @@ botaoPedidoSessao.addEventListener('click', e => {
     // } else {
     //     dde = dde_p
     // }
-
-    console.log(produtoSelecionado, "PRODUTO SELECIONADO")
-    console.log(qt_digitada, "QT DIGITADA")
-    console.log(p_compra, "PRECO DE COMPRA")
 
 
     addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, filialSelecionado)
