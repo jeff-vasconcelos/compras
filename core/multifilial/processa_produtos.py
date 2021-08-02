@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from api.models.fornecedor import Fornecedor
 from api.models.produto import Produto
 from core.models.empresas_models import Filial
@@ -116,7 +115,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     #     filiais.append(v)
 
     for filial in lista_filiais:
-        print('filial', filial)
         if pedidos is not None:
             pedidos_ = pedidos.query('cod_filial == @filial')
         else:
@@ -224,8 +222,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         # CALCULO DE MARGEM
         preco_custo = estoque_.custo_ult_entrada.unique()
-        preco_tabela = vendas_.preco_unit.unique()
-        # preco_tabela = estoque_.preco_venda.unique()
+        preco_tabela = estoque_.preco_venda.unique()
 
 
         m = preco_tabela - preco_custo

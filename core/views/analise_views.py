@@ -1,4 +1,7 @@
+import datetime
 from math import ceil
+
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
@@ -18,6 +21,7 @@ from core.models.empresas_models import Filial
 import csv
 import pandas as pd
 from core.multifilial.vendas import vendas
+from core.models.pedidos_models import *
 
 
 @login_required
@@ -496,6 +500,8 @@ def add_prod_pedido_sessao(request):
             produto_nome = prod_qs.desc_produto
             produto_codigo = prod_qs.cod_produto
 
+
+
             if not request.session.get('pedido_produto'):
                 request.session['pedido_produto'] = {}
                 request.session.save()
@@ -509,6 +515,7 @@ def add_prod_pedido_sessao(request):
                 'ped_cod_filial': cod_filial,
                 'ped_pr_compra': pr_compra,
                 'ped_qt_digitada': qt_digitada,
+
             }
 
             request.session.save()
@@ -556,8 +563,41 @@ def export_csv(request):
     pedido = request.session.get('pedido_produto', [])
     lista = []
 
+    id_usuario = request.user.usuario.id
+    id_empresa = request.user.usuario.empresa_id
+
+    empresa = Empresa.objects.get(id=id_empresa)
+    usuario = User.objects.get(id=id_usuario)
+
+    primeiro = usuario.first_name
+    espaco = " "
+    ultimo = usuario.last_name
+
+    numero = id_empresa
+    numero = str(numero)
+
+    data = datetime.datetime.now().strftime("%d%m%Y%H%M")
+
+    p = PedidoInsight.objects.create(
+        numero=f'{numero}-{data}',
+        usuario=primeiro + espaco + ultimo,
+        empresa=empresa
+    )
+    p.save()
+
     for value in pedido.values():
         temp = value
+
+        p_i = PedidoInsightItens.objects.create(
+            cod_produto=temp['ped_produto_cod'],
+            desc_produto=temp['ped_produto_nome'],
+            cod_filial=temp['ped_cod_filial'],
+            preco=temp['ped_pr_compra'],
+            quantidade=temp['ped_qt_digitada'],
+            pedido=p
+        )
+
+        p_i.save()
 
         del [temp['ped_cod_filial']]
         del [temp['ped_produto_nome']]

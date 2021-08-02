@@ -131,7 +131,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         filiais.append(v)
 
     for filial in filiais:
-        # print('filial', filial)
         if pedidos is not None:
             pedidos_ = pedidos.query('cod_filial == @filial')
         else:
@@ -232,18 +231,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             sugestao = ((media * (leadtime + tempo_reposicao)) + estoque_segur) - (
                     prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
-        # print('produto')
-        # print(cod_produto)
-        # print("saldo")
-        # print(prod_resumo['saldo'])
-        # print("estoque disponivel")
-        # print(prod_resumo['estoque_dispon'])
-        # print("media ajustada")
-        # print(media_ajustada)
-        # print("media")
-        # print(media)
-        # print("estoque seg")
-        # print(estoque_segur)
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
         prod_resumo['media'] = media.round(2)
@@ -261,8 +248,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         # CALCULO DE MARGEM
         preco_custo = estoque_.custo_ult_entrada.unique()
-        preco_tabela = vendas_.preco_unit.unique()
-        # preco_tabela = estoque_.preco_venda.unique()
+        preco_tabela = estoque_.preco_venda.unique()
 
         m = preco_tabela - preco_custo
         m_ = m / preco_tabela
