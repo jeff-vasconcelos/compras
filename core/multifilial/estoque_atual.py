@@ -30,8 +30,8 @@ def estoque_atual(cod_produto, id_empresa, lista_filiais):
     list_est_atual = []
     for i in list:
         df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial",  "cod_fornecedor", "qt_geral", "qt_indenizada",
-                                      "qt_reservada", "qt_pendente", "qt_bloqueada", "qt_disponivel", "custo_ult_entrada",
-                                      "preco_venda", "data", "created_at", "produto_id", "fornecedor_id", "filial_id",
+                                      "qt_reservada", "qt_pendente", "qt_bloqueada", "qt_disponivel", "preco_venda",
+                                      "custo_ult_entrada", "data", "created_at", "produto_id", "fornecedor_id", "filial_id",
                                       "empresa_id", "campo_um", "campo_dois", "campo_tres"
                                       ])
 

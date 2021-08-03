@@ -40,6 +40,10 @@ class Empresa(models.Model):
     envia_email = models.BooleanField(default=True, verbose_name='Enviar E-mails de alerta')
     principio_ativo = models.BooleanField(default=False, verbose_name='Considerar Princípio Ativo')
 
+    campo_um = models.CharField(max_length=255, null=True, blank=True)
+    campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+
     def __str__(self):
         return self.nome_fantasia
 
@@ -48,6 +52,10 @@ class Filial(models.Model):
     cod_filial = models.IntegerField(blank=True, null=True)
     desc_filial = models.CharField(max_length=255, blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='filial_empresa')
+
+    campo_um = models.CharField(max_length=255, null=True, blank=True)
+    campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Filial'
@@ -73,6 +81,11 @@ class Alerta(models.Model):
     cod_fornecedor = models.IntegerField(blank=True, null=False)
     empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='alerta_empresa')
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    campo_um = models.CharField(max_length=255, null=True, blank=True)
+    campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+    campo_quatro = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Alerta'

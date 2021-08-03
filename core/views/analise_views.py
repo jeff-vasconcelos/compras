@@ -31,11 +31,9 @@ def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
 
     if empresa.principio_ativo == True:
         p_ativo = True
-        print("tem principio ativo")
+
     else:
         p_ativo = False
-        print("não tem principio ativo")
-
 
     filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
     context = {
