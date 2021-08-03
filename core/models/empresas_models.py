@@ -33,6 +33,10 @@ class Empresa(models.Model):
     cep = models.CharField(max_length=9, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    atualizacao_alerta = models.DateTimeField(null=True, blank=True)
+    quantidade_alerta = models.IntegerField(blank=True, null=True)
+
     envia_email = models.BooleanField(default=True, verbose_name='Enviar E-mails de alerta')
     principio_ativo = models.BooleanField(default=False, verbose_name='Considerar Princípio Ativo')
 
@@ -41,7 +45,7 @@ class Empresa(models.Model):
 
 
 class Filial(models.Model):
-    cod_filial = models.IntegerField(blank=True, null=False)
+    cod_filial = models.IntegerField(blank=True, null=True)
     desc_filial = models.CharField(max_length=255, blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='filial_empresa')
 
@@ -54,8 +58,8 @@ class Filial(models.Model):
 
 
 class Alerta(models.Model):
-    cod_filial = models.IntegerField(blank=True, null=False)
-    cod_produto = models.IntegerField(blank=True, null=False)
+    cod_filial = models.IntegerField(blank=True, null=True)
+    cod_produto = models.IntegerField(blank=True, null=True)
     desc_produto = models.CharField(max_length=255, blank=True, null=True)
     saldo = models.FloatField(blank=True, null=True)
     sugestao = models.FloatField(blank=True, null=True)

@@ -10,6 +10,8 @@ from reportlab.lib.utils import ImageReader
 from core.models.parametros_models import Email
 from core.models.usuarios_models import User
 import locale
+from django.utils import timezone
+
 
 from core.trata_dados.home_abc import *
 
@@ -87,6 +89,7 @@ def alerta_db(id_empresa, produtos):
     if itens:
         itens.delete()
 
+    contador_alerta = 0
 
     for i in produtos:
         if i["qt_excesso"] > 0 or i["condicao_estoque"] != "NORMAL":
@@ -112,6 +115,13 @@ def alerta_db(id_empresa, produtos):
                 empresa=empresa
             )
             b.save()
+
+            contador_alerta = contador_alerta + 1
+
+    data_hora = datetime.datetime.now(tz=timezone.utc)
+    empresa.atualizacao_alerta = data_hora
+    empresa.quantidade_alerta = contador_alerta
+    empresa.save()
 
 
 def mm(valor):
@@ -208,7 +218,11 @@ def pdf_generate(request):
     return pdf
 
 
+# ROTINA DE EXECUÇÃO DE ALERTA
 def rotina_alerta_home(request):
+    #TODO ENVIAR ID EMPRESA COMO PARAMETRO
+
+    empresa = Empresa.objects.get(id=1)
     produtos = alertas(1)
 
     grafico_um = processa_grafico_um(produtos)
@@ -219,11 +233,16 @@ def rotina_alerta_home(request):
     db_grafico_um(1, grafico_um)
     db_dados_estoque(1, dados_estoque)
 
-    send_email_alerta(request, 1)
+    # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
+    if empresa.envia_email:
+        send_email_alerta(request, 1)
 
 
+
+#TODO FUNÇÃO DE TESTE - REMOVER
 #TESTE
 def teste(request, template_name='testando_alerta.html'):
+    empresa = Empresa.objects.get(id=1)
     produtos = alertas(1)
 
     grafico_um = processa_grafico_um(produtos)
@@ -234,6 +253,8 @@ def teste(request, template_name='testando_alerta.html'):
     db_grafico_um(1, grafico_um)
     db_dados_estoque(1, dados_estoque)
 
-    send_email_alerta(request, 1)
+    # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
+    if empresa.envia_email:
+        send_email_alerta(request, 1)
 
     return render(request, template_name)

@@ -161,32 +161,32 @@
         </div>
     </div>
 
-    <div>
-        {% if grafico_dois %}
-
-            <table width="100%">
-                <thead>
-                <tr>
-                    <th class="tabela-home-head">Curva</th>
-                    <th class="tabela-home-last">Total</th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                {% for rupt in grafico_dois %}
-                    <tr>
-
-                        <td class="tabela-home-body">{{ rupt.curva }}</td>
-                        <td class="tabela-home-body">{{ rupt.total }}</td>
-
-                    </tr>
-                {% endfor %}
-
-                </tbody>
-            </table>
-        {% endif %}
-
-    </div>
+{#    <div>#}
+{#        {% if grafico_dois %}#}
+{##}
+{#            <table width="100%">#}
+{#                <thead>#}
+{#                <tr>#}
+{#                    <th class="tabela-home-head">Curva</th>#}
+{#                    <th class="tabela-home-last">Total</th>#}
+{#                </tr>#}
+{#                </thead>#}
+{##}
+{#                <tbody>#}
+{##}
+{#                {% for rupt in grafico_dois %}#}
+{#                    <tr>#}
+{##}
+{#                        <td class="tabela-home-body">{{ rupt.curva }}</td>#}
+{#                        <td class="tabela-home-body">{{ rupt.total }}</td>#}
+{##}
+{#                    </tr>#}
+{#                {% endfor %}#}
+{##}
+{#                </tbody>#}
+{#            </table>#}
+{#        {% endif %}#}
+{##}
+{#    </div>#}
 
 {% endblock conteudo %}

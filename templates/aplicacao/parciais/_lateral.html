@@ -40,7 +40,7 @@
             <i id="icone-alert" class="fas fa-fw fa-envelope"></i>
 
             <span>Alertas
-                <span id="contador-alerta">10</span>
+                <span id="contador-alerta">{{ request.user.usuario.empresa.quantidade_alerta }}</span>
             </span>
         </a>
     </li>
