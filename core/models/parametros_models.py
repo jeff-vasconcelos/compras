@@ -13,6 +13,10 @@ class Parametro(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='parametros',
                                 blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Configuração Empresa'
+        verbose_name_plural = 'Configurações Empresas'
+
     def __str__(self):
         return self.empresa.nome_fantasia
 
@@ -37,8 +41,8 @@ class DadosEstoque(models.Model):
                                 blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Dados Estoque'
-        verbose_name_plural = 'Dados Estoque'
+        verbose_name = 'Home - Dados Estoque'
+        verbose_name_plural = 'Home - Dados Estoque'
 
     def __str__(self):
         return self.empresa.nome_fantasia
@@ -54,6 +58,10 @@ class GraficoCurva(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='grafcurva_empresa',
                                 blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Home - Grafico Um'
+        verbose_name_plural = 'Home - Grafico Um'
+
     def __str__(self):
         return self.empresa.nome_fantasia
 
@@ -63,6 +71,10 @@ class GraficoRuptura(models.Model):
     total = models.FloatField(null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='grafruptura_empresa',
                                 blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Home - Grafico Dois'
+        verbose_name_plural = 'Home - Grafico Dois'
 
     def __str__(self):
         return self.empresa.nome_fantasia

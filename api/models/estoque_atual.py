@@ -33,8 +33,8 @@ class Estoque(models.Model):
     campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Estoque atual'
-        verbose_name_plural = 'Estoque atual'
+        verbose_name = 'Estoque'
+        verbose_name_plural = 'Estoque'
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:

@@ -26,8 +26,8 @@ class HistoricoEstoque(models.Model):
     campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Histórico de estoque'
-        verbose_name_plural = 'Históricos de estoque'
+        verbose_name = 'Histórico'
+        verbose_name_plural = 'Históricos'
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:

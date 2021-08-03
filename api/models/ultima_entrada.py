@@ -27,8 +27,8 @@ class Entrada(models.Model):
     campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Ultima entrada'
-        verbose_name_plural = 'Ultimas entradas'
+        verbose_name = 'Entrada'
+        verbose_name_plural = 'Entradas'
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:

@@ -26,8 +26,8 @@ class Pedido(models.Model):
     campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Pedido de compra'
-        verbose_name_plural = 'Pedidos de compra'
+        verbose_name = 'Pedido'
+        verbose_name_plural = 'Pedidos'
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:

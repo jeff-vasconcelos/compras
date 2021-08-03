@@ -42,11 +42,11 @@ def processa_grafico_um(produtos):
             curva.append(i)
 
         elif i['condicao_estoque'] == "RUPTURA":
-            i['valor_parcial'] = i['estoque'] * i['custo']
+            i['valor_ruptura'] = i['estoque'] * i['custo']
 
             i['valor_excesso'] = 0
             i['valor_normal'] = 0
-            i['valor_ruptura'] = 0
+            i['valor_parcial'] = 0
 
             curva.append(i)
 
@@ -415,10 +415,3 @@ def db_dados_estoque(id_empresa, produtos):
             empresa=empresa
         )
         b.save()
-        #
-        # curva = models.CharField(max_length=255, blank=True, null=True)
-        # skus = models.IntegerField(null=True, blank=True)
-        # normal = models.IntegerField(null=True, blank=True)
-        # parcial = models.IntegerField(null=True, blank=True)
-        # ruptura = models.IntegerField(null=True, blank=True)
-        # excesso = models.IntegerField(null=True, blank=True)

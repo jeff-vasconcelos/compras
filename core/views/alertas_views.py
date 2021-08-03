@@ -131,13 +131,12 @@ def send_email_alerta(request, id_empresa):
     for i in usuarios:
         email_user = i.email
 
-        lista_email_cc.append(email_user)
+        lista_email.append(email_user)
 
     if emails_cad:
         for a in emails_cad:
             email = a.email
-            lista_email.append(email)
-
+            lista_email_cc.append(email)
 
     msg = EmailMessage(
         'Alerta de Ruptura',

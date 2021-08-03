@@ -169,13 +169,13 @@ REST_FRAMEWORK = {
 }
 
 #SMTP CONFIGURATION
-"""
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'asm.demandas@gmail.com'
-EMAIL_HOST_PASSWORD = '@asm2170'
+EMAIL_HOST_USER = 'contato.insight.cluster@gmail.com'
+EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
 
 """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -185,6 +185,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'contato-insight@ecluster.com.br'
 EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
+"""
 
 # Sessão em dias: 60s * 60m * 24h * 1d
 SESSION_COOKIE_AGE = 60 * 60 * 12 * 1

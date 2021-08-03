@@ -13,6 +13,10 @@ class PedidoInsight(models.Model):
     campo_dois = models.CharField(max_length=255, blank=True, null=True)
     campo_tres = models.CharField(max_length=255, blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Pedido Insight'
+        verbose_name_plural = 'Pedidos Insight'
+
     def __str__(self):
         return f'{self.empresa.nome_fantasia} / {self.numero}'
 
@@ -33,8 +37,8 @@ class PedidoInsightItens(models.Model):
     campo_tres = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Item Pedido Insight'
-        verbose_name_plural = 'Itens Pedido Insight'
+        verbose_name = 'Item - Pedido Insight'
+        verbose_name_plural = 'Itens - Pedido Insight'
 
     def __str__(self):
         return f'{self.pedido.numero} / {self.cod_produto} - {self.desc_produto}'
