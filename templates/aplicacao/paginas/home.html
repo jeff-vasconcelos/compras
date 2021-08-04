@@ -1,6 +1,12 @@
 {% extends 'aplicacao/base.html' %}
 {% load static %}
 
+
+{% block title %}
+    <title>Home - Insight</title>
+{% endblock title %}
+
+
 {% block scripts %}
 
     <script src="{% static 'aplicacao/js/demo/charts-home.js' %}" defer></script>
@@ -44,6 +50,16 @@
             border-bottom: solid 1px black;
         }
     </style>
+
+    <div class="row">
+        <div class="col" style="padding-top: 10px; padding-bottom: 10px; text-align: right">
+            {% if request.user.usuario.empresa.atualizacao_alerta %}
+                <h6>Atualizado em: {{ request.user.usuario.empresa.atualizacao_alerta }}</h6>
+            {% else %}
+                <h6></h6>
+            {% endif %}
+        </div>
+    </div>
 
 
     <!-- CARDS -->

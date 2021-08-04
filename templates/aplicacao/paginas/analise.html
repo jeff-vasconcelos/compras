@@ -1,6 +1,10 @@
 {% extends 'aplicacao/base.html' %}
 {% load static %}
 
+{% block title %}
+    <title>Análise - Insight</title>
+{% endblock title %}
+
 {% block scripts %}
 <script src="{% static 'aplicacao/js/pesquisa_fornecedor.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>

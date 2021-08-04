@@ -40,6 +40,8 @@ class Empresa(models.Model):
     envia_email = models.BooleanField(default=True, verbose_name='Enviar E-mails de alerta')
     principio_ativo = models.BooleanField(default=False, verbose_name='Considerar Princípio Ativo')
 
+    qt_usuarios_logados = models.IntegerField(blank=True, null=True, verbose_name='Quantidade de usuários logados')
+
     campo_um = models.CharField(max_length=255, null=True, blank=True)
     campo_dois = models.CharField(max_length=255, null=True, blank=True)
     campo_tres = models.CharField(max_length=255, null=True, blank=True)

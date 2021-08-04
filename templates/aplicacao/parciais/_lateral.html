@@ -40,7 +40,11 @@
             <i id="icone-alert" class="fas fa-fw fa-envelope"></i>
 
             <span>Alertas
-                <span id="contador-alerta">{{ request.user.usuario.empresa.quantidade_alerta }}</span>
+                {% if request.user.usuario.empresa.quantidade_alerta %}
+                    <span id="contador-alerta">{{ request.user.usuario.empresa.quantidade_alerta }}</span>
+                {% else %}
+                    <span id="contador-alerta">0</span>
+                {% endif %}
             </span>
         </a>
     </li>

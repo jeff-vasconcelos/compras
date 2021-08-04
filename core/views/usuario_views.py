@@ -6,6 +6,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from core.forms.usuarios_forms import *
 from core.models.usuarios_models import *
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
+from django.utils import timezone
 
 
 """ Função de Login """
@@ -17,10 +20,20 @@ def login_painel(request, template_name="aplicacao/login/login.html"):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
 
+        usuario = User.objects.get(username=username)
+        id_empresa = usuario.usuario.empresa.pk
+        qt_logados, qt_empresa = get_all_logged_in_users(id_empresa)
+
         if user is not None:
             if user.is_active == True:
-                login(request, user)
-                return HttpResponseRedirect(next)
+
+                if qt_logados >= qt_empresa:
+                    messages.error(request, "Ops, Excedido o número máximo de usuários conectados!")
+                    return HttpResponseRedirect(settings.LOGIN_URL)
+
+                else:
+                    login(request, user)
+                    return HttpResponseRedirect(next)
             else:
                 messages.error(request, "Usuário inativo")
                 return HttpResponseRedirect(settings.LOGIN_URL)
@@ -42,36 +55,36 @@ def logout_painel(request):
 def cadastrar_usuario(request, template_name="aplicacao/paginas/usuarios/usuario_cad.html"):
     if request.user.usuario.tipo == "Administrador":
         try:
-            form = UsersForm(request.POST, request.FILES)
-            form2 = UsuariosForm(request.POST, request.FILES)
-            if request.method == "POST":
-                password_confirm = request.POST['password_confirm']
-                password = request.POST['password']
-                empresa = request.user.usuario.empresa
+                form = UsersForm(request.POST, request.FILES)
+                form2 = UsuariosForm(request.POST, request.FILES)
+                if request.method == "POST":
+                    password_confirm = request.POST['password_confirm']
+                    password = request.POST['password']
+                    empresa = request.user.usuario.empresa
 
-                if password == password_confirm:
-                    if form.is_valid():
-                        if form2.is_valid():
-                            user = form.save(commit=False)
-                            user.set_password(user.password)
-                            user.is_active = True
-                            user.save()
+                    if password == password_confirm:
+                        if form.is_valid():
+                            if form2.is_valid():
+                                user = form.save(commit=False)
+                                user.set_password(user.password)
+                                user.is_active = True
+                                user.save()
 
-                            user2 = User.objects.get(username=user.username)
-                            usuario = form2.save(commit=False)
-                            usuario.usuario = user2
-                            usuario.empresa = empresa
-                            usuario.save()
+                                user2 = User.objects.get(username=user.username)
+                                usuario = form2.save(commit=False)
+                                usuario.usuario = user2
+                                usuario.empresa = empresa
+                                usuario.save()
 
-                            messages.success(request, "Cadastrado com sucesso!")
-                            return redirect('home_painel')
+                                messages.success(request, "Cadastrado com sucesso!")
+                                return redirect('listar-usuarios')
+                            else:
+                                messages.error(request, "Por favor, verifique os campos obrigatórios!")
                         else:
                             messages.error(request, "Por favor, verifique os campos obrigatórios!")
-                    else:
-                        messages.error(request, "Por favor, verifique os campos obrigatórios!")
 
-                else:
-                    messages.error(request, "Senhas não conferem. Tente novamente!")
+                    else:
+                        messages.error(request, "Senhas não conferem. Tente novamente!")
         except Exception:
             messages.error(request, "Erro ao cadastrar usuário, por favor verifique os campos informados!")
     else:
@@ -203,3 +216,20 @@ def inativar_usuario(request, pk):
     else:
         messages.error(request, "Ops, o usuário não tem permissão!")
         return redirect('home_painel')
+
+
+def get_all_logged_in_users(id_empresa):
+    empresa = Empresa.objects.get(id=id_empresa)
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    uid_list = []
+
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+
+    usuarios = User.objects.filter(id__in=uid_list, usuario__empresa=id_empresa)
+
+    total_logados = usuarios.count()
+    qt_empresa = empresa.qt_usuarios_logados
+
+    return total_logados, qt_empresa

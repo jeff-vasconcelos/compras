@@ -1,164 +1,177 @@
 {% extends 'aplicacao/base.html' %}
 
+
+{% block title %}
+    <title>Alertas - Insight</title>
+{% endblock title %}
+
+
 {% block conteudo %}
-<div class="row">
-    <div class="col-4">
-        <h2>Alertas</h2>
-    </div>
-    <div class="col-8 float-right">
-        <div class="row">
-
-            <div class="col">
-                <div class="form-group">
-                    <label class="form-label">Curva</label>
-                    <select class="form-select">
-                        <option selected>Todos</option>
-                        <option>Curva A</option>
-                        <option>Curva B</option>
-                        <option>Curva C</option>
-                        <option>Curva D</option>
-                        <option>Curva E</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="form-group">
-                    <label class="form-label">Estoque</label>
-                    <select class="form-select">
-                        <option selected>Todas</option>
-                        <option>Normal</option>
-                        <option>Rup. Parcial</option>
-                        <option>Ruptura</option>
-                        <option>Excesso</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="form-group">
-                    <label class="form-label">Filial</label>
-                    <select class="form-select">
-                        <option selected>Todas</option>
-                        <option>Matriz</option>
-                    </select>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-6">
+            <h2>Alertas</h2>
         </div>
-    </div>
-</div>
+        <div class="col-6 float-right" style="text-align: right; padding-top: 10px">
+            {% if request.user.usuario.empresa.atualizacao_alerta %}
+                <h6>Atualizado em: {{ request.user.usuario.empresa.atualizacao_alerta }}</h6>
+            {% else %}
+                <h6></h6>
+            {% endif %}
 
-<hr>
-<div class="card shadow mb-4">
-
-    <div class="card-header py-3">
-        <div class="row">
-            <div class="col-6">
-                <h6 class="m-0 font-weight-bold">Alertas</h6>
-            </div>
-
-            <div class="col-6">
-                <h6>Atualizado: {{ request.user.usuario.empresa.atualizacao_alerta }}</h6>
-            </div>
         </div>
     </div>
 
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                <tr>
-                    <th>Filial</th>
-                    <th>Produto</th>
-                    <th>Previsão Est.</th>
-                    <th>Estoque</th>
-                    <th>Pedido Pend.</th>
-                    <th>Quantidade</th>
-                    <th>Valor</th>
-                    <th>Curva</th>
-                    <th>Fornecedor</th>
-                </tr>
-                </thead>
+    <hr>
+    <div class="card shadow mb-4">
 
-                <tbody>
-                {% if produtos %}
-                {% for produto in produtos %}
-                {% if produto.estado_estoque == "EXCESSO" %}
-                <tr class="excesso">
-                    <td class="status">{{ produto.cod_filial }}</td>
-                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
-                    <td class="status excesso">{{ produto.estado_estoque }}</td>
-                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.qt_excesso|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.vl_excesso }}</td>
-                    <td class="curva">{{ produto.curva }}</td>
-                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+        <!--
+        <div class="card-header py-3">
+            <div class="row">
 
-                </tr>
-                {% elif produto.estado_estoque == "PARCIAL" %}
-                <tr class="parcial">
-                    <td class="status">{{ produto.cod_filial }}</td>
-                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
-                    <td class="status parcial">{{ produto.estado_estoque }}</td>
-                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.valor }}</td>
-                    <td class="curva">{{ produto.curva }}</td>
-                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
-                </tr>
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold">Alertas</h6>
+                </div>
 
-                {% elif produto.estado_estoque == "RUPTURA" %}
-                <tr class="ruptura">
-                    <td class="status">{{ produto.cod_filial }}</td>
-                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
-                    <td class="status ruptura">{{ produto.estado_estoque }}</td>
-                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                    <td class="numero">{{ produto.valor }}</td>
-                    <td class="curva">{{ produto.curva }}</td>
-                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-                {% endif %}
-                </tbody>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="form-label">Curva</label>
+                                <select class="form-select">
+                                    <option selected>Todos</option>
+                                    <option>Curva A</option>
+                                    <option>Curva B</option>
+                                    <option>Curva C</option>
+                                    <option>Curva D</option>
+                                    <option>Curva E</option>
+                                </select>
+                            </div>
+                        </div>
 
-            </table>
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="form-label">Estoque</label>
+                                <select class="form-select">
+                                    <option selected>Todas</option>
+                                    <option>Normal</option>
+                                    <option>Rup. Parcial</option>
+                                    <option>Ruptura</option>
+                                    <option>Excesso</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="form-label">Filial</label>
+                                <select class="form-select">
+                                    <option selected>Todas</option>
+                                    <option>Matriz</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Filial</th>
+                        <th>Produto</th>
+                        <th>Previsão Est.</th>
+                        <th>Estoque</th>
+                        <th>Pedido Pend.</th>
+                        <th>Quantidade</th>
+                        <th>Valor</th>
+                        <th>Curva</th>
+                        <th>Fornecedor</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if produtos %}
+                        {% for produto in produtos %}
+                            {% if produto.estado_estoque == "EXCESSO" %}
+                                <tr class="excesso">
+                                    <td class="status">{{ produto.cod_filial }}</td>
+                                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                    <td class="status excesso">{{ produto.estado_estoque }}</td>
+                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.qt_excesso|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.vl_excesso }}</td>
+                                    <td class="curva">{{ produto.curva }}</td>
+                                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+
+                                </tr>
+                            {% elif produto.estado_estoque == "PARCIAL" %}
+                                <tr class="parcial">
+                                    <td class="status">{{ produto.cod_filial }}</td>
+                                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                    <td class="status parcial">{{ produto.estado_estoque }}</td>
+                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.valor }}</td>
+                                    <td class="curva">{{ produto.curva }}</td>
+                                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                </tr>
+
+                            {% elif produto.estado_estoque == "RUPTURA" %}
+                                <tr class="ruptura">
+                                    <td class="status">{{ produto.cod_filial }}</td>
+                                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                    <td class="status ruptura">{{ produto.estado_estoque }}</td>
+                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.valor }}</td>
+                                    <td class="curva">{{ produto.curva }}</td>
+                                    <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
         </div>
     </div>
-</div>
-<style>
+    <style>
 
-    tr.excesso, tr.ruptura, tr.parcial {
-        font-size: 12px;
-    }
+        tr.excesso, tr.ruptura, tr.parcial {
+            font-size: 12px;
+        }
 
-    td.excesso {
-        background-color: #F42E15;
-        color: #FFFFFF;
-    }
+        td.excesso {
+            background-color: #F42E15;
+            color: #FFFFFF;
+        }
 
-    td.ruptura {
-        background-color: #7d7b7a;
-        color: #FFFFFF;
-    }
+        td.ruptura {
+            background-color: #7d7b7a;
+            color: #FFFFFF;
+        }
 
-    td.parcial {
-        background-color: #ffa500;
-        color: #FFFFFF;
-    }
+        td.parcial {
+            background-color: #ffa500;
+            color: #FFFFFF;
+        }
 
-    td.numero {
-        text-align: right;
-    }
+        td.numero {
+            text-align: right;
+        }
 
-    td.curva, td.status {
-        text-align: center;
-    }
+        td.curva, td.status {
+            text-align: center;
+        }
 
-</style>
+    </style>
 
 {% endblock %}
