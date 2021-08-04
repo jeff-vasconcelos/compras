@@ -16,7 +16,15 @@ class Produtos(admin.ModelAdmin):
     list_display_links = ('cod_produto', 'desc_produto')
     search_fields = ('cod_produto', 'desc_produto',)
     list_filter = ('fornecedor', 'empresa',)
-    list_per_page = 20
+    list_per_page = 40
+
+
+class FornecedorAdmin(admin.ModelAdmin):
+    list_display = ('id', 'cod_fornecedor', 'desc_fornecedor', 'empresa')
+    list_display_links = ('cod_fornecedor', 'desc_fornecedor',)
+    search_fields = ('cod_fornecedor', 'desc_fornecedor',)
+    list_filter = ('empresa',)
+    list_per_page = 40
 
 
 class Pedidos(admin.ModelAdmin):
@@ -61,7 +69,7 @@ class UltEntrada(admin.ModelAdmin):
 
 admin.site.register(Produto, Produtos)
 admin.site.register(Estoque, EstoqueAtual)
-admin.site.register(Fornecedor)
+admin.site.register(Fornecedor, FornecedorAdmin)
 admin.site.register(HistoricoEstoque, Historico)
 admin.site.register(Pedido, Pedidos)
 admin.site.register(Entrada, UltEntrada)
