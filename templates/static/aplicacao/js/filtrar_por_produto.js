@@ -11,7 +11,6 @@ const filterProd = (prod) => {
         processData: false,
         contentType: false,
         success: (res_fil_prod) => {
-            console.log(res_fil_prod)
             const data = res_fil_prod.data
 
             const data_p = data[0]
@@ -31,7 +30,7 @@ const filterProd = (prod) => {
                 `
                 data_p.forEach(prod => {
                     resultadosPProdutos.innerHTML += `
-                        <option name="option-product" class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>
+                        <option name="option-product" class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome}</option>
                     `
                 })
             }
@@ -50,7 +49,6 @@ const filterProd = (prod) => {
 }
 
 function selecao_produto() {
-    console.log('clicado')
     for (var i = 0; i < listaProdutos.length; i++) {
         if (listaProdutos[i].checked == true) {
             const marcado = listaProdutos[i].value
@@ -67,7 +65,7 @@ function selecao_produto() {
             }
         }
     }
-    console.log(checkProduto)
+
     const produtos_selecionados = new FormData()
     produtos_selecionados.append('csrfmiddlewaretoken', csrf)
     produtos_selecionados.append('produto', checkProduto)

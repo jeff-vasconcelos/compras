@@ -16,8 +16,17 @@ def verifica_produto(cod_produto, id_empresa, periodo):
         empresa__id__exact=id_empresa
     ).exists()
 
-    if vendas:
-        return True
+    produto = Produto.objects.get(
+        cod_produto__exact=cod_produto
+    )
+
+    politica_fornecedor = produto.fornecedor.tempo_estoque
+
+    if politica_fornecedor is not None:
+        if vendas:
+            return True
+        else:
+            return False
     else:
         return False
 

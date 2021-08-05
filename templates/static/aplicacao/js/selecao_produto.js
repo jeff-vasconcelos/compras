@@ -1,4 +1,4 @@
-console.log("selecao_produto")
+
 const listaProdutosSelecionar = document.getElementById('results-produtos')
 const listaFiliais = document.getElementById('filtro-filial')
 const tabelaInfo = document.getElementById('body-tabela-analise')
@@ -31,20 +31,23 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
             'tempo_reposicao': t_repo
         },
         success: (info_prod) => {
-            //VALIDANDO
-            console.log(info_prod)
-            const dados = info_prod.data
 
+            const dados = info_prod.data
 
             if (dados === 0) {
 
+                // $("canvas#ChartSerieHist").remove();
+                // $("canvas#ChartCobertura").remove();
+                // $("div#div-grafico-um").append('<canvas id="ChartSerieHist"></canvas>')
+                // $("div#div-grafico-dois").append('<canvas id="ChartCobertura"></canvas>')
+
                 botaoVerPedidosPendentes.style.display = 'none'
-                valor_condicao_est.innerHTML = ""
-                valor_curva.innerHTML = ""
-                valor_media.innerHTML = ""
-                valor_ruptura.innerHTML = ""
-                porc_ruptura.innerHTML = ""
-                tabelaInfo.innerHTML = ""
+                valor_condicao_est.innerHTML = "-"
+                valor_curva.innerHTML = "-"
+                valor_media.innerHTML = "-"
+                valor_ruptura.innerHTML = "-"
+                porc_ruptura.innerHTML = "-"
+                tabelaInfo.innerHTML = "-"
                 tabelaInfo.innerHTML = `
                         <tr>
                             <th class="tabela-info">Cód. Filial</th>
@@ -70,8 +73,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                         </tr>
                     `
-                porc_media.innerHTML = ""
-                valor_media_simples.innerHTML = ""
+                porc_media.innerHTML = "-"
+                valor_media_simples.innerHTML = "-"
 
                 mensagemErro.innerHTML += `
                     <div class="alert alert-danger d-flex align-items-center" role="alert">
@@ -79,7 +82,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <use xlink:href="#exclamation-triangle-fill"/>
                         </svg>
                         <div>
-                            &nbsp; O produto selecionado pode não ter vendas no periodo!
+                            &nbsp; O produto pode não ter <b>vendas no periodo</b> ou os <b>parametros do fornecedor</b> não foram definidos!
                         </div>
                     </div>
                 `
@@ -87,17 +90,15 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     // show the alert
                     setTimeout(function () {
                         $(".alert").alert('close');
-                    }, 5000);
+                    }, 6000);
                 });
 
             } else {
-                console.log("tem dados")
 
                 const data = dados[0]
                 const graficos = dados[1]
                 const informacoes = dados[2]
 
-                console.log(informacoes)
 
                 $("canvas#ChartSerieHist").remove();
                 $("canvas#ChartCobertura").remove();
@@ -406,12 +407,12 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                 if (!data) {
                     botaoVerPedidosPendentes.style.display = 'none'
-                    valor_condicao_est.innerHTML = ""
-                    valor_curva.innerHTML = ""
-                    valor_media.innerHTML = ""
-                    valor_ruptura.innerHTML = ""
-                    porc_ruptura.innerHTML = ""
-                    tabelaInfo.innerHTML = ""
+                    valor_condicao_est.innerHTML = "-"
+                    valor_curva.innerHTML = "-"
+                    valor_media.innerHTML = "-"
+                    valor_ruptura.innerHTML = "-"
+                    porc_ruptura.innerHTML = "-"
+                    tabelaInfo.innerHTML = "-"
                     tabelaInfo.innerHTML = `
                         <tr>
                             <th class="tabela-info">Cód. Filial</th>
@@ -437,8 +438,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                         </tr>
                     `
-                    porc_media.innerHTML = ""
-                    valor_media_simples.innerHTML = ""
+                    porc_media.innerHTML = "-"
+                    valor_media_simples.innerHTML = "-"
                 } else {
                     botaoVerPedidosPendentes.style.display = "initial"
                     valor_condicao_est.innerHTML = ""
@@ -587,11 +588,6 @@ listaProdutosSelecionar.addEventListener('change', e => {
         t_repo = valor_treposicao
     }
 
-    console.log(filialSelecionado, "FILIAL SELECIONADA")
-    console.log(produtoSelecionado, "PRODUTO SELECIONADO")
-    console.log(lead, "LEADTIME")
-    console.log(t_repo, "TEMPO DE REPOSICAO")
-
     sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
 })
 
@@ -625,10 +621,6 @@ listaFiliais.addEventListener('change', e => {
         t_repo = valor_treposicao
     }
 
-    console.log(filialSelecionada, "FILIAL SELECIONADA")
-    console.log(lead, "LEADTIME")
-    console.log(t_repo, "TEMPO DE REPOSICAO")
-
     sendSelectProd(filialSelecionada, produtoSelecionado, lead, t_repo)
 })
 
@@ -661,10 +653,6 @@ leadtime.addEventListener('keyup', a => {
         t_repo = valor_treposicao
     }
 
-    console.log(filialSelecionado, "FILIAL FILIAL")
-    console.log(produtoSelecionado, "PRODUTO SELECIONADO")
-    console.log(lead, "LEADTIME")
-    console.log(t_repo, "TEMPO DE REPOSICAO")
 
     sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
 })
@@ -691,18 +679,12 @@ t_reposicao.addEventListener('keyup', a => {
     // PEGANDO TEMPO DE REPOSIÇÃO
     let valor_treposicao = ""
     valor_treposicao = t_reposicao.value
-    console.log(valor_treposicao)
     var t_repo = 0
     if (valor_treposicao === "") {
         t_repo = 0
     } else {
         t_repo = valor_treposicao
     }
-
-   console.log(filialSelecionado, "FILIAL FILIAL")
-    console.log(produtoSelecionado, "PRODUTO SELECIONADO")
-    console.log(lead, "LEADTIME")
-    console.log(t_repo, "TEMPO DE REPOSICAO")
 
     sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
 })

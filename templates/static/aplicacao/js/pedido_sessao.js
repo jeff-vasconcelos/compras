@@ -157,7 +157,7 @@ const verPedidoSessao = () => {
                         <td>${prod.ped_cod_filial}</td>
                         <td>${prod.ped_produto_cod}</td>
                         <td>${prod.ped_produto_nome}</td>
-                        <td>R$ ${prod.ped_pr_compra}</td>
+                        <td>${prod.ped_pr_compra}</td>
                         <td>${prod.ped_qt_digitada}</td>
                         
                         <td>

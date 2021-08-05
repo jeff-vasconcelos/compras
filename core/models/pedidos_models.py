@@ -7,7 +7,7 @@ class PedidoInsight(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='pedidos_insight',
                                 blank=True, null=True)
     usuario = models.CharField(max_length=255, blank=True, null=True)
-    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True, verbose_name='Criado em:')
 
     campo_um = models.CharField(max_length=255, blank=True, null=True)
     campo_dois = models.CharField(max_length=255, blank=True, null=True)

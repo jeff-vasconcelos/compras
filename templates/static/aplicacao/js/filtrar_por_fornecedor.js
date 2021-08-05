@@ -12,7 +12,6 @@ const filterFornec = (forn) =>{
         processData: false,
         contentType: false,
         success: (res_fil_fornec)=> {
-            console.log(res_fil_fornec)
             const data = res_fil_fornec.data
 
             const data_f = data[0]
@@ -32,7 +31,7 @@ const filterFornec = (forn) =>{
                 `
                 data_f.forEach(prod=> {
                     resultadosProdutos.innerHTML += `
-                        <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>
+                        <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome}</option>
                     `
                 })
             }

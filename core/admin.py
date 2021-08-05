@@ -30,15 +30,47 @@ class FilialAdmin(admin.ModelAdmin):
     list_per_page = 40
 
 
+class AlertaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'cod_produto', 'cod_filial', 'empresa')
+    list_display_links = ('cod_produto',)
+    search_fields = ('cod_produto', 'cod_filial', 'empresa',)
+    list_filter = ('empresa',)
+    list_per_page = 40
+
+
+class ConfigAdmin(admin.ModelAdmin):
+    list_display = ('id', 'empresa')
+    list_display_links = ('id', 'empresa',)
+    search_fields = ('empresa',)
+    list_filter = ('empresa',)
+    list_per_page = 40
+
+
+class EmailAdmin(admin.ModelAdmin):
+    list_display = ('id', 'empresa')
+    list_display_links = ('id', 'empresa',)
+    search_fields = ('empresa',)
+    list_filter = ('empresa',)
+    list_per_page = 40
+
+
+class PedidoInsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'empresa', 'usuario', 'created_at')
+    list_display_links = ('id', 'empresa',)
+    search_fields = ('empresa',)
+    list_filter = ('empresa',)
+    list_per_page = 40
+
+
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Filial, FilialAdmin)
 admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Academy)
-admin.site.register(Parametro)
-admin.site.register(PedidoInsight)
+admin.site.register(Parametro, ConfigAdmin)
+admin.site.register(PedidoInsight, PedidoInsAdmin)
 admin.site.register(PedidoInsightItens)
-admin.site.register(Alerta)
-admin.site.register(Email)
+admin.site.register(Alerta, AlertaAdmin)
+admin.site.register(Email, EmailAdmin)
 admin.site.register(DadosEstoque)
 admin.site.register(GraficoCurva)
 admin.site.register(GraficoRuptura)

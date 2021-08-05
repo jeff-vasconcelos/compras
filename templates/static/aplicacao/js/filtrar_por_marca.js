@@ -1,4 +1,4 @@
-console.log("funcionando aqui - marca")
+
 const listaMarcaSelecionar = document.getElementById('filtro_marca')
 
 const enviarSelectMarca = (marca) =>{
@@ -10,12 +10,11 @@ const enviarSelectMarca = (marca) =>{
         contentType: false,
         success: (res_fil_marca)=> {
             const data_m = res_fil_marca.data
-            console.log(data_m)
             if (Array.isArray(data_m)){
                 resultadosProdutos.innerHTML = `<option class="option-analise" value="0" selected>Selecione o produto</option>`
                 data_m.forEach(prod=> {
                     resultadosProdutos.innerHTML += `
-                        <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>
+                        <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome}</option>
                     `
                 })
             }
@@ -26,7 +25,6 @@ const enviarSelectMarca = (marca) =>{
 listaMarcaSelecionar.addEventListener('change', e => {
     // PEGANDO PRODUTO SELECIONADO
     const marcaSelecionada = e.target.value
-    console.log(marcaSelecionada)
 
     for (var i = 0; i < listaFornecedores.length; i++){
         if (listaFornecedores[i].checked == true){

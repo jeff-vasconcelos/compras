@@ -1,4 +1,4 @@
-console.log("funcionando aqui")
+
 const listaCurvaSelecionar = document.getElementById('curva_abc_select')
 
 const enviarSelectCurva = (curva) =>{
@@ -34,7 +34,7 @@ const enviarSelectCurva = (curva) =>{
                     resultadosProdutos.innerHTML = `<option class="option-analise" value="0" selected>Selecione o produto</option>`
                     data_f.forEach(prod => {
                         resultadosProdutos.innerHTML += `
-                        <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome} ${prod.emb}</option>
+                        <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome}</option>
                     `
                     })
                 }
@@ -84,9 +84,6 @@ listaCurvaSelecionar.addEventListener('change', e => {
             }
         }
     }
-
-    console.log(checkFornecedor)
-    console.log(checkProduto)
 
     const curva_selecionada = new FormData()
     curva_selecionada.append('csrfmiddlewaretoken', csrf)

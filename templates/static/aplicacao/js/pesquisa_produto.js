@@ -11,7 +11,6 @@ const sendSearchProd = (prod) =>{
         },
         success: (res)=> {
             const data = res.data
-            console.log(data)
             if (Array.isArray(data)){
                 resultsBoxProd.innerHTML = ""
                 data.forEach(prod=> {
@@ -19,7 +18,7 @@ const sendSearchProd = (prod) =>{
                     <input name="item-produto" class="form-check-input" type="checkbox" value="${prod.pk}" id="${prod.pk}" 
                     style="display: block" onclick="selecao_produto()   ">
                         <label style="display: block" class="form-check-label" for="${prod.pk}">
-                            ${prod.cod} - ${prod.nome} ${prod.emb}
+                            ${prod.cod} - ${prod.nome}
                         </label>
                     `
                 })

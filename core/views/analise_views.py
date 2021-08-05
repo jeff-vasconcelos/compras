@@ -1,6 +1,5 @@
 import datetime
 from math import ceil
-
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -15,13 +14,15 @@ from core.multifilial.curva_abc import abc
 from core.trata_dados.curva_abc import curva_abc
 from core.trata_dados.datas import dia_semana_mes_ano
 from core.multifilial.historico_estoque import historico_estoque
-# from core.trata_dados.vendas import *
 from core.trata_dados.pedidos import pedidos_todos
 from core.models.empresas_models import Filial
 import csv
 import pandas as pd
 from core.multifilial.vendas import vendas
 from core.models.pedidos_models import *
+import re  # pacote com as rotinas de expressão regular
+import locale
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 @login_required
@@ -48,25 +49,56 @@ def buscar_produto(request):
     if request.is_ajax():
         res = None
         produto = request.POST.get('produto')
-        qs = Produto.objects.filter(
-            Q(desc_produto__icontains=produto) |
-            Q(cod_produto__icontains=produto),
-            Q(empresa__id__exact=empresa)
-        )
-        if len(qs) > 0 and len(produto) > 0:
-            data = []
-            for prod in qs:
-                item = {
-                    'pk': prod.pk,
-                    'nome': prod.desc_produto,
-                    'cod': prod.cod_produto,
-                    'emb': prod.embalagem
-                }
-                data.append(item)
-            res = data
+
+        pattern_int = re.compile(r"(0|-?[1-9][0-9]*)")
+
+        if pattern_int.match(produto):
+            qs = Produto.objects.filter(
+                Q(cod_produto__icontains=produto),
+                Q(empresa__id__exact=empresa)
+            )[:15]
+
+            if len(qs) > 0 and len(produto) > 0:
+                data = []
+                for prod in qs:
+                    item = {
+                        'pk': prod.pk,
+                        'nome': prod.desc_produto,
+                        'cod': prod.cod_produto,
+                        'emb': prod.embalagem
+                    }
+                    data.append(item)
+                res = data
+            else:
+                res = "Nada encontrado!"
+            return JsonResponse({'data': res})
+
         else:
-            res = "Nada encontrado!"
-        return JsonResponse({'data': res})
+            if len(produto) >= 3:
+                qs = Produto.objects.filter(
+                    Q(desc_produto__icontains=produto),
+                    Q(empresa__id__exact=empresa)
+                )[:15]
+
+                if len(qs) > 0 and len(produto) > 0:
+                    data = []
+                    for prod in qs:
+                        item = {
+                            'pk': prod.pk,
+                            'nome': prod.desc_produto,
+                            'cod': prod.cod_produto,
+                            'emb': prod.embalagem
+                        }
+                        data.append(item)
+                    res = data
+                else:
+                    res = "Nada encontrado!"
+                return JsonResponse({'data': res})
+
+            else:
+                res = "Continue digitando!"
+            return JsonResponse({'data': res})
+
     return JsonResponse({})
 
 
@@ -75,24 +107,55 @@ def buscar_fornecedor(request):
     if request.is_ajax():
         res_f = None
         fornecedor = request.POST.get('fornecedor')
-        qs = Fornecedor.objects.filter(
-            Q(desc_fornecedor__icontains=fornecedor) |
-            Q(cod_fornecedor__icontains=fornecedor),
-            Q(empresa__id__exact=empresa)
-        )
-        if len(qs) > 0 and len(fornecedor) > 0:
-            data = []
-            for fornec in qs:
-                item = {
-                    'pk': fornec.pk,
-                    'nome': fornec.desc_fornecedor,
-                    'cod': fornec.cod_fornecedor
-                }
-                data.append(item)
-            res_f = data
+
+        pattern_int = re.compile(r"(0|-?[1-9][0-9]*)")
+
+        if pattern_int.match(fornecedor):
+            qs = Fornecedor.objects.filter(
+                Q(cod_fornecedor__icontains=fornecedor),
+                Q(empresa__id__exact=empresa)
+            )[:15]
+
+            if len(qs) > 0 and len(fornecedor) > 0:
+                data = []
+                for fornec in qs:
+                    item = {
+                        'pk': fornec.pk,
+                        'nome': fornec.desc_fornecedor,
+                        'cod': fornec.cod_fornecedor
+                    }
+                    data.append(item)
+                res_f = data
+            else:
+                res_f = "Nada encontrado!"
+            return JsonResponse({'data': res_f})
+
         else:
-            res_f = "Nada encontrado!"
-        return JsonResponse({'data': res_f})
+            if len(fornecedor) >= 3:
+
+                qs = Fornecedor.objects.filter(
+                    Q(desc_fornecedor__icontains=fornecedor),
+                    Q(empresa__id__exact=empresa)
+                )[:15]
+
+                if len(qs) > 0 and len(fornecedor) > 0:
+                    data = []
+                    for fornec in qs:
+                        item = {
+                            'pk': fornec.pk,
+                            'nome': fornec.desc_fornecedor,
+                            'cod': fornec.cod_fornecedor
+                        }
+                        data.append(item)
+                    res_f = data
+                else:
+                    res_f = "Nada encontrado!"
+                return JsonResponse({'data': res_f})
+
+            else:
+                res = "Continue digitando!"
+            return JsonResponse({'data': res})
+
     return JsonResponse({})
 
 
@@ -494,6 +557,9 @@ def add_prod_pedido_sessao(request):
             qt_digitada = request.POST.get('qt_digitada')
             pr_compra = request.POST.get('pr_compra')
 
+            preco_f = pr_compra.replace(",", ".")
+            preco = float(preco_f)
+
             prod_qs = Produto.objects.get(id=produto_id)
             produto_nome = prod_qs.desc_produto
             produto_codigo = prod_qs.cod_produto
@@ -511,9 +577,8 @@ def add_prod_pedido_sessao(request):
                 'ped_produto_cod': produto_codigo,
                 'ped_produto_nome': produto_nome,
                 'ped_cod_filial': cod_filial,
-                'ped_pr_compra': pr_compra,
+                'ped_pr_compra': preco,
                 'ped_qt_digitada': qt_digitada,
-
             }
 
             request.session.save()
@@ -537,6 +602,9 @@ def ver_prod_pedido_sessao(request):
         else:
             for value in contexto.values():
                 temp = value
+                preco = temp['ped_pr_compra']
+                preco_form = locale.currency(preco, grouping=True)
+                temp.update({'ped_pr_compra': preco_form})
                 lista.append(temp)
 
             return JsonResponse({'data': lista})
