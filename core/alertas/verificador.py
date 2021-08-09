@@ -17,7 +17,8 @@ def verifica_produto(cod_produto, id_empresa, periodo):
     ).exists()
 
     produto = Produto.objects.get(
-        cod_produto__exact=cod_produto
+        cod_produto__exact=cod_produto,
+        empresa__id__exact=id_empresa
     )
 
     politica_fornecedor = produto.fornecedor.tempo_estoque
