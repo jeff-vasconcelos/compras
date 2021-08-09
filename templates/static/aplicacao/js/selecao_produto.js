@@ -35,8 +35,6 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
             const dados = info_prod.data
             console.log(dados)
 
-            const erro_processar = dados[0]
-
             if (dados === 0) {
 
                 // $("canvas#ChartSerieHist").remove();
@@ -98,7 +96,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
             }
 
-            else if (erro_processar === 1) {
+            else if (dados[0] === 1) {
 
                 // $("canvas#ChartSerieHist").remove();
                 // $("canvas#ChartCobertura").remove();
