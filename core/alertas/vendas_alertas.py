@@ -1,3 +1,5 @@
+import math
+
 import numpy
 
 from api.models.venda import Venda
@@ -99,7 +101,21 @@ def vendas(cod_produto, id_empresa, periodo):
 
             e_vendas = vendas_dt
             tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
-            media = tratando_media.mean()
+
+            _media = tratando_media.mean()
+
+            if _media == 0:
+                med = 1
+
+            elif math.isnan(_media):
+                med = 1
+
+            else:
+                med = _media
+
+            media = round(med, 2)
+
+            print(media)
 
             maximo = e_vendas['qt_vendas'].max()
             d_padrao = tratando_media.std()
@@ -135,7 +151,7 @@ def vendas(cod_produto, id_empresa, periodo):
             media_ajustada = lista_for_df['valores'].mean()
 
             # ADICIONANDO VALORES AO DATAFRAME
-            e_vendas['media'] = media.round(2)
+            e_vendas['media'] = media
             e_vendas['max'] = round(max_media, 2)
             e_vendas['min'] = 0
 
@@ -153,7 +169,7 @@ def vendas(cod_produto, id_empresa, periodo):
             info_p = {
                 'cod_filial': filial_cod,
                 'dias_s_vendas': [d_sem_vendas], 'dias_vendas': [d_vendas],
-                'media': [media.round(2)], 'maximo': [maximo], 'desvio': [d_padrao.round(2)],
+                'media': [media], 'maximo': [maximo], 'desvio': [d_padrao.round(2)],
                 'max_media': [max_media.round(2)],
                 'media_ajustada': [round(media_ajustada, 2)],
                 'quantidade_un_caixa': produto_qs.quantidade_un_cx,
