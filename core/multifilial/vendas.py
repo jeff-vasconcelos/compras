@@ -115,8 +115,6 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
 
             media = round(med, 2)
 
-            print(media)
-
             maximo = e_vendas['qt_vendas'].max()
             d_padrao = tratando_media.std()
 

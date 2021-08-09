@@ -421,70 +421,77 @@ def selecionar_produto(request):
     id_empresa = request.user.usuario.empresa_id
 
     if request.is_ajax():
+        try:
 
-        #DADOS DA REQUISIÇÃO
-        id_produto = int(request.POST.get('produto'))
-        leadtime = int(request.POST.get('leadtime'))
-        t_reposicao = int(request.POST.get('tempo_reposicao'))
-        filial_selecionada = int(request.POST.get('filial'))
+            #DADOS DA REQUISIÇÃO
+            id_produto = int(request.POST.get('produto'))
+            leadtime = int(request.POST.get('leadtime'))
+            t_reposicao = int(request.POST.get('tempo_reposicao'))
+            filial_selecionada = int(request.POST.get('filial'))
 
-        #VERIFICANDO SE HOUVE VENDAS NO PERIODO INDEPENDE DA FILIAL
-        qs = Produto.objects.get(id=id_produto, empresa__id=id_empresa)
-        parametros = Parametro.objects.get(empresa_id=id_empresa)
-        verif_produto = verifica_produto(qs.cod_produto, id_empresa, parametros.periodo)
-        lista_filiais = []
+            #VERIFICANDO SE HOUVE VENDAS NO PERIODO INDEPENDE DA FILIAL
+            qs = Produto.objects.get(id=id_produto, empresa__id=id_empresa)
+            parametros = Parametro.objects.get(empresa_id=id_empresa)
+            verif_produto = verifica_produto(qs.cod_produto, id_empresa, parametros.periodo)
+            lista_filiais = []
 
-        cod_produto = qs.cod_produto
-        cod_fornecedor = qs.cod_fornecedor
-        periodo = parametros.periodo
+            cod_produto = qs.cod_produto
+            cod_fornecedor = qs.cod_fornecedor
+            periodo = parametros.periodo
 
-        if verif_produto == True:
+            if verif_produto == True:
 
-            #VERIFCANDO FILIAIS COM VENDAS DO PRODUTO
-            se_vendas = Venda.objects.filter(
-                empresa__id__exact=id_empresa,
-                produto__id__exact=id_produto,
-            )
-            filiais_cod = se_vendas.values_list('cod_filial', flat=True).distinct()
-
-
-            for filial in filiais_cod:
-                f = filial
-                lista_filiais.append(f)
-
-            inf_filiais = a_multifiliais(cod_produto, cod_fornecedor, id_empresa,
-                                         leadtime, t_reposicao, periodo, lista_filiais)
+                #VERIFCANDO FILIAIS COM VENDAS DO PRODUTO
+                se_vendas = Venda.objects.filter(
+                    empresa__id__exact=id_empresa,
+                    produto__id__exact=id_produto,
+                )
+                filiais_cod = se_vendas.values_list('cod_filial', flat=True).distinct()
 
 
-            df_filial_selecionada = inf_filiais.query('filial == @filial_selecionada')
-            df_filial_selecionada = df_filial_selecionada.drop(columns=[
-                'filial','estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
-                'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela', 'margem'
-            ])
+                for filial in filiais_cod:
+                    f = filial
+                    lista_filiais.append(f)
 
-            i_filial_selec = df_filial_selecionada.to_dict('records')
+                inf_filiais = a_multifiliais(cod_produto, cod_fornecedor, id_empresa,
+                                             leadtime, t_reposicao, periodo, lista_filiais)
 
-            for i in i_filial_selec:
-                info_prod_filiais = i
 
-            inf_filiais = inf_filiais.drop(columns=[
-                'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
-            ])
+                df_filial_selecionada = inf_filiais.query('filial == @filial_selecionada')
+                df_filial_selecionada = df_filial_selecionada.drop(columns=[
+                    'filial','estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
+                    'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela', 'margem'
+                ])
 
-            inf_filiais = inf_filiais.to_dict('records')
+                i_filial_selec = df_filial_selecionada.to_dict('records')
 
-            data = []
+                for i in i_filial_selec:
+                    info_prod_filiais = i
 
-            mapa = mapas_serie(id_empresa, cod_produto, filial_selecionada, periodo)
+                inf_filiais = inf_filiais.drop(columns=[
+                    'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
+                ])
 
-            data.append(inf_filiais)  # 0
-            data.append(mapa)  # 1
-            data.append(info_prod_filiais) #2
+                inf_filiais = inf_filiais.to_dict('records')
 
-            return JsonResponse({'data': data})
+                data = []
 
-        else:
-            return JsonResponse({'data': 0})
+                mapa = mapas_serie(id_empresa, cod_produto, filial_selecionada, periodo)
+
+                data.append(inf_filiais)  # 0
+                data.append(mapa)  # 1
+                data.append(info_prod_filiais) #2
+
+                return JsonResponse({'data': data})
+        except Exception as NameError:
+            print(NameError)
+            erro = str(NameError)
+            d = [1 ,erro]
+
+            return JsonResponse({'data': d})
+
+    else:
+        return JsonResponse({'data': 0})
 
     return JsonResponse({})
 

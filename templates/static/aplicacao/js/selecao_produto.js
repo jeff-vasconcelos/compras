@@ -35,6 +35,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
             const dados = info_prod.data
             console.log(dados)
 
+            const erro_processar = dados[0]
+
             if (dados === 0) {
 
                 // $("canvas#ChartSerieHist").remove();
@@ -94,7 +96,70 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     }, 6000);
                 });
 
-            } else {
+            }
+
+            else if (erro_processar === 1) {
+
+                // $("canvas#ChartSerieHist").remove();
+                // $("canvas#ChartCobertura").remove();
+                // $("div#div-grafico-um").append('<canvas id="ChartSerieHist"></canvas>')
+                // $("div#div-grafico-dois").append('<canvas id="ChartCobertura"></canvas>')
+
+                botaoVerPedidosPendentes.style.display = 'none'
+                valor_condicao_est.innerHTML = "-"
+                valor_curva.innerHTML = "-"
+                valor_media.innerHTML = "-"
+                valor_ruptura.innerHTML = "-"
+                porc_ruptura.innerHTML = "-"
+                tabelaInfo.innerHTML = "-"
+                tabelaInfo.innerHTML = `
+                        <tr>
+                            <th class="tabela-info">Cód. Filial</th>
+                            <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Avaria</th>
+                            <th class="tabela-info">Ped. pendente</th>
+                            <th class="tabela-info">Dt. ult. Ent.</th>
+                            <th class="tabela-info">Qt. ult. Ent.</th>
+                            <th class="tabela-info">Vl. ult. Ent.</th>
+                            <th class="tabela-info">DDE</th>
+                            <th class="tabela-info">Est. seg.</th>
+                            <th class="tabela-info">Ponto rep.</th>
+                            <th class="tabela-info">Cx Fech.</th>
+                            <th class="tabela-info">Und Caixa</th>
+                            <th class="tabela-info">Sugestão Und</th>
+                            <th class="tabela-info">Pr. tabela</th>
+                            <th class="tabela-info">Margem</th>
+                            <!--                                <th>Qt digitada</th>-->
+                            <!--                                <th>Pr. compra</th>-->
+                            <!--                                <th>% margem</th>-->
+                            <!--                                <th>Pr. sugerido</th>-->
+                            <!--                                <th>DDE</th>-->
+
+                        </tr>
+                    `
+                porc_media.innerHTML = "-"
+                valor_media_simples.innerHTML = "-"
+
+                mensagemErro.innerHTML += `
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                            <use xlink:href="#exclamation-triangle-fill"/>
+                        </svg>
+                        <div>
+                            &nbsp; Não é possivel analisar o produto!
+                        </div>
+                    </div>
+                `
+                $(document).ready(function () {
+                    // show the alert
+                    setTimeout(function () {
+                        $(".alert").alert('close');
+                    }, 6000);
+                });
+
+            }
+
+            else {
 
                 const data = dados[0]
                 const graficos = dados[1]
