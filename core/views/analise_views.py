@@ -483,16 +483,15 @@ def selecionar_produto(request):
                 data.append(info_prod_filiais) #2
 
                 return JsonResponse({'data': data})
+            else:
+                zero = [0]
+                return JsonResponse({'data': zero})
+
         except Exception as NameError:
-            print(NameError)
             erro = str(NameError)
             d = [1 ,erro]
 
             return JsonResponse({'data': d})
-
-    else:
-        return JsonResponse({'data': 0})
-
     return JsonResponse({})
 
 

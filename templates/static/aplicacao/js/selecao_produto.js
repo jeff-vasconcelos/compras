@@ -35,7 +35,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
             const dados = info_prod.data
             console.log(dados)
 
-            if (dados === 0) {
+            if (dados[0] === 0) {
 
                 // $("canvas#ChartSerieHist").remove();
                 // $("canvas#ChartCobertura").remove();
@@ -162,7 +162,6 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 const data = dados[0]
                 const graficos = dados[1]
                 const informacoes = dados[2]
-
 
                 $("canvas#ChartSerieHist").remove();
                 $("canvas#ChartCobertura").remove();
