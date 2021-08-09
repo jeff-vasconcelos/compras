@@ -33,6 +33,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
         success: (info_prod) => {
 
             const dados = info_prod.data
+            console.log(dados)
 
             if (dados === 0) {
 
