@@ -108,7 +108,7 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
 def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
     global resumo_produto, qt_excesso, vl_excesso
     parametros = Parametro.objects.get(empresa_id=id_empresa)
-    fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor)
+    fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor, empresa__id__exact=id_empresa)
     pedidos = pedidos_compra(cod_produto, id_empresa)
     u_entrada = ultima_entrada(cod_produto, id_empresa, periodo)
     e_atual = estoque_atual(cod_produto, id_empresa)

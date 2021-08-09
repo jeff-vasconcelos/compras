@@ -101,7 +101,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     u_entrada = ultima_entrada(cod_produto, id_empresa, periodo, lista_filiais)
     e_atual = estoque_atual(cod_produto, id_empresa, lista_filiais)
     vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
-    fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor)
+    fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor, empresa__id__exact=id_empresa)
     # df_vendas, informacoes_produto = vendas(cod_produto, id_empresa, periodo)
 
     lista_fornecedor = []
