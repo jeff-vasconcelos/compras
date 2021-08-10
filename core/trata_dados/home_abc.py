@@ -82,6 +82,7 @@ def processa_grafico_um(produtos):
     # CURVA B
     for b in curva:
         if b['curva'] == 'B':
+            print("Entrou na curva B")
             lista_normal.append(b['valor_normal'])
             lista_excesso.append(b['valor_excesso'])
             lista_parcial.append(b['valor_parcial'])

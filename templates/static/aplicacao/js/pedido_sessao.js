@@ -1,4 +1,3 @@
-
 const ProdutosSelecionar = document.getElementById('results-produtos')
 const inputPrCompraDigitada = document.getElementById('pr_compra')
 const inputMargemDigitada = document.getElementById('porc_margem')
@@ -35,7 +34,7 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
             console.log(pedido_sessao.data)
             const resposta = pedido_sessao.data
 
-            if( resposta === "SUCESSO"){
+            if (resposta === "SUCESSO") {
                 inputQtDigitada.value = ""
                 inputPrCompraDigitada.value = ""
                 mensagemSucesso.innerHTML += `
@@ -138,20 +137,18 @@ const verPedidoSessao = () => {
         type: 'GET',
         url: '/painel/ver-produto-pedido/',
         success: (pedido_sessao) => {
-            console.log(pedido_sessao.data)
 
             const data = pedido_sessao.data
-            console.log(data)
 
-            if (data === "FALSE"){
+            if (data === "FALSE") {
                 botaoExportarPedido.style.display = 'none'
             } else {
                 botaoExportarPedido.style.display = 'block'
             }
 
-            if (Array.isArray(data)){
+            if (Array.isArray(data)) {
                 resultPedidoSessao.innerHTML = ""
-                data.forEach(prod=> {
+                data.forEach(prod => {
                     resultPedidoSessao.innerHTML += `
                     <tr>
                         <td>${prod.ped_cod_filial}</td>
@@ -187,7 +184,6 @@ const rmPedidoSessao = (produto) => {
             'produto': produto
         },
         success: (pedido_sessao) => {
-            console.log(pedido_sessao.data)
             mensagemSucesso.innerHTML += `
                     <div class="alert alert-success d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
@@ -206,7 +202,7 @@ const rmPedidoSessao = (produto) => {
                 // show the alert
                 setTimeout(function () {
                     $(".alert").alert('close');
-                }, 5000);
+                }, 6000);
             });
 
 
@@ -220,41 +216,16 @@ function rm_prod_pedido_sessao(prod_id) {
     rmPedidoSessao(produto)
 }
 
-//
-// // VER PEDIDO NA SESSAO
-// const verPedidoSessao = () => {
-//     $.ajax({
-//         type: 'GET',
-//         url: '/painel/ver-produto-pedido/',
-//         success: (pedido_sessao) => {
-//             console.log(pedido_sessao.data)
-//
-//             const data = pedido_sessao.data
-//             console.log(data)
-//             if (Array.isArray(data)){
-//                 resultPedidoSessao.innerHTML = ""
-//                 data.forEach(prod=> {
-//                     resultPedidoSessao.innerHTML += `
-//                     <tr>
-//                         <td>${prod.ped_cod_filial}</td>
-//                         <td>${prod.ped_produto_cod}</td>
-//                         <td>${prod.ped_produto_nome}</td>
-//                         <td>R$ ${prod.ped_pr_compra}</td>
-//                         <td>${prod.ped_qt_digitada}</td>
-//                         <td>${prod.ped_margem} %</td>
-//                         <td>
-//                             <button onclick="rm_prod_pedido_sessao(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="btn btn-danger btn-sm">
-//                                 <i class="fas fa-times-circle fa-1x"></i>
-//                             </button>
-//                         </td>
-//                      </tr>
-//                     `
-//                 })
-//             }
-//         }
-//     });
-// }
-// botaoVerPedidoSessao.addEventListener('click', e => {
-//     verPedidoSessao()
-// })
-//
+botaoExportarPedido.addEventListener("click", e => {
+
+    resultPedidoSessao.innerHTML = ""
+
+    $(".modal-pedido").modal('hide');
+
+    $(document).ready(function () {
+        // show the alert
+        setTimeout(function () {
+            $(".alert").alert('close');
+        }, 6000);
+    });
+})

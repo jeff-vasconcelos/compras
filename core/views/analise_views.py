@@ -1,5 +1,6 @@
 import datetime
 from math import ceil
+import xlwt
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -563,6 +564,9 @@ def add_prod_pedido_sessao(request):
             qt_digitada = request.POST.get('qt_digitada')
             pr_compra = request.POST.get('pr_compra')
 
+            qt_digitada = qt_digitada.replace(",", ".")
+            qt_digitada = float(qt_digitada)
+
             preco_f = pr_compra.replace(",", ".")
             preco = float(preco_f)
 
@@ -626,12 +630,25 @@ def rm_prod_pedido_sessao(request):
         return JsonResponse({'data': 0})
 
 
-def export_csv(request):
-    response = HttpResponse(content_type='text/csv')
+def export_csv(request) -> object:
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="insight.xls"'
 
-    writer = csv.writer(response)
-    writer.writerow(['cod_produto', 'preco', 'quantidade'])
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Pedido Insight')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
 
+    # COLUNAS DA PLANILHA
+    columns = ['cod_produto', 'preco', 'quantidade']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+
+    # GET PEDIDO SESSÃO
     pedido = request.session.get('pedido_produto', [])
     lista = []
 
@@ -650,6 +667,7 @@ def export_csv(request):
 
     data = datetime.datetime.now().strftime("%d%m%Y%H%M")
 
+    # SALVAR EM PEDIDOS FEITOS
     p = PedidoInsight.objects.create(
         numero=f'{numero}-{data}',
         usuario=primeiro + espaco + ultimo,
@@ -657,6 +675,7 @@ def export_csv(request):
     )
     p.save()
 
+    # SALVAR ITENS DO PEDIDO
     for value in pedido.values():
         temp = value
 
@@ -677,10 +696,19 @@ def export_csv(request):
 
         lista.append(temp)
 
-    for i in lista:
-        writer.writerow(i.values())
+    # LINHAS DA PLANILHA
+    for row in lista:
+        valores = row.values()
+        l_valores = list(valores)
+        row_num += 1
 
-    response['Content-Disposition'] = 'attachment; filename="importar_pedido.csv"'
+        for col_num in range(len(l_valores)):
+            ws.write(row_num, col_num, l_valores[col_num], font_style)
+
+    wb.save(response)
+
+    del request.session['pedido_produto']
+    request.session.save()
 
     return response
 
@@ -702,13 +730,18 @@ def pedidos_pedentes(request):
 
             pedidos = pedidos_todos(produto_codigo, empresa, filial)
 
-            pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
-            pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
+            if pedidos is not None:
 
-            pedidos['data_ped'] = pedidos['data_ped'].astype(str)
+                pedidos['data'] = pd.to_datetime(pedidos.data).dt.strftime('%d/%m/%Y')
+                pedidos.rename(columns={'data': 'data_ped'}, inplace=True)
 
-            pedid = pedidos.assign(**pedidos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
-                "records")
+                pedidos['data_ped'] = pedidos['data_ped'].astype(str)
 
-            return JsonResponse({'data': pedid})
+                pedid = pedidos.assign(**pedidos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
+                    "records")
+
+                return JsonResponse({'data': pedid})
+            else:
+                res = "NOTPEDIDO"
+                return JsonResponse({'data': res})
     return JsonResponse({})

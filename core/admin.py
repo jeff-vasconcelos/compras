@@ -33,7 +33,7 @@ class FilialAdmin(admin.ModelAdmin):
 class AlertaAdmin(admin.ModelAdmin):
     list_display = ('id', 'cod_produto', 'cod_filial', 'empresa')
     list_display_links = ('cod_produto',)
-    search_fields = ('cod_produto', 'cod_filial', 'empresa',)
+    search_fields = ('cod_produto', )
     list_filter = ('empresa',)
     list_per_page = 40
 

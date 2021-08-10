@@ -279,6 +279,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
             prod_resumo['qt_excesso'] = qt_excesso.round(0)
             prod_resumo['vl_excesso'] = vl_excesso
+            prod_resumo['sugestao'] = 0
             condicao_estoque = 'EXCESSO'
 
         elif temp_est >= dde > dde_ponto_rep:

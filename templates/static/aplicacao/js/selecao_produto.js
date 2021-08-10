@@ -491,6 +491,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Cx Fech.</th>
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
+                            <th class="tabela-info">Excesso</th>
                             <th class="tabela-info">Pr. tabela</th>
                             <th class="tabela-info">Margem</th>
                             <!--                                <th>Qt digitada</th>-->
@@ -526,6 +527,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Cx Fech.</th>
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
+                            <th class="tabela-info">Excesso</th>
                             <th class="tabela-info">Pr. tabela</th>
                             <th class="tabela-info">Margem</th>
                             <!--                                <th>Qt digitada</th>-->
@@ -586,6 +588,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <td class="tabela-info">${produto_info.sugestao_caixa}</td>
                             <td class="tabela-info">${produto_info.sugestao_unidade}</td>
                             <td class="tabela-info">${produto_info.sugestao}</td>
+                            <td class="tabela-info">${produto_info.qt_excesso}</td>
                             <td class="tabela-info">R$ ${produto_info.preco_tabela}</td>
                             <td class="tabela-info">${produto_info.margem} %</td>
                           
