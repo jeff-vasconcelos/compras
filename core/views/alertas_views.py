@@ -52,6 +52,7 @@ def alertas(id_empresa):
 
 
                 for index, row in infor_filiais.iterrows():
+                    print(row)
                     alertas_produtos = {
                         'filial': row.filial,
                         'cod_produto': row.cod_produto,
