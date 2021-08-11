@@ -15,7 +15,7 @@ app.conf.beat_schedule = {
       'alerta_estrela': {
          'task': 'core.tasks.processa_alerta',
          'schedule': 1,
-         "args": ("request", 4)
+         "args": ("request",)
       },
 }
 
