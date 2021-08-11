@@ -9,9 +9,6 @@ from core.multifilial.filiais import get_filiais
 
 def estoque_atual(cod_produto, id_empresa, lista_filiais):
     global disponivel
-    # hoje = datetime.date.today()
-
-    # filiais = get_filiais(id_empresa)
 
     list = []
     for filial in lista_filiais:
@@ -20,7 +17,7 @@ def estoque_atual(cod_produto, id_empresa, lista_filiais):
             cod_produto__exact=cod_produto,
             cod_filial__exact=filial,
             empresa__id__exact=id_empresa
-        )[:1].values())
+        ).order_by('-id')[:1].values())
 
         if not estoque_a.empty:
             estoque_ = estoque_a.drop_duplicates(subset=['cod_filial'], keep='first')

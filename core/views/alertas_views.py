@@ -221,9 +221,7 @@ def pdf_generate(request):
 
 
 # ROTINA DE EXECUÇÃO DE ALERTA
-def rotina_alerta_home(request, id_empresa):
-
-    empresa = Empresa.objects.get(id=id_empresa)
+def rotina_alerta(request, id_empresa):
     produtos = alertas(id_empresa)
 
     grafico_um = processa_grafico_um(produtos)
@@ -234,10 +232,16 @@ def rotina_alerta_home(request, id_empresa):
     db_grafico_um(id_empresa, grafico_um)
     db_dados_estoque(id_empresa, dados_estoque)
 
-    # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
-    if empresa.envia_email:
-        send_email_alerta(request, id_empresa)
 
+def rotina_email(request, id_empresa):
+    empresa = Empresa.objects.get(id=id_empresa)
+
+    # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
+    try:
+        if empresa.envia_email:
+            send_email_alerta(request, id_empresa)
+    except:
+        print("NÃO FOI POSSIVEL ENVIAR O(S) EMAIL(S)")
 
 
 #TODO FUNÇÃO DE TESTE - REMOVER

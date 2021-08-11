@@ -1,10 +1,18 @@
 from __future__ import absolute_import
 from celery import shared_task
-from core.views.alertas_views import rotina_alerta_home
+from core.views.alertas_views import *
 
 
 @shared_task
-def realiza_alerta(request):
-    print("Realizando rotina de alerta HOME...")
-    rotina_alerta_home(request)
-    print("Rotina de alerta concluido!!!")
+def processa_alerta(request, id_empresa):
+    print("Iniciando Alertas...")
+    rotina_alerta(request, id_empresa)
+    print("Alerta concluido!")
+
+
+@shared_task
+def processa_email(request, id_empresa):
+    print("Iniciando Envio de Emails...")
+    rotina_email(request, id_empresa)
+    print("Envio concluido!")
+

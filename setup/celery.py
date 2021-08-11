@@ -13,7 +13,7 @@ app = Celery('setup', broker="redis://localhost:6379", backend="redis://localhos
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
       'alerta': {
-         'task': 'core.tasks.realiza_alerta',
+         'task': 'core.tasks.processa_alerta',
          'schedule': 1,
          "args": ("request",)
       },
@@ -22,6 +22,6 @@ app.conf.beat_schedule = {
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
-@app.task(bind=True)
-def debug_task(self):
-    print('Request: {0!r}'.format(self.request))
+# @app.task(bind=True)
+# def debug_task(self):
+#     print('Request: {0!r}'.format(self.request))
