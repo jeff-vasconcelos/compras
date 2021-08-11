@@ -221,7 +221,8 @@ def pdf_generate(request):
 
 
 # ROTINA DE EXECUÇÃO DE ALERTA
-def rotina_alerta(request, id_empresa):
+def rotina_alerta(request, id_emp):
+    id_empresa = int(id_emp)
     produtos = alertas(id_empresa)
 
     grafico_um = processa_grafico_um(produtos)
@@ -233,7 +234,8 @@ def rotina_alerta(request, id_empresa):
     db_dados_estoque(id_empresa, dados_estoque)
 
 
-def rotina_email(request, id_empresa):
+def rotina_email(request, id_emp):
+    id_empresa = int(id_emp)
     empresa = Empresa.objects.get(id=id_empresa)
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
