@@ -12,10 +12,10 @@ app = Celery('setup', broker="redis://localhost:6379", backend="redis://localhos
 # pickle the object when using Windows.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
-      'alerta': {
+      'alerta_estrela': {
          'task': 'core.tasks.processa_alerta',
          'schedule': 1,
-         "args": ("request",)
+         "args": ("request", 4)
       },
 }
 
