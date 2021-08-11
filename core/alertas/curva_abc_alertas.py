@@ -2,6 +2,7 @@ from api.models.venda import Venda
 import pandas as pd
 import datetime
 from core.alertas.verificador import get_filiais
+import numpy
 
 
 def abc(cod_fornecedor, id_empresa, periodo):
@@ -31,6 +32,8 @@ def abc(cod_fornecedor, id_empresa, periodo):
                                           "produto_id", "fornecedor_id", "filial_id", "empresa_id", "campo_um", "campo_dois", "campo_tres"])
 
         df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
+
+        df['qt_vendas'].fillna(0, inplace=True)
 
         df['vl_total_vendido'] = df['qt_vendas'] * df['preco_unit']
         df['vl_total_custo'] = df['qt_vendas'] * df['custo_fin']

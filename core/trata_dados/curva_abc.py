@@ -34,6 +34,8 @@ def curva_abc(cod_fornecedor, id_empresa, periodo):
 
         df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
 
+        df['qt_vendas'].fillna(0, inplace=True)
+
         df['vl_total_vendido'] = df['qt_vendas'] * df['preco_unit']
         df['vl_total_custo'] = df['qt_vendas'] * df['custo_fin']
 
