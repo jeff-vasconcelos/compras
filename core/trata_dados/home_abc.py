@@ -5,7 +5,7 @@ from core.models.parametros_models import GraficoCurva, DadosEstoque, GraficoRup
 
 
 def processa_grafico_um(produtos):
-    global status
+    global status, total_normal_b, total_excesso_b, total_parcial_b, total_ruptura_b
     lista_normal = []
     lista_excesso = []
     lista_parcial = []
@@ -60,10 +60,10 @@ def processa_grafico_um(produtos):
             lista_ruptura.append(a['valor_ruptura'])
 
 
-    total_normal = sum(lista_normal)
-    total_excesso = sum(lista_excesso)
-    total_parcial = sum(lista_parcial)
-    total_ruptura = sum(lista_ruptura)
+    total_normal_a = sum(lista_normal)
+    total_excesso_a = sum(lista_excesso)
+    total_parcial_a = sum(lista_parcial)
+    total_ruptura_a = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
@@ -73,25 +73,24 @@ def processa_grafico_um(produtos):
 
     curva_a = {
         'curva': 'A',
-        'total_normal':total_normal,
-        'total_excesso':total_excesso,
-        'total_parcial':total_parcial,
-        'total_ruptura':total_ruptura
+        'total_normal':total_normal_a,
+        'total_excesso':total_excesso_a,
+        'total_parcial':total_parcial_a,
+        'total_ruptura':total_ruptura_a
     }
 
     # CURVA B
     for b in curva:
         if b['curva'] == 'B':
-            print("Entrou na curva B")
             lista_normal.append(b['valor_normal'])
             lista_excesso.append(b['valor_excesso'])
             lista_parcial.append(b['valor_parcial'])
             lista_ruptura.append(b['valor_ruptura'])
 
-        total_normal = sum(lista_normal)
-        total_excesso = sum(lista_excesso)
-        total_parcial = sum(lista_parcial)
-        total_ruptura = sum(lista_ruptura)
+        total_normal_b = sum(lista_normal)
+        total_excesso_b = sum(lista_excesso)
+        total_parcial_b = sum(lista_parcial)
+        total_ruptura_b = sum(lista_ruptura)
 
         lista_normal.clear()
         lista_excesso.clear()
@@ -100,10 +99,10 @@ def processa_grafico_um(produtos):
 
     curva_b = {
         'curva': 'B',
-        'total_normal': total_normal,
-        'total_excesso': total_excesso,
-        'total_parcial': total_parcial,
-        'total_ruptura': total_ruptura
+        'total_normal': total_normal_b,
+        'total_excesso': total_excesso_b,
+        'total_parcial': total_parcial_b,
+        'total_ruptura': total_ruptura_b
     }
 
     # CURVA C
@@ -114,10 +113,10 @@ def processa_grafico_um(produtos):
             lista_parcial.append(c['valor_parcial'])
             lista_ruptura.append(c['valor_ruptura'])
 
-    total_normal = sum(lista_normal)
-    total_excesso = sum(lista_excesso)
-    total_parcial = sum(lista_parcial)
-    total_ruptura = sum(lista_ruptura)
+    total_normal_c = sum(lista_normal)
+    total_excesso_c = sum(lista_excesso)
+    total_parcial_c = sum(lista_parcial)
+    total_ruptura_c = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
@@ -126,10 +125,10 @@ def processa_grafico_um(produtos):
 
     curva_c = {
         'curva': 'C',
-        'total_normal': total_normal,
-        'total_excesso': total_excesso,
-        'total_parcial': total_parcial,
-        'total_ruptura': total_ruptura
+        'total_normal': total_normal_c,
+        'total_excesso': total_excesso_c,
+        'total_parcial': total_parcial_c,
+        'total_ruptura': total_ruptura_c
     }
 
     # CURVA D
@@ -140,10 +139,10 @@ def processa_grafico_um(produtos):
             lista_parcial.append(d['valor_parcial'])
             lista_ruptura.append(d['valor_ruptura'])
 
-    total_normal = sum(lista_normal)
-    total_excesso = sum(lista_excesso)
-    total_parcial = sum(lista_parcial)
-    total_ruptura = sum(lista_ruptura)
+    total_normal_d = sum(lista_normal)
+    total_excesso_d = sum(lista_excesso)
+    total_parcial_d = sum(lista_parcial)
+    total_ruptura_d = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
@@ -152,10 +151,10 @@ def processa_grafico_um(produtos):
 
     curva_d = {
         'curva': 'D',
-        'total_normal': total_normal,
-        'total_excesso': total_excesso,
-        'total_parcial': total_parcial,
-        'total_ruptura': total_ruptura
+        'total_normal': total_normal_d,
+        'total_excesso': total_excesso_d,
+        'total_parcial': total_parcial_d,
+        'total_ruptura': total_ruptura_d
     }
 
     # CURVA E
@@ -166,10 +165,10 @@ def processa_grafico_um(produtos):
             lista_parcial.append(e['valor_parcial'])
             lista_ruptura.append(e['valor_ruptura'])
 
-    total_normal = sum(lista_normal)
-    total_excesso = sum(lista_excesso)
-    total_parcial = sum(lista_parcial)
-    total_ruptura = sum(lista_ruptura)
+    total_normal_e = sum(lista_normal)
+    total_excesso_e = sum(lista_excesso)
+    total_parcial_e = sum(lista_parcial)
+    total_ruptura_e = sum(lista_ruptura)
 
     lista_normal.clear()
     lista_excesso.clear()
@@ -178,10 +177,10 @@ def processa_grafico_um(produtos):
 
     curva_e = {
         'curva': 'E',
-        'total_normal': total_normal,
-        'total_excesso': total_excesso,
-        'total_parcial': total_parcial,
-        'total_ruptura': total_ruptura
+        'total_normal': total_normal_e,
+        'total_excesso': total_excesso_e,
+        'total_parcial': total_parcial_e,
+        'total_ruptura': total_ruptura_e
     }
 
     lista_status = [curva_a, curva_b, curva_c, curva_d, curva_e]

@@ -15,11 +15,3 @@ def processa_email(request, id_empresa):
     print("Iniciando Envio de Emails...")
     rotina_email(request, id_empresa)
     print("Envio concluido!")
-
-
-@shared_task
-def teste_processa_email(request, id_empresa):
-    print("Iniciando Envio de Emails...")
-    rotina_email(request, id_empresa)
-    print("Envio concluido!")
-
