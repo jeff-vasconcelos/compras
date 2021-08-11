@@ -204,6 +204,12 @@ def db_grafico_um(id_empresa, produtos):
 
 
     for i in produtos:
+        #TODO REMOVER
+        print("GRAVAR NO DB")
+        print(i['curva'])
+        print(i)
+
+
         normal = i['total_normal']
         excesso = i['total_excesso']
         parcial = i['total_parcial']

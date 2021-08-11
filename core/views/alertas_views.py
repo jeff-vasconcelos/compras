@@ -52,7 +52,8 @@ def alertas(id_empresa):
 
 
                 for index, row in infor_filiais.iterrows():
-                    print(row)
+                    #TODO REMOVER
+                    print(row.desc_produto)
                     alertas_produtos = {
                         'filial': row.filial,
                         'cod_produto': row.cod_produto,
@@ -220,23 +221,22 @@ def pdf_generate(request):
 
 
 # ROTINA DE EXECUÇÃO DE ALERTA
-def rotina_alerta_home(request):
-    #TODO ENVIAR ID EMPRESA COMO PARAMETRO
+def rotina_alerta_home(request, id_empresa):
 
-    empresa = Empresa.objects.get(id=1)
-    produtos = alertas(1)
+    empresa = Empresa.objects.get(id=id_empresa)
+    produtos = alertas(id_empresa)
 
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
 
-    alerta_db(1, produtos)
+    alerta_db(id_empresa, produtos)
 
-    db_grafico_um(1, grafico_um)
-    db_dados_estoque(1, dados_estoque)
+    db_grafico_um(id_empresa, grafico_um)
+    db_dados_estoque(id_empresa, dados_estoque)
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     if empresa.envia_email:
-        send_email_alerta(request, 1)
+        send_email_alerta(request, id_empresa)
 
 
 
