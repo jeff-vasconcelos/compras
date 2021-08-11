@@ -221,7 +221,7 @@ def pdf_generate(request):
 
 
 # ROTINA DE EXECUÇÃO DE ALERTA
-def rotina_alerta(id_empresa):
+def rotina_alerta(request, id_empresa):
     produtos = alertas(id_empresa)
 
     grafico_um = processa_grafico_um(produtos)
