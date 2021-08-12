@@ -411,15 +411,11 @@ def filtrar_produto_curva(request):
 def filtrar_produto_marca(request):
     empresa = request.user.usuario.empresa_id
     if request.is_ajax():
-        res_fil_curva = None
         marca = request.POST.get('marca')
-        print(marca)
         fornecedor = request.POST.get('fornecedor')
         produto = request.POST.get('produto')
-        print(produto)
 
         if fornecedor != '':
-            print("pequisando por fornce")
             fornecedor = fornecedor.replace(",", " ")
 
             a = fornecedor.split()
@@ -431,10 +427,9 @@ def filtrar_produto_marca(request):
             lista_fornecedor = []
             for i in b:
                 lista_fornecedor.append(int(i))
-            print(lista_fornecedor)
+
             qs = Produto.objects.filter(marca=marca, fornecedor_id__in=lista_fornecedor,
                                         empresa__id__exact=empresa).order_by('desc_produto')
-            print(qs)
             if len(qs) > 0:
                 data = []
                 for prod in qs:
@@ -450,7 +445,6 @@ def filtrar_produto_marca(request):
             return JsonResponse({'data': res_fil_curva})
 
         if produto != '':
-            print("pequisando por prduto")
             produto = produto.replace(",", " ")
 
             a = produto.split()
@@ -462,9 +456,9 @@ def filtrar_produto_marca(request):
             lista_produto = []
             for i in b:
                 lista_produto.append(int(i))
-            print(lista_produto)
+
             qs = Produto.objects.filter(marca=marca, id__in=lista_produto, empresa__id__exact=empresa).order_by('desc_produto')
-            print(qs)
+
             if len(qs) > 0:
                 data = []
                 for prod in qs:
