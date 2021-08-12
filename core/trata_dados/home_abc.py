@@ -6,6 +6,7 @@ from core.models.parametros_models import GraficoCurva, DadosEstoque, GraficoRup
 
 def processa_grafico_um(produtos):
     global status, total_normal_b, total_excesso_b, total_parcial_b, total_ruptura_b
+
     lista_normal = []
     lista_excesso = []
     lista_parcial = []
@@ -50,7 +51,6 @@ def processa_grafico_um(produtos):
 
             curva.append(i)
 
-
     #CURVA A
     for a in curva:
         if a['curva'] == 'A':
@@ -87,15 +87,15 @@ def processa_grafico_um(produtos):
             lista_parcial.append(b['valor_parcial'])
             lista_ruptura.append(b['valor_ruptura'])
 
-        total_normal_b = sum(lista_normal)
-        total_excesso_b = sum(lista_excesso)
-        total_parcial_b = sum(lista_parcial)
-        total_ruptura_b = sum(lista_ruptura)
+    total_normal_b = sum(lista_normal)
+    total_excesso_b = sum(lista_excesso)
+    total_parcial_b = sum(lista_parcial)
+    total_ruptura_b = sum(lista_ruptura)
 
-        lista_normal.clear()
-        lista_excesso.clear()
-        lista_parcial.clear()
-        lista_ruptura.clear()
+    lista_normal.clear()
+    lista_excesso.clear()
+    lista_parcial.clear()
+    lista_ruptura.clear()
 
     curva_b = {
         'curva': 'B',
@@ -203,12 +203,6 @@ def db_grafico_um(id_empresa, produtos):
 
 
     for i in produtos:
-        #TODO REMOVER
-        print("GRAVAR NO DB")
-        print(i['curva'])
-        print(i)
-
-
         normal = i['total_normal']
         excesso = i['total_excesso']
         parcial = i['total_parcial']

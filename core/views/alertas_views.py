@@ -52,8 +52,6 @@ def alertas(id_empresa):
 
 
                 for index, row in infor_filiais.iterrows():
-                    #TODO REMOVER
-                    print(row.desc_produto)
                     alertas_produtos = {
                         'filial': row.filial,
                         'cod_produto': row.cod_produto,
@@ -222,6 +220,9 @@ def pdf_generate(request):
 
 # ROTINA DE EXECUÇÃO DE ALERTA
 def rotina_alerta(request, id_empresa):
+    empresa = Empresa.objects.get(id=id_empresa)
+    print(f"PROCESSANDO DADOS DE {empresa.nome_fantasia}")
+
     produtos = alertas(id_empresa)
 
     grafico_um = processa_grafico_um(produtos)
@@ -239,6 +240,7 @@ def rotina_email(request, id_empresa):
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     try:
         if empresa.envia_email:
+            print(f"ENVIANDO EMAIL(S) DE {empresa.nome_fantasia}")
             send_email_alerta(request, id_empresa)
     except:
         print("NÃO FOI POSSIVEL ENVIAR O(S) EMAIL(S)")

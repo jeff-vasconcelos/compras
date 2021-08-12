@@ -5,13 +5,13 @@ from core.views.alertas_views import *
 
 @shared_task
 def processa_alerta(request, id_empresa):
-    print("Iniciando Alertas...")
+    print("INICIANDO TASK DE ALERTAS...")
     rotina_alerta(request, id_empresa)
-    print("Alerta concluido!")
+    print("TASK DE ALERTAS CONCLUIDA!")
 
 
 @shared_task
 def processa_email(request, id_empresa):
-    print("Iniciando Envio de Emails...")
+    print("INICIANDO TASK DE EMAIL...")
     rotina_email(request, id_empresa)
-    print("Envio concluido!")
+    print("TASK DE EMAIL CONCLUIDA!")
