@@ -43,9 +43,27 @@ listaMarcaSelecionar.addEventListener('change', e => {
         }
     }
 
+    for (var i = 0; i < listaProdutos.length; i++) {
+        if (listaProdutos[i].checked == true) {
+            const marcado = listaProdutos[i].value
+            if (checkProduto.indexOf(marcado) > -1) {
+
+            } else {
+                checkProduto.push(marcado)
+            }
+
+        } else if (listaProdutos[i].checked == false) {
+            const desmarq = listaProdutos[i].value
+            if (checkProduto.indexOf(desmarq) > -1) {
+                checkProduto.splice(checkProduto.indexOf(desmarq), 1)
+            }
+        }
+    }
+
     const marca_selecionada = new FormData()
     marca_selecionada.append('csrfmiddlewaretoken', csrf)
     marca_selecionada.append('fornecedor', checkFornecedor)
+    marca_selecionada.append('produto', checkProduto)
     marca_selecionada.append('marca', marcaSelecionada)
 
     enviarSelectMarca(marca_selecionada)

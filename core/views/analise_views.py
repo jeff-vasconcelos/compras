@@ -211,7 +211,7 @@ def filtrar_produto_fornecedor(request):
         for i in b:
             lista_fornecedor.append(int(i))
 
-        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
+        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('desc_produto')
 
         if len(qs) > 0 and len(lista_fornecedor) > 0:
             marcas = []
@@ -223,7 +223,6 @@ def filtrar_produto_fornecedor(request):
                     'pk': prod.pk,
                     'nome': prod.desc_produto,
                     'cod': prod.cod_produto,
-                    'emb': prod.embalagem,
                 }
                 if prod.marca not in marcas:
                     marcas.append(prod.marca)
@@ -259,7 +258,7 @@ def filtrar_produto_produto(request):
         for i in b:
             lista_produto.append(int(i))
 
-        qs = Produto.objects.filter(id__in=lista_produto, empresa__id__exact=empresa).order_by('cod_produto')
+        qs = Produto.objects.filter(id__in=lista_produto, empresa__id__exact=empresa).order_by('desc_produto')
 
         if len(qs) > 0 and len(lista_produto) > 0:
             marcas = []
@@ -271,7 +270,6 @@ def filtrar_produto_produto(request):
                     'pk': prod.pk,
                     'nome': prod.desc_produto,
                     'cod': prod.cod_produto,
-                    'emb': prod.embalagem,
                 }
                 if prod.marca not in marcas:
                     marcas.append(prod.marca)
@@ -345,7 +343,6 @@ def filtrar_produto_curva(request):
                                 'pk': prod.pk,
                                 'nome': prod.desc_produto,
                                 'cod': prod.cod_produto,
-                                'emb': prod.embalagem
                             }
                             data.append(item)
                         res_fil_curva = data
@@ -397,7 +394,6 @@ def filtrar_produto_curva(request):
                                 'pk': prod.pk,
                                 'nome': prod.desc_produto,
                                 'cod': prod.cod_produto,
-                                'emb': prod.embalagem
                             }
                             data.append(item)
                         res_fil_curva = data
@@ -417,36 +413,71 @@ def filtrar_produto_marca(request):
     if request.is_ajax():
         res_fil_curva = None
         marca = request.POST.get('marca')
-
+        print(marca)
         fornecedor = request.POST.get('fornecedor')
-        fornecedor = fornecedor.replace(",", " ")
+        produto = request.POST.get('produto')
+        print(produto)
 
-        a = fornecedor.split()
-        b = []
+        if fornecedor != '':
+            print("pequisando por fornce")
+            fornecedor = fornecedor.replace(",", " ")
 
-        for elemento in a:
-            b.append(int(elemento))
+            a = fornecedor.split()
+            b = []
 
-        lista_fornecedor = []
-        for i in b:
-            lista_fornecedor.append(int(i))
+            for elemento in a:
+                b.append(int(elemento))
 
-        qs = Produto.objects.filter(marca=marca, fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('cod_produto')
+            lista_fornecedor = []
+            for i in b:
+                lista_fornecedor.append(int(i))
+            print(lista_fornecedor)
+            qs = Produto.objects.filter(marca=marca, fornecedor_id__in=lista_fornecedor,
+                                        empresa__id__exact=empresa).order_by('desc_produto')
+            print(qs)
+            if len(qs) > 0:
+                data = []
+                for prod in qs:
+                    item = {
+                        'pk': prod.pk,
+                        'nome': prod.desc_produto,
+                        'cod': prod.cod_produto,
+                    }
+                    data.append(item)
+                res_fil_curva = data
+            else:
+                res_fil_curva = "Nada encontrado!"
+            return JsonResponse({'data': res_fil_curva})
 
-        if len(qs) > 0:
-            data = []
-            for prod in qs:
-                item = {
-                    'pk': prod.pk,
-                    'nome': prod.desc_produto,
-                    'cod': prod.cod_produto,
-                    'emb': prod.embalagem,
-                }
-                data.append(item)
-            res_fil_curva = data
-        else:
-            res_fil_curva = "Nada encontrado!"
-        return JsonResponse({'data': res_fil_curva})
+        if produto != '':
+            print("pequisando por prduto")
+            produto = produto.replace(",", " ")
+
+            a = produto.split()
+            b = []
+
+            for elemento in a:
+                b.append(int(elemento))
+
+            lista_produto = []
+            for i in b:
+                lista_produto.append(int(i))
+            print(lista_produto)
+            qs = Produto.objects.filter(marca=marca, id__in=lista_produto, empresa__id__exact=empresa).order_by('desc_produto')
+            print(qs)
+            if len(qs) > 0:
+                data = []
+                for prod in qs:
+                    item = {
+                        'pk': prod.pk,
+                        'nome': prod.desc_produto,
+                        'cod': prod.cod_produto,
+                    }
+                    data.append(item)
+                res_fil_curva = data
+            else:
+                res_fil_curva = "Nada encontrado!"
+            return JsonResponse({'data': res_fil_curva})
     return JsonResponse({})
 
 
