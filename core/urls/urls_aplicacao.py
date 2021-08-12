@@ -14,6 +14,7 @@ from core.multifilial.processa_produtos import a_multifiliais
 urlpatterns = [
     path('search/prod', buscar_produto, name='results-produto'),
     path('search/fornec', buscar_fornecedor, name='results-fornecedor'),
+    path('search/principio', buscar_pricipioativo, name='results-principio'),
     path('filter-fornec/', filtrar_produto_fornecedor, name='filter-fornecedor'),
     path('filter-prod/', filtrar_produto_produto, name='filter-produto'),
     path('filter-curva/', filtrar_produto_curva, name='filter-curva'),

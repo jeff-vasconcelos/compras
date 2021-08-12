@@ -630,6 +630,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 listaProdutosSelecionar.addEventListener('change', e => {
     resultsBoxFornec.classList.add('d-none')
     resultsBoxProd.classList.add('d-none')
+    resultsBoxPrincipio.classList.add('d-none')
 
     // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = e.target.value
@@ -661,6 +662,7 @@ listaProdutosSelecionar.addEventListener('change', e => {
 listaFiliais.addEventListener('change', e => {
     resultsBoxFornec.classList.add('d-none')
     resultsBoxProd.classList.add('d-none')
+    resultsBoxPrincipio.classList.add('d-none')
 
     //PEGANDO FILIAL SELECIONADA
     const filialSelecionada = e.target.value
@@ -694,6 +696,7 @@ listaFiliais.addEventListener('change', e => {
 leadtime.addEventListener('keyup', a => {
     resultsBoxFornec.classList.add('d-none')
     resultsBoxProd.classList.add('d-none')
+    resultsBoxPrincipio.classList.add('d-none')
 
     // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = listaProdutosSelecionar.value
@@ -727,6 +730,7 @@ leadtime.addEventListener('keyup', a => {
 t_reposicao.addEventListener('keyup', a => {
     resultsBoxFornec.classList.add('d-none')
     resultsBoxProd.classList.add('d-none')
+    resultsBoxPrincipio.classList.add('d-none')
 
     // PEGANDO PRODUTO SELECIONADO
     const produtoSelecionado = listaProdutosSelecionar.value

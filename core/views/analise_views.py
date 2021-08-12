@@ -160,6 +160,40 @@ def buscar_fornecedor(request):
     return JsonResponse({})
 
 
+def buscar_pricipioativo(request):
+    empresa = request.user.usuario.empresa_id
+    if request.is_ajax():
+        res = None
+        produto = request.POST.get('produto')
+
+        if len(produto) >= 3:
+            qs = Produto.objects.filter(
+                Q(principio_ativo__icontains=produto),
+                Q(empresa__id__exact=empresa)
+            )[:15]
+
+            if len(qs) > 0 and len(produto) > 0:
+                data = []
+                for prod in qs:
+                    item = {
+                        'pk': prod.pk,
+                        'nome': prod.desc_produto,
+                        'cod': prod.cod_produto,
+                        'emb': prod.embalagem
+                    }
+                    data.append(item)
+                res = data
+            else:
+                res = "Nada encontrado!"
+            return JsonResponse({'data': res})
+
+        else:
+            res = "Continue digitando!"
+        return JsonResponse({'data': res})
+
+    return JsonResponse({})
+
+
 def filtrar_produto_fornecedor(request):
     empresa = request.user.usuario.empresa_id
     if request.is_ajax():
@@ -261,7 +295,6 @@ def filtrar_produto_produto(request):
 def filtrar_produto_curva(request):
     id_empresa = request.user.usuario.empresa_id
     if request.is_ajax():
-        res_fil_curva = None
         id_fornecedor = request.POST.get('fornecedor')
         id_produto = request.POST.get('produto')
 
@@ -344,7 +377,7 @@ def filtrar_produto_curva(request):
                     cod_fornec = i.fornecedor.cod_fornecedor
                     list_fornec.append(cod_fornec)
 
-                curva_f = abc(list_fornec, id_empresa, parametros.periodo)
+                curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
                 curva_f = curva_f.query('curva== @curva')
 
                 if not curva_f.empty:
@@ -354,7 +387,7 @@ def filtrar_produto_curva(request):
                         if items[0] in lista_produto:
                             list_produto.append(int(items[1]))
 
-                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=empresa).order_by(
+                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=id_empresa).order_by(
                         'cod_produto')
 
                     if len(qs) > 0 and len(list_produto) > 0:

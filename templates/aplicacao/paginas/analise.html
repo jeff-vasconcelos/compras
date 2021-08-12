@@ -8,6 +8,7 @@
 {% block scripts %}
 <script src="{% static 'aplicacao/js/pesquisa_fornecedor.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>
+<script src="{% static 'aplicacao/js/pesquisa_principio_ativo.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
 <script src="{% static 'aplicacao/js/filtrar_por_curva.js' %}" defer></script>
@@ -113,13 +114,13 @@
         <div class="form-group">
             <form id="search-f" autocomplete="off">
 
-                <input id="search-fornec" type="text" class="form-control"
+                <input id="search-principio" type="text" class="form-control"
                        name="p_principio_ativo"
                        placeholder="Pesquisar por Princípio Ativo">
 
                 <div class="row">
                     <div class="col check-div-fornec">
-                        <div class="form-check" id="results-box-fornec">
+                        <div class="form-check" id="results-box-principio">
 
                         </div>
                     </div>

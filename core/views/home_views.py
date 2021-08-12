@@ -1,9 +1,11 @@
 from chartjs.views.lines import BaseLineChartView
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
 from core.models.parametros_models import DadosEstoque, GraficoCurva, GraficoRuptura
 
 
+@login_required
 def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
     id_empresa = request.user.usuario.empresa_id

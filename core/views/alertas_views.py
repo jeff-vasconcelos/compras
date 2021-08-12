@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.utils import timezone
 from core.alertas.processa_produtos_alertas import *
@@ -11,11 +12,9 @@ from core.models.parametros_models import Email
 from core.models.usuarios_models import User
 import locale
 from django.utils import timezone
-
-
 from core.trata_dados.home_abc import *
-
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+
 
 def alertas(id_empresa):
     global alertas_produtos, infor_filiais, condicao
@@ -73,6 +72,7 @@ def alertas(id_empresa):
     return lista_alertas
 
 
+@login_required
 def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     id_empresa = request.user.usuario.empresa_id
     produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
