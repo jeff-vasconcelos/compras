@@ -18,6 +18,8 @@ const valor_ruptura = document.getElementById('valor_ruptura')
 const leadtime = document.getElementById('leadtime')
 const t_reposicao = document.getElementById('tempo_reposicao')
 
+const area_graf_um = document.getElementById('div-grafico-um')
+const area_graf_dois = document.getElementById('div-grafico-dois')
 
 const sendSelectProd = (codfilial, prod, lead, t_repo) => {
     $.ajax({
@@ -33,7 +35,6 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
         success: (info_prod) => {
 
             const dados = info_prod.data
-            console.log(dados)
 
             if (dados[0] === 0) {
 
@@ -162,6 +163,16 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 const data = dados[0]
                 const graficos = dados[1]
                 const informacoes = dados[2]
+
+                console.log(graficos.periodo)
+                if (graficos.periodo <= 60){
+                    area_graf_um.style.width = "auto";
+                    area_graf_dois.style.width = "auto";
+                }
+                else if (graficos.periodo > 60){
+                    area_graf_um.style.width = "2000px";
+                    area_graf_dois.style.width = "2000px";
+                }
 
                 $("canvas#ChartSerieHist").remove();
                 $("canvas#ChartCobertura").remove();
@@ -292,12 +303,12 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                                 },
                                 ticks: {
                                     //limite de dias da serie historica
-                                    maxTicksLimit: 120,
+                                    maxTicksLimit: graficos.periodo,
                                     major: {
                                         enabled: true
                                     }
                                 },
-                                maxBarThickness: 250,
+                                // maxBarThickness: 250,
                             }],
                             yAxes: [{
                                 id: 'A',
@@ -412,12 +423,12 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                                     drawBorder: false
                                 },
                                 ticks: {
-                                    maxTicksLimit: 120,
+                                    maxTicksLimit: graficos.periodo,
                                     major: {
                                         enabled: true
                                     }
                                 },
-                                maxBarThickness: 250,
+                                // maxBarThickness: 250,
                             }],
                             yAxes: [{
                                 ticks: {

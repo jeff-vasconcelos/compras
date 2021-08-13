@@ -675,7 +675,8 @@ def mapas_serie(id_empresa, cod_produto, cod_filial, periodo):
         'data_qtvenda': data_qtvenda,
         'label_dt_serie': label_dt_serie,
         'qt_estoque': qt_estoque,
-        'label_dt_serie_est': label_dt_serie_est
+        'label_dt_serie_est': label_dt_serie_est,
+        'periodo': periodo
     }
 
     return item

@@ -456,14 +456,23 @@
             <div class="card shadow mb-4">
                 <div class="card-body" id="grafico-serie-hist">
                     <p class="texto-grafico-analise">Série histórica de vendas</p>
-                    <div style="overflow-x: auto; white-space: nowrap;">
-                        <div class="chart-bar" style="width:2000px;" id="div-grafico-um">
+                    <div id="div-graf-um">
+                        <div class="chart-bar" id="div-grafico-um">
                             <canvas id="ChartSerieHist"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <style>
+            #div-graf-um{
+                overflow-x: auto; white-space: nowrap;
+            }
+            #div-grafico-um{
+                width: 2000px;
+            }
+        </style>
 
         <div class="col-md-12">
             <div class="card shadow mb-4">
