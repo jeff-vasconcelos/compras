@@ -19,6 +19,7 @@ urlpatterns = [
     path('filter-prod/', filtrar_produto_produto, name='filter-produto'),
     path('filter-curva/', filtrar_produto_curva, name='filter-curva'),
     path('filter-marca/', filtrar_produto_marca, name='filter-marca'),
+    path('filter-principio/', filtrar_produto_principio, name='filter-principio'),
     path('select-prod/', selecionar_produto, name='filter-produto'),
 
     # TODO remover path de url

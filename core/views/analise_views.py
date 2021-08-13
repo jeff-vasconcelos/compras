@@ -164,7 +164,7 @@ def buscar_pricipioativo(request):
     empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         res = None
-        produto = request.POST.get('produto')
+        produto = request.POST.get('princ')
 
         if len(produto) >= 3:
             qs = Produto.objects.filter(
@@ -174,13 +174,16 @@ def buscar_pricipioativo(request):
 
             if len(qs) > 0 and len(produto) > 0:
                 data = []
+                principios = []
                 for prod in qs:
+                    if prod.principio_ativo not in principios:
+                        principios.append(prod.principio_ativo)
+
+                for i in principios:
                     item = {
-                        'pk': prod.pk,
-                        'nome': prod.desc_produto,
-                        'cod': prod.cod_produto,
-                        'emb': prod.embalagem
+                        'principio': i,
                     }
+
                     data.append(item)
                 res = data
             else:
@@ -224,13 +227,14 @@ def filtrar_produto_fornecedor(request):
                     'nome': prod.desc_produto,
                     'cod': prod.cod_produto,
                 }
-                if prod.marca not in marcas:
+                if prod.marca not in marcas and prod.marca is not None:
                     marcas.append(prod.marca)
                 data.append(item)
 
             for i in marcas:
                 itens_marcas = {
-                    'marca_p': i
+                    'marca_p': i,
+                    'marca_p_desc': i
                 }
                 marcas_itens.append(itens_marcas)
 
@@ -271,13 +275,14 @@ def filtrar_produto_produto(request):
                     'nome': prod.desc_produto,
                     'cod': prod.cod_produto,
                 }
-                if prod.marca not in marcas:
+                if prod.marca not in marcas and prod.marca is not None:
                     marcas.append(prod.marca)
                 data.append(item)
 
             for i in marcas:
                 itens_marcas = {
-                    'marca_p': i
+                    'marca_p': i,
+                    'marca_p_desc': i
                 }
                 marcas_itens.append(itens_marcas)
 
@@ -414,6 +419,7 @@ def filtrar_produto_marca(request):
         marca = request.POST.get('marca')
         fornecedor = request.POST.get('fornecedor')
         produto = request.POST.get('produto')
+        p_ativo = request.POST.get('principio')
 
         if fornecedor != '':
             fornecedor = fornecedor.replace(",", " ")
@@ -472,6 +478,68 @@ def filtrar_produto_marca(request):
             else:
                 res_fil_curva = "Nada encontrado!"
             return JsonResponse({'data': res_fil_curva})
+
+        if p_ativo != '':
+            principio_ativo = p_ativo.split(",")
+            print(principio_ativo)
+
+            qs = Produto.objects.filter(marca=marca, principio_ativo__in=principio_ativo,
+                                        empresa__id__exact=empresa).order_by('desc_produto')
+            print(qs)
+            if len(qs) > 0:
+                data = []
+                for prod in qs:
+                    item = {
+                        'pk': prod.pk,
+                        'nome': prod.desc_produto,
+                        'cod': prod.cod_produto,
+                    }
+                    data.append(item)
+                res_fil_curva = data
+            else:
+                res_fil_curva = "Nada encontrado!"
+            return JsonResponse({'data': res_fil_curva})
+    return JsonResponse({})
+
+
+def filtrar_produto_principio(request):
+
+    empresa = request.user.usuario.empresa_id
+    if request.is_ajax():
+        p_ativo = request.POST.get('principio')
+        principio_ativo = p_ativo.split(",")
+
+        qs = Produto.objects.filter(principio_ativo__in=principio_ativo, empresa__id__exact=empresa).order_by('desc_produto')
+
+        if len(qs) > 0 and len(principio_ativo) > 0:
+            marcas = []
+            marcas_itens = []
+
+            data = []
+            for prod in qs:
+                item = {
+                    'pk': prod.pk,
+                    'nome': prod.desc_produto,
+                    'cod': prod.cod_produto,
+                }
+                if prod.marca not in marcas and prod.marca is not None:
+                    marcas.append(prod.marca)
+                data.append(item)
+
+            for i in marcas:
+                itens_marcas = {
+                    'marca_p': i,
+                    'marca_p_desc': i
+                }
+                marcas_itens.append(itens_marcas)
+
+
+            res_fil_prod = []
+            res_fil_prod.append(data)
+            res_fil_prod.append(marcas_itens)
+        else:
+            res_fil_prod = "Nada encontrado!"
+        return JsonResponse({'data': res_fil_prod})
     return JsonResponse({})
 
 

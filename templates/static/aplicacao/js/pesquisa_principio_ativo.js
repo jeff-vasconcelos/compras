@@ -1,4 +1,3 @@
-console.log("principio ativo")
 const searchPrincipio = document.getElementById('search-principio')
 const resultsBoxPrincipio = document.getElementById('results-box-principio')
 
@@ -8,7 +7,7 @@ const sendSearchPrincipio = (prod) =>{
         url: '/painel/search/principio',
         data: {
             'csrfmiddlewaretoken': csrf,
-            'produto': prod,
+            'princ': prod,
         },
         success: (res)=> {
             const data = res.data
@@ -16,10 +15,10 @@ const sendSearchPrincipio = (prod) =>{
                 resultsBoxPrincipio.innerHTML = ""
                 data.forEach(prod=> {
                     resultsBoxPrincipio.innerHTML += `
-                    <input name="item-produto" class="form-check-input" type="checkbox" value="${prod.pk}" id="${prod.pk}" 
-                    style="display: block" onclick="selecao_produto()   ">
-                        <label style="display: block" class="form-check-label" for="${prod.pk}">
-                            ${prod.cod} - ${prod.nome}
+                    <input name="item-principio" class="form-check-input" type="checkbox" value="${prod.principio}" id="${prod.principio}" 
+                    style="display: block" onclick="selecao_principio()   ">
+                        <label style="display: block" class="form-check-label" for="${prod.principio}">
+                            ${prod.principio}
                         </label>
                     `
                 })

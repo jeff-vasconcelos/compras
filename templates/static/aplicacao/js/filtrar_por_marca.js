@@ -60,10 +60,30 @@ listaMarcaSelecionar.addEventListener('change', e => {
         }
     }
 
+    for (var i = 0; i < listaPrincipio.length; i++) {
+        if (listaPrincipio[i].checked == true) {
+            const marcado = listaPrincipio[i].value
+
+            if (checkPrincipio.indexOf(marcado) > -1) {
+
+            } else {
+                checkPrincipio.push(marcado)
+            }
+
+        } else if (listaPrincipio[i].checked == false) {
+            const desmarq = listaPrincipio[i].value
+
+            if (checkPrincipio.indexOf(desmarq) > -1) {
+                checkPrincipio.splice(checkPrincipio.indexOf(desmarq), 1)
+            }
+        }
+    }
+
     const marca_selecionada = new FormData()
     marca_selecionada.append('csrfmiddlewaretoken', csrf)
     marca_selecionada.append('fornecedor', checkFornecedor)
     marca_selecionada.append('produto', checkProduto)
+    marca_selecionada.append('principio', checkPrincipio)
     marca_selecionada.append('marca', marcaSelecionada)
 
     enviarSelectMarca(marca_selecionada)
