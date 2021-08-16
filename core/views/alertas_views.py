@@ -123,6 +123,26 @@ def alerta_por_curva(request, curva, template_name='aplicacao/paginas/alertas.ht
     return render(request, template_name, contexto)
 
 
+def alerta_por_condicao(request, condicao, template_name='aplicacao/paginas/alertas.html'):
+    id_empresa = request.user.usuario.empresa_id
+    cond = condicao.upper()
+
+    if cond == 'todos':
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=cond)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
 def alerta_db(id_empresa, produtos):
 
     itens = Alerta.objects.all().filter(

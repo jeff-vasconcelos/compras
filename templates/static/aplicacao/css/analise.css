@@ -90,6 +90,14 @@ button.ver-pedido {
     font-size: 12px;
     margin-left: 10px;
 }
+a.ver-pedido {
+    background-color: #4791ff;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-left: 10px;
+}
 button.ver-pedido:hover, button.ver-pedido:focus{
     background-color: #4791ff;
 }

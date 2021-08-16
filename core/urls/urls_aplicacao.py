@@ -23,6 +23,7 @@ urlpatterns = [
     path('select-prod/', selecionar_produto, name='filter-produto'),
 
     path('alertas/curva/<str:curva>', alerta_por_curva, name='filter-filial-curva'),
+    path('alertas/condicao/<str:condicao>', alerta_por_condicao, name='filter-filial-condicao'),
     path('alertas/filial/<int:filial>', alerta_por_filial, name='filter-filial-alerta'),
 
     # TODO remover path de url
