@@ -28,7 +28,7 @@ class FornecedorAdmin(admin.ModelAdmin):
 
 
 class Pedidos(admin.ModelAdmin):
-    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa')
+    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto', )
     search_fields = ('cod_produto', )
     list_filter = ('empresa',)
@@ -36,7 +36,7 @@ class Pedidos(admin.ModelAdmin):
 
 
 class Historico(admin.ModelAdmin):
-    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa')
+    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto',)
     search_fields = ('cod_produto',)
     list_filter = ('empresa',)
@@ -52,7 +52,7 @@ class Vendas(admin.ModelAdmin):
 
 
 class EstoqueAtual(admin.ModelAdmin):
-    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa')
+    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto',)
     search_fields = ('cod_produto', )
     list_filter = ('empresa',)
@@ -60,7 +60,7 @@ class EstoqueAtual(admin.ModelAdmin):
 
 
 class UltEntrada(admin.ModelAdmin):
-    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa')
+    list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto',)
     search_fields = ('cod_produto',)
     list_filter = ('empresa',)

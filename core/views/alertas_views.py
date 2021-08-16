@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
+from django.http import JsonResponse
 from django.utils import timezone
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
@@ -76,8 +77,50 @@ def alertas(id_empresa):
 def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
     id_empresa = request.user.usuario.empresa_id
     produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
 
-    return render(request, template_name, {'produtos': produtos})
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_por_filial(request, filial, template_name='aplicacao/paginas/alertas.html'):
+    id_empresa = request.user.usuario.empresa_id
+    if filial == 0:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, cod_filial=filial)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_por_curva(request, curva, template_name='aplicacao/paginas/alertas.html'):
+    id_empresa = request.user.usuario.empresa_id
+    if curva == 'todos':
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, curva=curva)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
 
 
 def alerta_db(id_empresa, produtos):

@@ -1,9 +1,14 @@
 {% extends 'aplicacao/base.html' %}
-
+{% load static %}
 
 {% block title %}
     <title>Alertas - Insight</title>
 {% endblock title %}
+
+
+{% block scripts %}
+    <script src="{% static 'aplicacao/js/filtrar_alertas.js' %}" defer></script>
+{% endblock scripts %}
 
 
 {% block conteudo %}
@@ -24,57 +29,57 @@
     <hr>
     <div class="card shadow mb-4">
 
-        <!--
+
         <div class="card-header py-3">
             <div class="row">
+                <!--
+                <div class="col-9">
 
-                <div class="col-6">
-                    <h6 class="m-0 font-weight-bold">Alertas</h6>
                 </div>
+                -->
+                <div class="col-12">
+                    <div class="row float-right">
 
-                <div class="col-6">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label">Curva</label>
-                                <select class="form-select">
-                                    <option selected>Todos</option>
-                                    <option>Curva A</option>
-                                    <option>Curva B</option>
-                                    <option>Curva C</option>
-                                    <option>Curva D</option>
-                                    <option>Curva E</option>
-                                </select>
+                        <div class="col" style="flex-grow: 0">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        id="dropdownMenuCurva">
+                                    Curva
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuCurva">
+                                    <a class="dropdown-item" href="{% url 'filter-filial-curva' "todos" %}">Todas as curvas</a>
+                                    <a class="dropdown-item" href="{% url 'filter-filial-curva' "A" %}">Curva A</a>
+                                    <a class="dropdown-item" href="{% url 'filter-filial-curva' "B" %}">Curva B</a>
+                                    <a class="dropdown-item" href="{% url 'filter-filial-curva' "C" %}">Curva C</a>
+                                    <a class="dropdown-item" href="{% url 'filter-filial-curva' "D" %}">Curva D</a>
+                                    <a class="dropdown-item" href="{% url 'filter-filial-curva' "E" %}">Curva E</a>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label">Estoque</label>
-                                <select class="form-select">
-                                    <option selected>Todas</option>
-                                    <option>Normal</option>
-                                    <option>Rup. Parcial</option>
-                                    <option>Ruptura</option>
-                                    <option>Excesso</option>
-                                </select>
+                        <div class="col" style="flex-grow: 0">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        id="dropdownMenuFilial">
+                                    Filial
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuFilial">
+                                    <a class="dropdown-item" href="{% url 'filter-filial-alerta' 0 %}">Todas as filiais</a>
+
+                                    {% for filial in filiais %}
+                                    <a class="dropdown-item" href="{% url 'filter-filial-alerta' filial.cod_filial %}">{{ filial.desc_filial }}</a>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label">Filial</label>
-                                <select class="form-select">
-                                    <option selected>Todas</option>
-                                    <option>Matriz</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        -->
+
 
         <div class="card-body">
             <div class="table-responsive">
@@ -90,6 +95,7 @@
                         <th>Valor</th>
                         <th>Curva</th>
                         <th>Fornecedor</th>
+                        <th>Ações</th>
                     </tr>
                     </thead>
 
@@ -107,6 +113,10 @@
                                     <td class="numero">{{ produto.vl_excesso }}</td>
                                     <td class="curva">{{ produto.curva }}</td>
                                     <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                    <td>
+                                        Ação 1 <br>
+                                        Ação 2
+                                    </td>
 
                                 </tr>
                             {% elif produto.estado_estoque == "PARCIAL" %}
@@ -120,6 +130,10 @@
                                     <td class="numero">{{ produto.valor }}</td>
                                     <td class="curva">{{ produto.curva }}</td>
                                     <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                    <td>
+                                        Ação 1 <br>
+                                        Ação 2
+                                    </td>
                                 </tr>
 
                             {% elif produto.estado_estoque == "RUPTURA" %}
@@ -133,6 +147,10 @@
                                     <td class="numero">{{ produto.valor }}</td>
                                     <td class="curva">{{ produto.curva }}</td>
                                     <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                    <td>
+                                        Ação 1 <br>
+                                        Ação 2
+                                    </td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
