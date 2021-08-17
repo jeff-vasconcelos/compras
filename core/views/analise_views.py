@@ -789,14 +789,15 @@ def export_csv(request) -> object:
     espaco = " "
     ultimo = usuario.last_name
 
-    numero = id_empresa
-    numero = str(numero)
+    num_empresa = id_empresa
+    num_empresa = str(num_empresa)
+    num_user = str(id_usuario)
 
     data = datetime.datetime.now().strftime("%d%m%Y%H%M")
 
     # SALVAR EM PEDIDOS FEITOS
     p = PedidoInsight.objects.create(
-        numero=f'{numero}-{data}',
+        numero=f'{data}/{num_empresa}-{num_user}',
         usuario=primeiro + espaco + ultimo,
         empresa=empresa
     )
@@ -806,11 +807,14 @@ def export_csv(request) -> object:
     for value in pedido.values():
         temp = value
 
+        pr = temp['ped_pr_compra']
+        preco = locale.currency(pr, grouping=True)
+
         p_i = PedidoInsightItens.objects.create(
             cod_produto=temp['ped_produto_cod'],
             desc_produto=temp['ped_produto_nome'],
             cod_filial=temp['ped_cod_filial'],
-            preco=temp['ped_pr_compra'],
+            preco=preco,
             quantidade=temp['ped_qt_digitada'],
             pedido=p
         )
