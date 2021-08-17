@@ -7,6 +7,7 @@ from core.views.home_views import *
 from core.views.analise_views import *
 from core.views.alertas_views import *
 from core.views.configuracao_views import *
+from core.trata_dados.generate_pdf import *
 
 
 from core.multifilial.processa_produtos import a_multifiliais
@@ -64,7 +65,7 @@ urlpatterns = [
 
     #TODO rota de testes
     path('testando/', teste, name='testando'),
-    path('teste/', get_all_logged_in_users, name='get_all_logged_in_users'),
+    path('teste/', pdf_pedidos_insight, name='get_all_logged_in_users'),
 
     #path('graficos_home', DadosGrafico, name='graficos_home')
 

@@ -54,12 +54,20 @@ class EmailAdmin(admin.ModelAdmin):
     list_per_page = 40
 
 
+class ItemPedidoInline(admin.TabularInline):
+    model = PedidoInsightItens
+    extra = 1
+
+
 class PedidoInsAdmin(admin.ModelAdmin):
     list_display = ('id', 'empresa', 'usuario', 'created_at')
     list_display_links = ('id', 'empresa',)
     search_fields = ('empresa',)
     list_filter = ('empresa',)
     list_per_page = 40
+    inlines = [
+        ItemPedidoInline
+    ]
 
 
 admin.site.register(Empresa, EmpresaAdmin)
