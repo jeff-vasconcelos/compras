@@ -20,12 +20,12 @@ def login_painel(request, template_name="aplicacao/login/login.html"):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
 
-        usuario = User.objects.get(username=username)
-        id_empresa = usuario.usuario.empresa.pk
-        qt_logados, qt_empresa = get_all_logged_in_users(id_empresa)
-
         if user is not None:
             if user.is_active == True:
+
+                usuario = User.objects.get(username=username)
+                id_empresa = usuario.usuario.empresa.pk
+                qt_logados, qt_empresa = get_all_logged_in_users(id_empresa)
 
                 if qt_logados >= qt_empresa:
                     messages.error(request, "Ops, Excedido o número máximo de usuários conectados!")

@@ -24,7 +24,7 @@ urlpatterns = [
     path('api-token-auth', views.obtain_auth_token, name='api-token-auth'),
     path('administracao/painel/', include('core.urls.urls_administracao')),
     path('painel/', include('core.urls.urls_aplicacao')),
-    path('acesso/', include('core.urls.urls_login')),
+    path('', include('core.urls.urls_login')),
 
     #TODO Remover rota debug_toolbar
     path('__debug__/', include(debug_toolbar.urls)),

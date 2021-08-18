@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 #ALLOWED_HOSTS = ['insight.ecluster.com.br', '177.136.201.66']
 
 
-LOGIN_URL = '/acesso/login'
+LOGIN_URL = '/'
 
 
 # Application definition
@@ -108,7 +108,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME', 'CLUSTER'),
+        'NAME': os.environ.get('DB_NAME', 'cluster'),
         'USER': os.environ.get('DB_USER', 'cluster'),
         'PASSWORD': os.environ.get('DB_PASS', 'clus123ter'),
         'HOST': '172.30.126.3',
@@ -188,7 +188,8 @@ EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
 
 
 # Sessão em dias: 60s * 60m * 24h * 1d
-SESSION_COOKIE_AGE = 60 * 60 * 12 * 1
+# SESSION_COOKIE_AGE = 60 * 60 * 12 * 1
+SESSION_COOKIE_AGE = 1800
 
 # Salvar a cada requisição
 SESSION_SAVE_EVERY_REQUEST = False
@@ -206,3 +207,5 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Sao_Paulo'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None

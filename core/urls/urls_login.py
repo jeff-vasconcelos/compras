@@ -4,7 +4,7 @@ from core.views.usuario_views import *
 
 
 urlpatterns = [
-    path('login/', login_painel, name='login'),
+    path('', login_painel, name='login'),
     path('logout', logout_painel, name='logout'),
 
 
