@@ -17,6 +17,181 @@ from core.trata_dados.home_abc import *
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
+@login_required
+def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
+    id_empresa = request.user.usuario.empresa_id
+    produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+# ALERTA EXCESSO
+@login_required
+def alerta_all_excesso(request, template_name='aplicacao/paginas/alertas/excesso.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "EXCESSO"
+    produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_excesso_filial(request, filial, template_name='aplicacao/paginas/alertas/excesso.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "EXCESSO"
+    if filial == 0:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, cod_filial=filial, estado_estoque=estado)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_excesso_curva(request, curva, template_name='aplicacao/paginas/alertas/excesso.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "EXCESSO"
+    if curva == 'todos':
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, curva=curva, estado_estoque=estado)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+# ALERTA PARCIAL
+@login_required
+def alerta_all_parcial(request, template_name='aplicacao/paginas/alertas/parcial.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "PARCIAL"
+    produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_parcial_filial(request, filial, template_name='aplicacao/paginas/alertas/parcial.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "PARCIAL"
+    if filial == 0:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, cod_filial=filial, estado_estoque=estado)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_parcial_curva(request, curva, template_name='aplicacao/paginas/alertas/parcial.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "PARCIAL"
+    if curva == 'todos':
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, curva=curva, estado_estoque=estado)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+# ALERTA RUPTURA
+@login_required
+def alerta_all_ruptura(request, template_name='aplicacao/paginas/alertas/ruptura.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "RUPTURA"
+    produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_ruptura_filial(request, filial, template_name='aplicacao/paginas/alertas/ruptura.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "RUPTURA"
+    if filial == 0:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, cod_filial=filial, estado_estoque=estado)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
+def alerta_ruptura_curva(request, curva, template_name='aplicacao/paginas/alertas/ruptura.html'):
+    id_empresa = request.user.usuario.empresa_id
+    estado = "RUPTURA"
+    if curva == 'todos':
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=estado)
+
+    else:
+        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, curva=curva, estado_estoque=estado)
+
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+
+    contexto = {
+        'produtos': produtos,
+        'filiais': filiais,
+    }
+
+    return render(request, template_name, contexto)
+
+
 def alertas(id_empresa):
     global alertas_produtos, infor_filiais, condicao
 
@@ -72,76 +247,6 @@ def alertas(id_empresa):
 
                     lista_alertas.append(alertas_produtos)
     return lista_alertas
-
-
-@login_required
-def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
-    id_empresa = request.user.usuario.empresa_id
-    produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
-
-    contexto = {
-        'produtos': produtos,
-        'filiais': filiais,
-    }
-
-    return render(request, template_name, contexto)
-
-
-def alerta_por_filial(request, filial, template_name='aplicacao/paginas/alertas.html'):
-    id_empresa = request.user.usuario.empresa_id
-    if filial == 0:
-        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
-
-    else:
-        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, cod_filial=filial)
-
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
-
-    contexto = {
-        'produtos': produtos,
-        'filiais': filiais,
-    }
-
-    return render(request, template_name, contexto)
-
-
-def alerta_por_curva(request, curva, template_name='aplicacao/paginas/alertas.html'):
-    id_empresa = request.user.usuario.empresa_id
-    if curva == 'todos':
-        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
-
-    else:
-        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, curva=curva)
-
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
-
-    contexto = {
-        'produtos': produtos,
-        'filiais': filiais,
-    }
-
-    return render(request, template_name, contexto)
-
-
-def alerta_por_condicao(request, condicao, template_name='aplicacao/paginas/alertas.html'):
-    id_empresa = request.user.usuario.empresa_id
-    cond = condicao.upper()
-
-    if cond == 'todos':
-        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
-
-    else:
-        produtos = Alerta.objects.filter(empresa__id__exact=id_empresa, estado_estoque=cond)
-
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
-
-    contexto = {
-        'produtos': produtos,
-        'filiais': filiais,
-    }
-
-    return render(request, template_name, contexto)
 
 
 def alerta_db(id_empresa, produtos):

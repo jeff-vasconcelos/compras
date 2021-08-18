@@ -26,9 +26,16 @@ urlpatterns = [
     path('select-prod/', selecionar_produto, name='filter-produto'),
 
     # ALERTAS
-    path('alertas/curva/<str:curva>', alerta_por_curva, name='filter-filial-curva'),
-    path('alertas/condicao/<str:condicao>', alerta_por_condicao, name='filter-filial-condicao'),
-    path('alertas/filial/<int:filial>', alerta_por_filial, name='filter-filial-alerta'),
+    path('alertas/excesso/curva/<str:curva>', alerta_excesso_curva, name='alerta_excesso_curva'),
+    path('alertas/excesso/filial/<int:filial>', alerta_excesso_filial, name='alerta_excesso_filial'),
+    path('alertas/parcial/curva/<str:curva>', alerta_parcial_curva, name='alerta_parcial_curva'),
+    path('alertas/parcial/filial/<int:filial>', alerta_parcial_filial, name='alerta_parcial_filial'),
+    path('alertas/ruptura/curva/<str:curva>', alerta_ruptura_curva, name='alerta_ruptura_curva'),
+    path('alertas/ruptura/filial/<int:filial>', alerta_ruptura_filial, name='alerta_ruptura_filial'),
+
+    path('alertas/excesso/', alerta_all_excesso, name='alerta_all_excesso'),
+    path('alertas/parcial/', alerta_all_parcial, name='alerta_all_parcial'),
+    path('alertas/ruptura/', alerta_all_ruptura, name='alerta_all_ruptura'),
 
     # PEDIDOS
     path('add-produto-pedido/', add_prod_pedido_sessao, name='add-prod-pedido-sessao'),
@@ -66,8 +73,11 @@ urlpatterns = [
 
     # PDFS
     path('pdf/pedidos/<int:pk>', pdf_pedidos_insight, name='pdf_pedidos_insight'),
+    path('pdf/alertas/excesso/', pdf_excesso, name='pdf_excesso'),
+    path('pdf/alertas/parcial/', pdf_parcial, name='pdf_parcial'),
+    path('pdf/alertas/ruptura/', pdf_ruptura, name='pdf_ruptura'),
 
-    #TODO rota de testes
+    # TODO rota de testes
     path('testando/', teste, name='testando'),
     path('teste/', pdf_pedidos_insight, name='get_all_logged_in_users'),
 

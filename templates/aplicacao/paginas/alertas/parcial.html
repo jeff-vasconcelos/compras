@@ -1,0 +1,153 @@
+{% extends 'aplicacao/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Alertas - Insight</title>
+{% endblock title %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-6">
+            <h2>Alertas</h2>
+        </div>
+        <div class="col-6 float-right" style="text-align: right; padding-top: 10px">
+            {% if request.user.usuario.empresa.atualizacao_alerta %}
+                <h6>Atualizado em: {{ request.user.usuario.empresa.atualizacao_alerta }}</h6>
+            {% else %}
+                <h6></h6>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <hr>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+
+                <div class="col-6 float-left">
+
+                    <a href="{% url 'pdf_parcial' %}" type="button"
+                       class="btn btn-primary btn-sm">
+                        <i class="fas fa-print"></i> Imprimir
+                    </a>
+
+                </div>
+
+                <div class="col-6">
+                    <div class="row float-right">
+
+                        <div class="col" style="flex-grow: 0">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        id="dropdownMenuCurva">
+                                    Curva
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuCurva">
+                                    <a class="dropdown-item" href="{% url 'alerta_parcial_curva' "todos" %}">Todas as
+                                        curvas</a>
+                                    <a class="dropdown-item" href="{% url 'alerta_parcial_curva' "A" %}">Curva A</a>
+                                    <a class="dropdown-item" href="{% url 'alerta_parcial_curva' "B" %}">Curva B</a>
+                                    <a class="dropdown-item" href="{% url 'alerta_parcial_curva' "C" %}">Curva C</a>
+                                    <a class="dropdown-item" href="{% url 'alerta_parcial_curva' "D" %}">Curva D</a>
+                                    <a class="dropdown-item" href="{% url 'alerta_parcial_curva' "E" %}">Curva E</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col" style="flex-grow: 0">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        id="dropdownMenuFilial">
+                                    Filial
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuFilial">
+                                    <a class="dropdown-item" href="{% url 'alerta_parcial_filial' 0 %}">Todas as
+                                        filiais</a>
+
+                                    {% for filial in filiais %}
+                                        <a class="dropdown-item"
+                                           href="{% url 'alerta_parcial_filial' filial.cod_filial %}">{{ filial.desc_filial }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Filial</th>
+                        <th>Produto</th>
+                        <th>Condição Est.</th>
+                        <th>Estoque</th>
+                        <th>Pedido Pend.</th>
+                        <th>Quantidade</th>
+                        <th>Valor</th>
+                        <th>Curva</th>
+                        <th>DDE</th>
+                        <th>Fornecedor</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if produtos %}
+                        {% for produto in produtos %}
+
+                            <tr class="parcial">
+                                <td class="status">{{ produto.cod_filial }}</td>
+                                <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                <td class="status parcial">{{ produto.estado_estoque }}</td>
+                                <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.valor }}</td>
+                                <td class="curva">{{ produto.curva }}</td>
+                                <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
+                                <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
+                                <td>
+                                    Ação 1 <br>
+                                    Ação 2
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <style>
+
+        tr.excesso, tr.ruptura, tr.parcial {
+            font-size: 12px;
+        }
+
+        td.parcial {
+            background-color: #ffa500;
+            color: #FFFFFF;
+        }
+
+        td.numero {
+            text-align: right;
+        }
+
+        td.curva, td.status {
+            text-align: center;
+        }
+
+    </style>
+
+{% endblock %}

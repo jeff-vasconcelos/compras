@@ -94,7 +94,11 @@ p.empresa-usuario-logado{
     color: #707070;
 }
 
-
+a.links_alerta {
+    color: #707070;
+    padding: 8px 10px;
+    font-family: Montserrat-Light;
+}
 /* ANALISE LATERAL */
 #link-anali-lat{
     color: #707070;
