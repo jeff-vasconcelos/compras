@@ -270,10 +270,12 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         estoque_disponivel = prod_resumo.estoque_dispon[0]
 
-        if media_ajustada <= 0:
-            dde = estoque_disponivel / media
-        else:
-            dde = estoque_disponivel / media_ajustada
+        # if media_ajustada <= 0:
+        #     dde = estoque_disponivel / media
+        # else:
+        #     dde = estoque_disponivel / media_ajustada
+
+        dde = estoque_disponivel / media
 
         ruptura = locale.currency(ruptura, grouping=True)
         prod_resumo['ruptura'] = ruptura
