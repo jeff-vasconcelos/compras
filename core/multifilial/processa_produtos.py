@@ -268,42 +268,79 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         temp_est = fornecedor.tempo_estoque
 
+        t_reposicao = tempo_reposicao
 
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
-        if temp_est < dde:
-            tamanho = media_ajustada * temp_est
-            qt_excesso = est_disponivel - tamanho
-            valor_e = qt_excesso * preco_custo
+        if t_reposicao > temp_est:
+            if t_reposicao < dde:
+                tamanho = media_ajustada * temp_est
+                qt_excesso = est_disponivel - tamanho
+                valor_e = qt_excesso * preco_custo
 
-            vl_e = valor_e.round(2)
-            vl_excesso = locale.currency(vl_e, grouping=True)
+                vl_e = valor_e.round(2)
+                vl_excesso = locale.currency(vl_e, grouping=True)
 
-            prod_resumo['qt_excesso'] = qt_excesso.round(0)
-            prod_resumo['vl_excesso'] = vl_excesso
-            prod_resumo['sugestao'] = 0
-            condicao_estoque = 'EXCESSO'
+                prod_resumo['qt_excesso'] = qt_excesso.round(0)
+                prod_resumo['vl_excesso'] = vl_excesso
+                prod_resumo['sugestao'] = 0
+                condicao_estoque = 'EXCESSO'
 
-        elif temp_est >= dde > dde_ponto_rep:
-            vl_e = 0
-            vl_excesso = locale.currency(vl_e, grouping=True)
-            prod_resumo['qt_excesso'] = 0
-            prod_resumo['vl_excesso'] = vl_excesso
-            condicao_estoque = 'NORMAL'
+            elif t_reposicao >= dde > dde_ponto_rep:
+                vl_e = 0
+                vl_excesso = locale.currency(vl_e, grouping=True)
+                prod_resumo['qt_excesso'] = 0
+                prod_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'NORMAL'
 
-        elif dde_ponto_rep >= dde > 0:
-            vl_e = 0
-            vl_excesso = locale.currency(vl_e, grouping=True)
-            prod_resumo['qt_excesso'] = 0
-            prod_resumo['vl_excesso'] = vl_excesso
-            condicao_estoque = 'PARCIAL'
+            elif dde_ponto_rep >= dde > 0:
+                vl_e = 0
+                vl_excesso = locale.currency(vl_e, grouping=True)
+                prod_resumo['qt_excesso'] = 0
+                prod_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'PARCIAL'
+
+            else:
+                vl_e = 0
+                vl_excesso = locale.currency(vl_e, grouping=True)
+                prod_resumo['qt_excesso'] = 0
+                prod_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'RUPTURA'
 
         else:
-            vl_e = 0
-            vl_excesso = locale.currency(vl_e, grouping=True)
-            prod_resumo['qt_excesso'] = 0
-            prod_resumo['vl_excesso'] = vl_excesso
-            condicao_estoque = 'RUPTURA'
+            if temp_est < dde:
+                tamanho = media_ajustada * temp_est
+                qt_excesso = est_disponivel - tamanho
+                valor_e = qt_excesso * preco_custo
+
+                vl_e = valor_e.round(2)
+                vl_excesso = locale.currency(vl_e, grouping=True)
+
+                prod_resumo['qt_excesso'] = qt_excesso.round(0)
+                prod_resumo['vl_excesso'] = vl_excesso
+                prod_resumo['sugestao'] = 0
+                condicao_estoque = 'EXCESSO'
+
+            elif temp_est >= dde > dde_ponto_rep:
+                vl_e = 0
+                vl_excesso = locale.currency(vl_e, grouping=True)
+                prod_resumo['qt_excesso'] = 0
+                prod_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'NORMAL'
+
+            elif dde_ponto_rep >= dde > 0:
+                vl_e = 0
+                vl_excesso = locale.currency(vl_e, grouping=True)
+                prod_resumo['qt_excesso'] = 0
+                prod_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'PARCIAL'
+
+            else:
+                vl_e = 0
+                vl_excesso = locale.currency(vl_e, grouping=True)
+                prod_resumo['qt_excesso'] = 0
+                prod_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'RUPTURA'
 
         prod_resumo['condicao_estoque'] = condicao_estoque
 

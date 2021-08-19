@@ -164,7 +164,6 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 const graficos = dados[1]
                 const informacoes = dados[2]
 
-                console.log(graficos.periodo)
                 if (graficos.periodo <= 60){
                     area_graf_um.style.width = "auto";
                     area_graf_dois.style.width = "auto";
