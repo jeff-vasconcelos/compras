@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from core.models.empresas_models import Empresa
+from core.models.empresas_models import Empresa, Filial
 from core.forms.empresas_forms import EmpresasForm
 from core.models.usuarios_models import Usuario
+from core.models.parametros_models import Parametro, Email
 
 
 """
@@ -78,8 +79,19 @@ def editar_empresa(request, pk, template_name='administracao/empresas/empresas_f
 def detalhes_empresa(request, pk, template_name='administracao/empresas/empresas_detalhes.html'):
     empresa = get_object_or_404(Empresa, pk=pk)
     usuarios = Usuario.objects.filter(empresa=empresa.pk)
+    configuracoes = Parametro.objects.get(empresa=empresa.pk)
+    emails = Email.objects.filter(empresa=empresa.pk)
+    filiais = Filial.objects.filter(empresa=empresa.pk)
 
-    return render(request, template_name, {'empresa': empresa, 'usuarios': usuarios})
+    contexto = {
+        'empresa': empresa,
+        'usuarios': usuarios,
+        'configuracoes': configuracoes,
+        'emails': emails,
+        'filiais': filiais
+    }
+
+    return render(request, template_name, contexto)
 
 
 @login_required
