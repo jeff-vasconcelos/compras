@@ -20,7 +20,8 @@ class ProdutoSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'produto': "registro já existe!"})
 
         fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
+        empresa = data['empresa']
+        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
 
         if not fornec:
             raise serializers.ValidationError({'fornecedor': "registro não existente"})
@@ -50,10 +51,11 @@ class EstoqueAtualSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'estoque atual': "registro já existe!"})
 
         fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
+        empresa = data['empresa']
+        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
 
         produto = data['cod_produto']
-        produt = Produto.objects.filter(cod_produto=produto)
+        produt = Produto.objects.filter(cod_produto=produto, empresa=empresa)
 
         if not fornec:
             raise serializers.ValidationError({'fornecedor': "registro não existente"})
@@ -73,10 +75,11 @@ class HistEstoqueSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'historico estoque': "registro já existe!"})
 
         fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
+        empresa = data['empresa']
+        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
 
         produto = data['cod_produto']
-        produt = Produto.objects.filter(cod_produto=produto)
+        produt = Produto.objects.filter(cod_produto=produto, empresa=empresa)
 
         if not fornec:
             raise serializers.ValidationError({'fornecedor': "registro não existente"})
@@ -97,10 +100,11 @@ class PedidoSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'pedido de compra': "registro já existe!"})
 
         fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
+        empresa = data['empresa']
+        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
 
         produto = data['cod_produto']
-        produt = Produto.objects.filter(cod_produto=produto)
+        produt = Produto.objects.filter(cod_produto=produto, empresa=empresa)
 
         if not fornec:
             raise serializers.ValidationError({'fornecedor': "registro não existente"})
@@ -121,10 +125,11 @@ class UltEntradaSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'ultima entrada': "registro já existe!"})
 
         fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
+        empresa = data['empresa']
+        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
 
         produto = data['cod_produto']
-        produt = Produto.objects.filter(cod_produto=produto)
+        produt = Produto.objects.filter(cod_produto=produto, empresa=empresa)
 
         if not fornec:
             raise serializers.ValidationError({'fornecedor': "registro não existente"})
@@ -145,10 +150,11 @@ class VendasSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'venda': "registro já existe!"})
 
         fornecedor = data['cod_fornecedor']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor)
+        empresa = data['empresa']
+        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
 
         produto = data['cod_produto']
-        produt = Produto.objects.filter(cod_produto=produto)
+        produt = Produto.objects.filter(cod_produto=produto, empresa=empresa)
 
         if not fornec:
             raise serializers.ValidationError({'fornecedor': "registro não existente"})
