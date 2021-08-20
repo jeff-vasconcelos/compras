@@ -236,12 +236,6 @@ def db_grafico_um(id_empresa, produtos):
 
 def dados_estoque_home(produtos):
 
-    sku = 0
-    cont_normal = 0
-    cont_excesso = 0
-    cont_parcial = 0
-    cont_ruptura = 0
-
     list_a = []
     list_b = []
     list_c = []
@@ -265,126 +259,159 @@ def dados_estoque_home(produtos):
             list_e.append(x)
 
     #CURVA A
+    sku_a = 0
+    cont_normal_a = 0
+    cont_excesso_a = 0
+    cont_parcial_a = 0
+    cont_ruptura_a = 0
+
     for a in list_a:
-        sku = sku + 1
+        sku_a = sku_a + 1
 
         if a['condicao_estoque'] == "NORMAL":
-            cont_normal = cont_normal + 1
+            cont_normal_a = cont_normal_a + 1
 
         elif a['condicao_estoque'] == "EXCESSO":
-            cont_excesso = cont_excesso + 1
+            cont_excesso_a = cont_excesso_a + 1
 
         elif a['condicao_estoque'] == "PARCIAL":
-            cont_parcial = cont_parcial + 1
+            cont_parcial_a = cont_parcial_a + 1
 
         elif a['condicao_estoque'] == "RUPTURA":
-            cont_ruptura = cont_ruptura + 1
+            cont_ruptura_a = cont_ruptura_a + 1
 
     curva_a = {
         'curva': 'A',
-        'skus': sku,
-        'normal': cont_normal,
-        'excesso': cont_excesso,
-        'parcial': cont_parcial,
-        'ruptura': cont_ruptura
+        'skus': sku_a,
+        'normal': cont_normal_a,
+        'excesso': cont_excesso_a,
+        'parcial': cont_parcial_a,
+        'ruptura': cont_ruptura_a
     }
 
     #CURVA B
+    sku_b = 0
+    cont_normal_b = 0
+    cont_excesso_b = 0
+    cont_parcial_b = 0
+    cont_ruptura_b = 0
+
     for b in list_b:
-        sku = sku + 1
+        sku_b = sku_b + 1
 
         if b['condicao_estoque'] == "NORMAL":
-            cont_normal = cont_normal + 1
+            cont_normal_b = cont_normal_b + 1
 
         elif b['condicao_estoque'] == "EXCESSO":
-            cont_excesso = cont_excesso + 1
+            cont_excesso_b = cont_excesso_b + 1
 
         elif b['condicao_estoque'] == "PARCIAL":
-            cont_parcial = cont_parcial + 1
+            cont_parcial_b = cont_parcial_b + 1
 
         elif b['condicao_estoque'] == "RUPTURA":
-            cont_ruptura = cont_ruptura + 1
+            cont_ruptura_b = cont_ruptura_b + 1
 
     curva_b = {
         'curva': 'B',
-        'skus': sku,
-        'normal': cont_normal,
-        'excesso': cont_excesso,
-        'parcial': cont_parcial,
-        'ruptura': cont_ruptura
+        'skus': sku_b,
+        'normal': cont_normal_b,
+        'excesso': cont_excesso_b,
+        'parcial': cont_parcial_b,
+        'ruptura': cont_ruptura_b
     }
 
     #CURVA C
+    sku_c = 0
+    cont_normal_c = 0
+    cont_excesso_c = 0
+    cont_parcial_c = 0
+    cont_ruptura_c = 0
+
     for c in list_c:
-        sku = sku + 1
+        sku_c = sku_c + 1
 
         if c['condicao_estoque'] == "NORMAL":
-            cont_normal = cont_normal + 1
+            cont_normal_c = cont_normal_c + 1
 
         elif c['condicao_estoque'] == "EXCESSO":
-            cont_excesso = cont_excesso + 1
+            cont_excesso_c = cont_excesso_c + 1
 
         elif c['condicao_estoque'] == "PARCIAL":
-            cont_parcial = cont_parcial + 1
+            cont_parcial_c = cont_parcial_c + 1
 
         elif c['condicao_estoque'] == "RUPTURA":
-            cont_ruptura = cont_ruptura + 1
+            cont_ruptura_c = cont_ruptura_c + 1
 
     curva_c = {
         'curva': 'C',
-        'skus': sku,
-        'normal': cont_normal,
-        'excesso': cont_excesso,
-        'parcial': cont_parcial,
-        'ruptura': cont_ruptura
+        'skus': sku_c,
+        'normal': cont_normal_c,
+        'excesso': cont_excesso_c,
+        'parcial': cont_parcial_c,
+        'ruptura': cont_ruptura_c
     }
 
+    #CURVA D
+
+    sku_d = 0
+    cont_normal_d = 0
+    cont_excesso_d = 0
+    cont_parcial_d = 0
+    cont_ruptura_d = 0
+
     for d in list_d:
-        sku = sku + 1
+        sku_d = sku_d + 1
 
         if d['condicao_estoque'] == "NORMAL":
-            cont_normal = cont_normal + 1
+            cont_normal_d = cont_normal_d + 1
 
         elif d['condicao_estoque'] == "EXCESSO":
-            cont_excesso = cont_excesso + 1
+            cont_excesso_d = cont_excesso_d + 1
 
         elif d['condicao_estoque'] == "PARCIAL":
-            cont_parcial = cont_parcial + 1
+            cont_parcial_d = cont_parcial_d + 1
 
         elif d['condicao_estoque'] == "RUPTURA":
-            cont_ruptura = cont_ruptura + 1
+            cont_ruptura_d = cont_ruptura_d + 1
 
     curva_d = {
         'curva': 'D',
-        'skus': sku,
-        'normal': cont_normal,
-        'excesso': cont_excesso,
-        'parcial': cont_parcial,
-        'ruptura': cont_ruptura
+        'skus': sku_d,
+        'normal': cont_normal_d,
+        'excesso': cont_excesso_d,
+        'parcial': cont_parcial_d,
+        'ruptura': cont_ruptura_d
     }
 
+    #CURVA E
+    sku_e = 0
+    cont_normal_e = 0
+    cont_excesso_e = 0
+    cont_parcial_e = 0
+    cont_ruptura_e = 0
+
     for e in list_e:
-        sku = sku + 1
+        sku_e = sku_e + 1
 
         if e['condicao_estoque'] == "NORMAL":
-            cont_normal = cont_normal + 1
+            cont_normal_e = cont_normal_e + 1
 
         elif e['condicao_estoque'] == "EXCESSO":
-            cont_excesso = cont_excesso + 1
+            cont_excesso_e = cont_excesso_e + 1
 
         elif e['condicao_estoque'] == "PARCIAL":
-            cont_parcial = cont_parcial + 1
+            cont_parcial_e = cont_parcial_e + 1
 
         elif e['condicao_estoque'] == "RUPTURA":
-            cont_ruptura = cont_ruptura + 1
+            cont_ruptura_e = cont_ruptura_e + 1
 
     curva_e = {
         'curva': 'E',
-        'skus': sku,
-        'normal': cont_normal,
-        'excesso': cont_excesso,
-        'parcial': cont_parcial,
-        'ruptura': cont_ruptura
+        'skus': sku_e,
+        'normal': cont_normal_e,
+        'excesso': cont_excesso_e,
+        'parcial': cont_parcial_e,
+        'ruptura': cont_ruptura_e
     }
 
 
