@@ -266,19 +266,19 @@ def dados_estoque_home(produtos):
     cont_ruptura_a = 0
 
     for a in list_a:
-        sku_a = sku_a + 1
+        sku_a += 1
 
         if a['condicao_estoque'] == "NORMAL":
-            cont_normal_a = cont_normal_a + 1
+            cont_normal_a += 1
 
         elif a['condicao_estoque'] == "EXCESSO":
-            cont_excesso_a = cont_excesso_a + 1
+            cont_excesso_a += 1
 
         elif a['condicao_estoque'] == "PARCIAL":
-            cont_parcial_a = cont_parcial_a + 1
+            cont_parcial_a += 1
 
         elif a['condicao_estoque'] == "RUPTURA":
-            cont_ruptura_a = cont_ruptura_a + 1
+            cont_ruptura_a += 1
 
     curva_a = {
         'curva': 'A',
@@ -297,19 +297,19 @@ def dados_estoque_home(produtos):
     cont_ruptura_b = 0
 
     for b in list_b:
-        sku_b = sku_b + 1
+        sku_b += 1
 
         if b['condicao_estoque'] == "NORMAL":
-            cont_normal_b = cont_normal_b + 1
+            cont_normal_b += 1
 
         elif b['condicao_estoque'] == "EXCESSO":
-            cont_excesso_b = cont_excesso_b + 1
+            cont_excesso_b += 1
 
         elif b['condicao_estoque'] == "PARCIAL":
-            cont_parcial_b = cont_parcial_b + 1
+            cont_parcial_b += 1
 
         elif b['condicao_estoque'] == "RUPTURA":
-            cont_ruptura_b = cont_ruptura_b + 1
+            cont_ruptura_b += 1
 
     curva_b = {
         'curva': 'B',
@@ -328,19 +328,19 @@ def dados_estoque_home(produtos):
     cont_ruptura_c = 0
 
     for c in list_c:
-        sku_c = sku_c + 1
+        sku_c += 1
 
         if c['condicao_estoque'] == "NORMAL":
-            cont_normal_c = cont_normal_c + 1
+            cont_normal_c += 1
 
         elif c['condicao_estoque'] == "EXCESSO":
-            cont_excesso_c = cont_excesso_c + 1
+            cont_excesso_c += 1
 
         elif c['condicao_estoque'] == "PARCIAL":
-            cont_parcial_c = cont_parcial_c + 1
+            cont_parcial_c += 1
 
         elif c['condicao_estoque'] == "RUPTURA":
-            cont_ruptura_c = cont_ruptura_c + 1
+            cont_ruptura_c += 1
 
     curva_c = {
         'curva': 'C',
@@ -352,7 +352,6 @@ def dados_estoque_home(produtos):
     }
 
     #CURVA D
-
     sku_d = 0
     cont_normal_d = 0
     cont_excesso_d = 0
@@ -360,19 +359,19 @@ def dados_estoque_home(produtos):
     cont_ruptura_d = 0
 
     for d in list_d:
-        sku_d = sku_d + 1
+        sku_d += 1
 
         if d['condicao_estoque'] == "NORMAL":
-            cont_normal_d = cont_normal_d + 1
+            cont_normal_d += 1
 
         elif d['condicao_estoque'] == "EXCESSO":
-            cont_excesso_d = cont_excesso_d + 1
+            cont_excesso_d += 1
 
         elif d['condicao_estoque'] == "PARCIAL":
-            cont_parcial_d = cont_parcial_d + 1
+            cont_parcial_d += 1
 
         elif d['condicao_estoque'] == "RUPTURA":
-            cont_ruptura_d = cont_ruptura_d + 1
+            cont_ruptura_d += 1
 
     curva_d = {
         'curva': 'D',
@@ -394,16 +393,16 @@ def dados_estoque_home(produtos):
         sku_e = sku_e + 1
 
         if e['condicao_estoque'] == "NORMAL":
-            cont_normal_e = cont_normal_e + 1
+            cont_normal_e += 1
 
         elif e['condicao_estoque'] == "EXCESSO":
-            cont_excesso_e = cont_excesso_e + 1
+            cont_excesso_e += 1
 
         elif e['condicao_estoque'] == "PARCIAL":
-            cont_parcial_e = cont_parcial_e + 1
+            cont_parcial_e += 1
 
         elif e['condicao_estoque'] == "RUPTURA":
-            cont_ruptura_e = cont_ruptura_e + 1
+            cont_ruptura_e += 1
 
     curva_e = {
         'curva': 'E',
@@ -413,6 +412,18 @@ def dados_estoque_home(produtos):
         'parcial': cont_parcial_e,
         'ruptura': cont_ruptura_e
     }
+
+    print(len(list_a))
+    print(len(list_b))
+    print(len(list_c))
+    print(len(list_d))
+    print(len(list_e))
+
+    list_a.clear()
+    list_b.clear()
+    list_c.clear()
+    list_d.clear()
+    list_e.clear()
 
 
     lista_dados_estoque = [curva_a, curva_b, curva_c, curva_d, curva_e]

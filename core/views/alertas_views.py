@@ -397,6 +397,7 @@ def rotina_alerta(request, id_empresa):
 
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
+    print(dados_estoque)
 
     alerta_db(id_empresa, produtos)
 
@@ -424,6 +425,7 @@ def teste(request, template_name='testando_alerta.html'):
 
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
+    print(dados_estoque)
 
     alerta_db(1, produtos)
 
