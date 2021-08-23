@@ -49,9 +49,11 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
         ruptura = str(produto_dados['ruptura'].unique()).strip('[]')
         condicao_est = str(produto_dados['condicao_estoque'].unique()).strip('[]')
         valor_excesso = str(produto_dados['vl_excesso'].unique()).strip('[]')
+        embalagem = str(produto_dados['embalagem'].unique()).strip('[]')
 
         data = []
         itens_analise = {
+            'embalagem': embalagem.replace("'",""),
             'filial': int(produto_dados['cod_filial'].unique()),
             'estoque': int(produto_dados['estoque_dispon'].unique()),
             'avaria': int(produto_dados['avarias'].unique()),
@@ -213,6 +215,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
         prod_resumo['qt_unit_caixa'] = info.quantidade_un_caixa.unique()
+
+        prod_resumo['embalagem'] = info.embalagem.unique()
 
         # PORCENTAGEM DA MEDIA
         d_m = desvio / media

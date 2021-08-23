@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.utils import timezone
+
+from api.views import valida_pedidos_excluidos
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
 from core.models.empresas_models import *
@@ -397,7 +399,6 @@ def rotina_alerta(request, id_empresa):
 
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
-    print(dados_estoque)
 
     alerta_db(id_empresa, produtos)
 
@@ -407,6 +408,9 @@ def rotina_alerta(request, id_empresa):
 
 def rotina_email(request, id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
+
+    # TODO testando pedido excluido do winthor
+    valida_pedidos_excluidos(id_empresa)
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     try:
@@ -425,12 +429,14 @@ def teste(request, template_name='testando_alerta.html'):
 
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
-    print(dados_estoque)
 
     alerta_db(1, produtos)
 
     db_grafico_um(1, grafico_um)
     db_dados_estoque(1, dados_estoque)
+
+    # TODO testando pedido excluido do winthor
+    valida_pedidos_excluidos(1)
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     if empresa.envia_email:

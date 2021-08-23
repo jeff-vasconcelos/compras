@@ -1,13 +1,15 @@
 from rest_framework import serializers
 from api.validator import *
 
-from api.models.produto import *
-from api.models.estoque_atual import *
-from api.models.historico_estoque import *
-from api.models.pedido_compra import *
-from api.models.ultima_entrada import *
-from api.models.venda import *
+from api.models.produto import Produto
+from api.models.fornecedor import Fornecedor
+from api.models.estoque_atual import Estoque
+from api.models.historico_estoque import HistoricoEstoque
+from api.models.pedido_compra import Pedido
+from api.models.ultima_entrada import Entrada
+from api.models.venda import Venda
 
+from api.models.pedidos import Pedidos_API
 
 
 class ProdutoSerializer(serializers.ModelSerializer):
@@ -104,6 +106,7 @@ class PedidoSerializer(serializers.ModelSerializer):
         fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
 
         produto = data['cod_produto']
+
         produt = Produto.objects.filter(cod_produto=produto, empresa=empresa)
 
         if not fornec:

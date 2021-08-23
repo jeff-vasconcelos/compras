@@ -1,10 +1,11 @@
-
-from api.models.produto import *
-from api.models.estoque_atual import *
-from api.models.historico_estoque import *
-from api.models.pedido_compra import *
-from api.models.ultima_entrada import *
-from api.models.venda import *
+from api.models.produto import Produto
+from api.models.fornecedor import Fornecedor
+from api.models.estoque_atual import Estoque
+from api.models.historico_estoque import HistoricoEstoque
+from api.models.pedido_compra import Pedido
+from api.models.ultima_entrada import Entrada
+from api.models.venda import Venda
+from api.models.pedidos import Pedidos_API
 
 
 
@@ -88,6 +89,22 @@ def valida_pedido(data):
     if pedido == False:
         return True
     else:
+        pedido_existe = Pedidos_API.objects.filter(
+            cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, saldo=saldo, num_pedido=pedido
+        ).exists()
+
+        if pedido_existe == False:
+            b = Pedidos_API.objects.create(
+                cod_produto = data['cod_produto'],
+                cod_filial = data['cod_filial'],
+                cod_fornecedor = data['cod_fornecedor'],
+                saldo = data['saldo'],
+                num_pedido = data['num_pedido'],
+                data = data['data'],
+                empresa = data['empresa']
+            )
+            b.save()
+
         return False
 
 

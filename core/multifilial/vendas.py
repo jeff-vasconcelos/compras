@@ -172,6 +172,7 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
                 'max_media': [max_media.round(2)],
                 'media_ajustada': [round(media_ajustada, 2)],
                 'quantidade_un_caixa': produto_qs.quantidade_un_cx,
+                'embalagem': produto_qs.embalagem,
                 'media_preco_praticado': media_preco_vendas
             }
             info_prod = pd.DataFrame(info_p)

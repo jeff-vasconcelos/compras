@@ -413,12 +413,6 @@ def dados_estoque_home(produtos):
         'ruptura': cont_ruptura_e
     }
 
-    print(len(list_a))
-    print(len(list_b))
-    print(len(list_c))
-    print(len(list_d))
-    print(len(list_e))
-
     list_a.clear()
     list_b.clear()
     list_c.clear()
