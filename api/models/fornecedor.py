@@ -10,6 +10,7 @@ class Fornecedor(models.Model):
     leadtime = models.IntegerField(null=True, blank=True)
     ciclo_reposicao = models.IntegerField(null=True, blank=True)
     tempo_estoque = models.IntegerField(null=True, blank=True)
+    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='fonecedor_empresa',
                                 blank=True, null=True)
     

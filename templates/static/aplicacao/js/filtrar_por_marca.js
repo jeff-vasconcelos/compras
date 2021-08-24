@@ -25,6 +25,7 @@ const enviarSelectMarca = (marca) =>{
 listaMarcaSelecionar.addEventListener('change', e => {
     // PEGANDO PRODUTO SELECIONADO
     const marcaSelecionada = e.target.value
+    // const curvaSelecionada = listaCurvaSelecionar.value
 
     for (var i = 0; i < listaFornecedores.length; i++){
         if (listaFornecedores[i].checked == true){

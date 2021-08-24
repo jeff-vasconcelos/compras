@@ -664,12 +664,14 @@ def filtrar_produto_curva(request):
 
 
 def filtrar_produto_marca(request):
-    empresa = request.user.usuario.empresa_id
+    id_empresa = request.user.usuario.empresa_id
+    # parametros = Parametro.objects.get(empresa_id=id_empresa)
     if request.is_ajax():
         marca = request.POST.get('marca')
         fornecedor = request.POST.get('fornecedor')
         produto = request.POST.get('produto')
         p_ativo = request.POST.get('principio')
+        # curva = request.POST.get('curva')
 
         if fornecedor != '':
             fornecedor = fornecedor.replace(",", " ")
@@ -687,7 +689,7 @@ def filtrar_produto_marca(request):
             qs = Produto.objects.filter(
                 marca=marca,
                 fornecedor_id__in=lista_fornecedor,
-                empresa__id__exact=empresa
+                empresa__id__exact=id_empresa
             ).order_by('desc_produto')
 
             if len(qs) > 0:
@@ -720,7 +722,7 @@ def filtrar_produto_marca(request):
             qs = Produto.objects.filter(
                 marca=marca,
                 id__in=lista_produto,
-                empresa__id__exact=empresa
+                empresa__id__exact=id_empresa
             ).order_by('desc_produto')
 
             if len(qs) > 0:
@@ -743,7 +745,7 @@ def filtrar_produto_marca(request):
             qs = Produto.objects.filter(
                 marca=marca,
                 principio_ativo__in=principio_ativo,
-                empresa__id__exact=empresa
+                empresa__id__exact=id_empresa
             ).order_by('desc_produto')
 
             if len(qs) > 0:
