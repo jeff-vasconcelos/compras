@@ -34,22 +34,8 @@
             <span>Análise</span></a>
     </li>
 
-    <!-- ALERTAS
-    <li id="alert-lat" class="nav-item">
-        <a id="link-alert-lat" class="nav-link" href="{% url 'alertas_painel' %}">
-            <i id="icone-alert" class="fas fa-fw fa-envelope"></i>
 
-            <span>Alertas
-                {% if request.user.usuario.empresa.quantidade_alerta %}
-                    <span id="contador-alerta">{{ request.user.usuario.empresa.quantidade_alerta }}</span>
-                {% else %}
-                    <span id="contador-alerta">0</span>
-                {% endif %}
-            </span>
-        </a>
-    </li>
-    -->
-
+    <!-- ALERTAS-->
     <li id="alert-lat" class="nav-item">
         <a id="link-alert-lat" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="true" aria-controls="collapseTwo">
@@ -108,11 +94,23 @@
 
     {% if request.user.usuario.tipo == "Administrador" %}
         <!-- CONFIGURAÇÕES -->
-        <li id="conf-lat" class="nav-item">
-            <a id="link-conf-lat" class="nav-link" href="{% url 'configuracao_painel' %}">
-                <i id="icone-conf" class="fas fa-fw fa-cog"></i>
-                <span>Configurações</span></a>
-        </li>
+
+        <li id="alert-lat" class="nav-item">
+            <a id="link-alert-lat" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfig"
+                aria-expanded="true" aria-controls="collapseConfig">
+            <i id="icone-conf" class="fas fa-fw fa-cog"></i>
+
+            <span>Configurações</span>
+        </a>
+
+        <div id="collapseConfig" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="links_alerta collapse-item" href="{% url 'email_painel' %}">E-mails</a>
+                <a class="links_alerta collapse-item" href="{% url 'fornecedores_painel' %}">Fornecedores</a>
+                <a class="links_alerta collapse-item" href="{% url 'configuracao_painel' %}">Parâmetros</a>
+            </div>
+        </div>
+    </li>
     {% endif %}
     <!-- BOTAO RECOLHER LATERAL-->
     <div class="botao-lateral text-center d-none d-md-inline">

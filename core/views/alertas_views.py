@@ -393,7 +393,7 @@ def pdf_generate(request):
 # ROTINA DE EXECUÇÃO DE ALERTA
 def rotina_alerta(request, id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
-    print(f"PROCESSANDO DADOS DE {empresa.nome_fantasia}")
+    print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
 
     produtos = alertas(id_empresa)
 

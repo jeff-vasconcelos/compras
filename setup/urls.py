@@ -25,7 +25,6 @@ urlpatterns = [
     path('administracao/painel/', include('core.urls.urls_administracao')),
     path('painel/', include('core.urls.urls_aplicacao')),
     path('', include('core.urls.urls_login')),
-    path('teste/', valida_pedidos_excluidos, name='teste-pedidos'),
 
     #TODO Remover rota debug_toolbar
     path('__debug__/', include(debug_toolbar.urls)),

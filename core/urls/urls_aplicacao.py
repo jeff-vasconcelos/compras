@@ -59,6 +59,8 @@ urlpatterns = [
     path('configuracoes/ver/email/', ver_emails_conf, name='config_ver_email'),
     path('configuracoes/remover/email/<int:pk>', remover_email_conf, name='config_remove_email'),
     path('configuracoes/editar/email/<int:pk>', editar_email_conf, name='config_editar_email'),
+    path('configuracoes/email/', email_painel, name='email_painel'),
+    path('configuracoes/fornecedores/', fornecedores_painel, name='fornecedores_painel'),
 
     # ACADEMY
     path('academy/', academy, name='academy'),
