@@ -46,6 +46,7 @@ const enviarSelectCurva = (curva) =>{
 listaCurvaSelecionar.addEventListener('change', e => {
     // PEGANDO PRODUTO SELECIONADO
     const curvaSelecionada = e.target.value
+    const marcaSelecionada = listaMarcaSelecionar.value
 
     resultsBoxFornec.classList.add('d-none')
     resultsBoxProd.classList.add('d-none')
@@ -85,11 +86,32 @@ listaCurvaSelecionar.addEventListener('change', e => {
         }
     }
 
+    for (var i = 0; i < listaPrincipio.length; i++) {
+        if (listaPrincipio[i].checked == true) {
+            const marcado = listaPrincipio[i].value
+
+            if (checkPrincipio.indexOf(marcado) > -1) {
+
+            } else {
+                checkPrincipio.push(marcado)
+            }
+
+        } else if (listaPrincipio[i].checked == false) {
+            const desmarq = listaPrincipio[i].value
+
+            if (checkPrincipio.indexOf(desmarq) > -1) {
+                checkPrincipio.splice(checkPrincipio.indexOf(desmarq), 1)
+            }
+        }
+    }
+
     const curva_selecionada = new FormData()
     curva_selecionada.append('csrfmiddlewaretoken', csrf)
     curva_selecionada.append('fornecedor', checkFornecedor)
     curva_selecionada.append('produto', checkProduto)
+    curva_selecionada.append('principio', checkPrincipio)
     curva_selecionada.append('curva', curvaSelecionada)
+    curva_selecionada.append('marca', marcaSelecionada)
 
     enviarSelectCurva(curva_selecionada)
 })

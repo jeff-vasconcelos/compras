@@ -85,6 +85,7 @@ listaMarcaSelecionar.addEventListener('change', e => {
     marca_selecionada.append('produto', checkProduto)
     marca_selecionada.append('principio', checkPrincipio)
     marca_selecionada.append('marca', marcaSelecionada)
+    // marca_selecionada.append('curva', curvaSelecionada)
 
     enviarSelectMarca(marca_selecionada)
 })

@@ -23,6 +23,7 @@ from core.multifilial.vendas import vendas
 from core.models.pedidos_models import *
 import re  # pacote com as rotinas de expressão regular
 import locale
+
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
@@ -214,7 +215,8 @@ def filtrar_produto_fornecedor(request):
         for i in b:
             lista_fornecedor.append(int(i))
 
-        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by('desc_produto')
+        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by(
+            'desc_produto')
 
         if len(qs) > 0 and len(lista_fornecedor) > 0:
             marcas = []
@@ -300,115 +302,363 @@ def filtrar_produto_curva(request):
     if request.is_ajax():
         id_fornecedor = request.POST.get('fornecedor')
         id_produto = request.POST.get('produto')
+        principio = request.POST.get('principio')
 
         curva = request.POST.get('curva')
+        marca = request.POST.get('marca')
 
         parametros = Parametro.objects.get(empresa_id=id_empresa)
+
         if curva == '0':
             return JsonResponse({})
+
         else:
 
-            if id_fornecedor is not None and id_fornecedor != '':
-                fornecedor = id_fornecedor.replace(",", " ")
+            if marca != '0':
 
-                a = fornecedor.split()
-                b = []
+                # BUSCANDO POR FORNECEDOR
+                if id_fornecedor is not None and id_fornecedor != '':
+                    fornecedor = id_fornecedor.replace(",", " ")
 
-                for elemento in a:
-                    b.append(int(elemento))
+                    a = fornecedor.split()
+                    b = []
 
-                lista_fornecedor = []
-                for i in b:
-                    lista_fornecedor.append(int(i))
+                    for elemento in a:
+                        b.append(int(elemento))
 
-                fornec = Fornecedor.objects.filter(id__in=lista_fornecedor)
+                    lista_fornecedor = []
+                    for i in b:
+                        lista_fornecedor.append(int(i))
 
-                list_fornec = []
-                for i in fornec:
-                    cod_fornec = i.cod_fornecedor
-                    list_fornec.append(cod_fornec)
+                    fornec = Fornecedor.objects.filter(
+                        id__in=lista_fornecedor,
+                        empresa__id__exact=id_empresa
+                    )
 
-                curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
-                # (cod_fornecedor, id_empresa, periodo, lista_filiais)
-                curva_f = curva_f.query('curva== @curva')
+                    list_fornec = []
+                    for i in fornec:
+                        cod_fornec = i.cod_fornecedor
+                        list_fornec.append(cod_fornec)
 
-                if not curva_f.empty:
-                    codprod = curva_f['cod_produto']
-                    list_produto = []
-                    for items in codprod.iteritems():
-                        list_produto.append(int(items[1]))
+                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    # (cod_fornecedor, id_empresa, periodo, lista_filiais)
+                    curva_f = curva_f.query('curva== @curva')
 
-                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=id_empresa).order_by(
-                        'cod_produto')
-
-                    if len(qs) > 0 and len(list_produto) > 0:
-                        data = []
-                        for prod in qs:
-                            item = {
-                                'pk': prod.pk,
-                                'nome': prod.desc_produto,
-                                'cod': prod.cod_produto,
-                            }
-                            data.append(item)
-                        res_fil_curva = data
-                    else:
-                        res_fil_curva = "Nada encontrado!"
-                    return JsonResponse({'data': res_fil_curva})
-                else:
-                    res = "FALSE"
-                    return JsonResponse({'data': res})
-
-            if id_produto is not None and id_produto != '':
-
-                produt = id_produto.replace(",", " ")
-
-                a = produt.split()
-                b = []
-
-                for elemento in a:
-                    b.append(int(elemento))
-
-                lista_produto = []
-                for i in b:
-                    lista_produto.append(int(i))
-
-                prod = Produto.objects.filter(id__in=lista_produto)
-
-                list_fornec = []
-                for i in prod:
-                    cod_fornec = i.fornecedor.cod_fornecedor
-                    list_fornec.append(cod_fornec)
-
-                curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
-                curva_f = curva_f.query('curva== @curva')
-
-                if not curva_f.empty:
-                    codprod = curva_f['cod_produto']
-                    list_produto = []
-                    for items in codprod.iteritems():
-                        if items[0] in lista_produto:
+                    if not curva_f.empty:
+                        codprod = curva_f['cod_produto']
+                        list_produto = []
+                        for items in codprod.iteritems():
                             list_produto.append(int(items[1]))
 
-                    qs = Produto.objects.filter(cod_produto__in=list_produto, empresa__id__exact=id_empresa).order_by(
-                        'cod_produto')
+                        qs = Produto.objects.filter(
+                            cod_produto__in=list_produto,
+                            empresa__id__exact=id_empresa,
+                            marca=marca
+                        ).order_by('desc_produto')
 
-                    if len(qs) > 0 and len(list_produto) > 0:
-                        data = []
-                        for prod in qs:
-                            item = {
-                                'pk': prod.pk,
-                                'nome': prod.desc_produto,
-                                'cod': prod.cod_produto,
-                            }
-                            data.append(item)
-                        res_fil_curva = data
+                        if len(qs) > 0 and len(list_produto) > 0:
+                            data = []
+                            for prod in qs:
+                                item = {
+                                    'pk': prod.pk,
+                                    'nome': prod.desc_produto,
+                                    'cod': prod.cod_produto,
+                                }
+                                data.append(item)
+                            res_fil_curva = data
+                        else:
+                            res_fil_curva = "Nada encontrado!"
+                        return JsonResponse({'data': res_fil_curva})
                     else:
                         res = "FALSE"
                         return JsonResponse({'data': res})
-                    return JsonResponse({'data': res_fil_curva})
-                else:
-                    res = "FALSE"
-                    return JsonResponse({'data': res})
+
+                # BUSCANDO POR PRODUTO
+                if id_produto is not None and id_produto != '':
+
+                    produt = id_produto.replace(",", " ")
+
+                    a = produt.split()
+                    b = []
+
+                    for elemento in a:
+                        b.append(int(elemento))
+
+                    lista_produto = []
+                    for i in b:
+                        lista_produto.append(int(i))
+
+                    prod = Produto.objects.filter(
+                        id__in=lista_produto,
+                        empresa__id__exact=id_empresa
+                    )
+
+                    list_fornec = []
+                    for i in prod:
+                        cod_fornec = i.fornecedor.cod_fornecedor
+                        list_fornec.append(cod_fornec)
+
+                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    curva_f = curva_f.query('curva== @curva')
+
+                    if not curva_f.empty:
+                        codprod = curva_f['cod_produto']
+                        list_produto = []
+                        for items in codprod.iteritems():
+                            if items[0] in lista_produto:
+                                list_produto.append(int(items[1]))
+
+                        qs = Produto.objects.filter(
+                            cod_produto__in=list_produto,
+                            empresa__id__exact=id_empresa,
+                            marca=marca
+                        ).order_by('desc_produto')
+
+                        if len(qs) > 0 and len(list_produto) > 0:
+                            data = []
+                            for prod in qs:
+                                item = {
+                                    'pk': prod.pk,
+                                    'nome': prod.desc_produto,
+                                    'cod': prod.cod_produto,
+                                }
+                                data.append(item)
+                            res_fil_curva = data
+                        else:
+                            res = "FALSE"
+                            return JsonResponse({'data': res})
+                        return JsonResponse({'data': res_fil_curva})
+                    else:
+                        res = "FALSE"
+                        return JsonResponse({'data': res})
+
+                # BUSCANDO POR PRICIPIO
+                if principio is not None and principio != '':
+                    p_ativo = principio.replace(",", " ")
+
+                    a = p_ativo.split()
+                    p = []
+
+                    for elemento in a:
+                        p.append(elemento)
+
+                    lista_p_ativo = []
+                    for i in p:
+                        lista_p_ativo.append(i)
+
+                    prod = Produto.objects.filter(
+                        principio_ativo__in=lista_p_ativo,
+                        empresa__id__exact=id_empresa
+                    )
+
+                    list_fornec = []
+                    for i in prod:
+                        cod_fornec = i.cod_fornecedor
+                        list_fornec.append(cod_fornec)
+
+                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+
+                    curva_f = curva_f.query('curva== @curva')
+
+                    if not curva_f.empty:
+                        codprod = curva_f['cod_produto']
+                        list_produto = []
+                        for items in codprod.iteritems():
+                            list_produto.append(int(items[1]))
+
+                        qs = Produto.objects.filter(
+                            cod_produto__in=list_produto,
+                            empresa__id__exact=id_empresa,
+                            marca=marca
+                        ).order_by('desc_produto')
+
+                        if len(qs) > 0 and len(list_produto) > 0:
+                            data = []
+                            for prod in qs:
+                                item = {
+                                    'pk': prod.pk,
+                                    'nome': prod.desc_produto,
+                                    'cod': prod.cod_produto,
+                                }
+                                data.append(item)
+                            res_fil_curva = data
+                        else:
+                            res_fil_curva = "Nada encontrado!"
+                        return JsonResponse({'data': res_fil_curva})
+                    else:
+                        res = "FALSE"
+                        return JsonResponse({'data': res})
+
+            else:
+                # BUSCA POR FORNECEDOR
+                if id_fornecedor is not None and id_fornecedor != '':
+                    fornecedor = id_fornecedor.replace(",", " ")
+
+                    a = fornecedor.split()
+                    b = []
+
+                    for elemento in a:
+                        b.append(int(elemento))
+
+                    lista_fornecedor = []
+                    for i in b:
+                        lista_fornecedor.append(int(i))
+
+                    fornec = Fornecedor.objects.filter(
+                        id__in=lista_fornecedor,
+                        empresa__id__exact=id_empresa
+                    )
+
+                    list_fornec = []
+                    for i in fornec:
+                        cod_fornec = i.cod_fornecedor
+                        list_fornec.append(cod_fornec)
+
+                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    # (cod_fornecedor, id_empresa, periodo, lista_filiais)
+                    curva_f = curva_f.query('curva== @curva')
+
+                    if not curva_f.empty:
+                        codprod = curva_f['cod_produto']
+                        list_produto = []
+                        for items in codprod.iteritems():
+                            list_produto.append(int(items[1]))
+
+                        qs = Produto.objects.filter(
+                            cod_produto__in=list_produto,
+                            empresa__id__exact=id_empresa
+                        ).order_by('desc_produto')
+
+                        if len(qs) > 0 and len(list_produto) > 0:
+                            data = []
+                            for prod in qs:
+                                item = {
+                                    'pk': prod.pk,
+                                    'nome': prod.desc_produto,
+                                    'cod': prod.cod_produto,
+                                }
+                                data.append(item)
+                            res_fil_curva = data
+                        else:
+                            res_fil_curva = "Nada encontrado!"
+                        return JsonResponse({'data': res_fil_curva})
+                    else:
+                        res = "FALSE"
+                        return JsonResponse({'data': res})
+
+                # BUSCA POR PRODUTO
+                if id_produto is not None and id_produto != '':
+
+                    produt = id_produto.replace(",", " ")
+
+                    a = produt.split()
+                    b = []
+
+                    for elemento in a:
+                        b.append(int(elemento))
+
+                    lista_produto = []
+                    for i in b:
+                        lista_produto.append(int(i))
+
+                    prod = Produto.objects.filter(
+                        id__in=lista_produto,
+                        empresa__id__exact=id_empresa
+                    )
+
+                    list_fornec = []
+                    for i in prod:
+                        cod_fornec = i.fornecedor.cod_fornecedor
+                        list_fornec.append(cod_fornec)
+
+                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    curva_f = curva_f.query('curva== @curva')
+
+                    if not curva_f.empty:
+                        codprod = curva_f['cod_produto']
+                        list_produto = []
+                        for items in codprod.iteritems():
+                            if items[0] in lista_produto:
+                                list_produto.append(int(items[1]))
+
+                        qs = Produto.objects.filter(
+                            cod_produto__in=list_produto,
+                            empresa__id__exact=id_empresa
+                        ).order_by('desc_produto')
+
+                        if len(qs) > 0 and len(list_produto) > 0:
+                            data = []
+                            for prod in qs:
+                                item = {
+                                    'pk': prod.pk,
+                                    'nome': prod.desc_produto,
+                                    'cod': prod.cod_produto,
+                                }
+                                data.append(item)
+                            res_fil_curva = data
+                        else:
+                            res = "FALSE"
+                            return JsonResponse({'data': res})
+                        return JsonResponse({'data': res_fil_curva})
+                    else:
+                        res = "FALSE"
+                        return JsonResponse({'data': res})
+
+                # BUSCANDO POR PRICIPIO
+                if principio is not None and principio != '':
+                    p_ativo = principio.replace(",", " ")
+
+                    a = p_ativo.split()
+                    p = []
+
+                    for elemento in a:
+                        p.append(elemento)
+
+                    lista_p_ativo = []
+                    for i in p:
+                        lista_p_ativo.append(i)
+
+                    prod = Produto.objects.filter(
+                        principio_ativo__in=lista_p_ativo,
+                        empresa__id__exact=id_empresa
+                    )
+
+                    list_fornec = []
+                    for i in prod:
+                        cod_fornec = i.cod_fornecedor
+                        list_fornec.append(cod_fornec)
+
+                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+
+                    curva_f = curva_f.query('curva== @curva')
+
+                    if not curva_f.empty:
+                        codprod = curva_f['cod_produto']
+                        list_produto = []
+                        for items in codprod.iteritems():
+                            list_produto.append(int(items[1]))
+
+                        qs = Produto.objects.filter(
+                            cod_produto__in=list_produto,
+                            empresa__id__exact=id_empresa
+                        ).order_by('desc_produto')
+
+                        if len(qs) > 0 and len(list_produto) > 0:
+                            data = []
+                            for prod in qs:
+                                item = {
+                                    'pk': prod.pk,
+                                    'nome': prod.desc_produto,
+                                    'cod': prod.cod_produto,
+                                }
+                                data.append(item)
+                            res_fil_curva = data
+                        else:
+                            res_fil_curva = "Nada encontrado!"
+                        return JsonResponse({'data': res_fil_curva})
+                    else:
+                        res = "FALSE"
+                        return JsonResponse({'data': res})
 
     return JsonResponse({})
 
@@ -434,8 +684,12 @@ def filtrar_produto_marca(request):
             for i in b:
                 lista_fornecedor.append(int(i))
 
-            qs = Produto.objects.filter(marca=marca, fornecedor_id__in=lista_fornecedor,
-                                        empresa__id__exact=empresa).order_by('desc_produto')
+            qs = Produto.objects.filter(
+                marca=marca,
+                fornecedor_id__in=lista_fornecedor,
+                empresa__id__exact=empresa
+            ).order_by('desc_produto')
+
             if len(qs) > 0:
                 data = []
                 for prod in qs:
@@ -463,7 +717,11 @@ def filtrar_produto_marca(request):
             for i in b:
                 lista_produto.append(int(i))
 
-            qs = Produto.objects.filter(marca=marca, id__in=lista_produto, empresa__id__exact=empresa).order_by('desc_produto')
+            qs = Produto.objects.filter(
+                marca=marca,
+                id__in=lista_produto,
+                empresa__id__exact=empresa
+            ).order_by('desc_produto')
 
             if len(qs) > 0:
                 data = []
@@ -481,11 +739,13 @@ def filtrar_produto_marca(request):
 
         if p_ativo != '':
             principio_ativo = p_ativo.split(",")
-            print(principio_ativo)
 
-            qs = Produto.objects.filter(marca=marca, principio_ativo__in=principio_ativo,
-                                        empresa__id__exact=empresa).order_by('desc_produto')
-            print(qs)
+            qs = Produto.objects.filter(
+                marca=marca,
+                principio_ativo__in=principio_ativo,
+                empresa__id__exact=empresa
+            ).order_by('desc_produto')
+
             if len(qs) > 0:
                 data = []
                 for prod in qs:
@@ -503,13 +763,15 @@ def filtrar_produto_marca(request):
 
 
 def filtrar_produto_principio(request):
-
     empresa = request.user.usuario.empresa_id
     if request.is_ajax():
         p_ativo = request.POST.get('principio')
         principio_ativo = p_ativo.split(",")
 
-        qs = Produto.objects.filter(principio_ativo__in=principio_ativo, empresa__id__exact=empresa).order_by('desc_produto')
+        qs = Produto.objects.filter(
+            principio_ativo__in=principio_ativo,
+            empresa__id__exact=empresa
+        ).order_by('desc_produto')
 
         if len(qs) > 0 and len(principio_ativo) > 0:
             marcas = []
@@ -533,7 +795,6 @@ def filtrar_produto_principio(request):
                 }
                 marcas_itens.append(itens_marcas)
 
-
             res_fil_prod = []
             res_fil_prod.append(data)
             res_fil_prod.append(marcas_itens)
@@ -543,22 +804,28 @@ def filtrar_produto_principio(request):
     return JsonResponse({})
 
 
-def selecionar_produto(request):
+def selecionar_produto(request) -> object:
     global info_prod_filiais
     id_empresa = request.user.usuario.empresa_id
 
     if request.is_ajax():
         try:
 
-            #DADOS DA REQUISIÇÃO
+            # DADOS DA REQUISIÇÃO
             id_produto = int(request.POST.get('produto'))
             leadtime = int(request.POST.get('leadtime'))
             t_reposicao = int(request.POST.get('tempo_reposicao'))
             filial_selecionada = int(request.POST.get('filial'))
 
-            #VERIFICANDO SE HOUVE VENDAS NO PERIODO INDEPENDE DA FILIAL
-            qs = Produto.objects.get(id=id_produto, empresa__id=id_empresa)
-            parametros = Parametro.objects.get(empresa_id=id_empresa)
+            # VERIFICANDO SE HOUVE VENDAS NO PERIODO INDEPENDE DA FILIAL
+            qs = Produto.objects.get(
+                id=id_produto,
+                empresa__id=id_empresa
+            )
+
+            parametros = Parametro.objects.get(
+                empresa_id=id_empresa
+            )
             verif_produto = verifica_produto(qs.cod_produto, id_empresa, parametros.periodo)
             lista_filiais = []
 
@@ -568,13 +835,12 @@ def selecionar_produto(request):
 
             if verif_produto == True:
 
-                #VERIFCANDO FILIAIS COM VENDAS DO PRODUTO
+                # VERIFCANDO FILIAIS COM VENDAS DO PRODUTO
                 se_vendas = Venda.objects.filter(
                     empresa__id__exact=id_empresa,
                     produto__id__exact=id_produto,
                 )
                 filiais_cod = se_vendas.values_list('cod_filial', flat=True).distinct()
-
 
                 for filial in filiais_cod:
                     f = filial
@@ -583,11 +849,11 @@ def selecionar_produto(request):
                 inf_filiais = a_multifiliais(cod_produto, cod_fornecedor, id_empresa,
                                              leadtime, t_reposicao, periodo, lista_filiais)
 
-
                 df_filial_selecionada = inf_filiais.query('filial == @filial_selecionada')
                 df_filial_selecionada = df_filial_selecionada.drop(columns=[
-                    'filial','estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
-                    'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela', 'margem'
+                    'filial', 'estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
+                    'est_seguranca', 'p_reposicao', 'sugestao', 'sugestao_caixa', 'sugestao_unidade', 'preco_tabela',
+                    'margem'
                 ])
 
                 i_filial_selec = df_filial_selecionada.to_dict('records')
@@ -596,7 +862,8 @@ def selecionar_produto(request):
                     info_prod_filiais = i
 
                 inf_filiais = inf_filiais.drop(columns=[
-                    'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media', 'media_simples'
+                    'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media',
+                    'media_simples'
                 ])
 
                 inf_filiais = inf_filiais.to_dict('records')
@@ -607,7 +874,7 @@ def selecionar_produto(request):
 
                 data.append(inf_filiais)  # 0
                 data.append(mapa)  # 1
-                data.append(info_prod_filiais) #2
+                data.append(info_prod_filiais)  # 2
 
                 return JsonResponse({'data': data})
             else:
@@ -616,7 +883,7 @@ def selecionar_produto(request):
 
         except Exception as NameError:
             erro = str(NameError)
-            d = [1 ,erro]
+            d = [1, erro]
 
             return JsonResponse({'data': d})
     return JsonResponse({})
@@ -700,8 +967,6 @@ def add_prod_pedido_sessao(request):
             prod_qs = Produto.objects.get(id=produto_id)
             produto_nome = prod_qs.desc_produto
             produto_codigo = prod_qs.cod_produto
-
-
 
             if not request.session.get('pedido_produto'):
                 request.session['pedido_produto'] = {}
