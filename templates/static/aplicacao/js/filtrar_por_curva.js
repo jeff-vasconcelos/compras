@@ -1,4 +1,4 @@
-console.log("funcionando")
+
 const listaCurvaSelecionar = document.getElementById('curva_abc_select')
 
 const enviarSelectCurva = (curva) =>{

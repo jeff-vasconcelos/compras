@@ -1,3 +1,8 @@
+//TOTAIS
+const th_tabela_totais = document.getElementById('th_tabela_totais')
+const td_tabela_totais = document.getElementById('td_tabela_totais')
+const titulo_vendasxmes = document.getElementById('titulo_vendasxmes')
+
 
 const listaProdutosSelecionar = document.getElementById('results-produtos')
 const listaFiliais = document.getElementById('filtro-filial')
@@ -44,11 +49,14 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 // $("div#div-grafico-dois").append('<canvas id="ChartCobertura"></canvas>')
 
                 botaoVerPedidosPendentes.style.display = 'none'
+                titulo_vendasxmes.style.display = 'none'
                 valor_condicao_est.innerHTML = "-"
                 valor_curva.innerHTML = "-"
                 valor_media.innerHTML = "-"
                 valor_ruptura.innerHTML = "-"
                 porc_ruptura.innerHTML = "-"
+                th_tabela_totais.innerHTML = ""
+                td_tabela_totais.innerHTML = ""
                 tabelaInfo.innerHTML = "-"
                 tabelaInfo.innerHTML = `
                         <tr>
@@ -106,11 +114,14 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 // $("div#div-grafico-dois").append('<canvas id="ChartCobertura"></canvas>')
 
                 botaoVerPedidosPendentes.style.display = 'none'
+                titulo_vendasxmes.style.display = 'none'
                 valor_condicao_est.innerHTML = "-"
                 valor_curva.innerHTML = "-"
                 valor_media.innerHTML = "-"
                 valor_ruptura.innerHTML = "-"
                 porc_ruptura.innerHTML = "-"
+                th_tabela_totais.innerHTML = ""
+                td_tabela_totais.innerHTML = ""
                 tabelaInfo.innerHTML = "-"
                 tabelaInfo.innerHTML = `
                         <tr>
@@ -165,6 +176,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 const data = dados[0]
                 const graficos = dados[1]
                 const informacoes = dados[2]
+                const totais = dados[3]
 
                 if (graficos.periodo <= 60){
                     area_graf_um.style.width = "auto";
@@ -482,11 +494,14 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                 if (!data) {
                     botaoVerPedidosPendentes.style.display = 'none'
+                    titulo_vendasxmes.style.display = 'none'
                     valor_condicao_est.innerHTML = "-"
                     valor_curva.innerHTML = "-"
                     valor_media.innerHTML = "-"
                     valor_ruptura.innerHTML = "-"
                     porc_ruptura.innerHTML = "-"
+                    th_tabela_totais.innerHTML = ""
+                    td_tabela_totais.innerHTML = ""
                     tabelaInfo.innerHTML = "-"
                     tabelaInfo.innerHTML = `
                         <tr>
@@ -519,12 +534,15 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     valor_media_simples.innerHTML = "-"
                 } else {
                     botaoVerPedidosPendentes.style.display = "initial"
+                    titulo_vendasxmes.style.display = "initial"
                     valor_condicao_est.innerHTML = ""
                     valor_curva.innerHTML = ""
                     valor_media.innerHTML = ""
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
+                    th_tabela_totais.innerHTML = ""
+                    td_tabela_totais.innerHTML = ""
                     tabelaInfo.innerHTML = `
                         <tr>
                             <th class="tabela-info">Cód. Filial</th>
@@ -607,6 +625,20 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <td class="tabela-info">R$ ${produto_info.preco_tabela}</td>
                             <td class="tabela-info">${produto_info.margem} %</td>
                           
+                            `
+                        })
+                    }
+
+                    if (Array.isArray(totais)) {
+                        totais.forEach(t_mes => {
+                            th_tabela_totais.innerHTML += `
+                            <th class="th_totais">${t_mes.mes} de ${t_mes.ano}</th>
+
+                            `
+
+                            td_tabela_totais.innerHTML += `
+                            <td class="td_totais">${t_mes.quantidade}</td>
+                            
                             `
                         })
                     }

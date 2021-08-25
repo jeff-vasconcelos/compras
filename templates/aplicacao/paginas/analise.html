@@ -456,7 +456,26 @@
         <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-body" id="grafico-serie-hist">
-                    <p class="texto-grafico-analise">Série histórica de vendas</p>
+
+                    <div class="row">
+                        <div class="col-3">
+                            <p id="titulo_vendasxmes">Vendas x Mês</p>
+                            <table>
+                                <tr id="th_tabela_totais">
+
+                                </tr>
+
+                                <tr id="td_tabela_totais">
+
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <p class="texto-grafico-analise">Série histórica de vendas</p>
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+
                     <div id="div-graf-um">
                         <div class="chart-bar" id="div-grafico-um">
                             <canvas id="ChartSerieHist"></canvas>
@@ -467,10 +486,12 @@
         </div>
 
         <style>
-            #div-graf-um{
-                overflow-x: auto; white-space: nowrap;
+            #div-graf-um {
+                overflow-x: auto;
+                white-space: nowrap;
             }
-            #div-grafico-um{
+
+            #div-grafico-um {
                 width: 2000px;
             }
         </style>

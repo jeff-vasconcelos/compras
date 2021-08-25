@@ -848,9 +848,10 @@ def selecionar_produto(request) -> object:
                     f = filial
                     lista_filiais.append(f)
 
-                inf_filiais = a_multifiliais(cod_produto, cod_fornecedor, id_empresa,
+                inf_filiais, total_vendas = a_multifiliais(cod_produto, cod_fornecedor, id_empresa,
                                              leadtime, t_reposicao, periodo, lista_filiais)
 
+                # FILIAL SELECIONADA
                 df_filial_selecionada = inf_filiais.query('filial == @filial_selecionada')
                 df_filial_selecionada = df_filial_selecionada.drop(columns=[
                     'filial', 'estoque', 'avaria', 'saldo', 'dt_ult_entrada', 'qt_ult_entrada', 'vl_ult_entrada', 'dde',
@@ -863,6 +864,25 @@ def selecionar_produto(request) -> object:
                 for i in i_filial_selec:
                     info_prod_filiais = i
 
+                # TOTAL DE VENDAS X MES
+                total_vendas['mes'] = total_vendas['mes'].astype(str)
+                df_total_vendas = total_vendas.query('cod_filial == @filial_selecionada')
+
+                lista_total_vendas = []
+
+                for index, row in df_total_vendas.iterrows():
+                    mes= row['mes'][4:]
+                    ano= row['mes'][:4]
+                    qt = row['qt_vendas']
+
+                    dicionario = {
+                        'mes': data_mes(mes),
+                        'ano': ano,
+                        'quantidade': qt
+                    }
+                    lista_total_vendas.append(dicionario)
+
+                # TODAS AS FILIALS
                 inf_filiais = inf_filiais.drop(columns=[
                     'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media',
                     'media_simples'
@@ -870,13 +890,14 @@ def selecionar_produto(request) -> object:
 
                 inf_filiais = inf_filiais.to_dict('records')
 
+                # ENVIO DE DADOS PARA JS
                 data = []
-
                 mapa = mapas_serie(id_empresa, cod_produto, filial_selecionada, periodo)
 
                 data.append(inf_filiais)  # 0
                 data.append(mapa)  # 1
                 data.append(info_prod_filiais)  # 2
+                data.append(lista_total_vendas)  # 3
 
                 return JsonResponse({'data': data})
             else:
@@ -889,6 +910,39 @@ def selecionar_produto(request) -> object:
 
             return JsonResponse({'data': d})
     return JsonResponse({})
+
+
+def data_mes(m):
+
+    global mes
+    n_mes = int(m)
+
+    if n_mes == 1:
+        mes = "Jan"
+    elif n_mes == 2:
+        mes = "Fev"
+    elif n_mes == 3:
+        mes = "Mar"
+    elif n_mes == 4:
+        mes = "Abr"
+    elif n_mes == 5:
+        mes = "Mai"
+    elif n_mes == 6:
+        mes = "Jun"
+    elif n_mes == 7:
+        mes = "Jul"
+    elif n_mes == 8:
+        mes = "Ago"
+    elif n_mes == 9:
+        mes = "Set"
+    elif n_mes == 10:
+        mes = "Out"
+    elif n_mes == 11:
+        mes = "Nov"
+    elif n_mes == 12:
+        mes = "Dez"
+
+    return mes
 
 
 def mapas_serie(id_empresa, cod_produto, cod_filial, periodo):

@@ -2,6 +2,7 @@
     font-family: Montserrat-Light;
     src: url(../fonts/Montserrat-Light.ttf);
 }
+
 @font-face {
     font-family: Montserrat-Medium;
     src: url(../fonts/Montserrat-Medium.ttf);
@@ -12,15 +13,18 @@ label.label-analise-tabela {
     font-size: 13px;
     font-family: Montserrat-Medium;
 }
+
 input.input-analise {
     font-size: 16px;
     height: 30px;
     text-align: center;
 }
+
 select.select-analise {
     height: 30px;
     font-size: 12px;
 }
+
 div.analise-div {
     padding: 0px 5px;
 }
@@ -44,32 +48,39 @@ div.analise-div {
     text-align: center;
     width: 100%;
 }
+
 #tabela-analise-digite {
     font-size: 12px;
     text-align: center;
     width: 100%;
 }
+
 input.input-tabela-analise {
     max-width: 90px;
     border-radius: 5px;
     border: 1px solid #d1d3e2;
     text-align: center;
 }
-th.tabela-info-th{
+
+th.tabela-info-th {
     border-right: 1px solid;
     font-size: 14px;
     font-family: Montserrat-Medium;
 }
-th.tabela-info-th-d{
+
+th.tabela-info-th-d {
     font-size: 14px;
     font-family: Montserrat-Medium;
 }
-td.tabela-info{
+
+td.tabela-info {
     border-right: 1px solid;
 }
-th.tabela-info{
+
+th.tabela-info {
     border-right: 1px solid;
 }
+
 div.botoes-analise-tabela {
     margin-top: 10px;
     text-align: right;
@@ -82,6 +93,7 @@ button.ver-pendentes {
     font-size: 12px;
     display: none;
 }
+
 button.ver-pedido {
     background-color: #4791ff;
     color: #FFFFFF;
@@ -90,6 +102,7 @@ button.ver-pedido {
     font-size: 12px;
     margin-left: 10px;
 }
+
 a.ver-pedido {
     background-color: #4791ff;
     color: #FFFFFF;
@@ -98,12 +111,15 @@ a.ver-pedido {
     font-size: 12px;
     margin-left: 10px;
 }
-button.ver-pedido:hover, button.ver-pedido:focus{
+
+button.ver-pedido:hover, button.ver-pedido:focus {
     background-color: #4791ff;
 }
+
 button.adicionar-item:hover, button.adicionar-item:focus {
     background-color: #224390;
 }
+
 button.adicionar-item {
     background-color: #224390;
     color: #FFFFFF;
@@ -136,36 +152,56 @@ p.texto-grafico-analise {
     font-size: 14px;
 }
 
-#btn-expo-modal-analise{
+#btn-expo-modal-analise {
     background-color: #224390;
     color: #FFFFFF;
     border: none;
     border-radius: 10px;
     font-size: 12px;
 }
-#btn-canc-modal-analise{
+
+#btn-canc-modal-analise {
     border: none;
     border-radius: 10px;
     font-size: 12px;
 }
-label.check-fornecedor{
+
+label.check-fornecedor {
     display: block;
 }
+
 div.check-div-fornec {
     background-color: #FFF;
     padding: 0px 3%;
     margin: 0px 10px;
     border-radius: 5px;
 }
-label.check-pro{
+
+label.check-pro {
     display: block;
 }
+
 div.check-div-prod {
     background-color: #FFF;
     padding: 0px 3%;
     margin: 0px 10px;
     border-radius: 5px;
 }
+
 #porc_ruptura {
     color: #de200d;
+}
+
+td.td_totais, th.th_totais {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
+    font-size: 12px;
+
+}
+#titulo_vendasxmes{
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin-bottom: 0px;
+    display: none;
 }

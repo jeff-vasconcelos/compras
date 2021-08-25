@@ -19,7 +19,7 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, lista_filiais):
     global dt_u_entrada
-    informacaoes_produto = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, lista_filiais)
+    informacaoes_produto, total_vendas = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, lista_filiais)
 
     lista_resumo = []
 
@@ -93,11 +93,11 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
 
     dados_produtos_filiais = pd.DataFrame(lista_fim)
 
-    return dados_produtos_filiais
+    return dados_produtos_filiais, total_vendas
 
 
 def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, lista_filiais):
-    global resumo_produto
+    global resumo_produto, total_vendas, vendas_
     parametros = Parametro.objects.get(empresa_id=id_empresa)
     pedidos = pedidos_compra(cod_produto, id_empresa, lista_filiais)
     u_entrada = ultima_entrada(cod_produto, id_empresa, periodo, lista_filiais)
@@ -276,6 +276,13 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
+        # TOTAL DE VENDAS POR MES
+        total_venda = vendas_.copy()
+        total_venda['data'] = pd.to_datetime(total_venda['data'])
+        total_venda['mes'] = total_venda['data'].map(lambda x: 100 * x.year + x.month)
+        total_vendas = total_venda.groupby(['mes', 'cod_filial'])['qt_vendas'].sum().reset_index()
+        # print(total_vendas)
+
         if t_reposicao > temp_est:
             if t_reposicao < dde:
                 tamanho = media_ajustada * temp_est
@@ -359,4 +366,11 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
                 lista_fim.append(b)
         resumo_produto = pd.DataFrame(lista_fim)
 
-    return resumo_produto
+    # TOTAL DE VENDAS POR MES
+    total_venda = vendas_p.copy()
+    total_venda['data'] = pd.to_datetime(total_venda['data'])
+    total_venda['mes'] = total_venda['data'].map(lambda x: 100 * x.year + x.month)
+    total_vendas = total_venda.groupby(['mes', 'cod_filial'])['qt_vendas'].sum().reset_index()
+
+
+    return resumo_produto, total_vendas
