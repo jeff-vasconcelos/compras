@@ -42,6 +42,7 @@ def pedidos_compra(cod_produto, id_empresa, lista_filiais):
                                           ])
 
             df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
+            df = df.drop_duplicates(subset=['num_pedido'], keep='first')
 
             pedidos = df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
