@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.shortcuts import render
 from rest_framework import viewsets, generics
@@ -72,10 +72,11 @@ def valida_pedidos_excluidos(id_empresa):
         existe = list(set(lista_ids))
 
         hoje = date.today()
+        ontem = date.today() - timedelta(1)
 
         pedidos = Pedido.objects.filter(
             empresa__id=id_empresa
-        ).exclude(Q(num_pedido__in=existe) | Q(created_at=hoje))
+        ).exclude(Q(num_pedido__in=existe) | Q(created_at=hoje) | Q(created_at=ontem))
 
         if pedidos:
             for p in pedidos:
