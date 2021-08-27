@@ -169,7 +169,7 @@ REST_FRAMEWORK = {
 }
 
 #SMTP CONFIGURATION
-"""
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -185,7 +185,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'contato-insight@ecluster.com.br'
 EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
-
+"""
 # 24 horas de sessão
 SESSION_COOKIE_AGE = 86400
 
@@ -209,7 +209,7 @@ CELERY_TIMEZONE = 'America/Sao_Paulo'
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 # CONFIG SSL
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True

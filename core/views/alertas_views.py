@@ -440,6 +440,7 @@ def teste(request, template_name='testando_alerta.html'):
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     if empresa.envia_email:
+        print('vai enviar e-mail')
         send_email_alerta(request, 1)
 
     return render(request, template_name)
