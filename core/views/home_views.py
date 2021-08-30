@@ -13,6 +13,9 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
     dados_estoque = DadosEstoque.objects.filter(empresa__id=id_empresa)
     grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa)
 
+    # REMOVER
+    grafico_dois = GraficoRuptura.objects.filter(empresa__id=id_empresa)
+
     # DADOS DE ESTOQUE
     t_skus = 0
     t_normal = 0
@@ -37,27 +40,32 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
 
     #GRAFICO UM
-    g_um = []
-    for g in grafico_um:
-
-        f_normal = float(g.normal)
-        f_parcial = float(g.parcial)
-        f_excesso = float(g.excesso)
-        f_total = float(g.total)
-
-        dic_garfico = {
-            'curva': g.curva,
-            'normal': locale.currency(f_normal, grouping=True),
-            'parcial': locale.currency(f_parcial, grouping=True),
-            'excesso': locale.currency(f_excesso, grouping=True),
-            'total': locale.currency(f_total, grouping=True)
-        }
-        g_um.append(dic_garfico)
+    # g_um = []
+    # for g in grafico_um:
+    #
+    #     f_normal = float(g.normal)
+    #     f_parcial = float(g.parcial)
+    #     f_excesso = float(g.excesso)
+    #     f_total = float(g.total)
+    #
+    #     dic_garfico = {
+    #         'curva': g.curva,
+    #         'normal': locale.currency(f_normal, grouping=True),
+    #         'parcial': locale.currency(f_parcial, grouping=True),
+    #         'excesso': locale.currency(f_excesso, grouping=True),
+    #         'total': locale.currency(f_total, grouping=True)
+    #     }
+    #     g_um.append(dic_garfico)
 
     contexto = {
         'dadosestoque': dados_estoque,
         'totais_dados_estoque': totais_dados_estoque,
-        'grafico_um': g_um
+
+        # REMOVER
+        'grafico_um': grafico_um,
+        'grafico_dois': grafico_dois
+
+        #'grafico_um': g_um
     }
     return render(request, template_name, contexto)
 
