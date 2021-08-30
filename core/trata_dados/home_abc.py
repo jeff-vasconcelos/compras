@@ -210,17 +210,12 @@ def db_grafico_um(id_empresa, produtos):
 
         total = normal + excesso + parcial
 
-        normal = locale.currency(normal, grouping=True)
-        excesso = locale.currency(excesso, grouping=True)
-        parcial = locale.currency(parcial, grouping=True)
-        total = locale.currency(total, grouping=True)
-
         b = GraficoCurva.objects.create(
             curva=i['curva'],
-            normal=normal,
-            parcial=parcial,
-            excesso=excesso,
-            total=total,
+            normal= round(normal, 2),
+            parcial= round(parcial, 2),
+            excesso= round(excesso, 2),
+            total= round(total, 2),
             empresa=empresa
         )
 
