@@ -25,7 +25,7 @@ urlpatterns = [
     path('filter-principio/', filtrar_produto_principio, name='filter-principio'),
     path('select-prod/', selecionar_produto, name='filter-produto'),
 
-    # path('home-graficos/', home_graficos, name='home_graficos'),
+    path('home-graficos/', home_graficos, name='home_graficos'),
 
     # ALERTAS
     path('alertas/excesso/curva/<str:curva>', alerta_excesso_curva, name='alerta_excesso_curva'),
