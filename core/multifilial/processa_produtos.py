@@ -26,6 +26,8 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
     for filial in lista_filiais:
         produto_dados = informacaoes_produto.query('cod_filial == @filial')
 
+        produto_dados['media_ajustada'].fillna(0, inplace = True)
+
         dt_entrada = produto_dados['dt_ult_ent'].unique()
 
         if dt_entrada == '-':
@@ -281,7 +283,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         total_venda['data'] = pd.to_datetime(total_venda['data'])
         total_venda['mes'] = total_venda['data'].map(lambda x: 100 * x.year + x.month)
         total_vendas = total_venda.groupby(['mes', 'cod_filial'])['qt_vendas'].sum().reset_index()
-        # print(total_vendas)
 
         if t_reposicao > temp_est:
             if t_reposicao < dde:

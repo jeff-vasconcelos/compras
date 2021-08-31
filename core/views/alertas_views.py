@@ -244,7 +244,8 @@ def alertas(id_empresa):
                         'custo': row.custo,
                         'fornecedor': row.fornecedor,
                         'cod_fornecedor': row.cod_fornecedor,
-                        'dde': row.dde
+                        'dde': row.dde,
+                        'media_ajustada': row.media_ajustada
                     }
 
                     lista_alertas.append(alertas_produtos)
@@ -284,7 +285,8 @@ def alerta_db(id_empresa, produtos):
                 fornecedor=i['fornecedor'],
                 cod_fornecedor=i['cod_fornecedor'],
                 empresa=empresa,
-                campo_um=i['dde']
+                campo_um=i['dde'],
+                campo_dois=i['media_ajustada']
             )
             b.save()
 

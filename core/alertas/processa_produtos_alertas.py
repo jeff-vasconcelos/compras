@@ -25,6 +25,8 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
     global dt_u_entrada
     informacaoes_produto = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo)
 
+    informacaoes_produto['media_ajustada'].fillna(0, inplace=True)
+
     lista_resumo = []
 
     filiais = []

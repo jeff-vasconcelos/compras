@@ -95,6 +95,7 @@
                         <th>Valor</th>
                         <th>Curva</th>
                         <th>DDE</th>
+                        <th>Média Ajus.</th>
                         <th>Fornecedor</th>
                         <!--
                         <th>Ações</th>
@@ -116,6 +117,7 @@
                                 <td class="numero">{{ produto.vl_excesso }}</td>
                                 <td class="curva">{{ produto.curva }}</td>
                                 <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.campo_dois|floatformat:1 }}</td>
                                 <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
                                 <!--
                                 <td>
