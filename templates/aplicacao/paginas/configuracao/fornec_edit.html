@@ -34,11 +34,18 @@
                     <div class="invalid-feedback">
                         {{ form.tempo_estoque.errors }}
                     </div>
-                </div>
 
-                <button type="submit" class="btn btn-success btn-sm">
-                    <i class="fas fa-save"></i> Salvar
-                </button>
+
+                    <button id="botao-salvar-config" type="submit" class="btn btn-success btn-sm">
+                        Salvar
+                    </button>
+
+                    <a href="{% url 'fornecedores_painel' %}"
+                       class="botao-cancelar-config btn btn-danger btn-sm" role="button" aria-pressed="true">
+                        Cancelar
+                    </a>
+
+                </div>
             </div>
             <div class="col-8">
                 <!--

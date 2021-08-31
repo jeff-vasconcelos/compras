@@ -18,7 +18,7 @@
                     <h6 class="m-0 font-weight-bold">Usuários Cadastrados</h6>
                 </div>
                 <div class="col-6">
-                    <a href="{% url 'cadastrar-usuario' %}" type="button"
+                    <a id="add-usuario" href="{% url 'cadastrar-usuario' %}" type="button"
                        class="float-right btn btn-primary btn-sm">
                         <i class="fas fa-plus-circle"></i> Cadastrar usuário
                     </a>
@@ -56,16 +56,16 @@
 
                                 <td>
                                     <a href="{% url 'editar-usuario'  usuario.pk %}"
-                                       class="btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                                       class="botao-editar-usuario btn btn-secondary btn-sm" role="button" aria-pressed="true">
                                         <i class="fas fa-edit"></i> Editar
                                     </a>
 
                                     {% if usuario.usuario.is_active == True %}
-                                        <a class="btn btn-danger btn-sm" title="Inativar" href="#" data-toggle="modal" data-target="#confirm{{ usuario.pk }}">
+                                        <a class="botao-inativar-usuario btn btn-danger btn-sm" title="Inativar" href="#" data-toggle="modal" data-target="#confirm{{ usuario.pk }}">
                                             <i class="fas fa-ban"></i> Inativar
                                         </a>
                                     {% else %}
-                                        <a class="btn btn-success btn-sm" title="Ativar" href="{% url 'inativar-usuarios' usuario.pk %}">
+                                        <a class="botao-ativar-usuario btn btn-success btn-sm" title="Ativar" href="{% url 'inativar-usuarios' usuario.pk %}">
                                             <i class="fas fa-check-circle"></i> Ativar
                                         </a>
                                     {% endif %}

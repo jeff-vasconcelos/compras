@@ -87,47 +87,124 @@ div.botoes-analise-tabela {
     padding: 10px 0px;
 }
 
-button.ver-pendentes {
+/*BOTOES*/
+
+#ver_pedidos_pendentes {
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 12px;
     display: none;
+    background-color: #54D8ff;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#ver_pedidos_pendentes:hover {
+    background-color: #627288;
+}
+#ver_pedidos_pendentes:focus {
+    background-color: #54D8ff;
 }
 
-button.ver-pedido {
-    background-color: #4791ff;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    font-size: 12px;
-    margin-left: 10px;
-}
 
-a.ver-pedido {
-    background-color: #4791ff;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    font-size: 12px;
-    margin-left: 10px;
-}
-
-button.ver-pedido:hover, button.ver-pedido:focus {
-    background-color: #4791ff;
-}
-
-button.adicionar-item:hover, button.adicionar-item:focus {
-    background-color: #224390;
-}
-
-button.adicionar-item {
+#ver_pedido_sessao {
     background-color: #224390;
     color: #FFFFFF;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 12px;
     margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
+#ver_pedido_sessao:hover{
+    background-color: #627288;
+}
+#ver_pedido_sessao:focus {
+     background-color: #224390;
+}
+
+
+#add_pedido_sessao {
+    background-color: #20BC77;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#add_pedido_sessao:hover {
+    background-color: #627288;
+}
+#add_pedido_sessao:focus {
+    background-color: #20BC77;
+}
+
+
+#btn-expo-modal-analise {
+    background-color: #20BC77;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#btn-expo-modal-analise:hover {
+    background-color: #627288;
+}
+#btn-expo-modal-analise:focus {
+    background-color: #20BC77;
+}
+
+
+#btn-canc-modal-analise {
+    background-color: #F15252;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#btn-canc-modal-analise:hover {
+    background-color: #627288;
+}
+#btn-canc-modal-analise:focus {
+    background-color: #F15252;
+}
+
+
+#btn-canc-modal-analise-p {
+    background-color: #F15252;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#btn-canc-modal-analise-p:hover {
+    background-color: #627288;
+}
+#btn-canc-modal-analise-p:focus {
+    background-color: #F15252;
+}
+
+button.botao_remover_p_sessao {
+    border-radius: 100%;
+}
+
 
 #div-grafico-um {
     width: 100%;
@@ -152,19 +229,7 @@ p.texto-grafico-analise {
     font-size: 14px;
 }
 
-#btn-expo-modal-analise {
-    background-color: #224390;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    font-size: 12px;
-}
 
-#btn-canc-modal-analise {
-    border: none;
-    border-radius: 10px;
-    font-size: 12px;
-}
 
 label.check-fornecedor {
     display: block;

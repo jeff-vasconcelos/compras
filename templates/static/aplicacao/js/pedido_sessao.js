@@ -158,7 +158,7 @@ const verPedidoSessao = () => {
                         <td>${prod.ped_qt_digitada}</td>
                         
                         <td>
-                            <button onclick="rm_prod_pedido_sessao(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="btn btn-danger btn-sm">
+                            <button onclick="rm_prod_pedido_sessao(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="botao_remover_p_sessao btn btn-danger btn-sm">
                                 <i class="fas fa-times-circle fa-1x"></i>
                             </button>
                         </td>

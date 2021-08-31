@@ -1,0 +1,100 @@
+#add-usuario {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #224390;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#add-usuario:hover {
+    background-color: #627288;
+}
+#add-usuario:focus {
+    background-color: #224390;
+}
+
+
+a.botao-editar-usuario {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #20BC77;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+a.botao-editar-usuario:hover {
+    background-color: #627288;
+}
+a.botao-editar-usuario:focus {
+    background-color: #20BC77;
+}
+
+
+a.botao-inativar-usuario {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #f15252;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+a.botao-inativar-usuario:hover {
+    background-color: #627288;
+}
+a.botao-inativar-usuario:focus {
+    background-color: #f15252;
+}
+
+
+a.botao-ativar-usuario {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #20BC77;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+a.botao-ativar-usuario:hover {
+    background-color: #627288;
+}
+a.botao-ativar-usuario:focus {
+    background-color: #20BC77;
+}
+
+#botao-cadusuario{
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #20BC77;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#botao-cadusuario:hover {
+    background-color: #627288;
+}
+#botao-cadusuario:focus {
+    background-color: #20BC77;
+}
+
+
+
+a.botao-canc-cadusuario{
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #f15252;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+a.botao-canc-cadusuario:hover {
+    background-color: #627288;
+}
+a.botao-canc-cadusuario:focus {
+    background-color: #f15252;
+}

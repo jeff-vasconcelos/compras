@@ -51,7 +51,7 @@ def editar_fornecedor_conf(request, pk, template_name='aplicacao/paginas/configu
                 fornecedor = form.save(commit=False)
                 fornecedor.save()
                 messages.success(request, "Fornecedor atualizado com sucesso!")
-                return redirect('configuracao_painel')
+                return redirect('fornecedores_painel')
             else:
                 messages.error(request, "Ops, não foi possivel atualizar")
         else:
@@ -96,7 +96,7 @@ def adicionar_email_conf(request, template_name='aplicacao/paginas/configuracao/
                     email.empresa = empresa
                     email.save()
                     messages.success(request, "E-mail cadastrado com sucesso!")
-                    return redirect('configuracao_painel')
+                    return redirect('email_painel')
                 else:
                     messages.error(request, "Ops, não foi possivel cadastrar e-mail")
             else:
@@ -126,7 +126,7 @@ def remover_email_conf(request, pk):
         email = Email.objects.get(pk=pk)
         email.delete()
         messages.error(request, "E-mail removido com sucesso!")
-        return redirect('configuracao_painel')
+        return redirect('email_painel')
     else:
         messages.error(request, "Ops, o usuário não tem permissão!")
         return redirect('home_painel')
@@ -141,7 +141,7 @@ def editar_email_conf(request, pk, template_name='aplicacao/paginas/configuracao
                 empresa = form.save(commit=False)
                 empresa.save()
                 messages.success(request, "E-mail atualizado com sucesso!")
-                return redirect('configuracao_painel')
+                return redirect('email_painel')
             else:
                 messages.error(request, "Ops, não foi possivel editar o e-mail")
         else:

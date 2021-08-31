@@ -51,7 +51,7 @@ $.ajax({
                 legend: {
                     display: false
                 },
-                cutoutPercentage: 90,
+                cutoutPercentage: 70,
             },
         });
 
@@ -84,7 +84,7 @@ $.ajax({
                 legend: {
                     display: false
                 },
-                cutoutPercentage: 90,
+                cutoutPercentage: 70,
             },
         });
 
@@ -116,7 +116,7 @@ $.ajax({
                 legend: {
                     display: false
                 },
-                cutoutPercentage: 90,
+                cutoutPercentage: 70,
             },
         });
 
@@ -148,7 +148,7 @@ $.ajax({
                 legend: {
                     display: false
                 },
-                cutoutPercentage: 90,
+                cutoutPercentage: 70,
             },
         });
 
@@ -180,7 +180,7 @@ $.ajax({
                 legend: {
                     display: false
                 },
-                cutoutPercentage: 90,
+                cutoutPercentage: 70,
             },
         });
 

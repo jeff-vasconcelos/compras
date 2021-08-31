@@ -97,13 +97,13 @@
             {% endif %}
         </div>
 
-        <button type="submit" class="btn btn-success btn-sm">
-            <i class="fas fa-save"></i> Salvar
+        <button id="botao-cadusuario" type="submit" class="btn btn-success btn-sm">
+             Salvar
         </button>
 
         {% if request.user.usuario.tipo == "Administrador" %}
-            <a class="btn btn-danger btn-sm" href="{% url 'listar-usuarios' %}" role="button">
-                <i class="fas fa-times-circle"></i> Cancelar
+            <a class="botao-canc-cadusuario btn btn-danger btn-sm" href="{% url 'listar-usuarios' %}" role="button">
+                 Cancelar
             </a>
         {% else %}
 

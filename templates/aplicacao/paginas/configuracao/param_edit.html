@@ -59,13 +59,18 @@
                     <div class="invalid-feedback">
                         {{ form.curva_e.errors }}
                     </div>
+
+
+                    <button id="botao-salvar-config" type="submit" class="btn btn-success btn-sm">
+                        Salvar
+                    </button>
+
+                    <a href="{% url 'configuracao_painel' %}"
+                       class="botao-cancelar-config btn btn-danger btn-sm" role="button" aria-pressed="true">
+                        Cancelar
+                    </a>
+
                 </div>
-
-
-
-                <button type="submit" class="btn btn-success btn-sm">
-                    <i class="fas fa-save"></i> Salvar
-                </button>
             </div>
 
             <div class="col-8">
