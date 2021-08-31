@@ -11,7 +11,7 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
     id_empresa = request.user.usuario.empresa_id
     dados_estoque = DadosEstoque.objects.filter(empresa__id=id_empresa)
-    grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa)
+    grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
 
     # DADOS DE ESTOQUE
     t_skus = 0
