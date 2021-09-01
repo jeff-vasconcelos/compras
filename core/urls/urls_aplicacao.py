@@ -30,13 +30,10 @@ urlpatterns = [
     # ALERTAS
     path('alertas/excesso/curva/<str:curva>', alerta_excesso_curva, name='alerta_excesso_curva'),
     path('alertas/excesso/filial/<int:filial>', alerta_excesso_filial, name='alerta_excesso_filial'),
-    path('alertas/parcial/curva/<str:curva>', alerta_parcial_curva, name='alerta_parcial_curva'),
-    path('alertas/parcial/filial/<int:filial>', alerta_parcial_filial, name='alerta_parcial_filial'),
     path('alertas/ruptura/curva/<str:curva>', alerta_ruptura_curva, name='alerta_ruptura_curva'),
     path('alertas/ruptura/filial/<int:filial>', alerta_ruptura_filial, name='alerta_ruptura_filial'),
 
     path('alertas/excesso/', alerta_all_excesso, name='alerta_all_excesso'),
-    path('alertas/parcial/', alerta_all_parcial, name='alerta_all_parcial'),
     path('alertas/ruptura/', alerta_all_ruptura, name='alerta_all_ruptura'),
 
     # PEDIDOS
@@ -78,7 +75,6 @@ urlpatterns = [
     # PDFS
     path('pdf/pedidos/<int:pk>', pdf_pedidos_insight, name='pdf_pedidos_insight'),
     path('pdf/alertas/excesso/', pdf_excesso, name='pdf_excesso'),
-    path('pdf/alertas/parcial/', pdf_parcial, name='pdf_parcial'),
     path('pdf/alertas/ruptura/', pdf_ruptura, name='pdf_ruptura'),
 
     # TODO rota de testes

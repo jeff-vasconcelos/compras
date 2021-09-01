@@ -88,18 +88,19 @@
                     <tr>
                         <th>Filial</th>
                         <th>Produto</th>
-                        <th>Condição Est.</th>
+                        <th>Condição</th>
                         <th>Estoque</th>
-                        <th>Pedido Pend.</th>
-                        <th>Quantidade</th>
+                        <th>Pendentes</th>
+                        <th>Quant.</th>
                         <th>Valor</th>
                         <th>Curva</th>
                         <th>DDE</th>
-                        <th>Média Ajus.</th>
-                        <th>Fornecedor</th>
-                        <!--
-                        <th>Ações</th>
-                        -->
+                        <th>Média</th>
+                        {% if p_ativo == True %}
+                            <th>Princípio</th>
+                        {% endif %}
+
+                        <th>Fornecedor.</th>
                     </tr>
                     </thead>
 
@@ -118,13 +119,10 @@
                                 <td class="curva">{{ produto.curva }}</td>
                                 <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
                                 <td class="numero">{{ produto.campo_dois|floatformat:1 }}</td>
+                                {% if p_ativo == True %}
+                                    <td class="numero">{{ produto.campo_tres }}</td>
+                                {% endif %}
                                 <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
-                                <!--
-                                <td>
-                                    Ação 1 <br>
-                                    Ação 2
-                                </td>
-                                -->
 
                             </tr>
 
