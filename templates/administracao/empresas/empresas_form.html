@@ -94,6 +94,32 @@
         </div>
     </div>
 
+
+    <h3 style="margin-top: 30px">+ Informações</h3>
+
+
+    <div class="form-row" style="margin-bottom: 50px">
+        <div class="form-group col-2">
+            <label for="cidade">Quantidade de usuários logados</label>
+            {{ form.qt_usuarios_logados }}
+        </div>
+
+        <div class="form-check col-2" style="margin-left: 70px">
+            {{ form.principio_ativo }}
+            <label class="form-check-label" for="gridCheck">
+                Princípio ativo
+            </label>
+        </div>
+        <div class="form-check col">
+            {{ form.envia_email }}
+            <label class="form-check-label" for="gridCheck">
+                Enviar e-mail de alerta
+            </label>
+        </div>
+
+    </div>
+
+
     <button type="submit" class="btn btn-outline-success btn-sm">
         <i class="fas fa-save"></i> Salvar
     </button>

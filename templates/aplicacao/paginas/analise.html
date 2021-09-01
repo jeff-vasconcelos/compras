@@ -1,56 +1,144 @@
 {% extends 'aplicacao/base.html' %}
 {% load static %}
 
+{% block title %}
+    <title>Análise - Insight</title>
+{% endblock title %}
+
 {% block scripts %}
     <script src="{% static 'aplicacao/js/pesquisa_fornecedor.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/filtros_pesquisa_analise.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/pesquisa_principio_ativo.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_curva.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_marca.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/filtrar_por_principio_ativo.js' %}" defer></script>
+
+    <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/pedido_sessao.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/pedidos_pendentes.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/mascara_preco.js' %}" defer></script>
+
+    <script>
+        $(document).ready(function () {
+            // show the alert
+            setTimeout(function () {
+                $(".alert").alert('close');
+            }, 5000);
+        });
+    </script>
 {% endblock scripts %}
 
 {% block conteudo %}
+
+    <div class="div-mensagem-sucesso" id="div-mensagem-sucesso">
+    </div>
+
+    <div class="div-mensagem-erro" id="div-mensagem-erro">
+    </div>
+
+    <div class="div-mensagem-alerta" id="div-mensagem-alerta">
+    </div>
+
+
     <div class="row">
-        <div class="col-md-6">
+        <div class="col">
             <div class="form-group">
                 <form id="search-f" autocomplete="off">
 
-                    <input id="search-fornec" type="text" class="form-control" name="p_fornecedor"
-                           placeholder="Pesquisar por fornecedor">
-                </form>
-                <div id="results-box-fornec" class="resultados d-none">
+                    <input id="search-fornec" type="text" class="form-control"
+                           name="p_fornecedor"
+                           placeholder="Pesquisar por Fornecedor">
 
-                </div>
+                    <div class="row">
+                        <div class="col check-div-fornec">
+                            <div class="form-check" id="results-box-fornec">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col">
             <div class="form-group">
                 <form id="search-p" autocomplete="off">
                     {% csrf_token %}
                     <input id="search-prod" type="text" class="form-control" name="p_produto"
-                           placeholder="Pesquisar por produto">
-                </form>
-                <div id="results-box-prod" class="resultados d-none">
+                           placeholder="Pesquisar por Produto">
 
-                </div>
+                    <div class="row">
+                        <div class="col check-div-prod">
+                            <div class="form-check" id="results-box-prod">
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+        {% if p_ativo == True %}
+            <div class="col">
+                <div class="form-group">
+                    <form id="search-f" autocomplete="off">
 
-        <div class="col-xl-3 col-lg-3">
+                        <input id="search-principio" type="text" class="form-control"
+                               name="p_principio_ativo"
+                               placeholder="Pesquisar por Princípio Ativo">
+
+                        <div class="row">
+                            <div class="col check-div-fornec">
+                                <div class="form-check" id="results-box-principio">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="col" style="display: none">
+                <div class="form-group">
+                    <form id="search-f" autocomplete="off">
+
+                        <input id="search-principio" type="text" class="form-control"
+                               name="p_principio_ativo"
+                               placeholder="Pesquisar por Princípio Ativo">
+
+                        <div class="row">
+                            <div class="col check-div-fornec">
+                                <div class="form-check" id="results-box-principio">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        {% endif %}
+    </div>
+    <div class="row">
+
+        <div class="col-xl-2 col-lg-2">
             <div class="card shadow mb-4 cards-home-info">
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
+                        <div class="col-12">
+                            Previsão Estoque
                         </div>
                     </div>
                     <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
+                        <div class="col-1 cards-home-sifrao">
                         </div>
-                        <div class="col-10 cards-home-valor">
-                            999.7M
+                        <div class="col-11 cards-home-valor" id="valor_fat">
+                            -
                         </div>
                         <!--
                         <div class="col-4" style="margin-top: auto; margin-bottom: auto">
@@ -62,23 +150,40 @@
             </div>
         </div>
 
-        <div class="col-xl-3 col-lg-3">
+        <div class="col-xl-2 col-lg-2">
             <div class="card shadow mb-4 cards-home-info">
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
                         <div class="col-8">
                             Curva
                         </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
+                    </div>
+                    <div class="row cards-home-valores">
+                        <div class="col-1 cards-home-sifrao">
+
+                        </div>
+                        <div class="col-11 cards-home-valor" id="valor_curva">
+                            -
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-lg-2">
+            <div class="card shadow mb-4 cards-home-info">
+                <div class="card-body cards-home-body">
+                    <div class="row cards-home-titulo">
+                        <div class="col-8">
+                            Média
                         </div>
                     </div>
                     <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
+                        <div class="col-1 cards-home-sifrao">
 
                         </div>
-                        <div class="col-10 cards-home-valor">
-                            C
+                        <div class="col-11 cards-home-valor" id="valor_media_simples">
+                            -
                         </div>
                     </div>
                 </div>
@@ -89,19 +194,19 @@
             <div class="card shadow mb-4 cards-home-info">
                 <div class="card-body cards-home-body">
                     <div class="row cards-home-titulo">
-                        <div class="col-8">
+                        <div class="col-7">
                             Media Ajustada
                         </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
+                        <div class="col-5 cards-home-porc" id="porc_media">
+                            -
                         </div>
                     </div>
                     <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
+                        <div class="col-1 cards-home-sifrao">
 
                         </div>
-                        <div class="col-10 cards-home-valor">
-                            239,45
+                        <div class="col-11 cards-home-valor" id="valor_media">
+                            -
                         </div>
                     </div>
                 </div>
@@ -115,16 +220,16 @@
                         <div class="col-8">
                             Ruptura
                         </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
+                        <div class="col-4 cards-home-porc" id="porc_ruptura">
+
                         </div>
                     </div>
                     <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
+                        <div class="col-1 cards-home-sifrao">
+
                         </div>
-                        <div class="col-10 cards-home-valor">
-                            999.7K
+                        <div class="col-11 cards-home-valor" id="valor_ruptura">
+                            -
                         </div>
                     </div>
                 </div>
@@ -134,147 +239,160 @@
         <div class="col-md-12">
             <div class="card shadow mb-4" id="div-analise-tabela">
                 <div class="row">
-                    <div class="col-md-1 analise-div">
+                    <div class="col-md-2 analise-div">
                         <div class="form-group">
                             <label class="label-analise-tabela">Leadtime</label>
-                            <input type="text" class="form-control input-analise" name="leadtime">
-                        </div>
-                    </div>
-                    <div class="col-md-1 analise-div">
-                        <div class="form-group">
-                            <label class="label-analise-tabela">C. reposição</label>
-                            <input type="text" class="form-control input-analise" name="leadtime">
-                        </div>
-                    </div>
-                    <div class="col analise-div">
-                        <div class="form-group">
-                            <label class="label-analise-tabela" for="produtos">Produto</label>
-                            <select class="form-control select-analise" name="produtos" id="results-produtos">
-                                <option class="option-analise" value="volvo">item</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-1 analise-div">
-                        <div class="form-group">
-                            <label class="label-analise-tabela" for="semana">Semana</label>
-                            <select class="form-control select-analise" name="semana" id="semana">
-                                <option class="option-analise" value="volvo">item</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-1 analise-div">
-                        <div class="form-group">
-                            <label class="label-analise-tabela" for="mensal">Mês</label>
-                            <select class="form-control select-analise" name="mensal" id="mensal">
-                                <option class="option-analise" value="volvo">itemafdfsddfsdfsdfdsfsfdsf</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-1 analise-div">
-                        <div class="form-group">
-                            <label class="label-analise-tabela" for="curva">Curva</label>
-                            <select class="form-control select-analise" name="curva" id="curva">
-                                <option class="option-analise" value="curva_a">A</option>
-                            </select>
+                            <input type="text" class="form-control input-analise" id="leadtime" name="leadtime"
+                                   placeholder="Ex. 10">
                         </div>
                     </div>
                     <div class="col-md-2 analise-div">
                         <div class="form-group">
-                            <label class="label-analise-tabela" for="marca">Marca</label>
-                            <select class="form-control select-analise" name="marca" id="marca">
-                                <option class="option-analise" value="volvo">item</option>
+                            <label class="label-analise-tabela">P. Reposição</label>
+                            <input type="text" class="form-control input-analise" id="tempo_reposicao"
+                                   name="tempo_reposicao" placeholder="Ex. 10">
+                        </div>
+                    </div>
+                    <div class="col analise-div">
+                        <div class="form-group">
+                            <label class="label-analise-tabela">Produto</label>
+                            <select class="form-control select-analise" name="produtos" id="results-produtos">
+                                <!--<option class="option-analise" value="0" selected>Selecione o produto</option>-->
                             </select>
                         </div>
                     </div>
+
+                    <div class="col-md-2 analise-div">
+                        <div class="form-group">
+                            <label class="label-analise-tabela">Curva</label>
+
+                            <select class="form-control select-analise" id="curva_abc_select">
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 analise-div">
+                        <div class="form-group">
+                            <label class="label-analise-tabela" for="marca">Marca</label>
+                            <select class="form-control select-analise" name="marca" id="filtro_marca">
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12" id="div-tabela">
+                    <div class="col-md-10" id="div-tabela">
                         <table id="tabela-analise">
+
                             <thead>
                             <tr>
-                                <th class="tabela-info-th" colspan="5">Dados filiais</th>
+                                <th class="tabela-info-th" colspan="4">Dados filiais</th>
                                 <th class="tabela-info-th" colspan="4">Dados de entrada</th>
-                                <th class="tabela-info-th" colspan="1">Calc. dias</th>
-                                <th class="tabela-info-th" colspan="5">Dados estatísticos</th>
-                                <th class="tabela-info-th" colspan="1">Preço prat.</th>
-                                <th class="tabela-info-th-d" colspan="5">Digitar pedido de compra</th>
+                                <th class="tabela-info-th" colspan="7">Dados estatísticos</th>
+                                <th class="tabela-info-th" colspan="2">Preço prat.</th>
+                                <!--                                <th class="tabela-info-th-d" colspan="4">Digitar pedido de compra</th>-->
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="body-tabela-analise">
                             <tr>
-                                <th class="tabela-info">Cód</th>
-                                <th class="tabela-info">Filial</th>
+                                <th class="tabela-info">Cód. Filial</th>
                                 <th class="tabela-info">Estoque</th>
                                 <th class="tabela-info">Avaria</th>
                                 <th class="tabela-info">Ped. pendente</th>
                                 <th class="tabela-info">Dt. ult. Ent.</th>
                                 <th class="tabela-info">Qt. ult. Ent.</th>
                                 <th class="tabela-info">Vl. ult. Ent.</th>
-                                <th class="tabela-info">DDE normal</th>
+                                <th class="tabela-info">Embal.</th>
+                                <th class="tabela-info">DDE</th>
                                 <th class="tabela-info">Est. seg.</th>
                                 <th class="tabela-info">Ponto rep.</th>
                                 <th class="tabela-info">Cx Fech.</th>
-                                <th class="tabela-info">Caixa</th>
-                                <th class="tabela-info">Unid.</th>
+                                <th class="tabela-info">Und Caixa</th>
+                                <th class="tabela-info">Sugestão Und</th>
+                                <th class="tabela-info">Excesso</th>
                                 <th class="tabela-info">Pr. tabela</th>
-                                <th class="tabela-info">% margem</th>
-
-                                <th>Qt digitada</th>
-                                <th>Pr. compra</th>
-                                <th>% margem</th>
-                                <th>Pr. sugerido</th>
-                                <th>DDE</th>
+                                <th class="tabela-info">Margem</th>
+                                <!--                                <th>Qt digitada</th>-->
+                                <!--                                <th>Pr. compra</th>-->
+                                <!--                                <th>% margem</th>-->
+                                <!--                                <th>Pr. sugerido</th>-->
+                                <!--                                <th>DDE</th>-->
 
                             </tr>
+                            <tr id="tabela-info-analise">
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-2" id="div-tabela-digite" style="padding-left: 0px; padding-right: 0px">
+                        <table id="tabela-analise-digite">
+                            <thead>
                             <tr>
-                                <td class="tabela-info">1234</td>
-                                <td class="tabela-info">Matriz</td>
-                                <td class="tabela-info">32000</td>
-                                <td class="tabela-info">9999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
-                                <td class="tabela-info">999</td>
+                                <th class="tabela-info-th-d" colspan="5">Digitar pedido de compra</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>Qt digitada</th>
+                                <th>Pr. compra</th>
+                                <!--
+                                <th>% margem</th>
 
+                                <th>Pr. sugerido</th>
 
+                                <th>DDE</th>
+                                -->
+                            </tr>
+                            <tr>
                                 <td class="tabela-form">
-                                    <input class="input-tabela-analise" name="">
+                                    <input class="input-tabela-analise" name="qt_digitada" id="qt_digit">
                                 </td>
                                 <td class="tabela-form">
-                                    <input class="input-tabela-analise" name="">
+                                    <input type="Text" class="input-tabela-analise" name="pr_compra" id="pr_compra"
+                                           onKeyUp="mascaraMoeda(this, event)" value="">
+                                </td>
+                                <!--
+                                <td class="tabela-form">
+                                    <input class="input-tabela-analise" name="porc_margem" id="porc_margem">
                                 </td>
                                 <td class="tabela-form">
-                                    <input class="input-tabela-analise" name="">
+                                    <input class="input-tabela-analise" name="pr_sugerido" id="pr_sugerido">
                                 </td>
                                 <td class="tabela-form">
-                                    <input class="input-tabela-analise" name="">
+                                    <input class="input-tabela-analise" name="dde" id="dde">
                                 </td>
-                                <td class="tabela-form">
-                                    <input class="input-tabela-analise" name="">
-                                </td>
-
+                                -->
                             </tr>
                             </tbody>
 
                         </table>
-                        <div class="col-md-12 botoes-analise-tabela">
-                            <button class="btn btn-secondary btn-sm ver-pendentes" type="button"
-                                    data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes
-                            </button>
-                            <button class="btn btn-secondary btn-sm ver-pedido" type="button"
-                                    data-toggle="modal" data-target=".modal-pedido">Ver pedido
-                            </button>
-                            <button class="btn btn-secondary btn-sm adicionar-item">Adicionar item</button>
-                        </div>
+                    </div>
+
+                    <div class="col-md-3" style="margin-bottom: 15px">
+                        <label class="label-analise-tabela">Filiais</label>
+                        <select class="form-control select-analise" id="filtro-filial">
+                            {% for filial in filiais %}
+                                <option class="option-analise" value="{{ filial.cod_filial }}">{{ filial.cod_filial }}
+                                    - {{ filial.desc_filial }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-9 botoes-analise-tabela">
+                        <button id="ver_pedidos_pendentes" class="btn btn-secondary btn-sm ver-pendentes"
+                                type="button"
+                                data-toggle="modal" data-target=".modal-pendentes">Pedidos pendentes
+                        </button>
+                        <button id="ver_pedido_sessao" class="btn btn-secondary btn-sm ver-pedido" type="button"
+                                data-toggle="modal" data-target=".modal-pedido">Ver pedido
+                        </button>
+                        <button id="add_pedido_sessao" class="btn btn-secondary btn-sm adicionar-item">Adicionar
+                            item
+                        </button>
                     </div>
                 </div>
             </div>
@@ -283,20 +401,54 @@
         <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-body" id="grafico-serie-hist">
-                    <p class="texto-grafico-analise">Série histórica de vendas</p>
-                    <div class="chart-bar">
-                        <canvas id="ChartSerieHist"></canvas>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <p id="titulo_vendasxmes">Vendas x Mês</p>
+                            <table>
+                                <tr id="th_tabela_totais">
+
+                                </tr>
+
+                                <tr id="td_tabela_totais">
+
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-4">
+                            <p class="texto-grafico-analise">Série histórica de vendas</p>
+                        </div>
+                        <div class="col-4"></div>
+                    </div>
+
+                    <div id="div-graf-um">
+                        <div class="chart-bar" id="div-grafico-um">
+                            <canvas id="ChartSerieHist"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <style>
+            #div-graf-um {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            #div-grafico-um {
+                width: 2000px;
+            }
+        </style>
+
         <div class="col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <p class="texto-grafico-analise">Cobertura de estoque</p>
-                    <div class="chart-bar" id="div-grafico-um">
-                        <canvas id="ChartCobertura"></canvas>
+                    <div style="overflow-x: auto; white-space: nowrap;">
+                        <div class="chart-bar" style="width:2000px;" id="div-grafico-dois">
+                            <canvas id="ChartCobertura"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -305,7 +457,8 @@
 
 
     <!-- MODAL ITENS PEDIDOS  -->
-    <div class="modal fade modal-pedido" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    <div id="modal-ver-pedido-geral" class="modal fade modal-pedido" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" id="modal-ver-pedido">
             <div class="modal-content">
@@ -318,45 +471,40 @@
                         <thead>
                         <tr>
                             <th>Cód. filial</th>
-                            <th>Filial</th>
                             <th>Cód. prod</th>
                             <th>Descrição produto</th>
                             <th>Preço</th>
                             <th>Quantidade</th>
-                            <th>Data do pedido</th>
+
                         </tr>
                         </thead>
 
-                        <tbody>
-                        <tr>
-                            <td>nome</td>
-                            <td>cnpj</td>
-                            <td>Ativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                        </tr>
+                        <tbody id="tbody_pedidos_sessao">
+
                         </tbody>
 
                     </table>
 
                 </div>
                 <div class="modal-footer">
+
                     <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
                             data-dismiss="modal">Voltar
                     </button>
-                    <button id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <a href="{% url 'exportar-pedido-sessao' %}" id="btn-expo-modal-analise" type="button"
+                       class="btn btn-primary btn-sm">Exportar <i
+                            class="fas fa-chevron-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- MODAL PEDIDOS PENDENTES -->
-    <div class="modal fade modal-pendentes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    <div class="modal fade modal-pendentes" id="modal-pendentes" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" id="modal-ver-pedido">
+        <div class="modal-dialog" id="modal-ver-pedido-p">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Pedidos pendentes</h5>
@@ -367,36 +515,29 @@
                         <thead>
                         <tr>
                             <th>Cód. filial</th>
-                            <th>Filial</th>
                             <th>Cód. prod</th>
                             <th>Descrição produto</th>
-                            <th>Preço</th>
-                            <th>Quantidade</th>
+                            <th>Saldo</th>
                             <th>Data do pedido</th>
+                            <th>Número do pedido</th>
                         </tr>
                         </thead>
 
-                        <tbody>
-                        <tr>
-                            <td>nome</td>
-                            <td>cnpj</td>
-                            <td>Ativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                            <td>Inativa</td>
-                        </tr>
+                        <tbody id="pedidos-pendentes-modal">
+
                         </tbody>
 
                     </table>
 
                 </div>
                 <div class="modal-footer">
-                    <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
+                    <button id="btn-canc-modal-analise-p" type="button" class="btn btn-secondary btn-sm"
                             data-dismiss="modal">Voltar
                     </button>
-                    <button id="btn-expo-modal-analise" type="button" class="btn btn-primary btn-sm">Exportar <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <!--                    <button id="btn-expo-modal-analise-p" type="button" class="btn btn-primary btn-sm">Exportar-->
+                    <!--                        <i-->
+                    <!--                                class="fas fa-chevron-right"></i>-->
+                    <!--                    </button>-->
                 </div>
             </div>
         </div>

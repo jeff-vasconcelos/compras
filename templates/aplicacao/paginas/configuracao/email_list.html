@@ -1,0 +1,68 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block title %}
+    <title>Configurações - Insight</title>
+{% endblock title %}
+
+
+{% block conteudo %}
+    <h2>E-mails cadastrados para alertas</h2>
+    <hr>
+
+    <div class="card shadow mb-4">
+
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-6">
+                    <h6 class="m-0 font-weight-bold">E-mails Cadastrados</h6>
+                </div>
+                <div class="col-6">
+                    <a id="add-email" href="{% url 'config_add_email' %}" type="button"
+                       class="float-right btn btn-primary btn-sm">
+                        Cadastrar e-mail
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if emails %}
+                        {% for email in emails %}
+                            <tr>
+                                <td>{{ email.email }}</td>
+                                <td>
+                                    <a href="{% url 'config_remove_email'  email.pk %}"
+                                       class="botao-remover-config btn btn-danger btn-sm" role="button" aria-pressed="true">
+                                         Remover
+                                    </a>
+
+                                    <a href="{% url 'config_editar_email'  email.pk %}"
+                                       class="botao-editar-config btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                                         Editar
+                                    </a>
+
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

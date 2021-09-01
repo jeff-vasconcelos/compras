@@ -1,337 +1,208 @@
 {% extends 'aplicacao/base.html' %}
+{% load static %}
+
+
+{% block title %}
+    <title>Home - Insight</title>
+{% endblock title %}
+
+
+{% block scripts %}
+
+    <script src="{% static 'aplicacao/js/home_grafico.js' %}" defer></script>
+
+{% endblock scripts %}
 
 {% block conteudo %}
+
+    <style>
+        div.card_curvas {
+            margin-left: auto;
+            margin-right: auto;
+            width: 10%;
+        }
+
+        h6.curvas_text {
+            font-size: 14px;
+        }
+
+        th.tabela-home-head {
+            border-bottom: solid 1px black;
+            border-right: solid 1px black;
+            text-align: center;
+        }
+
+        td.tabela-home-body {
+            border-right: solid 1px black;
+            text-align: center;
+        }
+
+        th.tabela-home-foot {
+            border-right: solid 1px black;
+            text-align: center;
+        }
+
+        th.tabela-home-last, td.tabela-home-last {
+            text-align: center;
+        }
+
+        #excesso-table-home {
+            border-bottom: solid 1px black;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col" style="padding-top: 10px; padding-bottom: 10px; text-align: right">
+            {% if request.user.usuario.empresa.atualizacao_alerta %}
+                <h6>Atualizado em: {{ request.user.usuario.empresa.atualizacao_alerta }}</h6>
+            {% else %}
+                <h6></h6>
+            {% endif %}
+        </div>
+    </div>
+
+
     <!-- CARDS -->
     <div class="row">
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Total Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
-                        </div>
-                        <div class="col-10 cards-home-valor">
-                             999.7M
-                        </div>
-                        <!--
-                        <div class="col-4" style="margin-top: auto; margin-bottom: auto">
-                            Grafico
-                        </div>
-                        -->
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% if grafico_um %}
+            {% for g_um in grafico_um %}
+                <div class="card_curvas col">
+                    <div class="card shadow mb-4 cards-home-info">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12" style="text-align: center">
+                                    <h5>Curva {{ g_um.curva }}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12" style="margin-right: auto; margin-left: auto">
+                                    <div class="chart-pie pt-4">
+                                        <canvas id="chartCurva{{ g_um.curva }}"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 23px; padding-top: 20px">
 
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Total Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
-                        </div>
-                        <div class="col-10 cards-home-valor">
-                             999.7M
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                <div class="col-5">
+                                    <h6 class="curvas_text">Normal:</h6>
+                                    <h6 class="curvas_text">Parcial:</h6>
+                                    <h6 class="curvas_text">Excesso:</h6>
+                                    <h6 class="curvas_text">Total Est.:</h6>
+                                </div>
 
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Total Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
-                        </div>
-                        <div class="col-10 cards-home-valor">
-                             999.7M
+                                <div class="col-7 text-right">
+                                    <h6 class="curvas_text">{{ g_um.normal }}</h6>
+                                    <h6 class="curvas_text">{{ g_um.parcial }}</h6>
+                                    <h6 class="curvas_text">{{ g_um.excesso }}</h6>
+                                    <h6 class="curvas_text">{{ g_um.total }}</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-8">
-                            Total Faturamento
-                        </div>
-                        <div class="col-4 cards-home-porc">
-                            92%
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-2 cards-home-sifrao">
-                            R$
-                        </div>
-                        <div class="col-10 cards-home-valor">
-                             999.7M
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            {% endfor %}
+        {% endif %}
     </div>
 
     <!-- GRAFICO -->
     <div class="row">
-        <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <p>Faturamento x Margem</p>
-                    <div class="chart-bar">
-                        <canvas id="myAreaChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- RUPTURA POR CURVA -->
-    <div class="row">
         <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <p>Ruptura por curva ABCDEX</p>
-                    <div class="row curva-home">
-                        <div class="col-5">
-                            <div class="chart-pie pt-4">
-                                <canvas id="myPieChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="col-7 curva-home-info">
+                    <h6>Dados Estoque</h6>
 
-                            <!-- CURVA A -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-a"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="#">
-                                                Curva A
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA B -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-b"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="#">
-                                                Curva B
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA C -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-c"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva C
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA D -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-d"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva D
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- CURVA E -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-e"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva E
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- CURVA X -->
-                            <div class="row curva-info">
-                                <div class="col-1 curva-info-cor">
-                                    <div class="curva-cor-x"></div>
-                                </div>
-                                <div class="col-11">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <a href="">
-                                                Curva X
-                                            </a>
-                                        </div>
-                                        <div class="col-6 curva-info-valor">
-                                            R$ 329.960,00
-                                        </div>
-                                    </div>
-                                    <div class="row linha-sub-curva">
-                                        <div class="linha-sub"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- TABELA PEDIDOS PENDENTES -->
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <p>Pedidos pendentes por fornecedor</p>
-                    <table class="tabela-home">
+                    <table width="100%">
+                        <thead>
                         <tr>
-                            <th>Seq.</th>
-                            <th>Cód. Fornec</th>
-                            <th>Fornecedor</th>
-                            <th>Quntidade</th>
-                            <th>Qt. Itens</th>
-                            <th>Vl. Total</th>
+                            <th class="tabela-home-head">Curva</th>
+                            <th class="tabela-home-head">SKU's</th>
+                            <th class="tabela-home-head">Normal</th>
+                            <th class="tabela-home-head">Ruptura Parc.</th>
+                            <th class="tabela-home-head">Ruptura</th>
+                            <th class="tabela-home-last" id="excesso-table-home">Excesso</th>
                         </tr>
+                        </thead>
+
+                        <tbody>
+                        {% if dadosestoque %}
+                            {% for dados in dadosestoque %}
+                                <tr>
+                                    <td class="tabela-home-body">{{ dados.curva }}</td>
+                                    <td class="tabela-home-body">{{ dados.skus }}</td>
+                                    <td class="tabela-home-body">{{ dados.normal }}</td>
+                                    <td class="tabela-home-body">{{ dados.parcial }}</td>
+                                    <td class="tabela-home-body">{{ dados.ruptura }}</td>
+                                    <td class="tabela-home-last">{{ dados.excesso }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+
+                        <tfoot>
+
                         <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
+                            <th class="tabela-home-foot">Total</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_skus }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_normal }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_parcial }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_ruptura }}</th>
+                            <th class="tabela-home-last">{{ totais_dados_estoque.t_excesso }}</th>
                         </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 324.900,00</td>
-                        </tr>
-                        <tr>
-                            <td>001</td>
-                            <td>999</td>
-                            <td>BRF S/A</td>
-                            <td>10</td>
-                            <td>3000</td>
-                            <td>R$ 303,00</td>
-                        </tr>
+
+                        </tfoot>
                     </table>
-                    <div class="row" style="margin-top: 30px">
-                        <div class="col-12 ver-fornec-home">
-                            <a href="#">
-                                Ver fornecedores <i class="far fa-caret-square-right"></i>
-                            </a>
-                        </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <p>Faturamento x Curva</p>
+                    <div class="chart-bar">
+                        <canvas id="chartRupturaxCurva"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12" style="margin-right: auto; margin-left: auto">
+            <div class="chart-pie pt-4">
+                <canvas id="grafico_a"></canvas>
+            </div>
+        </div>
+    </div>
+
+{#    <div>#}
+{#        {% if grafico_dois %}#}
+{##}
+{#            <table width="100%">#}
+{#                <thead>#}
+{#                <tr>#}
+{#                    <th class="tabela-home-head">Curva</th>#}
+{#                    <th class="tabela-home-last">Total</th>#}
+{#                </tr>#}
+{#                </thead>#}
+{##}
+{#                <tbody>#}
+{##}
+{#                {% for rupt in grafico_dois %}#}
+{#                    <tr>#}
+{##}
+{#                        <td class="tabela-home-body">{{ rupt.curva }}</td>#}
+{#                        <td class="tabela-home-body">{{ rupt.total }}</td>#}
+{##}
+{#                    </tr>#}
+{#                {% endfor %}#}
+{##}
+{#                </tbody>#}
+{#            </table>#}
+{#        {% endif %}#}
+{##}
+{#    </div>#}
+
 {% endblock conteudo %}

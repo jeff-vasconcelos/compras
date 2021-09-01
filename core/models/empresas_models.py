@@ -34,5 +34,64 @@ class Empresa(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
+    atualizacao_alerta = models.DateTimeField(null=True, blank=True)
+    quantidade_alerta = models.IntegerField(blank=True, null=True)
+
+    envia_email = models.BooleanField(default=True, verbose_name='Enviar E-mails de alerta')
+    principio_ativo = models.BooleanField(default=False, verbose_name='Considerar Princípio Ativo')
+
+    qt_usuarios_logados = models.IntegerField(blank=True, null=True, verbose_name='Quantidade de usuários logados')
+
+    campo_um = models.CharField(max_length=255, null=True, blank=True)
+    campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+
     def __str__(self):
         return self.nome_fantasia
+
+
+class Filial(models.Model):
+    cod_filial = models.IntegerField(blank=True, null=True)
+    desc_filial = models.CharField(max_length=255, blank=True, null=True)
+    empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='filial_empresa')
+
+    campo_um = models.CharField(max_length=255, null=True, blank=True)
+    campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Filial'
+        verbose_name_plural = 'Filiais'
+
+    def __str__(self):
+        return self.desc_filial
+
+
+class Alerta(models.Model):
+    cod_filial = models.IntegerField(blank=True, null=True)
+    cod_produto = models.IntegerField(blank=True, null=True)
+    desc_produto = models.CharField(max_length=255, blank=True, null=True)
+    saldo = models.FloatField(blank=True, null=True)
+    sugestao = models.FloatField(blank=True, null=True)
+    valor = models.CharField(max_length=255, blank=True, null=True)
+    estado_estoque = models.CharField(max_length=255, blank=True, null=True)
+    estoque = models.FloatField(blank=True, null=True)
+    qt_excesso = models.FloatField(blank=True, null=True)
+    vl_excesso = models.CharField(max_length=255, blank=True, null=True)
+    curva = models.CharField(max_length=255, blank=True, null=True)
+    fornecedor = models.CharField(max_length=255, blank=True, null=True)
+    cod_fornecedor = models.IntegerField(blank=True, null=False)
+    empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='alerta_empresa')
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    campo_um = models.CharField(max_length=255, null=True, blank=True)
+    campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+    campo_quatro = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Alerta'
+        verbose_name_plural = 'Alertas'
+
+    def __str__(self):
+        return self.empresa.nome_fantasia

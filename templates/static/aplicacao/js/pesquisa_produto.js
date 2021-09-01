@@ -1,7 +1,7 @@
 const searchProd = document.getElementById('search-prod')
 const resultsBoxProd = document.getElementById('results-box-prod')
 
-const sendSearchProd = (prod) =>{
+const sendSearchProd = (prod) => {
     $.ajax({
         type: 'POST',
         url: '/painel/search/prod',
@@ -9,41 +9,40 @@ const sendSearchProd = (prod) =>{
             'csrfmiddlewaretoken': csrf,
             'produto': prod,
         },
-        success: (res)=> {
-            console.log(res.data)
+        success: (res) => {
             const data = res.data
-            if (Array.isArray(data)){
+            if (Array.isArray(data)) {
                 resultsBoxProd.innerHTML = ""
-                data.forEach(prod=> {
+                data.forEach(prod => {
                     resultsBoxProd.innerHTML += `
-                    <a href="">
-                        <div class="row">
-                            <div class="col">
-                                <h3>${prod.cod} - ${prod.nome}</h3>
-                            </div>
-                        </div>
-                    </a>
+                    <input name="item-produto" class="form-check-input" type="checkbox" value="${prod.pk}" id="${prod.pk}" 
+                    style="display: block" onclick="selecao_produto()   ">
+                        <label style="display: block" class="form-check-label" for="${prod.pk}">
+                            ${prod.cod} - ${prod.nome}
+                        </label>
                     `
                 })
-            }else{
-                 if (searchProd.value.length > 0){
-                      resultsBoxProd.innerHTML = `<b>${data}</b>`
-                 }else{
-                     resultsBoxProd.classList.add('d-none')
-                 }
+            } else {
+                if (searchProd.value.length > 0) {
+                    resultsBoxProd.innerHTML = `<b>${data}</b>`
+                } else {
+                    resultsBoxProd.classList.add('d-none')
+                    resultadosPProdutos.innerHTML = ""
+                    listaMarcaSelecionar.innerHTML = ""
+                    listaCurvaSelecionar.innerHTML = ""
+                }
             }
         },
-        error: (err)=> {
-            console.log(err)
+        error: function (error) {
+            console.log(error)
         }
 
     })
 }
 
-searchProd.addEventListener('keyup', e=>{
-    console.log(e.target.value)
+searchProd.addEventListener('keyup', e => {
 
-    if (resultsBoxProd.classList.contains('d-none')){
+    if (resultsBoxProd.classList.contains('d-none')) {
         resultsBoxProd.classList.remove('d-none')
     }
 

@@ -1,0 +1,47 @@
+{% extends 'aplicacao/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Pedidos - Insight</title>
+{% endblock title %}
+
+{% block conteudo %}
+
+    <h2>Pedido n° {{ pedido.numero }}</h2>
+    <hr>
+
+    <div class="card shadow mb-4">
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Filial</th>
+                        <th>Produto</th>
+                        <th>Preço digitado</th>
+                        <th>Quantidade digitada</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if itens %}
+                        {% for item in itens %}
+                            <tr>
+                                <td>{{ item.cod_filial }}</td>
+                                <td>{{ item.cod_produto }} - {{ item.desc_produto }}</td>
+                                <td>{{ item.preco }}</td>
+                                <td>{{ item.quantidade }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock conteudo %}

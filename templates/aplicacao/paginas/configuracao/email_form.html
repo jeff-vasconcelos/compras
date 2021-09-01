@@ -1,0 +1,49 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block title %}
+    <title>Configurações - Insight</title>
+{% endblock title %}
+
+
+{% block conteudo %}
+
+    <h2>E-mail</h2>
+    <hr>
+
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-4">
+
+                <div class="form-group col-md-12">
+                    <label for="email">Email</label>
+                    {{ form.email }}
+                    <div class="invalid-feedback">
+                        {{ form.email.errors }}
+                    </div>
+
+
+                    <button id="botao-salvar-config" type="submit" class="btn btn-success btn-sm">
+                         Salvar
+                    </button>
+
+                    <a href="{% url 'config_ver_email' %}"
+                       class="botao-cancelar-config btn btn-danger btn-sm" role="button" aria-pressed="true">
+                        Cancelar
+                    </a>
+
+                </div>
+            </div>
+            <div class="col-8">
+                <!--
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi atque distinctio dolorum, eos eum ex
+                    explicabo libero mollitia, necessitatibus neque praesentium quisquam quo quos ratione ullam unde
+                    veniam
+                    voluptate voluptates!
+                </p>
+                -->
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

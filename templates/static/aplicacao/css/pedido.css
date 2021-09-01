@@ -1,0 +1,33 @@
+
+a.botao-ver-pinsight {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #224390;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+a.botao-ver-pinsight:hover {
+    background-color: #627288;
+}
+a.botao-ver-pinsight:focus {
+    background-color: #224390;
+}
+
+a.botao-print-insight {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #20BC77;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+a.botao-print-insight:hover {
+    background-color: #627288;
+}
+a.botao-print-insight:focus {
+    background-color: #20BC77;
+}
+

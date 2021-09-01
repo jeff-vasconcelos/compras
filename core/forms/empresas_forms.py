@@ -7,7 +7,8 @@ class EmpresasForm(forms.ModelForm):
     class Meta:
         model = Empresa
         fields = ['nome_fantasia', 'razao_social', 'cnpj', 'iestadual', 'resp_tec', 'resp_leg', 'telefone',
-                  'email', 'ativo', 'endereco', 'cidade', 'bairro', 'numero', 'estado', 'cep']
+                  'email', 'ativo', 'endereco', 'cidade', 'bairro', 'numero', 'estado', 'cep', 'qt_usuarios_logados',
+                  'principio_ativo', 'envia_email']
 
         widgets = {
             'nome_fantasia': forms.TextInput(attrs={'class': 'form-control'}),
@@ -24,5 +25,8 @@ class EmpresasForm(forms.ModelForm):
             'bairro': forms.TextInput(attrs={'class': 'form-control'}),
             'numero': forms.TextInput(attrs={'class': 'form-control'}),
             'estado': forms.Select(attrs={'class': 'form-control'}),
-            'cep': forms.TextInput(attrs={'data-mask': '00000-000', 'class': 'form-control'})
+            'cep': forms.TextInput(attrs={'data-mask': '00000-000', 'class': 'form-control'}),
+            'qt_usuarios_logados': forms.NumberInput(attrs={'class': 'form-control'}),
+            'principio_ativo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'envia_email': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

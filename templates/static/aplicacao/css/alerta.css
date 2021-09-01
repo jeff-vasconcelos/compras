@@ -1,0 +1,128 @@
+/*BOTOES*/
+
+#btn-print-excesso {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #20BC77;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#btn-print-excesso:hover {
+    background-color: #627288;
+}
+
+#btn-print-excesso:focus {
+    background-color: #20BC77;
+}
+
+
+#btn-print-parcial {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #20BC77;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#btn-print-parcial:hover {
+    background-color: #627288;
+}
+
+#btn-print-parcial:focus {
+    background-color: #20BC77;
+}
+
+
+#btn-print-ruptura {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #20BC77;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#btn-print-ruptura:hover {
+    background-color: #627288;
+}
+
+#btn-print-ruptura:focus {
+    background-color: #20BC77;
+}
+
+
+#dropdownMenuCurva {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #224390;
+    height: 28px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#dropdownMenuCurva:hover {
+    background-color: #627288;
+}
+
+#dropdownMenuCurva:focus {
+    background-color: #224390;
+}
+
+#dropdownMenuFilial {
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    background-color: #224390;
+    height: 28px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#dropdownMenuFilial:hover {
+    background-color: #627288;
+}
+
+#dropdownMenuFilial:focus {
+    background-color: #224390;
+}
+
+
+/*OUTROS ESTILOS*/
+tr.excesso, tr.ruptura, tr.parcial {
+    font-size: 12px;
+}
+
+td.excesso {
+    background-color: #F42E15;
+    color: #FFFFFF;
+}
+
+td.numero {
+    text-align: right;
+}
+
+td.curva, td.status {
+    text-align: center;
+}
+
+td.parcial {
+    background-color: #ffa500;
+    color: #FFFFFF;
+}
+
+
+td.ruptura {
+    background-color: #7d7b7a;
+    color: #FFFFFF;
+}
+
+th.sorting, th.sorting_desc {
+    font-size: 14px;
+}

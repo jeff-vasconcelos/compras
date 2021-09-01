@@ -3,19 +3,28 @@
     src: url(../fonts/Montserrat-Light.ttf);
 }
 
+@font-face {
+    font-family: Montserrat-Medium;
+    src: url(../fonts/Montserrat-Medium.ttf);
+}
+
 
 label.label-analise-tabela {
     font-size: 13px;
+    font-family: Montserrat-Medium;
 }
+
 input.input-analise {
     font-size: 16px;
     height: 30px;
     text-align: center;
 }
+
 select.select-analise {
     height: 30px;
     font-size: 12px;
 }
+
 div.analise-div {
     padding: 0px 5px;
 }
@@ -29,63 +38,173 @@ div.analise-div {
     margin-bottom: 10px;
 }
 
+#div-tabela-digite {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 #tabela-analise {
     font-size: 12px;
     text-align: center;
     width: 100%;
 }
+
+#tabela-analise-digite {
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+}
+
 input.input-tabela-analise {
-    max-width: 50px;
+    max-width: 90px;
     border-radius: 5px;
     border: 1px solid #d1d3e2;
     text-align: center;
 }
-th.tabela-info-th{
+
+th.tabela-info-th {
     border-right: 1px solid;
     font-size: 14px;
+    font-family: Montserrat-Medium;
 }
-th.tabela-info-th-d{
+
+th.tabela-info-th-d {
     font-size: 14px;
+    font-family: Montserrat-Medium;
 }
-td.tabela-info{
+
+td.tabela-info {
     border-right: 1px solid;
 }
-th.tabela-info{
+
+th.tabela-info {
     border-right: 1px solid;
 }
+
 div.botoes-analise-tabela {
     margin-top: 10px;
     text-align: right;
     padding: 10px 0px;
 }
 
-button.ver-pendentes {
+/*BOTOES*/
+
+#ver_pedidos_pendentes {
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 12px;
+    display: none;
+    background-color: #54D8ff;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
-button.ver-pedido {
-    background-color: #4791ff;
+#ver_pedidos_pendentes:hover {
+    background-color: #627288;
+}
+#ver_pedidos_pendentes:focus {
+    background-color: #54D8ff;
+}
+
+
+#ver_pedido_sessao {
+    background-color: #224390;
     color: #FFFFFF;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 12px;
     margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
-button.ver-pedido:hover, button.ver-pedido:focus{
-    background-color: #4791ff;
+#ver_pedido_sessao:hover{
+    background-color: #627288;
 }
-button.adicionar-item:hover, button.adicionar-item:focus {
-    background-color: #224390;
+#ver_pedido_sessao:focus {
+     background-color: #224390;
 }
-button.adicionar-item {
-    background-color: #224390;
+
+
+#add_pedido_sessao {
+    background-color: #20BC77;
     color: #FFFFFF;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 12px;
     margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
+#add_pedido_sessao:hover {
+    background-color: #627288;
+}
+#add_pedido_sessao:focus {
+    background-color: #20BC77;
+}
+
+
+#btn-expo-modal-analise {
+    background-color: #20BC77;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#btn-expo-modal-analise:hover {
+    background-color: #627288;
+}
+#btn-expo-modal-analise:focus {
+    background-color: #20BC77;
+}
+
+
+#btn-canc-modal-analise {
+    background-color: #F15252;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#btn-canc-modal-analise:hover {
+    background-color: #627288;
+}
+#btn-canc-modal-analise:focus {
+    background-color: #F15252;
+}
+
+
+#btn-canc-modal-analise-p {
+    background-color: #F15252;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#btn-canc-modal-analise-p:hover {
+    background-color: #627288;
+}
+#btn-canc-modal-analise-p:focus {
+    background-color: #F15252;
+}
+
+button.botao_remover_p_sessao {
+    border-radius: 100%;
+}
+
 
 #div-grafico-um {
     width: 100%;
@@ -97,21 +216,57 @@ button.adicionar-item {
 p.texto-grafico-analise {
     text-align: center;
     margin-bottom: 0px;
+    font-family: Montserrat-Medium;
 }
 
 #modal-ver-pedido {
     max-width: 1100px;
     font-size: 14px;
 }
-#btn-expo-modal-analise{
-    background-color: #224390;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 10px;
-    font-size: 12px;
+
+#modal-ver-pedido-p {
+    max-width: 1100px;
+    font-size: 14px;
 }
-#btn-canc-modal-analise{
-    border: none;
-    border-radius: 10px;
+
+
+
+label.check-fornecedor {
+    display: block;
+}
+
+div.check-div-fornec {
+    background-color: #FFF;
+    padding: 0px 3%;
+    margin: 0px 10px;
+    border-radius: 5px;
+}
+
+label.check-pro {
+    display: block;
+}
+
+div.check-div-prod {
+    background-color: #FFF;
+    padding: 0px 3%;
+    margin: 0px 10px;
+    border-radius: 5px;
+}
+
+#porc_ruptura {
+    color: #de200d;
+}
+
+td.td_totais, th.th_totais {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: center;
     font-size: 12px;
+
+}
+#titulo_vendasxmes{
+    padding-bottom: 0px;
+    padding-top: 0px;
+    margin-bottom: 0px;
+    display: none;
 }

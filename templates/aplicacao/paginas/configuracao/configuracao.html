@@ -1,0 +1,56 @@
+{% extends 'aplicacao/base.html' %}
+
+{% block title %}
+    <title>Configurações - Insight</title>
+{% endblock title %}
+
+
+{% block conteudo %}
+    <h2>Configurações</h2>
+    <hr>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+
+                        <div class="card-header py-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h6 class="m-0 font-weight-bold">Parâmetros de estoque de segurança</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6>Periodo da análise: <b>{{ parametro.periodo }}</b> dias</h6>
+                            <h6>Curva A: <b>{{ parametro.curva_a|floatformat:1 }}</b> % de segurança</h6>
+                            <h6>Curva B: <b>{{ parametro.curva_b|floatformat:1 }}</b> % de segurança</h6>
+                            <h6>Curva C: <b>{{ parametro.curva_c|floatformat:1 }}</b> % de segurança</h6>
+                            <h6>Curva D: <b>{{ parametro.curva_d|floatformat:1 }}</b> % de segurança</h6>
+                            <h6>Curva E: <b>{{ parametro.curva_e|floatformat:1 }}</b> % de segurança</h6>
+
+                            <a href="{% url 'config_edit_param' parametro.pk %}"
+                               class="botao-gerenciar-conf float-right btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                                Gerenciar
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-6">
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+{% endblock %}

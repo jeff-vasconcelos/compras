@@ -1,6 +1,15 @@
 {% extends 'aplicacao/base.html' %}
 
+{% block title %}
+    <title>Usuários - Insight</title>
+{% endblock title %}
+
+
 {% block conteudo %}
+
+    <h2>Usuários</h2>
+    <hr>
+
     <div class="card shadow mb-4">
 
         <div class="card-header py-3">
@@ -9,9 +18,9 @@
                     <h6 class="m-0 font-weight-bold">Usuários Cadastrados</h6>
                 </div>
                 <div class="col-6">
-                    <a href="{% url 'cadastrar-usuario' %}" type="button"
+                    <a id="add-usuario" href="{% url 'cadastrar-usuario' %}" type="button"
                        class="float-right btn btn-primary btn-sm">
-                        <i class="fas fa-plus-circle"></i> Cadastrar usuário
+                         Cadastrar usuário
                     </a>
                 </div>
             </div>
@@ -47,17 +56,17 @@
 
                                 <td>
                                     <a href="{% url 'editar-usuario'  usuario.pk %}"
-                                       class="btn btn-secondary btn-sm" role="button" aria-pressed="true">
-                                        <i class="fas fa-info-circle"></i> Editar
+                                       class="botao-editar-usuario btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                                         Editar
                                     </a>
 
                                     {% if usuario.usuario.is_active == True %}
-                                        <a class="btn btn-danger btn-sm" title="Inativar" href="#" data-toggle="modal" data-target="#confirm{{ usuario.pk }}">
-                                            <i class="fas fa-ban"></i> Inativar
+                                        <a class="botao-inativar-usuario btn btn-danger btn-sm" title="Inativar" href="#" data-toggle="modal" data-target="#confirm{{ usuario.pk }}">
+                                             Inativar
                                         </a>
                                     {% else %}
-                                        <a class="btn btn-success btn-sm" title="Ativar" href="{% url 'inativar-usuarios' usuario.pk %}">
-                                            <i class="fas fa-check-circle"></i> Ativar
+                                        <a class="botao-ativar-usuario btn btn-success btn-sm" title="Ativar" href="{% url 'inativar-usuarios' usuario.pk %}">
+                                             Ativar
                                         </a>
                                     {% endif %}
 
@@ -74,9 +83,9 @@
                                                 <strong>{{ usuario.usuario.first_name }} {{ usuario.usuario.last_name }}</strong> ?</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <a class="btn btn-danger"
+                                            <a class="botao-remover-config btn btn-danger"
                                                href="{% url 'inativar-usuarios' usuario.pk %}">Inativar</a>
-                                            <button type="button" data-dismiss="modal" class="btn btn-default">
+                                            <button id="add-email" type="button" data-dismiss="modal" class="btn btn-default" style="color: #FFFFFF">
                                                 Cancelar
                                             </button>
                                         </div>
