@@ -198,7 +198,7 @@ def alertas(id_empresa):
     global alertas_produtos, infor_filiais, condicao
 
     lista_alertas = []
-    parametros = Parametro.objects.get(empresa_id=id_empresa)
+    parametros = Parametro.objects.get(empresa__id=id_empresa)
 
     fornecedores = get_fornecedores(id_empresa)
 
@@ -247,7 +247,8 @@ def alertas(id_empresa):
                         'cod_fornecedor': row.cod_fornecedor,
                         'dde': row.dde,
                         'media_ajustada': row.media_ajustada,
-                        'principio_ativo': row.principio_ativo
+                        'principio_ativo': row.principio_ativo,
+                        'dt_ult_entrada': row.dt_ult_entrada
                     }
 
                     lista_alertas.append(alertas_produtos)
@@ -289,7 +290,8 @@ def alerta_db(id_empresa, produtos):
                 empresa=empresa,
                 campo_um=i['dde'],
                 campo_dois=i['media_ajustada'],
-                campo_tres=i['principio_ativo']
+                campo_tres=i['principio_ativo'],
+                campo_quatro=i['dt_ult_entrada']
             )
             b.save()
 
@@ -439,6 +441,7 @@ def teste(request, template_name='testando_alerta.html'):
 
     db_grafico_um(1, grafico_um)
     db_dados_estoque(1, dados_estoque)
+    db_grafico_dois(1)
 
     # TODO testando pedido excluido do winthor
     valida_pedidos_excluidos(1)

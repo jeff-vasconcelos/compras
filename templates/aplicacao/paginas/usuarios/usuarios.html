@@ -57,7 +57,7 @@
                                 <td>
                                     <a href="{% url 'editar-usuario'  usuario.pk %}"
                                        class="botao-editar-usuario btn btn-secondary btn-sm" role="button" aria-pressed="true">
-                                        <i class="fas fa-edit"></i> Editar
+                                         Editar
                                     </a>
 
                                     {% if usuario.usuario.is_active == True %}
@@ -83,9 +83,9 @@
                                                 <strong>{{ usuario.usuario.first_name }} {{ usuario.usuario.last_name }}</strong> ?</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <a class="btn btn-danger"
+                                            <a class="botao-remover-config btn btn-danger"
                                                href="{% url 'inativar-usuarios' usuario.pk %}">Inativar</a>
-                                            <button type="button" data-dismiss="modal" class="btn btn-default">
+                                            <button id="add-email" type="button" data-dismiss="modal" class="btn btn-default" style="color: #FFFFFF">
                                                 Cancelar
                                             </button>
                                         </div>

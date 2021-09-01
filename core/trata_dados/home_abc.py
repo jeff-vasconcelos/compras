@@ -1,7 +1,11 @@
 import locale
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+
+from core.alertas.curva_abc_alertas import abc
+from core.alertas.verificador import get_fornecedores
 from core.models.empresas_models import Empresa
-from core.models.parametros_models import GraficoCurva, DadosEstoque, GraficoRuptura
+from core.models.parametros_models import GraficoCurva, DadosEstoque, GraficoFaturamento, Parametro
+
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def processa_grafico_um(produtos):
@@ -191,16 +195,11 @@ def processa_grafico_um(produtos):
 def db_grafico_um(id_empresa, produtos):
 
     itens = GraficoCurva.objects.all().filter(empresa__id__exact=id_empresa)
-    itens_rupt = GraficoRuptura.objects.all().filter(empresa__id__exact=id_empresa)
 
     empresa = Empresa.objects.get(id=id_empresa)
 
     if itens:
         itens.delete()
-
-    if itens_rupt:
-        itens_rupt.delete()
-
 
     for i in produtos:
         normal = i['total_normal']
@@ -219,13 +218,104 @@ def db_grafico_um(id_empresa, produtos):
             empresa=empresa
         )
 
-        r = GraficoRuptura.objects.create(
-            curva=i['curva'],
-            total=ruptura,
+        b.save()
+
+
+def db_grafico_dois(id_empresa):
+
+    global total_a, total_b, total_c, total_d, total_e
+    lista_fornecedor = get_fornecedores(id_empresa)
+    empresa = Empresa.objects.get(id=id_empresa)
+    parametros = Parametro.objects.get(empresa_id=id_empresa)
+    itens_faturamento = GraficoFaturamento.objects.all().filter(empresa__id__exact=id_empresa)
+
+    curva = abc(lista_fornecedor, id_empresa, parametros.periodo)
+
+    la, lb, lc, ld, le = [], [], [], [], []
+
+    for index, row in curva.iterrows():
+
+        if row['curva'] == 'A':
+            la.append(float(row['vl_total_vendido']))
+
+        if row['curva'] == 'B':
+            lb.append(float(row['vl_total_vendido']))
+
+        if row['curva'] == 'C':
+            lc.append(float(row['vl_total_vendido']))
+
+        if row['curva'] == 'D':
+            ld.append(float(row['vl_total_vendido']))
+
+        if row['curva'] == 'E':
+            le.append(float(row['vl_total_vendido']))
+
+    # curva A
+    if len(la) != 0:
+        total_a = sum(la)
+    else:
+        total_a = 0
+
+    curva_a = {
+        'curva': "A",
+        'total': total_a
+    }
+
+    # curva B
+    if len(lb) != 0:
+        total_b = sum(lb)
+    else:
+        total_b = 0
+
+    curva_b = {
+        'curva': "B",
+        'total': total_b
+    }
+
+    # curva C
+    if len(lc) != 0:
+        total_c = sum(lc)
+    else:
+        total_c = 0
+    curva_c = {
+        'curva': "C",
+        'total': total_c
+    }
+
+
+    # curva D
+    if len(ld) != 0:
+        total_d = sum(ld)
+    else:
+        total_d = 0
+    curva_d = {
+        'curva': "D",
+        'total': total_d
+    }
+
+
+    #curva E
+    if len(le) != 0:
+        total_e = sum(le)
+    else:
+        total_e = 0
+    curva_e = {
+        'curva': "E",
+        'total': total_e
+    }
+
+    curvas = [curva_a, curva_b, curva_c, curva_d, curva_e]
+
+    if itens_faturamento:
+        itens_faturamento.delete()
+
+    for c in curvas:
+
+        r = GraficoFaturamento.objects.create(
+            curva=c['curva'],
+            total=c['total'],
             empresa=empresa
         )
-
-        b.save()
         r.save()
 
 

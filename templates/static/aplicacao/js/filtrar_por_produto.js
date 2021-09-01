@@ -34,16 +34,19 @@ const filterProd = (prod) => {
                     `
                 })
             }
-            if (Array.isArray(marcas)){
+            if (Array.isArray(marcas)) {
                 listaMarcaSelecionar.innerHTML = `<option class="option-analise" value="0" selected>Selecione</option>`
 
-                marcas.forEach(p_marcas=> {
+                marcas.forEach(p_marcas => {
 
                     listaMarcaSelecionar.innerHTML += `
                         <option class="option-analise" value="${p_marcas.marca_p}">${p_marcas.marca_p}</option>
                     `
                 })
             }
+        },
+        error: function (error) {
+            console.log(error)
         }
     })
 }

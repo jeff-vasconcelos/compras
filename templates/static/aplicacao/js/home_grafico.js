@@ -20,9 +20,6 @@ $.ajax({
 
         const curvaRuptura = graficoDois[0]
 
-        console.log(curvaRuptura)
-
-
         // CURVA A
         var ctx1 = document.getElementById("chartCurvaA");
         var ChartCurvaA = new Chart(ctx1, {
@@ -191,13 +188,27 @@ $.ajax({
             type: 'bar',
             data: {
                 labels: curvaRuptura.curva,
-                datasets: [{
-                    label: "R$ ",
-                    backgroundColor: "#4e73df",
-                    hoverBackgroundColor: "#2e59d9",
-                    borderColor: "#4e73df",
-                    data: curvaRuptura.valor,
-                }],
+                datasets: [
+                    {
+                        label: "R$",
+                        yAxisID: 'A',
+                        backgroundColor: "#4e73df",
+                        hoverBackgroundColor: "#2e59d9",
+                        borderColor: "#4e73df",
+                        data: curvaRuptura.valor,
+                        maxBarThickness: 45,
+                    },
+                    {
+                        label: "%",
+                        yAxisID: 'B',
+                        backgroundColor: "#ffbc40",
+                        hoverBackgroundColor: "#ffbc40",
+                        borderColor: "#ffbc40",
+                        data: curvaRuptura.porcent,
+                        maxBarThickness: 35,
+                    }
+
+                ],
             },
             options: {
                 maintainAspectRatio: false,
@@ -219,11 +230,12 @@ $.ajax({
                             drawBorder: false
                         },
                         ticks: {
-                            maxTicksLimit: 6
+                            maxTicksLimit: 5
                         },
-                        maxBarThickness: 25,
+
                     }],
                     yAxes: [{
+                        id: 'A',
                         ticks: {
                             min: 0,
                             maxTicksLimit: 5,
@@ -241,10 +253,34 @@ $.ajax({
                             borderDash: [2],
                             zeroLineBorderDash: [2]
                         }
-                    }],
+                    },
+                        {
+                            id: 'B',
+                            position: 'right',
+                            ticks: {
+                                min: 0,
+                                maxTicksLimit: 5,
+                                padding: 10,
+                                // Include a dollar sign in the ticks
+                                callback: function (value, index, values) {
+                                    // return value.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+                                    return value + '%';
+                                }
+                            },
+                            gridLines: {
+                                color: "rgb(234, 236, 244)",
+                                zeroLineColor: "rgb(234, 236, 244)",
+                                drawBorder: false,
+                                borderDash: [2],
+                                zeroLineBorderDash: [2]
+                            }
+                        }],
                 },
                 legend: {
-                    display: false
+                    display: true,
+                    labels: {
+                        usePointStyle: true,
+                    }
                 },
                 tooltips: {
                     titleMarginBottom: 10,
@@ -261,7 +297,7 @@ $.ajax({
                     callbacks: {
                         label: function (tooltipItem, chart) {
                             var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                            return datasetLabel + ": " + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            return datasetLabel + " " + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.');
                         }
                     },
                 },

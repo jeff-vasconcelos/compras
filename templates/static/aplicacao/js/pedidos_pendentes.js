@@ -8,12 +8,12 @@ const verPedidosPendentes = (produto, filial) => {
         data: {
             'csrfmiddlewaretoken': csrf,
             'produto': produto,
-            'filial':filial
+            'filial': filial
         },
         success: (pedidos_pendentes) => {
 
             const data = pedidos_pendentes.data
-            if (data === 'FALSE'){
+            if (data === 'FALSE') {
 
                 mensagemErro.innerHTML += `
                     <div class="alert alert-danger d-flex align-items-center" role="alert">
@@ -33,7 +33,7 @@ const verPedidosPendentes = (produto, filial) => {
                 });
             }
 
-            if (data === 'NOTPEDIDO'){
+            if (data === 'NOTPEDIDO') {
 
                 mensagemErro.innerHTML += `
                     <div class="alert alert-danger d-flex align-items-center" role="alert">
@@ -54,9 +54,9 @@ const verPedidosPendentes = (produto, filial) => {
                 });
             }
 
-            if (Array.isArray(data)){
+            if (Array.isArray(data)) {
                 resultsPedidosPendentes.innerHTML = ""
-                data.forEach(prod=> {
+                data.forEach(prod => {
                     resultsPedidosPendentes.innerHTML += `
                     <tr>
                         <td>${prod.cod_filial}</td>
@@ -69,6 +69,9 @@ const verPedidosPendentes = (produto, filial) => {
                     `
                 })
             }
+        },
+        error: function (error) {
+            console.log(error)
         }
     });
 }

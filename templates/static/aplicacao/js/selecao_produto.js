@@ -104,9 +104,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     }, 6000);
                 });
 
-            }
-
-            else if (dados[0] === 1) {
+            } else if (dados[0] === 1) {
 
                 // $("canvas#ChartSerieHist").remove();
                 // $("canvas#ChartCobertura").remove();
@@ -169,20 +167,17 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     }, 6000);
                 });
 
-            }
-
-            else {
+            } else {
 
                 const data = dados[0]
                 const graficos = dados[1]
                 const informacoes = dados[2]
                 const totais = dados[3]
 
-                if (graficos.periodo <= 60){
+                if (graficos.periodo <= 60) {
                     area_graf_um.style.width = "auto";
                     area_graf_dois.style.width = "auto";
-                }
-                else if (graficos.periodo > 60){
+                } else if (graficos.periodo > 60) {
                     area_graf_um.style.width = "2000px";
                     area_graf_dois.style.width = "2000px";
                 }
@@ -358,7 +353,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         },
                         legend: {
                             display: true,
-                            labels :{
+                            labels: {
                                 usePointStyle: true,
                             }
                         },
@@ -464,7 +459,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         },
                         legend: {
                             display: true,
-                            labels :{
+                            labels: {
                                 usePointStyle: true,
                             }
                         },
@@ -596,9 +591,9 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         valor_curva.style.color = "#0576E0"
                     } else if (informacoes.curva === 'C') {
                         valor_curva.style.color = "#FFA500"
-                    }else if (informacoes.curva === 'D') {
+                    } else if (informacoes.curva === 'D') {
                         valor_curva.style.color = "#a3a0fb"
-                    }else if (informacoes.curva === 'E') {
+                    } else if (informacoes.curva === 'E') {
                         valor_curva.style.color = "#ec6666"
                     }
 
@@ -669,6 +664,9 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 }
             }
 
+        },
+        error: function (error) {
+            console.log(error)
         }
     })
 }

@@ -1,14 +1,13 @@
-
 const listaCurvaSelecionar = document.getElementById('curva_abc_select')
 
-const enviarSelectCurva = (curva) =>{
+const enviarSelectCurva = (curva) => {
     $.ajax({
         type: 'POST',
         url: '/painel/filter-curva/',
         data: curva,
         processData: false,
         contentType: false,
-        success: (res_fil_curva)=> {
+        success: (res_fil_curva) => {
             const data_f = res_fil_curva.data
 
             if (data_f === "FALSE") {
@@ -39,6 +38,9 @@ const enviarSelectCurva = (curva) =>{
                     })
                 }
             }
+        },
+        error: function (error) {
+            console.log(error)
         }
     })
 }
@@ -52,18 +54,18 @@ listaCurvaSelecionar.addEventListener('change', e => {
     resultsBoxProd.classList.add('d-none')
 
     // PEGANDO COD FORNECEDOR
-    for (var i = 0; i < listaFornecedores.length; i++){
-        if (listaFornecedores[i].checked == true){
+    for (var i = 0; i < listaFornecedores.length; i++) {
+        if (listaFornecedores[i].checked == true) {
             const marcado = listaFornecedores[i].value
-            if (checkFornecedor.indexOf(marcado) > -1){
+            if (checkFornecedor.indexOf(marcado) > -1) {
 
-            }else{
+            } else {
                 checkFornecedor.push(marcado)
             }
 
-        }else if (listaFornecedores[i].checked == false){
+        } else if (listaFornecedores[i].checked == false) {
             const desmarq = listaFornecedores[i].value
-            if (checkFornecedor.indexOf(desmarq) > -1){
+            if (checkFornecedor.indexOf(desmarq) > -1) {
                 checkFornecedor.splice(checkFornecedor.indexOf(desmarq), 1)
             }
         }

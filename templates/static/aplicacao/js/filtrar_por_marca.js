@@ -1,23 +1,25 @@
-
 const listaMarcaSelecionar = document.getElementById('filtro_marca')
 
-const enviarSelectMarca = (marca) =>{
+const enviarSelectMarca = (marca) => {
     $.ajax({
         type: 'POST',
         url: '/painel/filter-marca/',
         data: marca,
         processData: false,
         contentType: false,
-        success: (res_fil_marca)=> {
+        success: (res_fil_marca) => {
             const data_m = res_fil_marca.data
-            if (Array.isArray(data_m)){
+            if (Array.isArray(data_m)) {
                 resultadosProdutos.innerHTML = `<option class="option-analise" value="0" selected>Selecione o produto</option>`
-                data_m.forEach(prod=> {
+                data_m.forEach(prod => {
                     resultadosProdutos.innerHTML += `
                         <option class="option-analise" value="${prod.pk}">${prod.cod} - ${prod.nome}</option>
                     `
                 })
             }
+        },
+        error: function (error) {
+            console.log(error)
         }
     })
 }
@@ -27,18 +29,18 @@ listaMarcaSelecionar.addEventListener('change', e => {
     const marcaSelecionada = e.target.value
     // const curvaSelecionada = listaCurvaSelecionar.value
 
-    for (var i = 0; i < listaFornecedores.length; i++){
-        if (listaFornecedores[i].checked == true){
+    for (var i = 0; i < listaFornecedores.length; i++) {
+        if (listaFornecedores[i].checked == true) {
             const marcado = listaFornecedores[i].value
-            if (checkFornecedor.indexOf(marcado) > -1){
+            if (checkFornecedor.indexOf(marcado) > -1) {
 
-            }else{
+            } else {
                 checkFornecedor.push(marcado)
             }
 
-        }else if (listaFornecedores[i].checked == false){
+        } else if (listaFornecedores[i].checked == false) {
             const desmarq = listaFornecedores[i].value
-            if (checkFornecedor.indexOf(desmarq) > -1){
+            if (checkFornecedor.indexOf(desmarq) > -1) {
                 checkFornecedor.splice(checkFornecedor.indexOf(desmarq), 1)
             }
         }

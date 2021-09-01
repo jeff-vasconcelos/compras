@@ -1,7 +1,7 @@
 const searchProd = document.getElementById('search-prod')
 const resultsBoxProd = document.getElementById('results-box-prod')
 
-const sendSearchProd = (prod) =>{
+const sendSearchProd = (prod) => {
     $.ajax({
         type: 'POST',
         url: '/painel/search/prod',
@@ -9,11 +9,11 @@ const sendSearchProd = (prod) =>{
             'csrfmiddlewaretoken': csrf,
             'produto': prod,
         },
-        success: (res)=> {
+        success: (res) => {
             const data = res.data
-            if (Array.isArray(data)){
+            if (Array.isArray(data)) {
                 resultsBoxProd.innerHTML = ""
-                data.forEach(prod=> {
+                data.forEach(prod => {
                     resultsBoxProd.innerHTML += `
                     <input name="item-produto" class="form-check-input" type="checkbox" value="${prod.pk}" id="${prod.pk}" 
                     style="display: block" onclick="selecao_produto()   ">
@@ -22,27 +22,27 @@ const sendSearchProd = (prod) =>{
                         </label>
                     `
                 })
-            }else{
-                 if (searchProd.value.length > 0){
-                      resultsBoxProd.innerHTML = `<b>${data}</b>`
-                 }else{
-                     resultsBoxProd.classList.add('d-none')
-                     resultadosPProdutos.innerHTML = ""
-                     listaMarcaSelecionar.innerHTML = ""
-                     listaCurvaSelecionar.innerHTML = ""
-                 }
+            } else {
+                if (searchProd.value.length > 0) {
+                    resultsBoxProd.innerHTML = `<b>${data}</b>`
+                } else {
+                    resultsBoxProd.classList.add('d-none')
+                    resultadosPProdutos.innerHTML = ""
+                    listaMarcaSelecionar.innerHTML = ""
+                    listaCurvaSelecionar.innerHTML = ""
+                }
             }
         },
-        error: (err)=> {
-            console.log(err)
+        error: function (error) {
+            console.log(error)
         }
 
     })
 }
 
-searchProd.addEventListener('keyup', e=>{
+searchProd.addEventListener('keyup', e => {
 
-    if (resultsBoxProd.classList.contains('d-none')){
+    if (resultsBoxProd.classList.contains('d-none')) {
         resultsBoxProd.classList.remove('d-none')
     }
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
-from core.models.parametros_models import DadosEstoque, GraficoCurva, GraficoRuptura
+from core.models.parametros_models import DadosEstoque, GraficoCurva, GraficoFaturamento
 import locale
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
@@ -64,8 +64,8 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
 def home_graficos(request):
     id_empresa = request.user.usuario.empresa_id
-    grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa)
-    grafico_dois = GraficoRuptura.objects.filter(empresa__id=id_empresa)
+    grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
+    grafico_dois = GraficoFaturamento.objects.filter(empresa__id=id_empresa).order_by('curva')
 
     data = []
 
@@ -103,23 +103,31 @@ def home_graficos(request):
         porcent_curva.append(curva_porc)
 
     # GRAFICO DOIS
-    valor_curva_ruptura = []
+    valor_curva_fatura = []
     curvas = []
     valores = []
+    porcentagem = []
 
     for b in grafico_dois:
         curvas.append(b.curva)
         valores.append(b.total)
 
+    faturamento_total = sum(valores)
+
+    for vl in grafico_dois:
+        part = round(vl.total * 100 / faturamento_total, 2)
+        porcentagem.append(part)
+
     curva_valor = {
         'curva': curvas,
-        'valor': valores
+        'valor': valores,
+        'porcent': porcentagem
     }
 
-    valor_curva_ruptura.append(curva_valor)
+    valor_curva_fatura.append(curva_valor)
 
     # LISTA COM TODOS OS DADOS
     data.append(porcent_curva)
-    data.append(valor_curva_ruptura)
+    data.append(valor_curva_fatura)
 
     return JsonResponse({'data': data})

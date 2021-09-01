@@ -81,5 +81,5 @@ admin.site.register(Alerta, AlertaAdmin)
 admin.site.register(Email, EmailAdmin)
 admin.site.register(DadosEstoque)
 admin.site.register(GraficoCurva)
-admin.site.register(GraficoRuptura)
+admin.site.register(GraficoFaturamento)
 

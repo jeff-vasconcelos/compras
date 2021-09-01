@@ -89,6 +89,7 @@
                         <th>Filial</th>
                         <th>Produto</th>
                         <th>Condição</th>
+                        <th>Ut. Entrada</th>
                         <th>Estoque</th>
                         <th>Pendentes</th>
                         <th>Quant.</th>
@@ -115,6 +116,7 @@
                                     <td class="status">{{ produto.cod_filial }}</td>
                                     <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
                                     <td class="status parcial">{{ produto.estado_estoque }}</td>
+                                    <td class="status">{{ produto.campo_quatro }}</td>
                                     <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
@@ -137,6 +139,7 @@
                                     <td class="status">{{ produto.cod_filial }}</td>
                                     <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
                                     <td class="status ruptura">{{ produto.estado_estoque }}</td>
+                                    <td class="status">{{ produto.campo_quatro }}</td>
                                     <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>

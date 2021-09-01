@@ -70,7 +70,7 @@ class GraficoCurva(models.Model):
         return self.empresa.nome_fantasia
 
 
-class GraficoRuptura(models.Model):
+class GraficoFaturamento(models.Model):
     curva = models.CharField(max_length=255, blank=True, null=True)
     total = models.FloatField(null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='grafruptura_empresa',
