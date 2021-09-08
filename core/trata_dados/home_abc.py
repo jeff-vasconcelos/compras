@@ -30,7 +30,6 @@ def processa_grafico_um(produtos):
 
         elif i['condicao_estoque'] == "EXCESSO":
             i['valor_excesso'] = i['qt_excesso'] * i['custo']
-            print(i['qt_excesso'])
             i['valor_normal'] = 0
             i['valor_parcial'] = 0
             i['valor_ruptura'] = 0
