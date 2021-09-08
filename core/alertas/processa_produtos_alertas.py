@@ -290,12 +290,14 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         temp_est = fornecedor.tempo_estoque
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
+        valida_mediaajust = math.isnan(media_ajustada)
 
         if temp_est < dde:
-            if media_ajustada <= 0:
-                tamanho = media * temp_est
-            else:
+            if valida_mediaajust == False:
                 tamanho = media_ajustada * temp_est
+
+            else:
+                tamanho = media * temp_est
 
             qt_excesso = est_disponivel - tamanho
             valor_e = qt_excesso * preco_custo

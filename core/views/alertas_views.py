@@ -404,7 +404,6 @@ def rotina_alerta(request, id_empresa):
     print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
 
     produtos = alertas(id_empresa)
-    print(produtos)
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
 

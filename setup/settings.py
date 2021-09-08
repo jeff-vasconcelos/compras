@@ -194,7 +194,6 @@ SESSION_SAVE_EVERY_REQUEST = False
 #TODO Remover debug_toolbar
 INTERNAL_IPS = [
     '127.0.0.1',
-    '177.136.201.66',
 ]
 
 # CELERY STUFF
