@@ -80,7 +80,6 @@ def valida_pedidos_excluidos(id_empresa):
 
         if pedidos:
             for p in pedidos:
-                print(p)
-                # p.delete()
+                p.delete()
 
     return None

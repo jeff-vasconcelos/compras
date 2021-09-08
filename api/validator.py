@@ -81,16 +81,17 @@ def valida_pedido(data):
     cod_empresa = data['empresa']
     pedido = data['num_pedido']
     saldo = data['saldo']
+    date = data['data']
 
     pedido = Pedido.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, saldo=saldo, num_pedido=pedido
+        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, saldo=saldo, num_pedido=pedido, data=date
     ).exists()
 
     if pedido == False:
         return True
     else:
         pedido_existe = Pedidos_API.objects.filter(
-            cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, saldo=saldo, num_pedido=pedido
+            cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, saldo=saldo, num_pedido=pedido, data=date
         ).exists()
 
         if pedido_existe == False:

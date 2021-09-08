@@ -3,6 +3,7 @@ from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.utils import timezone
 
+from api.models.pedidos import Pedidos_API
 from api.views import valida_pedidos_excluidos
 from core.alertas.processa_produtos_alertas import *
 from core.alertas.verificador import *
@@ -403,7 +404,7 @@ def rotina_alerta(request, id_empresa):
     print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
 
     produtos = alertas(id_empresa)
-
+    print(produtos)
     grafico_um = processa_grafico_um(produtos)
     dados_estoque = dados_estoque_home(produtos)
 
@@ -415,9 +416,11 @@ def rotina_alerta(request, id_empresa):
 
 def rotina_email(request, id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
+    pedidos_existentes = Pedidos_API.objects.filter(empresa__id=id_empresa)
 
     # TODO testando pedido excluido do winthor
     valida_pedidos_excluidos(id_empresa)
+    pedidos_existentes.delete()
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     try:
@@ -445,6 +448,8 @@ def teste(request, template_name='testando_alerta.html'):
 
     # TODO testando pedido excluido do winthor
     valida_pedidos_excluidos(1)
+    pedidos_existentes = Pedidos_API.objects.filter(empresa__id=1)
+    pedidos_existentes.delete()
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     # if empresa.envia_email:

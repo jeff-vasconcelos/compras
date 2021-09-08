@@ -29,7 +29,7 @@ SECRET_KEY = 'pc#&s_x-+hi7ly1li$9z=&)z^9*iu(w)wruukoddo=t4ue-183'
 #DEBUG = True
 DEBUG = False
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['insight.ecluster.com.br', '177.136.201.66']
 
 

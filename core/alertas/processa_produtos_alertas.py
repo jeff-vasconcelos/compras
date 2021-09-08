@@ -291,7 +291,11 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
 
         if temp_est < dde:
-            tamanho = media_ajustada * temp_est
+            if media_ajustada <= 0:
+                tamanho = media * temp_est
+            else:
+                tamanho = media_ajustada * temp_est
+
             qt_excesso = est_disponivel - tamanho
             valor_e = qt_excesso * preco_custo
 
@@ -301,6 +305,10 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             prod_resumo['qt_excesso'] = qt_excesso.round(0)
             prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'EXCESSO'
+
+
+            print("media_ajustada", media_ajustada)
+            print("qt_excesso", qt_excesso)
 
         elif temp_est >= dde > dde_ponto_rep:
             vl_e = 0
