@@ -26,7 +26,7 @@ class Fornecedor(models.Model):
         if not self.leadtime:
             leadtime = 25
             ciclo_reposicao = 30
-            tempo_estoque = 30
+            tempo_estoque = 55
 
             self.leadtime = leadtime
             self.ciclo_reposicao = ciclo_reposicao

@@ -49,6 +49,13 @@ def editar_fornecedor_conf(request, pk, template_name='aplicacao/paginas/configu
             form = FornecedorForm(request.POST, instance=fornecedor)
             if form.is_valid():
                 fornecedor = form.save(commit=False)
+                soma = fornecedor.ciclo_reposicao + fornecedor.leadtime
+                t_estoque = fornecedor.tempo_estoque
+
+                if soma > t_estoque:
+                    messages.error(request, "Ops, não foi possivel atualizar, por favor verifique o tempo de estoque.")
+                    return render(request, template_name, {'form': form, 'fornecedor': fornecedor})
+
                 fornecedor.save()
                 messages.success(request, "Fornecedor atualizado com sucesso!")
                 return redirect('fornecedores_painel')
