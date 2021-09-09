@@ -309,10 +309,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             prod_resumo['vl_excesso'] = vl_excesso
             condicao_estoque = 'EXCESSO'
 
-            print(cod_produto)
-            print("media_ajustada", media_ajustada)
-            print("est_disponivel", est_disponivel)
-
         elif temp_est >= dde > dde_ponto_rep:
             vl_e = 0
             vl_excesso = locale.currency(vl_e, grouping=True)

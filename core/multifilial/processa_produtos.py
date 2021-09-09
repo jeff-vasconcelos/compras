@@ -169,7 +169,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         prod_resumo['custo'] = estoque_['custo_ult_entrada'].unique()
 
         prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
-        prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
+        #prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
+        prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
         prod_resumo['vl_ult_ent'] = vl_ult_entrada
