@@ -19,6 +19,7 @@
                     <tr>
                         <th>Número do pedido</th>
                         <th>Usuário responsável</th>
+                        <th>Fornecedor</th>
                         <th>Data de criação</th>
                         <th>Ações</th>
                     </tr>
@@ -31,6 +32,7 @@
                             <tr>
                                 <td>{{ pedido.numero }}</td>
                                 <td>{{ pedido.usuario }}</td>
+                                <td>{{ pedido.campo_um }} - {{ pedido.campo_dois }}</td>
                                 <td>{{ pedido.created_at }}</td>
 
                                 <td>

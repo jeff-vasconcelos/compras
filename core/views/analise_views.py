@@ -1092,7 +1092,7 @@ def pedido_save_db(request) -> object:
 
         empresa = Empresa.objects.get(id=id_empresa)
         usuario = User.objects.get(id=id_usuario)
-        fornecedor = Fornecedor.objects.get(id=1)
+        fornecedor = Fornecedor.objects.get(id=id_fornecedor)
 
         primeiro = usuario.first_name
         espaco = " "
@@ -1108,7 +1108,8 @@ def pedido_save_db(request) -> object:
         p = PedidoInsight.objects.create(
             numero=f'{data}/{num_empresa}-{num_user}',
             usuario=primeiro + espaco + ultimo,
-            campo_um=fornecedor.desc_fornecedor,
+            campo_um=fornecedor.cod_fornecedor,
+            campo_dois=fornecedor.desc_fornecedor,
             empresa=empresa
         )
         p.save()
