@@ -155,6 +155,7 @@ div.botoes-analise-tabela {
     height: 28px;
     padding-right: 15px;
     padding-left: 15px;
+    display: none;
 }
 #btn-expo-modal-analise:hover {
     background-color: #627288;

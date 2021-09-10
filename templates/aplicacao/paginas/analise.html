@@ -14,6 +14,7 @@
     <script src="{% static 'aplicacao/js/filtrar_por_curva.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/filtrar_por_marca.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/filtrar_por_principio_ativo.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/pesquisa_pedido_fornecedor.js' %}" defer></script>
 
     <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
@@ -463,7 +464,24 @@
         <div class="modal-dialog" id="modal-ver-pedido">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ver pedido</h5>
+                    <div class="col-6">
+                        <h5 class="modal-title">Ver pedido</h5>
+                    </div>
+                    <div class="col-6">
+                        <input id="fornec_select_id" type="hidden" value="">
+                        <input id="search-pedido-fornec" type="text" class="form-control"
+                               name="pedido_fornecedor"
+                               placeholder="Selecionar Fornecedor">
+
+                        <div class="row">
+                            <div class="col check-div-fornec">
+                                <div class="form-check" id="results-pedido-fornec">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-body">
 

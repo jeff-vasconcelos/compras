@@ -1017,7 +1017,8 @@ def add_prod_pedido_sessao(request):
             qt_digitada = qt_digitada.replace(",", ".")
             qt_digitada = float(qt_digitada)
 
-            preco_f = pr_compra.replace(",", ".")
+            preco_f = pr_compra.replace(".", "")
+            preco_f = preco_f.replace(",", ".")
             preco = float(preco_f)
 
             prod_qs = Produto.objects.get(id=produto_id)
@@ -1078,7 +1079,64 @@ def rm_prod_pedido_sessao(request):
         return JsonResponse({'data': 0})
 
 
+def pedido_save_db(request) -> object:
+    if request.is_ajax():
+        id_fornecedor = request.POST.get('fornecedor')
+
+        # GET PEDIDO SESSÃO
+        pedido = request.session.get('pedido_produto', [])
+        lista = []
+
+        id_usuario = request.user.usuario.id
+        id_empresa = request.user.usuario.empresa_id
+
+        empresa = Empresa.objects.get(id=id_empresa)
+        usuario = User.objects.get(id=id_usuario)
+        fornecedor = Fornecedor.objects.get(id=1)
+
+        primeiro = usuario.first_name
+        espaco = " "
+        ultimo = usuario.last_name
+
+        num_empresa = id_empresa
+        num_empresa = str(num_empresa)
+        num_user = str(id_usuario)
+
+        data = datetime.datetime.now().strftime("%d%m%Y%H%M")
+
+        # SALVAR EM PEDIDOS FEITOS
+        p = PedidoInsight.objects.create(
+            numero=f'{data}/{num_empresa}-{num_user}',
+            usuario=primeiro + espaco + ultimo,
+            campo_um=fornecedor.desc_fornecedor,
+            empresa=empresa
+        )
+        p.save()
+
+        # SALVAR ITENS DO PEDIDO
+        for value in pedido.values():
+            temp = value
+
+            pr = temp['ped_pr_compra']
+            preco = locale.currency(pr, grouping=True)
+
+            p_i = PedidoInsightItens.objects.create(
+                cod_produto=temp['ped_produto_cod'],
+                desc_produto=temp['ped_produto_nome'],
+                cod_filial=temp['ped_cod_filial'],
+                preco=preco,
+                quantidade=temp['ped_qt_digitada'],
+                pedido=p
+            )
+
+            p_i.save()
+
+            lista.append(temp)
+
+    return JsonResponse({})
+
 def export_csv(request) -> object:
+
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="insight.xls"'
 
@@ -1100,47 +1158,10 @@ def export_csv(request) -> object:
     pedido = request.session.get('pedido_produto', [])
     lista = []
 
-    id_usuario = request.user.usuario.id
-    id_empresa = request.user.usuario.empresa_id
-
-    empresa = Empresa.objects.get(id=id_empresa)
-    usuario = User.objects.get(id=id_usuario)
-
-    primeiro = usuario.first_name
-    espaco = " "
-    ultimo = usuario.last_name
-
-    num_empresa = id_empresa
-    num_empresa = str(num_empresa)
-    num_user = str(id_usuario)
-
-    data = datetime.datetime.now().strftime("%d%m%Y%H%M")
-
-    # SALVAR EM PEDIDOS FEITOS
-    p = PedidoInsight.objects.create(
-        numero=f'{data}/{num_empresa}-{num_user}',
-        usuario=primeiro + espaco + ultimo,
-        empresa=empresa
-    )
-    p.save()
 
     # SALVAR ITENS DO PEDIDO
     for value in pedido.values():
         temp = value
-
-        pr = temp['ped_pr_compra']
-        preco = locale.currency(pr, grouping=True)
-
-        p_i = PedidoInsightItens.objects.create(
-            cod_produto=temp['ped_produto_cod'],
-            desc_produto=temp['ped_produto_nome'],
-            cod_filial=temp['ped_cod_filial'],
-            preco=preco,
-            quantidade=temp['ped_qt_digitada'],
-            pedido=p
-        )
-
-        p_i.save()
 
         del [temp['ped_cod_filial']]
         del [temp['ped_produto_nome']]

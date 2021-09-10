@@ -142,8 +142,6 @@ const verPedidoSessao = () => {
 
             if (data === "FALSE") {
                 botaoExportarPedido.style.display = 'none'
-            } else {
-                botaoExportarPedido.style.display = 'block'
             }
 
             if (Array.isArray(data)) {
@@ -219,10 +217,28 @@ function rm_prod_pedido_sessao(prod_id) {
     rmPedidoSessao(produto)
 }
 
+
+const exportPedidoSessao = (fornecedor) => {
+    $.ajax({
+        type: 'POST',
+        url: '/painel/fornecedor-pedido/',
+        data: {
+            'csrfmiddlewaretoken': csrf,
+            'fornecedor': fornecedor
+        },
+        success: () => {
+
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    });
+}
+
 botaoExportarPedido.addEventListener("click", e => {
-
+    const fornecedor = document.getElementById("fornec_select_id").value
     resultPedidoSessao.innerHTML = ""
-
+    document.getElementById("search-pedido-fornec").value='';
     $(".modal-pedido").modal('hide');
 
     $(document).ready(function () {
@@ -231,4 +247,7 @@ botaoExportarPedido.addEventListener("click", e => {
             $(".alert").alert('close');
         }, 6000);
     });
+    console.log(fornecedor)
+    exportPedidoSessao(fornecedor);
+
 })

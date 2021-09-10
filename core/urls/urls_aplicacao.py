@@ -41,6 +41,7 @@ urlpatterns = [
     path('ver-produto-pedido/', ver_prod_pedido_sessao, name='ver-prod-pedido-sessao'),
     path('rm-produto-pedido/', rm_prod_pedido_sessao, name='rm-prod-pedido-sessao'),
     path('exportar-produto-pedido/', export_csv, name='exportar-pedido-sessao'),
+    path('fornecedor-pedido/', pedido_save_db, name='fornecedor-pedido'),
     path('ver-pedido-pendentes/', pedidos_pedentes, name='ver-pedido-pendentes'),
     path('pedidos/ver/<int:pk>', ver_pedidos_insight, name='ver_pedidos_insight'),
 
