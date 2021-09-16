@@ -1,5 +1,8 @@
 {% extends 'aplicacao/base.html' %}
 {% load static %}
+{% load humanize %}
+{% load l10n %}
+
 
 {% block title %}
     <title>Alertas - Insight</title>
@@ -117,7 +120,7 @@
                                 <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
                                 <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
                                 <td class="numero">{{ produto.qt_excesso|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.vl_excesso }}</td>
+                                <td class="numero">R$ {{ produto.vl_excesso|floatformat:2 }}</td>
                                 <td class="curva">{{ produto.curva }}</td>
                                 <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
                                 <td class="numero">{{ produto.campo_dois|floatformat:1 }}</td>

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.utils import timezone
-
+import pandas as pd
 from api.models.pedidos import Pedidos_API
 from api.views import valida_pedidos_excluidos
 from core.alertas.processa_produtos_alertas import *
@@ -20,18 +20,26 @@ from core.trata_dados.home_abc import *
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-@login_required
-def alerta_painel(request, template_name='aplicacao/paginas/alertas.html'):
-    id_empresa = request.user.usuario.empresa_id
-    produtos = Alerta.objects.filter(empresa__id__exact=id_empresa)
-    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
+def alerta_teste():
 
-    contexto = {
-        'produtos': produtos,
-        'filiais': filiais,
-    }
+    df = pd.DataFrame(Alerta.objects.filter(
+        empresa__id__exact=1,
+        estado_estoque='EXCESSO'
+    ).order_by('cod_fornecedor').values())
 
-    return render(request, template_name, contexto)
+    df['vl_excesso'] = df['vl_excesso'].astype(float)
+
+    list_val_cus = ['qt_excesso', 'vl_excesso']
+
+    por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial'])[list_val_cus].sum().round(2).reset_index()
+
+    p_fornec =  por_fornecedor.to_dict('records')
+    print(p_fornec)
+
+    for i in p_fornec:
+        print(i)
+
+
 
 # ALERTA EXCESSO
 @login_required
@@ -54,6 +62,8 @@ def alerta_all_excesso(request, template_name='aplicacao/paginas/alertas/excesso
         'filiais': filiais,
         'p_ativo': p_ativo
     }
+
+    alerta_teste()
 
     return render(request, template_name, contexto)
 
@@ -231,6 +241,7 @@ def alertas(id_empresa):
 
 
                 for index, row in infor_filiais.iterrows():
+                    print(row.vl_excesso)
                     alertas_produtos = {
                         'filial': row.filial,
                         'cod_produto': row.cod_produto,
@@ -272,7 +283,6 @@ def alerta_db(id_empresa, produtos):
 
             valor = round(i['valor_sugestao'], 0)
             valor_excesso = i['vl_excesso']
-            valor_sug = locale.currency(valor, grouping=True)
 
             b = Alerta.objects.create(
                 cod_filial=i['filial'],
@@ -280,7 +290,7 @@ def alerta_db(id_empresa, produtos):
                 desc_produto=i['desc_produto'],
                 saldo=round(i['saldo'], 0),
                 estado_estoque=i['condicao_estoque'],
-                valor=valor_sug,
+                valor=valor,
                 sugestao=round(i['sugestao_unidade'], 0),
                 estoque=round(i['estoque'], 0),
                 qt_excesso=round(i['qt_excesso'], 0),
@@ -413,6 +423,7 @@ def rotina_alerta(request, id_empresa):
     db_dados_estoque(id_empresa, dados_estoque)
 
 
+# ROTINA DE EXECUÇÃO DE EMAIL
 def rotina_email(request, id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
     pedidos_existentes = Pedidos_API.objects.filter(empresa__id=id_empresa)

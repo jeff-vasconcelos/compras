@@ -303,31 +303,31 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             valor_e = qt_excesso * preco_custo
 
             vl_e = valor_e.round(2)
-            vl_excesso = locale.currency(vl_e, grouping=True)
+            # vl_excesso = locale.currency(vl_e, grouping=True)
 
             prod_resumo['qt_excesso'] = qt_excesso.round(0)
-            prod_resumo['vl_excesso'] = vl_excesso
+            prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'EXCESSO'
 
         elif temp_est >= dde > dde_ponto_rep:
             vl_e = 0
-            vl_excesso = locale.currency(vl_e, grouping=True)
+            # vl_excesso = locale.currency(vl_e, grouping=True)
             prod_resumo['qt_excesso'] = 0
-            prod_resumo['vl_excesso'] = vl_excesso
+            prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'NORMAL'
 
         elif dde_ponto_rep >= dde > 0:
             vl_e = 0
-            vl_excesso = locale.currency(vl_e, grouping=True)
+            # vl_excesso = locale.currency(vl_e, grouping=True)
             prod_resumo['qt_excesso'] = 0
-            prod_resumo['vl_excesso'] = vl_excesso
+            prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'PARCIAL'
 
         else:
             vl_e = 0
-            vl_excesso = locale.currency(vl_e, grouping=True)
+            # vl_excesso = locale.currency(vl_e, grouping=True)
             prod_resumo['qt_excesso'] = 0
-            prod_resumo['vl_excesso'] = vl_excesso
+            prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'RUPTURA'
 
         prod_resumo['condicao_estoque'] = condicao_estoque

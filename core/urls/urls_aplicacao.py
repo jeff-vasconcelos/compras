@@ -48,7 +48,7 @@ urlpatterns = [
     # PAGINAS
     path('home/', home_painel, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),
-    path('alertas/', alerta_painel, name='alertas_painel'),
+    # path('alertas/', alerta_painel, name='alertas_painel'),
     path('configuracoes/', configuracao_painel, name='configuracao_painel'),
     path('pedidos/', pedido_painel, name='pedido_painel'),
 
