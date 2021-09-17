@@ -8,7 +8,7 @@ class Venda(models.Model):
     cod_produto = models.IntegerField(null=False, blank=False)
     cod_filial = models.IntegerField(null=False, blank=False)
     cod_fornecedor = models.IntegerField(null=False, blank=False)
-    qt_venda = models.IntegerField(null=False, blank=False)
+    qt_venda = models.FloatField(null=False, blank=False)
     preco_unit = models.FloatField(null=False, blank=False)
     custo_fin = models.FloatField(null=False, blank=False)
     data = models.DateField(null=False, blank=False)
