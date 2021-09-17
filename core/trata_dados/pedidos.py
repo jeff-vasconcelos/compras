@@ -29,12 +29,14 @@ def pedidos_todos(cod_produto, id_empresa, cod_filial):
 
         pedidos = df.sort_values(by=['data'], ascending=False)
 
+        pedidos = pedidos.drop_duplicates(subset=['num_pedido'], keep='first')
+
         indexNames = pedidos[(pedidos['saldo'] == 0)].index
         pedidos.drop(indexNames, inplace=True)
 
         pedidos['desc_produto'] = produto.desc_produto
 
-        pedidos = pedidos.drop_duplicates(subset=['num_pedido'], keep='first')
+        # pedidos = pedidos.drop_duplicates(subset=['num_pedido'], keep='first')
 
         return pedidos
     else:

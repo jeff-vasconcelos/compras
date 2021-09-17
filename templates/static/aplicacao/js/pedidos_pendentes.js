@@ -41,7 +41,7 @@ const verPedidosPendentes = (produto, filial) => {
                             <use xlink:href="#exclamation-triangle-fill"/>
                         </svg>
                         <div>
-                            &nbsp; Não há pedidos pendentes do produtop selecionado!
+                            &nbsp; Não há pedidos pendentes do produto selecionado!
                         </div>
                     </div>
                 `

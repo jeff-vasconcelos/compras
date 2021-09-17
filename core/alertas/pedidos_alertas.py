@@ -32,7 +32,6 @@ def pedidos_compra(cod_produto, id_empresa):
     list_pedidos = []
     if list:
 
-
         for i in list:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "saldo", "num_pedido",
                                           "data", "created_at","produto_id", "fornecedor_id", "filial_id", "empresa_id",
@@ -41,7 +40,9 @@ def pedidos_compra(cod_produto, id_empresa):
 
             df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
 
-            pedidos = df.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
+            pedidos = df.drop_duplicates(subset=['num_pedido'], keep='first')
+
+            pedidos = pedidos.groupby(['cod_filial'])['saldo'].sum().to_frame().reset_index()
 
             pedidos_ = pedidos.assign(
                 **pedidos.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")

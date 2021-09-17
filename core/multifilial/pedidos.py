@@ -4,8 +4,6 @@ from core.models.empresas_models import Filial
 import pandas as pd
 import datetime
 
-from core.multifilial.filiais import get_filiais
-
 
 def pedidos_compra(cod_produto, id_empresa, lista_filiais):
     global lista_fim

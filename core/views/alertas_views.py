@@ -20,10 +20,11 @@ from core.trata_dados.home_abc import *
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-def alerta_teste():
-
+@login_required
+def excesso_fornecedor(request):
+    empresa = request.user.usuario.empresa_id
     df = pd.DataFrame(Alerta.objects.filter(
-        empresa__id__exact=1,
+        empresa__id__exact=empresa,
         estado_estoque='EXCESSO'
     ).order_by('cod_fornecedor').values())
 
@@ -34,10 +35,43 @@ def alerta_teste():
     por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial'])[list_val_cus].sum().round(2).reset_index()
 
     p_fornec =  por_fornecedor.to_dict('records')
-    print(p_fornec)
 
-    for i in p_fornec:
-        print(i)
+    context = {
+        'fornecedores': p_fornec
+    }
+
+    return render(request, 'aplicacao/paginas/alertas/excesso_fornec.html', context)
+
+
+@login_required
+def ruptura_fornecedor(request):
+    empresa = request.user.usuario.empresa_id
+    estado = ["RUPTURA", "PARCIAL"]
+
+    df = pd.DataFrame(Alerta.objects.filter(
+        empresa__id__exact=empresa,
+        estado_estoque__in=estado
+    ).order_by('cod_fornecedor').values())
+
+    df['valor'] = df['valor'].astype(float)
+
+    sugestao = df['sugestao'].apply(lambda x: 0 if x <= 0 else x)
+    valor = df['valor'].apply(lambda x: 0 if x <= 0 else x)
+
+    df['sugestao'] = sugestao
+    df['valor'] = valor
+
+    list_val_cus = ['sugestao', 'valor']
+
+    por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial', 'estado_estoque'])[list_val_cus].sum().round(2).reset_index()
+
+    p_fornec =  por_fornecedor.to_dict('records')
+
+    context = {
+        'fornecedores': p_fornec
+    }
+
+    return render(request, 'aplicacao/paginas/alertas/ruptura_fornec.html', context)
 
 
 
@@ -62,8 +96,6 @@ def alerta_all_excesso(request, template_name='aplicacao/paginas/alertas/excesso
         'filiais': filiais,
         'p_ativo': p_ativo
     }
-
-    alerta_teste()
 
     return render(request, template_name, contexto)
 
@@ -241,7 +273,6 @@ def alertas(id_empresa):
 
 
                 for index, row in infor_filiais.iterrows():
-                    print(row.vl_excesso)
                     alertas_produtos = {
                         'filial': row.filial,
                         'cod_produto': row.cod_produto,

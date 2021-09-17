@@ -33,6 +33,9 @@ urlpatterns = [
     path('alertas/ruptura/curva/<str:curva>', alerta_ruptura_curva, name='alerta_ruptura_curva'),
     path('alertas/ruptura/filial/<int:filial>', alerta_ruptura_filial, name='alerta_ruptura_filial'),
 
+    path('alertas/excesso/fornecedor/', excesso_fornecedor, name='alerta_excesso_fornecedor'),
+    path('alertas/ruptura/fornecedor/', ruptura_fornecedor, name='alerta_ruptura_fornecedor'),
+
     path('alertas/excesso/', alerta_all_excesso, name='alerta_all_excesso'),
     path('alertas/ruptura/', alerta_all_ruptura, name='alerta_all_ruptura'),
 

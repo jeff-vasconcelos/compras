@@ -1,0 +1,82 @@
+{% extends 'aplicacao/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load l10n %}
+
+
+{% block title %}
+    <title>Alertas - Insight</title>
+{% endblock title %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-6">
+            <h2>Alertas</h2>
+        </div>
+        <div class="col-6 float-right" style="text-align: right; padding-top: 10px">
+            {% if request.user.usuario.empresa.atualizacao_alerta %}
+                <h6>Atualizado em: {{ request.user.usuario.empresa.atualizacao_alerta }}</h6>
+            {% else %}
+                <h6></h6>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <hr>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+
+                <div class="col-6 float-left">
+
+                    <h5>Excesso por Fornecedor</h5>
+
+                </div>
+
+                <div class="col-6">
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Filial</th>
+                        <th>Fornecedor</th>
+                        <th>Quantidade.</th>
+                        <th>Valor</th>
+                        <!--
+                        <th>Detalhes</th>
+                        -->
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if fornecedores %}
+                        {% for fornecedor in fornecedores %}
+
+                            <tr class="excesso">
+                                <td class="status">{{ fornecedor.cod_filial }}</td>
+                                <td>{{ fornecedor.cod_fornecedor }} - {{ fornecedor.fornecedor }}</td>
+                                <td class="numero">{{ fornecedor.qt_excesso|floatformat:0 }}</td>
+                                <td class="numero">R$ {{ fornecedor.vl_excesso|floatformat:2 }}</td>
+                                <!--
+                                <td>
+                                    <a href="" type="button" class="btn btn-secondary btn-sm">Ver produtos</a>
+                                </td>
+                                -->
+                            </tr>
+
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
