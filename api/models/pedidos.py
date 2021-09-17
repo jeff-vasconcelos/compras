@@ -8,7 +8,7 @@ class Pedidos_API(models.Model):
     cod_produto = models.IntegerField(null=False, blank=False)
     cod_filial = models.IntegerField(null=False, blank=False)
     cod_fornecedor = models.IntegerField(null=False, blank=False)
-    saldo = models.IntegerField(null=False, blank=False)
+    saldo = models.FloatField(null=False, blank=False)
     num_pedido = models.IntegerField(null=False, blank=False)
     data = models.DateField(null=False, blank=False)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)

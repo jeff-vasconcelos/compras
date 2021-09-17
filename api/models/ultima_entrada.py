@@ -8,7 +8,7 @@ class Entrada(models.Model):
     cod_produto = models.IntegerField(null=False, blank=False)
     cod_filial = models.IntegerField(null=False, blank=False)
     cod_fornecedor = models.IntegerField(null=False, blank=False)
-    qt_ult_entrada = models.IntegerField(null=False, blank=False)
+    qt_ult_entrada = models.FloatField(null=False, blank=False)
     vl_ult_entrada = models.FloatField(null=False, blank=False)
     data = models.DateField(null=False, blank=False)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True)
