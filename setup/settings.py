@@ -17,24 +17,22 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'pc#&s_x-+hi7ly1li$9z=&)z^9*iu(w)wruukoddo=t4ue-183'
-#SECRET_KEY = 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@'
+# SECRET_KEY = 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['insight.ecluster.com.br', '177.136.201.66']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['insight.ecluster.com.br', '177.136.201.66']
 
 
 LOGIN_URL = '/'
-
 
 # Application definition
 
@@ -54,7 +52,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_crontab',
 
-    #TODO Remover app debug_toolbar
+    # TODO Remover app debug_toolbar
     'debug_toolbar',
 
 ]
@@ -70,7 +68,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #TODO Remover middleware debug_toolbar
+    # TODO Remover middleware debug_toolbar
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -88,16 +86,18 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'to_str': 'core.templatetags.to_str',
+            }
         },
     },
 ]
 
 WSGI_APPLICATION = 'setup.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -116,7 +116,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -136,7 +136,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -149,7 +148,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -169,7 +167,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-#SMTP CONFIGURATION
+# SMTP CONFIGURATION
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -193,7 +191,7 @@ SESSION_COOKIE_AGE = 86400
 # Salvar a cada requisição
 SESSION_SAVE_EVERY_REQUEST = False
 
-#TODO Remover debug_toolbar
+# TODO Remover debug_toolbar
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
@@ -209,11 +207,11 @@ CELERY_TIMEZONE = 'America/Sao_Paulo'
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
-THOUSAND_SEPARATOR='.',
-USE_THOUSAND_SEPARATOR=True
+THOUSAND_SEPARATOR = '.',
+USE_THOUSAND_SEPARATOR = True
 
 # CONFIG SSL
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True

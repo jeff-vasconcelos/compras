@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% load l10n %}
-
+{% load to_str %}
 
 {% block title %}
     <title>Alertas - Insight</title>
@@ -60,7 +60,7 @@
 
                             <tr class="excesso">
                                 <td class="status">{{ fornecedor.cod_filial }}</td>
-                                <td>{{ fornecedor.cod_fornecedor }} - {{ fornecedor.fornecedor }}</td>
+                                <td>{{ fornecedor.cod_fornecedor|to_str }} - {{ fornecedor.fornecedor }}</td>
                                 <td class="numero">{{ fornecedor.qt_excesso|floatformat:0 }}</td>
                                 <td class="numero">R$ {{ fornecedor.vl_excesso|floatformat:2 }}</td>
                                 <!--

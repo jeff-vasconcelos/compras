@@ -44,6 +44,23 @@ def excesso_fornecedor(request):
 
 
 @login_required
+def ver_excesso_fornecedor(request, cod_fornecedor):
+    empresa = request.user.usuario.empresa_id
+
+    produtos_fornec = Alerta.objects.filter(
+        empresa__id__exact=empresa,
+        estado_estoque='EXCESSO',
+        cod_fornecedor__exact=cod_fornecedor
+    )
+
+    context = {
+        'produtos': produtos_fornec
+    }
+
+    return render(request, 'aplicacao/paginas/alertas/excesso.html', context)
+
+
+@login_required
 def ruptura_fornecedor(request):
     empresa = request.user.usuario.empresa_id
     estado = ["RUPTURA", "PARCIAL"]
@@ -73,6 +90,22 @@ def ruptura_fornecedor(request):
 
     return render(request, 'aplicacao/paginas/alertas/ruptura_fornec.html', context)
 
+
+@login_required
+def ver_ruptura_fornecedor(request, cod_fornecedor):
+    empresa = request.user.usuario.empresa_id
+    estado = ['RUPTURA', 'PARCIAL']
+    produtos_fornec = Alerta.objects.filter(
+        empresa__id__exact=empresa,
+        estado_estoque__in=estado,
+        cod_fornecedor__exact=cod_fornecedor
+    )
+
+    context = {
+        'produtos': produtos_fornec
+    }
+
+    return render(request, 'aplicacao/paginas/alertas/ruptura.html', context)
 
 
 # ALERTA EXCESSO

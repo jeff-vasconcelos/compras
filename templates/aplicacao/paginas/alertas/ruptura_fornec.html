@@ -2,6 +2,7 @@
 {% load static %}
 {% load humanize %}
 {% load l10n %}
+{% load to_str %}
 
 {% block title %}
     <title>Alertas - Insight</title>
@@ -63,7 +64,7 @@
                             {% if fornecedor.estado_estoque == 'PARCIAL' %}
                                 <tr class="parcial">
                                     <td class="status">{{ fornecedor.cod_filial }}</td>
-                                    <td>{{ fornecedor.cod_fornecedor }} - {{ fornecedor.fornecedor }}</td>
+                                    <td>{{ fornecedor.cod_fornecedor|to_str }} - {{ fornecedor.fornecedor }}</td>
                                     <td class="status parcial">{{ fornecedor.estado_estoque }}</td>
                                     <td class="numero">{{ fornecedor.sugestao|floatformat:0 }}</td>
                                     <td class="numero">R$ {{ fornecedor.valor|floatformat:2 }}</td>
@@ -78,7 +79,7 @@
                             {% if fornecedor.estado_estoque == 'RUPTURA' %}
                                 <tr class="ruptura">
                                     <td class="status">{{ fornecedor.cod_filial }}</td>
-                                    <td>{{ fornecedor.cod_fornecedor }} - {{ fornecedor.fornecedor }}</td>
+                                    <td>{{ fornecedor.cod_fornecedor|to_str }} - {{ fornecedor.fornecedor }}</td>
                                     <td class="status ruptura">{{ fornecedor.estado_estoque }}</td>
                                     <td class="numero">{{ fornecedor.sugestao|floatformat:0 }}</td>
                                     <td class="numero">R$ {{ fornecedor.valor|floatformat:2 }}</td>
