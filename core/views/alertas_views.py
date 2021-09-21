@@ -57,7 +57,7 @@ def ver_excesso_fornecedor(request, cod_fornecedor):
         'produtos': produtos_fornec
     }
 
-    return render(request, 'aplicacao/paginas/alertas/excesso.html', context)
+    return render(request, 'aplicacao/paginas/alertas/ver_excesso_fornec.html', context)
 
 
 @login_required
@@ -105,7 +105,7 @@ def ver_ruptura_fornecedor(request, cod_fornecedor):
         'produtos': produtos_fornec
     }
 
-    return render(request, 'aplicacao/paginas/alertas/ruptura.html', context)
+    return render(request, 'aplicacao/paginas/alertas/ver_ruptura_fornec.html', context)
 
 
 # ALERTA EXCESSO
