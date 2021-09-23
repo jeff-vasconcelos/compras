@@ -8,12 +8,6 @@ from api.models.venda import Venda
 from api.models.pedidos import Pedidos_API
 
 
-
-""" Função responsável por verificar se ja existe o registro no BD web, não permitindo duplicar
-    informações vindas do  banco de dados local.
-    
-    Leva em consideração o codigo do produto, data de movimentação e filial
-"""
 def valida_produto(data):
     cod_produto = data['cod_produto']
     cod_empresa = data['empresa']
@@ -47,10 +41,14 @@ def valida_estoque_atual(data):
     cod_filial = data['cod_filial']
     quantidade = data['qt_geral']
     cod_empresa = data['empresa']
-    data = data['data']
+    date = data['data']
 
     estoqueatual = Estoque.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data, qt_geral=quantidade
+        cod_produto=cod_produto,
+        cod_filial=cod_filial,
+        empresa=cod_empresa,
+        data=date,
+        qt_geral=quantidade
     ).exists()
 
     if estoqueatual == False:
@@ -63,10 +61,13 @@ def valida_hist_estoque(data):
     cod_produto = data['cod_produto']
     cod_filial = data['cod_filial']
     cod_empresa = data['empresa']
-    data = data['data']
+    date = data['data']
 
     histestoque = HistoricoEstoque.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data
+        cod_produto=cod_produto,
+        cod_filial=cod_filial,
+        empresa=cod_empresa,
+        data=date
     ).exists()
 
     if histestoque == False:
@@ -84,14 +85,24 @@ def valida_pedido(data):
     date = data['data']
 
     pedido = Pedido.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, saldo=saldo, num_pedido=pedido, data=date
+        cod_produto=cod_produto,
+        cod_filial=cod_filial,
+        empresa=cod_empresa,
+        saldo=saldo,
+        num_pedido=pedido,
+        data=date
     ).exists()
 
     if pedido == False:
         return True
     else:
         pedido_existe = Pedidos_API.objects.filter(
-            cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, saldo=saldo, num_pedido=pedido, data=date
+            cod_produto=cod_produto,
+            cod_filial=cod_filial,
+            empresa=cod_empresa,
+            saldo=saldo,
+            num_pedido=pedido,
+            data=date
         ).exists()
 
         if pedido_existe == False:
@@ -113,10 +124,17 @@ def valida_ultentrada(data):
     cod_produto = data['cod_produto']
     cod_filial = data['cod_filial']
     cod_empresa = data['empresa']
-    data = data['data']
+    quantidade = data['qt_ult_entrada']
+    fornec = data['cod_fornecedor']
+    date = data['data']
 
     ultentrada = Entrada.objects.filter(
-        cod_produto=cod_produto, cod_filial=cod_filial, empresa=cod_empresa, data=data
+        cod_produto=cod_produto,
+        cod_filial=cod_filial,
+        empresa=cod_empresa,
+        data=date,
+        qt_ult_entrada=quantidade,
+        cod_fornecedor=fornec
     ).exists()
 
     if ultentrada == False:
@@ -136,7 +154,14 @@ def valida_venda(data):
     nf = data['num_nota']
 
     venda = Venda.objects.filter(
-        cod_produto=cod_produto, empresa=cod_empresa, cod_filial=cod_filial ,data=dt, qt_venda=qt, preco_unit=preco, cliente=cli, num_nota=nf
+        cod_produto=cod_produto,
+        empresa=cod_empresa,
+        cod_filial=cod_filial,
+        data=dt,
+        qt_venda=qt,
+        preco_unit=preco,
+        cliente=cli,
+        num_nota=nf
     ).exists()
 
     if venda == False:
