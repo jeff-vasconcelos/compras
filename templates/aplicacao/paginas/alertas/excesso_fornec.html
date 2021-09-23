@@ -48,9 +48,9 @@
                         <th>Fornecedor</th>
                         <th>Quantidade.</th>
                         <th>Valor</th>
-                        <!--
-                        <th>Detalhes</th>
-                        -->
+
+                        <th>Ações</th>
+
                     </tr>
                     </thead>
 
@@ -61,13 +61,16 @@
                             <tr class="excesso">
                                 <td class="status">{{ fornecedor.cod_filial }}</td>
                                 <td>{{ fornecedor.cod_fornecedor|to_str }} - {{ fornecedor.fornecedor }}</td>
-                                <td class="numero">{{ fornecedor.qt_excesso|floatformat:0 }}</td>
+                                <td class="numero">{{ fornecedor.contagem|floatformat:0 }}</td>
                                 <td class="numero">R$ {{ fornecedor.vl_excesso|floatformat:2 }}</td>
-                                <!--
+
                                 <td>
-                                    <a href="" type="button" class="btn btn-secondary btn-sm">Ver produtos</a>
+                                    <a href="{% url 'ver_excesso_fornecedor' fornecedor.cod_fornecedor %}"
+                                       class="botao-ver-pinsight btn btn-secondary btn-sm" title="Visualizar" role="button" aria-pressed="true">
+                                        Visualizar
+                                    </a>
                                 </td>
-                                -->
+
                             </tr>
 
                         {% endfor %}

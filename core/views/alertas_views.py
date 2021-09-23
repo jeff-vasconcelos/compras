@@ -30,11 +30,17 @@ def excesso_fornecedor(request):
 
     df['vl_excesso'] = df['vl_excesso'].astype(float)
 
-    list_val_cus = ['qt_excesso', 'vl_excesso']
+    list_val_cus = ['vl_excesso']
+
+    counts = df['cod_fornecedor'].value_counts()
+    counts_df = counts.to_frame().reset_index()
+    counts_df.columns=['cod_fornecedor', 'contagem']
 
     por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial'])[list_val_cus].sum().round(2).reset_index()
 
-    p_fornec =  por_fornecedor.to_dict('records')
+    result = pd.merge(por_fornecedor, counts_df, how="right", on=['cod_fornecedor'])
+
+    p_fornec =  result.to_dict('records')
 
     context = {
         'fornecedores': p_fornec
@@ -46,7 +52,7 @@ def excesso_fornecedor(request):
 @login_required
 def ver_excesso_fornecedor(request, cod_fornecedor):
     empresa = request.user.usuario.empresa_id
-
+    fornec = Fornecedor.objects.get(empresa_id=empresa, cod_fornecedor__exact=cod_fornecedor)
     produtos_fornec = Alerta.objects.filter(
         empresa__id__exact=empresa,
         estado_estoque='EXCESSO',
@@ -54,7 +60,8 @@ def ver_excesso_fornecedor(request, cod_fornecedor):
     )
 
     context = {
-        'produtos': produtos_fornec
+        'produtos': produtos_fornec,
+        'fornecedor': fornec
     }
 
     return render(request, 'aplicacao/paginas/alertas/ver_excesso_fornec.html', context)
@@ -80,9 +87,15 @@ def ruptura_fornecedor(request):
 
     list_val_cus = ['sugestao', 'valor']
 
+    counts = df['cod_fornecedor'].value_counts()
+    counts_df = counts.to_frame().reset_index()
+    counts_df.columns = ['cod_fornecedor', 'contagem']
+
     por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial', 'estado_estoque'])[list_val_cus].sum().round(2).reset_index()
 
-    p_fornec =  por_fornecedor.to_dict('records')
+    result = pd.merge(por_fornecedor, counts_df, how="right", on=['cod_fornecedor'])
+
+    p_fornec =  result.to_dict('records')
 
     context = {
         'fornecedores': p_fornec
@@ -94,6 +107,7 @@ def ruptura_fornecedor(request):
 @login_required
 def ver_ruptura_fornecedor(request, cod_fornecedor):
     empresa = request.user.usuario.empresa_id
+    fornec = Fornecedor.objects.get(empresa_id=empresa, cod_fornecedor__exact=cod_fornecedor)
     estado = ['RUPTURA', 'PARCIAL']
     produtos_fornec = Alerta.objects.filter(
         empresa__id__exact=empresa,
@@ -102,7 +116,8 @@ def ver_ruptura_fornecedor(request, cod_fornecedor):
     )
 
     context = {
-        'produtos': produtos_fornec
+        'produtos': produtos_fornec,
+        'fornecedor': fornec
     }
 
     return render(request, 'aplicacao/paginas/alertas/ver_ruptura_fornec.html', context)

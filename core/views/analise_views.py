@@ -904,9 +904,8 @@ def selecionar_produto(request) -> object:
                 zero = [0]
                 return JsonResponse({'data': zero})
 
-        except Exception as NameError:
-            erro = str(NameError)
-            d = [1, erro]
+        except Exception as error:
+            d = [1, str(error)]
 
             return JsonResponse({'data': d})
     return JsonResponse({})
