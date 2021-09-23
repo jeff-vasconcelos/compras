@@ -78,3 +78,10 @@ def estoque_create(request, *args, **kwargs):
         serializer.save()
 
     return Response(serializer.data)
+
+
+@api_view(['GET', ])
+@permission_classes((IsAuthenticated, ))
+def access_valid(request):
+
+    return Response("API - Insight")

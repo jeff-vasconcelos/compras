@@ -24,4 +24,5 @@ urlpatterns = [
     path('integration/pedido/', pedido_create, name='integration_pedido_create'),
     path('integration/entrada/', entrada_create, name='integration_entrada_create'),
     path('integration/estoque/', estoque_create, name='integration_estoque_create'),
+    path('integration/', access_valid, name='access_valid'),
 ]
