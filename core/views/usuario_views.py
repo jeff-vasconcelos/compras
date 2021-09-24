@@ -15,33 +15,38 @@ from django.utils import timezone
 def login_painel(request, template_name="aplicacao/login/login.html"):
     next = request.GET.get('next', '/painel/home')
 
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
+    if request.user.is_authenticated:
+        return redirect('home_painel')
 
-        if user is not None:
-            if user.is_active == True:
+    else:
 
-                usuario = User.objects.get(username=username)
-                id_empresa = usuario.usuario.empresa.pk
-                qt_logados, qt_empresa = get_all_logged_in_users(id_empresa)
+        if request.method == "POST":
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
 
-                if qt_logados >= qt_empresa:
-                    messages.error(request, "Ops, Excedido o número máximo de usuários conectados!")
-                    return HttpResponseRedirect(settings.LOGIN_URL)
+            if user is not None:
+                if user.is_active == True:
 
+                    usuario = User.objects.get(username=username)
+                    id_empresa = usuario.usuario.empresa.pk
+                    qt_logados, qt_empresa = get_all_logged_in_users(id_empresa)
+
+                    if qt_logados >= qt_empresa:
+                        messages.error(request, "Ops, Excedido o número máximo de usuários conectados!")
+                        return HttpResponseRedirect(settings.LOGIN_URL)
+
+                    else:
+                        login(request, user)
+                        return HttpResponseRedirect(next)
                 else:
-                    login(request, user)
-                    return HttpResponseRedirect(next)
+                    messages.error(request, "Usuário inativo")
+                    return HttpResponseRedirect(settings.LOGIN_URL)
             else:
-                messages.error(request, "Usuário inativo")
+                messages.error(request, "Usuário e/ou Senha incorretos.")
                 return HttpResponseRedirect(settings.LOGIN_URL)
-        else:
-            messages.error(request, "Usuário e/ou Senha incorretos.")
-            return HttpResponseRedirect(settings.LOGIN_URL)
 
-    return render(request, template_name, {'redirect_to': next})
+        return render(request, template_name, {'redirect_to': next})
 
 
 """ Função de Logout """
