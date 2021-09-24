@@ -37,7 +37,7 @@ def listar_filiais_empresa(request, pk):
     return Response(serializer.data)
 
 
-class FornecedorCreate(generics.ListCreateAPIView):
+class FornecedorCreate(generics.CreateAPIView):
     queryset = Fornecedor.objects.all()
     serializer_class = FornecSerializer
 
@@ -51,7 +51,7 @@ class FornecedorCreate(generics.ListCreateAPIView):
         return Response(data)
 
 
-class ProdutoCreate(generics.ListCreateAPIView):
+class ProdutoCreate(generics.CreateAPIView):
     queryset = Produto.objects.all()
     serializer_class = ProdSerializer
 
@@ -65,7 +65,7 @@ class ProdutoCreate(generics.ListCreateAPIView):
         return Response(data)
 
 
-class HistoricoCreate(generics.ListCreateAPIView):
+class HistoricoCreate(generics.CreateAPIView):
     queryset = HistoricoEstoque.objects.all()
     serializer_class = HistSerializer
 
@@ -79,7 +79,7 @@ class HistoricoCreate(generics.ListCreateAPIView):
         return Response(data)
 
 
-class VendaCreate(generics.ListCreateAPIView):
+class VendaCreate(generics.CreateAPIView):
     queryset = Venda.objects.all()
     serializer_class = VendaSerializer
 
@@ -93,7 +93,7 @@ class VendaCreate(generics.ListCreateAPIView):
         return Response(data)
 
 
-class PedidoCreate(generics.ListCreateAPIView):
+class PedidoCreate(generics.CreateAPIView):
     queryset = Pedido.objects.all()
     serializer_class = PedSerializer
 
@@ -107,7 +107,7 @@ class PedidoCreate(generics.ListCreateAPIView):
         return Response(data)
 
 
-class EntradaCreate(generics.ListCreateAPIView):
+class EntradaCreate(generics.CreateAPIView):
     queryset = Entrada.objects.all()
     serializer_class = EntSerializer
 
@@ -121,7 +121,7 @@ class EntradaCreate(generics.ListCreateAPIView):
         return Response(data)
 
 
-class EstoqueCreate(generics.ListCreateAPIView):
+class EstoqueCreate(generics.CreateAPIView):
     queryset = Estoque.objects.all()
     serializer_class = EstSerializer
 
