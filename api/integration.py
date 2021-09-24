@@ -45,7 +45,7 @@ class FornecedorCreate(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = Fornecedor.objects.all()
+        results = Fornecedor.objects.none()
         output_serializer = FornecSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)
@@ -59,7 +59,7 @@ class ProdutoCreate(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = Produto.objects.all()
+        results = Produto.objects.none()
         output_serializer = ProdSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)
@@ -73,7 +73,7 @@ class HistoricoCreate(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = HistoricoEstoque.objects.all()
+        results = HistoricoEstoque.objects.none()
         output_serializer = HistSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)
@@ -87,7 +87,7 @@ class VendaCreate(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = Venda.objects.all()
+        results = Venda.objects.none()
         output_serializer = VendaSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)
@@ -101,7 +101,7 @@ class PedidoCreate(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = Pedido.objects.all()
+        results = Pedido.objects.none()
         output_serializer = PedSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)
@@ -115,7 +115,7 @@ class EntradaCreate(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = Entrada.objects.all()
+        results = Entrada.objects.none()
         output_serializer = EntSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)
@@ -129,7 +129,7 @@ class EstoqueCreate(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = Estoque.objects.all()
+        results = Estoque.objects.none()
         output_serializer = EstSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)
