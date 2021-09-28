@@ -48,7 +48,7 @@
                     <tr>
                         <th>Filial</th>
                         <th>Fornecedor</th>
-                        <th>Status</th>
+
                         <th>Quantidade</th>
                         <th>Valor</th>
                         <th>Detalhes</th>
@@ -59,11 +59,10 @@
                     {% if fornecedores %}
                         {% for fornecedor in fornecedores %}
 
-                            {% if fornecedor.estado_estoque == 'PARCIAL' %}
                                 <tr class="parcial">
                                     <td class="status">{{ fornecedor.cod_filial }}</td>
                                     <td>{{ fornecedor.cod_fornecedor|to_str }} - {{ fornecedor.fornecedor }}</td>
-                                    <td class="status parcial">{{ fornecedor.estado_estoque }}</td>
+
                                     <td class="numero">{{ fornecedor.contagem|floatformat:0 }}</td>
                                     <td class="numero">R$ {{ fornecedor.valor|floatformat:2 }}</td>
 
@@ -74,26 +73,7 @@
                                             Visualizar
                                         </a>
                                     </td>
-
                                 </tr>
-                            {% endif %}
-
-                            {% if fornecedor.estado_estoque == 'RUPTURA' %}
-                                <tr class="ruptura">
-                                    <td class="status">{{ fornecedor.cod_filial }}</td>
-                                    <td>{{ fornecedor.cod_fornecedor|to_str }} - {{ fornecedor.fornecedor }}</td>
-                                    <td class="status ruptura">{{ fornecedor.estado_estoque }}</td>
-                                    <td class="numero">{{ fornecedor.contagem|floatformat:0 }}</td>
-                                    <td class="numero">R$ {{ fornecedor.valor|floatformat:2 }}</td>
-                                    <td>
-                                        <a href="{% url 'ver_ruptura_fornecedor' fornecedor.cod_fornecedor %}"
-                                           class="botao-ver-pinsight btn btn-secondary btn-sm" title="Visualizar"
-                                           role="button" aria-pressed="true">
-                                            Visualizar
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endif %}
 
                         {% endfor %}
                     {% endif %}

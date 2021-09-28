@@ -26,7 +26,8 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
     for filial in lista_filiais:
         produto_dados = informacaoes_produto.query('cod_filial == @filial')
 
-        produto_dados['media_ajustada'].fillna(0, inplace = True)
+        # produto_dados['media_ajustada'].fillna(0, inplace = True)
+        produto_dados['media'].fillna(0, inplace = True)
 
         dt_entrada = produto_dados['dt_ult_ent'].unique()
 
@@ -73,7 +74,7 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
             'preco_tabela': float(produto_dados['preco_venda_tabela'].unique()),
             'margem': float(produto_dados['margem'].unique()),
             'curva': curva.replace("'", ""),
-            'media_ajustada': str(produto_dados['media_ajustada'].unique()).strip('[]'),
+            # 'media_ajustada': str(produto_dados['media_ajustada'].unique()).strip('[]'),
             'ruptura': ruptura.replace("'", ""),
             'ruptura_porc': float(produto_dados['ruptura_porc'].unique()),
             'ruptura_cor': str(produto_dados['cor_ruptura'].unique()).strip('[]'),
@@ -148,7 +149,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         info = info_produto.query('cod_filial == @filial')
 
         media = info.media.unique()
-        media_ajustada = info.media_ajustada.unique()
+        # media_ajustada = info.media_ajustada.unique()
         desvio = info.desvio.unique()
 
         # SOMANDO SALDO DE PEDIDOS
@@ -202,18 +203,19 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         # CALCULANDO PONTO DE REPOSIÇÃO
         estoque_segur = est_seg.round(0)
-        ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
+        #ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
+        ponto_reposicao = (media * leadtime) + estoque_segur
         prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
 
         # CALCULANDO SUGESTAO DE COMPRAS
-        sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (
-                prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+        #sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+        sugestao = ((media * (leadtime + tempo_reposicao)) + estoque_segur) - (prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
 
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
         prod_resumo['media'] = media.round(2)
-        prod_resumo['media_ajustada'] = media_ajustada
+        # prod_resumo['media_ajustada'] = media_ajustada
 
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
@@ -265,6 +267,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         dde = estoque_disponivel / media
 
+        print(dde)
+
         ruptura = locale.currency(ruptura, grouping=True)
         prod_resumo['ruptura'] = ruptura
         prod_resumo['dde'] = dde.round(2)
@@ -287,7 +291,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         if t_reposicao > temp_est:
             if t_reposicao < dde:
-                tamanho = media_ajustada * temp_est
+                #tamanho = media_ajustada * temp_est
+                tamanho = media * temp_est
                 qt_excesso = est_disponivel - tamanho
                 valor_e = qt_excesso * preco_custo
 
@@ -322,7 +327,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         else:
             if temp_est < dde:
-                tamanho = media_ajustada * temp_est
+                #tamanho = media_ajustada * temp_est
+                tamanho = media * temp_est
                 qt_excesso = est_disponivel - tamanho
                 valor_e = qt_excesso * preco_custo
 

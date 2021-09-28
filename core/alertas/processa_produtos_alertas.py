@@ -25,7 +25,8 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
     global dt_u_entrada
     informacaoes_produto = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo)
 
-    informacaoes_produto['media_ajustada'].fillna(0, inplace=True)
+    #informacaoes_produto['media_ajustada'].fillna(0, inplace=True)
+    informacaoes_produto['media'].fillna(0, inplace=True)
 
     lista_resumo = []
 
@@ -82,7 +83,7 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
             'custo':custo,
             'margem': float(produto_dados['margem'].unique()),
             'curva': curva.replace("'", ""),
-            'media_ajustada': str(produto_dados['media_ajustada'].unique()).strip('[]'),
+            # 'media_ajustada': str(produto_dados['media_ajustada'].unique()).strip('[]'),
             'ruptura': ruptura.replace("'", ""),
             'ruptura_porc': float(produto_dados['ruptura_porc'].unique()),
             'ruptura_cor': str(produto_dados['cor_ruptura'].unique()).strip('[]'),
@@ -208,18 +209,19 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['estoque_segur'] = est_seg.round(0)
 
-        valida_media = math.isnan(media_ajustada)
+        #valida_media = math.isnan(media_ajustada)
+        valida_media = math.isnan(media)
 
         # CALCULANDO PONTO DE REPOSIÇÃO
         estoque_segur = est_seg.round(0)
 
         if valida_media == False:
-            ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
+            #ponto_reposicao = (media_ajustada * leadtime) + estoque_segur
+            ponto_reposicao = (media * leadtime) + estoque_segur
             prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
 
-            # CALCULANDO SUGESTAO DE COMPRAS
-            sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (
-                    prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+            #sugestao = ((media_ajustada * (leadtime + tempo_reposicao)) + estoque_segur) - (prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
+            sugestao = ((media * (leadtime + tempo_reposicao)) + estoque_segur) - (prod_resumo['saldo'] + prod_resumo['estoque_dispon'])
         else:
             ponto_reposicao = (media * leadtime) + estoque_segur
             prod_resumo['ponto_repo'] = ponto_reposicao.round(0)
@@ -290,10 +292,11 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         temp_est = fornecedor.tempo_estoque
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
-        valida_mediaajust = math.isnan(media_ajustada)
+        #valida_mediaajust = math.isnan(media_ajustada)
+        valida_mediaajust = math.isnan(media)
 
         if temp_est < dde:
-            if valida_mediaajust == False:
+            if not valida_mediaajust:
                 tamanho = media_ajustada * temp_est
 
             else:

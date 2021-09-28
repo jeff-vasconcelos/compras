@@ -52,7 +52,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 titulo_vendasxmes.style.display = 'none'
                 valor_condicao_est.innerHTML = "-"
                 valor_curva.innerHTML = "-"
-                valor_media.innerHTML = "-"
+                // valor_media.innerHTML = "-"
                 valor_ruptura.innerHTML = "-"
                 porc_ruptura.innerHTML = "-"
                 th_tabela_totais.innerHTML = ""
@@ -84,7 +84,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                         </tr>
                     `
-                porc_media.innerHTML = "-"
+                // porc_media.innerHTML = "-"
                 valor_media_simples.innerHTML = "-"
 
                 mensagemErro.innerHTML += `
@@ -115,7 +115,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 titulo_vendasxmes.style.display = 'none'
                 valor_condicao_est.innerHTML = "-"
                 valor_curva.innerHTML = "-"
-                valor_media.innerHTML = "-"
+                // valor_media.innerHTML = "-"
                 valor_ruptura.innerHTML = "-"
                 porc_ruptura.innerHTML = "-"
                 th_tabela_totais.innerHTML = ""
@@ -147,7 +147,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                         </tr>
                     `
-                porc_media.innerHTML = "-"
+                // porc_media.innerHTML = "-"
                 valor_media_simples.innerHTML = "-"
 
                 mensagemErro.innerHTML += `
@@ -492,7 +492,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     titulo_vendasxmes.style.display = 'none'
                     valor_condicao_est.innerHTML = "-"
                     valor_curva.innerHTML = "-"
-                    valor_media.innerHTML = "-"
+                    // valor_media.innerHTML = "-"
                     valor_ruptura.innerHTML = "-"
                     porc_ruptura.innerHTML = "-"
                     th_tabela_totais.innerHTML = ""
@@ -525,14 +525,14 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                         </tr>
                     `
-                    porc_media.innerHTML = "-"
+                    // porc_media.innerHTML = "-"
                     valor_media_simples.innerHTML = "-"
                 } else {
                     botaoVerPedidosPendentes.style.display = "initial"
                     titulo_vendasxmes.style.display = "initial"
                     valor_condicao_est.innerHTML = ""
                     valor_curva.innerHTML = ""
-                    valor_media.innerHTML = ""
+                    // valor_media.innerHTML = ""
                     valor_ruptura.innerHTML = ""
                     porc_ruptura.innerHTML = ""
                     tabelaInfo.innerHTML = ""
@@ -565,7 +565,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
 
                         </tr>
                     `
-                    porc_media.innerHTML = ""
+                    // porc_media.innerHTML = ""
                     valor_media_simples.innerHTML = ""
 
                     // VALIDANDO COR DA RUPTURA
@@ -645,15 +645,15 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     valor_curva.innerHTML += `
                         ${informacoes.curva}
                     `
-                    valor_media.innerHTML += `
-                        ${informacoes.media_ajustada}
-                    `
+                    // valor_media.innerHTML += `
+                    //     ${informacoes.media_ajustada}
+                    // `
                     valor_media_simples.innerHTML += `
                         ${informacoes.media_simples}
                     `
-                    porc_media.innerHTML += `
-                        ${informacoes.porc_media} %
-                    `
+                    // porc_media.innerHTML += `
+                    //     ${informacoes.porc_media} %
+                    // `
                     valor_ruptura.innerHTML += `
                         ${informacoes.ruptura}
                     `

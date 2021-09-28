@@ -884,7 +884,7 @@ def selecionar_produto(request) -> object:
 
                 # TODAS AS FILIALS
                 inf_filiais = inf_filiais.drop(columns=[
-                    'curva', 'media_ajustada', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media',
+                    'curva', 'ruptura_porc', 'ruptura_cor', 'condicao_estoque', 'porc_media',
                     'media_simples'
                 ])
 

@@ -74,7 +74,8 @@
 
                                     {% for filial in filiais %}
                                         <a class="dropdown-item"
-                                           href="{% url 'alerta_excesso_filial' filial.cod_filial %}">{{ filial.desc_filial }}</a>
+                                           href="{% url 'alerta_excesso_filial' filial.cod_filial %}">
+            {{ filial.desc_filial }}</a>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -103,11 +104,12 @@
                         <th>Curva</th>
                         <th>DDE</th>
                         <th>Média</th>
+
                         {% if p_ativo == True %}
                             <th>Princípio</th>
                         {% endif %}
 
-                        <th>Fornecedor.</th>
+                        <th>Açôes.</th>
                     </tr>
                     </thead>
 
@@ -127,11 +129,24 @@
                                 <td class="curva">{{ produto.curva }}</td>
                                 <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
                                 <td class="numero">{{ produto.campo_dois|floatformat:1 }}</td>
+
                                 {% if p_ativo == True %}
                                     <td class="numero">{{ produto.campo_tres }}</td>
                                 {% endif %}
-                                <td>{{ produto.cod_fornecedor|to_str }} - {{ produto.fornecedor }}</td>
 
+                                <td>
+                                    <input class="input_alertas" type="text" name="qt_digit_alertas" id="qt_digit_alertas" placeholder="Qtd">
+                                    <input class="input_alertas" type="text" name="vl_digit_alertas" id="vl_digit_alertas" placeholder="Preço">
+
+                                    <button id="add_item_alertas" class="btn btn-secondary btn-sm adicionar-item">
+                                        Adicionar item
+                                    </button>
+
+                                    <button id="ver_graf_alertas" class="btn btn-secondary btn-sm adicionar-item"
+                                            type="button" data-toggle="modal" data-target=".modal_graf_alertas">
+                                        Gráficos
+                                    </button>
+                                </td>
                             </tr>
 
                         {% endfor %}
@@ -139,6 +154,34 @@
                     </tbody>
 
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal_graf_alertas" class="modal fade modal_graf_alertas" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog" id="modal_grafico">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <div class="col-6">
+                        <h5 class="modal-title">Série Histórica</h5>
+                    </div>
+
+                </div>
+                <div class="modal-body">
+
+                    <!-- mapas -->
+
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
+                            data-dismiss="modal">Voltar
+                    </button>
+                </div>
             </div>
         </div>
     </div>

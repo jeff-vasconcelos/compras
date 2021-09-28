@@ -28,25 +28,29 @@ def excesso_fornecedor(request):
         estado_estoque='EXCESSO'
     ).order_by('cod_fornecedor').values())
 
-    df['vl_excesso'] = df['vl_excesso'].astype(float)
+    if not df.empty:
 
-    list_val_cus = ['vl_excesso']
+        df['vl_excesso'] = df['vl_excesso'].astype(float)
 
-    counts = df['cod_fornecedor'].value_counts()
-    counts_df = counts.to_frame().reset_index()
-    counts_df.columns=['cod_fornecedor', 'contagem']
+        list_val_cus = ['vl_excesso']
 
-    por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial'])[list_val_cus].sum().round(2).reset_index()
+        counts = df['cod_fornecedor'].value_counts()
+        counts_df = counts.to_frame().reset_index()
+        counts_df.columns=['cod_fornecedor', 'contagem']
 
-    result = pd.merge(por_fornecedor, counts_df, how="right", on=['cod_fornecedor'])
+        por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial'])[list_val_cus].sum().round(2).reset_index()
 
-    p_fornec =  result.to_dict('records')
+        result = pd.merge(por_fornecedor, counts_df, how="right", on=['cod_fornecedor'])
 
-    context = {
-        'fornecedores': p_fornec
-    }
+        p_fornec =  result.to_dict('records')
 
-    return render(request, 'aplicacao/paginas/alertas/excesso_fornec.html', context)
+        context = {
+            'fornecedores': p_fornec
+        }
+
+        return render(request, 'aplicacao/paginas/alertas/excesso_fornec.html', context)
+    else:
+        return render(request, 'aplicacao/paginas/alertas/excesso_fornec.html')
 
 
 @login_required
@@ -77,31 +81,35 @@ def ruptura_fornecedor(request):
         estado_estoque__in=estado
     ).order_by('cod_fornecedor').values())
 
-    df['valor'] = df['valor'].astype(float)
+    if not df.empty:
 
-    sugestao = df['sugestao'].apply(lambda x: 0 if x <= 0 else x)
-    valor = df['valor'].apply(lambda x: 0 if x <= 0 else x)
+        df['valor'] = df['valor'].astype(float)
 
-    df['sugestao'] = sugestao
-    df['valor'] = valor
+        sugestao = df['sugestao'].apply(lambda x: 0 if x <= 0 else x)
+        valor = df['valor'].apply(lambda x: 0 if x <= 0 else x)
 
-    list_val_cus = ['sugestao', 'valor']
+        df['sugestao'] = sugestao
+        df['valor'] = valor
 
-    counts = df['cod_fornecedor'].value_counts()
-    counts_df = counts.to_frame().reset_index()
-    counts_df.columns = ['cod_fornecedor', 'contagem']
+        list_val_cus = ['sugestao', 'valor']
 
-    por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial', 'estado_estoque'])[list_val_cus].sum().round(2).reset_index()
+        counts = df['cod_fornecedor'].value_counts()
+        counts_df = counts.to_frame().reset_index()
+        counts_df.columns = ['cod_fornecedor', 'contagem']
 
-    result = pd.merge(por_fornecedor, counts_df, how="right", on=['cod_fornecedor'])
+        por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial', 'estado_estoque'])[list_val_cus].sum().round(2).reset_index()
 
-    p_fornec =  result.to_dict('records')
+        result = pd.merge(por_fornecedor, counts_df, how="right", on=['cod_fornecedor'])
 
-    context = {
-        'fornecedores': p_fornec
-    }
+        p_fornec =  result.to_dict('records')
 
-    return render(request, 'aplicacao/paginas/alertas/ruptura_fornec.html', context)
+        context = {
+            'fornecedores': p_fornec
+        }
+
+        return render(request, 'aplicacao/paginas/alertas/ruptura_fornec.html', context)
+    else:
+        return render(request, 'aplicacao/paginas/alertas/ruptura_fornec.html')
 
 
 @login_required
@@ -337,7 +345,8 @@ def alertas(id_empresa):
                         'fornecedor': row.fornecedor,
                         'cod_fornecedor': row.cod_fornecedor,
                         'dde': row.dde,
-                        'media_ajustada': row.media_ajustada,
+                        # 'media_ajustada': row.media_ajustada,
+                        'media': row.media_simples,
                         'principio_ativo': row.principio_ativo,
                         'dt_ult_entrada': row.dt_ult_entrada
                     }
@@ -379,7 +388,8 @@ def alerta_db(id_empresa, produtos):
                 cod_fornecedor=i['cod_fornecedor'],
                 empresa=empresa,
                 campo_um=i['dde'],
-                campo_dois=i['media_ajustada'],
+                #campo_dois=i['media_ajustada'],
+                campo_dois=i['media'],
                 campo_tres=i['principio_ativo'],
                 campo_quatro=i['dt_ult_entrada']
             )

@@ -35,4 +35,4 @@ class Fornecedor(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.desc_fornecedor
+        return f'{self.cod_fornecedor} - {self.desc_fornecedor}'
