@@ -160,6 +160,7 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
             media = lista_for_df['valores'].mean()
             d_padrao = media.std()
 
+
             d_m = d_padrao / media
             d_m_dois = d_m * 2
             d_m_media = media * d_m_dois

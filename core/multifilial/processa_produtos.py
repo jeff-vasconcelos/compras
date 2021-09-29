@@ -59,6 +59,7 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
             'embalagem': embalagem.replace("'",""),
             'filial': int(produto_dados['cod_filial'].unique()),
             'estoque': int(produto_dados['estoque_dispon'].unique()),
+            'qt_bloqueada': int(produto_dados['qt_bloqueada'].unique()),
             'avaria': int(produto_dados['avarias'].unique()),
             'saldo': int(produto_dados['saldo'].unique()),
             'dt_ult_entrada': dt_u_entrada[0],
@@ -172,6 +173,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
         #prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel']
+        prod_resumo['qt_bloqueada'] = estoque_['qt_bloqueada']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
         prod_resumo['vl_ult_ent'] = vl_ult_entrada
@@ -266,8 +268,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         #     dde = estoque_disponivel / media_ajustada
 
         dde = estoque_disponivel / media
-
-        print(dde)
 
         ruptura = locale.currency(ruptura, grouping=True)
         prod_resumo['ruptura'] = ruptura
@@ -379,6 +379,5 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     total_venda['data'] = pd.to_datetime(total_venda['data'])
     total_venda['mes'] = total_venda['data'].map(lambda x: 100 * x.year + x.month)
     total_vendas = total_venda.groupby(['mes', 'cod_filial'])['qt_vendas'].sum().reset_index()
-
 
     return resumo_produto, total_vendas

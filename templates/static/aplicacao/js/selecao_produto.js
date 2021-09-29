@@ -62,6 +62,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         <tr>
                             <th class="tabela-info">Cód. Filial</th>
                             <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Bloqueado</th>
                             <th class="tabela-info">Avaria</th>
                             <th class="tabela-info">Ped. pendente</th>
                             <th class="tabela-info">Dt. ult. Ent.</th>
@@ -105,6 +106,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                 });
 
             } else if (dados[0] === 1) {
+                const mensagem_erro = dados[1]
 
                 // $("canvas#ChartSerieHist").remove();
                 // $("canvas#ChartCobertura").remove();
@@ -125,6 +127,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         <tr>
                             <th class="tabela-info">Cód. Filial</th>
                             <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Bloqueado</th>
                             <th class="tabela-info">Avaria</th>
                             <th class="tabela-info">Ped. pendente</th>
                             <th class="tabela-info">Dt. ult. Ent.</th>
@@ -156,7 +159,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <use xlink:href="#exclamation-triangle-fill"/>
                         </svg>
                         <div>
-                            &nbsp; Não é possivel analisar o produto!
+                            &nbsp; Não é possivel analisar o produto! &nbsp; "${mensagem_erro}"
+                            
                         </div>
                     </div>
                 `
@@ -502,6 +506,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         <tr>
                             <th class="tabela-info">Cód. Filial</th>
                             <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Bloqueado</th>
                             <th class="tabela-info">Avaria</th>
                             <th class="tabela-info">Ped. pendente</th>
                             <th class="tabela-info">Dt. ult. Ent.</th>
@@ -542,6 +547,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         <tr>
                             <th class="tabela-info">Cód. Filial</th>
                             <th class="tabela-info">Estoque</th>
+                            <th class="tabela-info">Bloqueado</th>
                             <th class="tabela-info">Avaria</th>
                             <th class="tabela-info">Ped. pendente</th>
                             <th class="tabela-info">Dt. ult. Ent.</th>
@@ -604,6 +610,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                         
                             <td class="tabela-info">${produto_info.filial}</td>
                             <td class="tabela-info">${produto_info.estoque}</td>
+                            <td class="tabela-info">${produto_info.qt_bloqueada}</td>
                             <td class="tabela-info">${produto_info.avaria}</td>
                             <td class="tabela-info">${produto_info.saldo}</td>
                             <td class="tabela-info">${produto_info.dt_ult_entrada}</td>

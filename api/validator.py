@@ -61,7 +61,7 @@ def valida_hist_estoque(data):
     cod_produto = data['cod_produto']
     cod_filial = data['cod_filial']
     cod_empresa = data['empresa']
-    quantidade = data['empresa']
+    quantidade = data['qt_estoque']
     date = data['data']
 
     histestoque = HistoricoEstoque.objects.filter(

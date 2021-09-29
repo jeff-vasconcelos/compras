@@ -157,8 +157,11 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         info = info_produto.query('cod_filial == @filial')
 
         media = info.media.unique()
-        media_ajustada = info.media_ajustada.unique()
+        #media_ajustada = info.media_ajustada.unique()
         desvio = info.desvio.unique()
+
+        print(media)
+        print(desvio)
 
         # SOMANDO SALDO DE PEDIDOS
         if not pedidos_.empty:
@@ -179,6 +182,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['avarias'] = estoque_['qt_indenizada'].sum()
         prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel']
+        prod_resumo['qt_bloqueada'] = estoque_['qt_bloqueada']
         # prod_resumo['estoque_dispon'] = estoque_a['qt_disponivel'] - prod_resumo['avarias']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
@@ -233,7 +237,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['sugestao'] = sugestao[0].round(0)
         prod_resumo['media'] = media.round(2)
-        prod_resumo['media_ajustada'] = media_ajustada
+        # prod_resumo['media_ajustada'] = media_ajustada
 
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
@@ -297,7 +301,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         if temp_est < dde:
             if not valida_mediaajust:
-                tamanho = media_ajustada * temp_est
+                #tamanho = media_ajustada * temp_est
+                tamanho = media * temp_est
 
             else:
                 tamanho = media * temp_est
