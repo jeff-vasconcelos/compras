@@ -230,6 +230,8 @@ def db_grafico_dois(id_empresa):
 
     curva = abc(lista_fornecedor, id_empresa, parametros.periodo)
 
+    print(curva)
+
     la, lb, lc, ld, le = [], [], [], [], []
 
     for index, row in curva.iterrows():

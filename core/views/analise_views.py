@@ -836,7 +836,7 @@ def selecionar_produto(request) -> object:
             periodo = parametros.periodo
 
             if verif_produto == True:
-                print('com vendas')
+
 
                 # VERIFCANDO FILIAIS COM VENDAS DO PRODUTO
                 se_vendas = Venda.objects.filter(
@@ -907,8 +907,7 @@ def selecionar_produto(request) -> object:
 
         except Exception as error:
             d = [1, str(error)]
-            print("deu erro")
-            print(str(error))
+
             return JsonResponse({'data': d})
     return JsonResponse({})
 
