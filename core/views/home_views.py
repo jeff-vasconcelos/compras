@@ -63,71 +63,77 @@ def home_painel(request, template_name='aplicacao/paginas/home.html'):
 
 
 def home_graficos(request):
-    id_empresa = request.user.usuario.empresa_id
-    grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
-    grafico_dois = GraficoFaturamento.objects.filter(empresa__id=id_empresa).order_by('curva')
+    try:
+        id_empresa = request.user.usuario.empresa_id
+        grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
+        grafico_dois = GraficoFaturamento.objects.filter(empresa__id=id_empresa).order_by('curva')
 
-    data = []
+        data = []
 
-    # GRAFICO UM
-    porcent_curva = []
+        # GRAFICO UM
+        porcent_curva = []
 
-    for a in grafico_um:
-        normal = float(a.normal)
-        parcial = float(a.parcial)
-        excesso = float(a.excesso)
-        total = float(a.total)
+        for a in grafico_um:
+            normal = float(a.normal)
+            parcial = float(a.parcial)
+            excesso = float(a.excesso)
+            total = float(a.total)
 
-        if normal != 0:
-            p_normal = round(normal * 100 / total, 2)
-        else:
-            p_normal = 0
+            if normal != 0:
+                p_normal = round(normal * 100 / total, 2)
+            else:
+                p_normal = 0
 
-        if parcial != 0:
-            p_parcial = round(parcial * 100 / total, 2)
-        else:
-            p_parcial = 0
+            if parcial != 0:
+                p_parcial = round(parcial * 100 / total, 2)
+            else:
+                p_parcial = 0
 
-        if excesso != 0:
-            p_excesso = round(excesso * 100 / total, 2)
-        else:
-            p_excesso = 0
+            if excesso != 0:
+                p_excesso = round(excesso * 100 / total, 2)
+            else:
+                p_excesso = 0
 
-        curva_porc = {
-            'curva': a.curva,
-            'p_normal': p_normal,
-            'p_parcial': p_parcial,
-            'p_excesso': p_excesso
+            curva_porc = {
+                'curva': a.curva,
+                'p_normal': p_normal,
+                'p_parcial': p_parcial,
+                'p_excesso': p_excesso
+            }
+
+            porcent_curva.append(curva_porc)
+
+        # GRAFICO DOIS
+        valor_curva_fatura = []
+        curvas = []
+        valores = []
+        porcentagem = []
+
+        for b in grafico_dois:
+            curvas.append(b.curva)
+            valores.append(b.total)
+
+        faturamento_total = sum(valores)
+
+        for vl in grafico_dois:
+            part = round(vl.total * 100 / faturamento_total, 2)
+            porcentagem.append(part)
+
+        curva_valor = {
+            'curva': curvas,
+            'valor': valores,
+            'porcent': porcentagem
         }
 
-        porcent_curva.append(curva_porc)
+        valor_curva_fatura.append(curva_valor)
 
-    # GRAFICO DOIS
-    valor_curva_fatura = []
-    curvas = []
-    valores = []
-    porcentagem = []
+        # LISTA COM TODOS OS DADOS
+        data.append(porcent_curva)
+        data.append(valor_curva_fatura)
 
-    for b in grafico_dois:
-        curvas.append(b.curva)
-        valores.append(b.total)
+        return JsonResponse({'data': data})
 
-    faturamento_total = sum(valores)
+    except Exception as error:
+        d = [1, str(error)]
 
-    for vl in grafico_dois:
-        part = round(vl.total * 100 / faturamento_total, 2)
-        porcentagem.append(part)
-
-    curva_valor = {
-        'curva': curvas,
-        'valor': valores,
-        'porcent': porcentagem
-    }
-
-    valor_curva_fatura.append(curva_valor)
-
-    # LISTA COM TODOS OS DADOS
-    data.append(porcent_curva)
-    data.append(valor_curva_fatura)
-
-    return JsonResponse({'data': data})
+        return JsonResponse({'data': d})

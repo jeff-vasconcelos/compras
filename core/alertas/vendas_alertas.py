@@ -100,31 +100,15 @@ def vendas(cod_produto, id_empresa, periodo):
                                     on=["data", "cod_produto", "cod_filial"])
 
             e_vendas = vendas_dt
-            # tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
-            #
-            # _media = tratando_media.mean()
-            #
-            # if _media == 0:
-            #     med = 1
-            #
-            # elif math.isnan(_media):
-            #     med = 1
-            #
-            # else:
-            #     med = _media
-            #
-            # media = round(med, 2)
+            tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
+
 
             maximo = e_vendas['qt_vendas'].max()
-            # d_padrao = tratando_media.std()
+            d_padrao = tratando_media.std()
 
             d_vendas = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else 1).sum()
             d_sem_vendas = periodo - d_vendas
 
-            # d_m = d_padrao / media
-            # d_m_dois = d_m * 2
-            # d_m_media = media * d_m_dois
-            # max_media = d_m_media + media
 
             values = {'qt_estoque': 0}
             e_vendas.fillna(value=values, inplace=True)
@@ -132,21 +116,6 @@ def vendas(cod_produto, id_empresa, periodo):
                 columns=['id', 'produto_id', 'fornecedor_id', 'empresa_id', 'created_at', 'cod_fornecedor_y',
                          'filial_id'],
                 inplace=True)
-
-            # cont_ajustada = 0
-            # # CONSIDERAR VENDAS MAIORES OU IGUAIS A ZERO E MENORES QUE A MÉDIA MAXIMA
-            # lista_media = []
-            # for v, est in zip(e_vendas.qt_vendas, e_vendas.qt_estoque):
-            #     if est > 0:
-            #         cont_ajustada = cont_ajustada + 1
-            #         if max_media > v >= 0:
-            #             lista_media.append(v)
-            #         else:
-            #             zero = 0
-            #             lista_media.append(zero)
-            #
-            # lista_for_df = pd.DataFrame(data=lista_media, columns=["valores"]).reset_index()
-            # media_ajustada = lista_for_df['valores'].mean()
 
             lista_media = []
             for v, est in zip(e_vendas.qt_vendas, e_vendas.qt_estoque):
@@ -156,7 +125,10 @@ def vendas(cod_produto, id_empresa, periodo):
             lista_for_df = pd.DataFrame(data=lista_media, columns=["valores"]).reset_index()
 
             media = lista_for_df['valores'].mean()
-            d_padrao = media.std()
+
+
+            if media == 0:
+                media = 0.1
 
             d_m = d_padrao / media
             d_m_dois = d_m * 2

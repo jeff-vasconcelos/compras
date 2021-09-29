@@ -160,9 +160,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         #media_ajustada = info.media_ajustada.unique()
         desvio = info.desvio.unique()
 
-        print(media)
-        print(desvio)
-
         # SOMANDO SALDO DE PEDIDOS
         if not pedidos_.empty:
             prod_resumo = pedidos_.groupby(['cod_filial'])['saldo'].sum().round(2).to_frame().reset_index()

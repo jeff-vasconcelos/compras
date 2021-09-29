@@ -101,7 +101,7 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
 
             e_vendas = vendas_dt
 
-            #tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
+            tratando_media = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else x)
 
             # _media = tratando_media.mean()
             #
@@ -117,7 +117,7 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
             # media = round(med, 2)
 
             maximo = e_vendas['qt_vendas'].max()
-            # d_padrao = tratando_media.std()
+            d_padrao = tratando_media.std()
 
             d_vendas = e_vendas['qt_vendas'].apply(lambda x: 0 if x <= 0 else 1).sum()
             d_sem_vendas = periodo - d_vendas
@@ -158,8 +158,9 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
             lista_for_df = pd.DataFrame(data=lista_media, columns=["valores"]).reset_index()
 
             media = lista_for_df['valores'].mean()
-            d_padrao = media.std()
 
+            if media == 0:
+                media = 0.1
 
             d_m = d_padrao / media
             d_m_dois = d_m * 2
