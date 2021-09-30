@@ -1,26 +1,27 @@
 {% extends 'aplicacao/base.html' %}
 {% load static %}
 
+
 {% block title %}
     <title>Análise - Insight</title>
 {% endblock title %}
 
-{% block scripts %}
-    <script src="{% static 'aplicacao/js/pesquisa_fornecedor.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/pesquisa_produto.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/pesquisa_principio_ativo.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/filtrar_por_fornecedor.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/filtrar_por_produto.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/filtrar_por_curva.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/filtrar_por_marca.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/filtrar_por_principio_ativo.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/pesquisa_pedido_fornecedor.js' %}" defer></script>
 
-    <script src="{% static 'aplicacao/js/selecao_produto.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/pedido_sessao.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/pedidos_pendentes.js' %}" defer></script>
+{% block scripts %}
+    <script src="{% static 'aplicacao/js/analise/pesquisa_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/pesquisa_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/pesquisa_principio_ativo.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/filtrar_por_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/filtrar_por_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/filtrar_por_curva.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/filtrar_por_marca.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/filtrar_por_principio_ativo.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/pesquisa_pedido_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/selecao_produto.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/pedido_sessao.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/analise/pedidos_pendentes.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/mascara_preco.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/graficos/chart-serie-hist.js' %}" defer></script>
 
     <script>
         $(document).ready(function () {
@@ -30,7 +31,9 @@
             }, 5000);
         });
     </script>
+
 {% endblock scripts %}
+
 
 {% block conteudo %}
 

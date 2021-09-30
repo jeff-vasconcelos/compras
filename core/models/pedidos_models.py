@@ -22,7 +22,7 @@ class PedidoInsight(models.Model):
 
 
 
-class PedidoInsightItens(models.Model):
+class ItemPedidoInsight(models.Model):
     cod_produto = models.IntegerField(null=True, blank=True)
     desc_produto = models.CharField(max_length=255, null=True, blank=True)
     cod_filial = models.IntegerField(null=True, blank=True)

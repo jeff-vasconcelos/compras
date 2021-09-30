@@ -5,11 +5,9 @@
 <head>
     {% include 'aplicacao/parciais/_head.html' %}
 
-    {% block scripts %}
-    {% endblock scripts %}
-
     {% block title %}
     {% endblock title %}
+
 </head>
 
 <body id="page-top">
@@ -77,17 +75,21 @@
 <!-- MODAL LOGOUT-->
 {% include 'aplicacao/parciais/_modal_logout.html' %}
 
+{% block scripts %}
+
+{% endblock scripts %}
+
 <script src="{% static 'aplicacao/vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'aplicacao/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'aplicacao/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 <script src="{% static 'aplicacao/js/sb-admin-2.min.js' %}"></script>
 <script src="{% static 'aplicacao/vendor/chart.js/Chart.min.js' %}"></script>
-<script src="{% static 'aplicacao/js/demo/chart-serie-hist.js' %}"></script>
-<script src="{% static 'aplicacao/js/demo/chart-cobert-estoq.js' %}"></script>
+<script src="{% static 'aplicacao/js/graficos/chart-serie-hist.js' %}"></script>
+<script src="{% static 'aplicacao/js/graficos/chart-cobert-estoq.js' %}"></script>
 
 <script src="{% static 'aplicacao/vendor/datatables/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'aplicacao/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
-<script src="{% static 'aplicacao/js/demo/datatables-demo.js' %}"></script>
+<script src="{% static 'aplicacao/js/graficos/datatables-demo.js' %}"></script>
 <!--
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.1/chart.min.js"
         integrity="sha512-dCMdvmRC8BuFAgdVMPrm5MJauIcozqGY8krxgbXyUhVTvR3vzH0x2qW2nB4jFdeymins2ZubDv7osK1roNBKjg=="

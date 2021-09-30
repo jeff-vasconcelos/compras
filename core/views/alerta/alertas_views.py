@@ -45,9 +45,11 @@ def excesso_fornecedor(request):
             'fornecedores': p_fornec
         }
 
-        return render(request, 'aplicacao/paginas/alertas/excesso_fornec.html', context)
+        return render(request,
+                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/excesso_fornec.html', context)
     else:
-        return render(request, 'aplicacao/paginas/alertas/excesso_fornec.html')
+        return render(request,
+                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/excesso_fornec.html')
 
 
 @login_required
@@ -65,7 +67,8 @@ def ver_excesso_fornecedor(request, cod_fornecedor):
         'fornecedor': fornec
     }
 
-    return render(request, 'aplicacao/paginas/alertas/ver_excesso_fornec.html', context)
+    return render(request,
+                  'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ver_excesso_fornec.html', context)
 
 
 @login_required
@@ -104,9 +107,11 @@ def ruptura_fornecedor(request):
             'fornecedores': p_fornec
         }
 
-        return render(request, 'aplicacao/paginas/alertas/ruptura_fornec.html', context)
+        return render(request,
+                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ruptura_fornec.html', context)
     else:
-        return render(request, 'aplicacao/paginas/alertas/ruptura_fornec.html')
+        return render(request,
+                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ruptura_fornec.html')
 
 
 @login_required
@@ -125,7 +130,8 @@ def ver_ruptura_fornecedor(request, cod_fornecedor):
         'fornecedor': fornec
     }
 
-    return render(request, 'aplicacao/paginas/alertas/ver_ruptura_fornec.html', context)
+    return render(request,
+                  'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ver_ruptura_fornec.html', context)
 
 
 # ALERTA EXCESSO

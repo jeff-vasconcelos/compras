@@ -18,7 +18,7 @@ def mm(valor):
 def pdf_pedidos_insight(request, pk):
     id_empresa = request.user.usuario.empresa_id
     pedido = PedidoInsight.objects.get(id=pk, empresa__id=id_empresa)
-    itens = PedidoInsightItens.objects.filter(pedido=pedido.pk)
+    itens = ItemPedidoInsight.objects.filter(pedido=pedido.pk)
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="PedidoInsight.pdf"'

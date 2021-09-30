@@ -27,7 +27,7 @@ def pedido_painel(request, template_name='aplicacao/paginas/pedidos/pedidos.html
 @login_required
 def ver_pedidos_insight(request, pk, template_name='aplicacao/paginas/pedidos/ver-pedido.html'):
     pedido = PedidoInsight.objects.get(id=pk)
-    itens = PedidoInsightItens.objects.filter(pedido=pedido.pk)
+    itens = ItemPedidoInsight.objects.filter(pedido=pedido.pk)
 
     contexto = {
         'itens':itens,
@@ -153,7 +153,7 @@ def pedido_save_db(request) -> object:
             pr = temp['ped_pr_compra']
             preco = locale.currency(pr, grouping=True)
 
-            p_i = PedidoInsightItens.objects.create(
+            p_i = ItemPedidoInsight.objects.create(
                 cod_produto=temp['ped_produto_cod'],
                 desc_produto=temp['ped_produto_nome'],
                 cod_filial=temp['ped_cod_filial'],

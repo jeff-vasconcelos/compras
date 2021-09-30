@@ -140,6 +140,22 @@ a.links_alerta {
     font-family: Montserrat-Medium;
 }
 
+/* FORNEC LATERAL */
+
+#link-fornec-lat{
+    color: #707070;
+    padding: 8px 10px;
+    font-family: Montserrat-Medium;
+}
+#link-fornec-lat:hover{
+    background-color: #f2f7ff;
+    border-left: solid 3px #224390;
+    color: #224390;
+}
+#icone-fornec{
+    color: #707070;
+}
+
 
 /* PEDIDOS LATERAL */
 #link-pedi-lat{

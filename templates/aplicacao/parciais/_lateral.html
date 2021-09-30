@@ -50,15 +50,32 @@
             </span>
         </a>
 
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="links_alerta collapse-item" href="{% url 'alerta_all_excesso' %}">Excesso</a>
                 <a class="links_alerta collapse-item" href="{% url 'alerta_all_ruptura' %}">Ruptura</a>
+            </div>
+        </div>
+    </li>
+
+
+    <!-- FORNECEDOR -->
+    <li id="alert-lat" class="nav-item">
+        <a id="link-alert-lat" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFornec"
+           aria-expanded="true" aria-controls="collapseFornec">
+            <i id="icone-fornec" class="fas fa-handshake"></i>
+
+            <span>Fornecedores</span>
+        </a>
+
+        <div id="collapseFornec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
                 <a class="links_alerta collapse-item" href="{% url 'alerta_excesso_fornecedor' %}">Excesso Fornecedor</a>
                 <a class="links_alerta collapse-item" href="{% url 'alerta_ruptura_fornecedor' %}">Ruptura Fornecedor</a>
             </div>
         </div>
     </li>
+
 
     <!-- PEDIDOS -->
     <li id="pedi-lat" class="nav-item">

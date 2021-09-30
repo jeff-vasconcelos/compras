@@ -55,7 +55,7 @@ class EmailAdmin(admin.ModelAdmin):
 
 
 class ItemPedidoInline(admin.TabularInline):
-    model = PedidoInsightItens
+    model = ItemPedidoInsight
     extra = 1
 
 
@@ -76,7 +76,7 @@ admin.site.register(Usuario, UsuarioAdmin)
 admin.site.register(Academy)
 admin.site.register(Parametro, ConfigAdmin)
 admin.site.register(PedidoInsight, PedidoInsAdmin)
-admin.site.register(PedidoInsightItens)
+admin.site.register(ItemPedidoInsight)
 admin.site.register(Alerta, AlertaAdmin)
 admin.site.register(Email, EmailAdmin)
 admin.site.register(DadosEstoque)

@@ -5366,7 +5366,7 @@ desktop:
     terms:
       - computer
       - cpu
-      - demo
+      - graficos
       - desktop
       - device
       - imac
@@ -11323,7 +11323,7 @@ laptop:
       - computer
       - cpu
       - dell
-      - demo
+      - graficos
       - device
       - mac
       - macbook
@@ -11342,7 +11342,7 @@ laptop-code:
       - computer
       - cpu
       - dell
-      - demo
+      - graficos
       - develop
       - device
       - mac
