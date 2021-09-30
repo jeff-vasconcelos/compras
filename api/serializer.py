@@ -2,12 +2,12 @@ from rest_framework import serializers
 from api.validator import *
 from api.models.produto import Produto
 from api.models.fornecedor import Fornecedor
-from api.models.estoque_atual import Estoque
-from api.models.historico_estoque import HistoricoEstoque
-from api.models.pedido_compra import Pedido
-from api.models.ultima_entrada import Entrada
+from api.models.estoque import Estoque
+from api.models.historico import Historico
+from api.models.pedido import Pedido
+from api.models.entrada import Entrada
 from api.models.venda import Venda
-from api.models.pedidos import Pedidos_API
+from api.models.pedido_duplicado import PedidoDuplicado
 from core.models.empresas_models import Filial, Empresa
 
 
@@ -42,7 +42,7 @@ class FornecedorSerializer(serializers.ModelSerializer):
         return data
 
 
-class EstoqueAtualSerializer(serializers.ModelSerializer):
+class EstoqueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estoque
         fields = '__all__'
@@ -73,9 +73,9 @@ class EstoqueAtualSerializer(serializers.ModelSerializer):
         return data
 
 
-class HistEstoqueSerializer(serializers.ModelSerializer):
+class HistoricoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = HistoricoEstoque
+        model = Historico
         fields = '__all__'
 
     def validate(self, data):
@@ -135,7 +135,7 @@ class PedidoSerializer(serializers.ModelSerializer):
         return data
 
 
-class UltEntradaSerializer(serializers.ModelSerializer):
+class EntradaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Entrada
         fields = '__all__'

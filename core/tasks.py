@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 from celery import shared_task
-from core.views.alertas_views import *
+from core.views.alerta.alertas_views import *
 
 
 @shared_task

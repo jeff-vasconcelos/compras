@@ -1,21 +1,15 @@
 from datetime import date, timedelta
-from rest_framework import viewsets, generics
-
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from api.serializer import *
-
 from api.models.produto import Produto
 from api.models.fornecedor import Fornecedor
-from api.models.estoque_atual import Estoque
-from api.models.historico_estoque import HistoricoEstoque
-from api.models.pedido_compra import Pedido
-from api.models.ultima_entrada import Entrada
+from api.models.estoque import Estoque
+from api.models.historico import Historico
+from api.models.pedido import Pedido
+from api.models.entrada import Entrada
 from api.models.venda import Venda
-from api.models.pedidos import Pedidos_API
-
+from api.models.pedido_duplicado import PedidoDuplicado
 from django.db.models import Q
 
 
@@ -34,13 +28,13 @@ class FornecedorViewSet(viewsets.ModelViewSet):
 class EstoqueAtualViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Estoque.objects.all()
-    serializer_class = EstoqueAtualSerializer
+    serializer_class = EstoqueSerializer
 
 
 class HistEstoqueViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = HistoricoEstoque.objects.all()
-    serializer_class = HistEstoqueSerializer
+    queryset = Historico.objects.all()
+    serializer_class = HistoricoSerializer
 
 
 class PedidoViewSet(viewsets.ModelViewSet):
@@ -52,7 +46,7 @@ class PedidoViewSet(viewsets.ModelViewSet):
 class UltEntradaViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Entrada.objects.all()
-    serializer_class = UltEntradaSerializer
+    serializer_class = EntradaSerializer
 
 
 class VendaViewSet(viewsets.ModelViewSet):
@@ -62,9 +56,8 @@ class VendaViewSet(viewsets.ModelViewSet):
 
 
 def valida_pedidos_excluidos(id_empresa):
-
     global pedidos
-    pedidos_existentes = Pedidos_API.objects.filter(empresa__id=id_empresa)
+    pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
     lista_ids = []
 
     if pedidos_existentes:

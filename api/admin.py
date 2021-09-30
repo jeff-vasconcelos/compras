@@ -1,19 +1,19 @@
 from django.contrib import admin
-from api.models.estoque_atual import Estoque
+from api.models.estoque import Estoque
 from api.models.fornecedor import Fornecedor
-from api.models.historico_estoque import HistoricoEstoque
-from api.models.pedido_compra import Pedido
+from api.models.historico import Historico
+from api.models.pedido import Pedido
 from api.models.produto import Produto
-from api.models.ultima_entrada import Entrada
+from api.models.entrada import Entrada
 from api.models.venda import Venda
 
-from api.models.pedidos import Pedidos_API
+from api.models.pedido_duplicado import PedidoDuplicado
 
 
 """ Adicionando dados da API de Produtos no Admin do DJANGO """
 
 
-class Produtos(admin.ModelAdmin):
+class ProdutoAdmin(admin.ModelAdmin):
     list_display = ('id', 'cod_produto', 'desc_produto', 'fornecedor', 'empresa')
     list_display_links = ('cod_produto', 'desc_produto')
     search_fields = ('cod_produto', 'desc_produto',)
@@ -29,7 +29,7 @@ class FornecedorAdmin(admin.ModelAdmin):
     list_per_page = 40
 
 
-class Pedidos(admin.ModelAdmin):
+class PedidoAdmin(admin.ModelAdmin):
     list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto', )
     search_fields = ('cod_produto', )
@@ -37,7 +37,7 @@ class Pedidos(admin.ModelAdmin):
     list_per_page = 40
 
 
-class Historico(admin.ModelAdmin):
+class HistoricoAdmin(admin.ModelAdmin):
     list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto',)
     search_fields = ('cod_produto',)
@@ -45,7 +45,7 @@ class Historico(admin.ModelAdmin):
     list_per_page = 40
 
 
-class Vendas(admin.ModelAdmin):
+class VendaAdmin(admin.ModelAdmin):
     list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto',)
     search_fields = ('cod_produto', )
@@ -53,7 +53,7 @@ class Vendas(admin.ModelAdmin):
     list_per_page = 40
 
 
-class EstoqueAtual(admin.ModelAdmin):
+class EstoqueAdmin(admin.ModelAdmin):
     list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto',)
     search_fields = ('cod_produto', )
@@ -61,7 +61,7 @@ class EstoqueAtual(admin.ModelAdmin):
     list_per_page = 40
 
 
-class UltEntrada(admin.ModelAdmin):
+class EntradaAdmin(admin.ModelAdmin):
     list_display = ('id', 'cod_produto', 'fornecedor', 'empresa', 'data')
     list_display_links = ('cod_produto',)
     search_fields = ('cod_produto',)
@@ -69,11 +69,11 @@ class UltEntrada(admin.ModelAdmin):
     list_per_page = 40
 
 
-admin.site.register(Produto, Produtos)
-admin.site.register(Estoque, EstoqueAtual)
+admin.site.register(Produto, ProdutoAdmin)
+admin.site.register(Estoque, EstoqueAdmin)
 admin.site.register(Fornecedor, FornecedorAdmin)
-admin.site.register(HistoricoEstoque, Historico)
-admin.site.register(Pedido, Pedidos)
-admin.site.register(Entrada, UltEntrada)
-admin.site.register(Venda, Vendas)
-admin.site.register(Pedidos_API)
+admin.site.register(Historico, HistoricoAdmin)
+admin.site.register(Pedido, PedidoAdmin)
+admin.site.register(Entrada, EntradaAdmin)
+admin.site.register(Venda, VendaAdmin)
+admin.site.register(PedidoDuplicado)

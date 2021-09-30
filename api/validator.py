@@ -1,11 +1,11 @@
 from api.models.produto import Produto
 from api.models.fornecedor import Fornecedor
-from api.models.estoque_atual import Estoque
-from api.models.historico_estoque import HistoricoEstoque
-from api.models.pedido_compra import Pedido
-from api.models.ultima_entrada import Entrada
+from api.models.estoque import Estoque
+from api.models.historico import Historico
+from api.models.pedido import Pedido
+from api.models.entrada import Entrada
 from api.models.venda import Venda
-from api.models.pedidos import Pedidos_API
+from api.models.pedido_duplicado import PedidoDuplicado
 
 
 def valida_produto(data):
@@ -64,7 +64,7 @@ def valida_hist_estoque(data):
     quantidade = data['qt_estoque']
     date = data['data']
 
-    histestoque = HistoricoEstoque.objects.filter(
+    histestoque = Historico.objects.filter(
         cod_produto=cod_produto,
         cod_filial=cod_filial,
         empresa=cod_empresa,
@@ -98,7 +98,7 @@ def valida_pedido(data):
     if pedido == False:
         return True
     else:
-        pedido_existe = Pedidos_API.objects.filter(
+        pedido_existe = PedidoDuplicado.objects.filter(
             cod_produto=cod_produto,
             cod_filial=cod_filial,
             empresa=cod_empresa,
@@ -108,7 +108,7 @@ def valida_pedido(data):
         ).exists()
 
         if pedido_existe == False:
-            b = Pedidos_API.objects.create(
+            b = PedidoDuplicado.objects.create(
                 cod_produto = data['cod_produto'],
                 cod_filial = data['cod_filial'],
                 cod_fornecedor = data['cod_fornecedor'],

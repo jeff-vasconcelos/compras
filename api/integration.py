@@ -66,14 +66,14 @@ class ProdutoCreate(generics.CreateAPIView):
 
 
 class HistoricoCreate(generics.CreateAPIView):
-    queryset = HistoricoEstoque.objects.all()
+    queryset = Historico.objects.all()
     serializer_class = HistSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, many=isinstance(request.data, list))
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        results = HistoricoEstoque.objects.none()
+        results = Historico.objects.none()
         output_serializer = HistSerializer(results, many=True)
         data = output_serializer.data[:]
         return Response(data)

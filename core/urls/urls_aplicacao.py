@@ -1,16 +1,15 @@
 from django.urls import path
-from django.conf import settings
 from django.conf.urls.static import static
-from core.views.usuario_views import *
-from core.views.academy_views import *
-from core.views.home_views import *
-from core.views.analise_views import *
-from core.views.alertas_views import *
-from core.views.configuracao_views import *
-from core.trata_dados.generate_pdf import *
-from core.views.pedidos_views import *
+from core.export_files.generate_xls import export_xls
+from core.views.usuario.usuario_views import *
+from core.views.academy.academy_views import *
+from core.views.home.home_views import *
+from core.views.analise.analise_views import *
+from core.views.alerta.alertas_views import *
+from core.views.configuracao.configuracao_views import *
+from core.export_files.generate_pdf import *
+from core.views.pedido_insight.pedidos_views import *
 
-from core.multifilial.processa_produtos import a_multifiliais
 
 urlpatterns = [
 
@@ -46,7 +45,7 @@ urlpatterns = [
     path('add-produto-pedido/', add_prod_pedido_sessao, name='add-prod-pedido-sessao'),
     path('ver-produto-pedido/', ver_prod_pedido_sessao, name='ver-prod-pedido-sessao'),
     path('rm-produto-pedido/', rm_prod_pedido_sessao, name='rm-prod-pedido-sessao'),
-    path('exportar-produto-pedido/', export_csv, name='exportar-pedido-sessao'),
+    path('exportar-produto-pedido/', export_xls, name='exportar-pedido-sessao'),
     path('fornecedor-pedido/', pedido_save_db, name='fornecedor-pedido'),
     path('ver-pedido-pendentes/', pedidos_pedentes, name='ver-pedido-pendentes'),
     path('pedidos/ver/<int:pk>', ver_pedidos_insight, name='ver_pedidos_insight'),
