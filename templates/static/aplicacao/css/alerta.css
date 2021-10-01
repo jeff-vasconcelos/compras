@@ -127,7 +127,7 @@ th.sorting, th.sorting_desc {
     font-size: 14px;
 }
 
-#add_item_alertas {
+button.add_item_alertas {
     background-color: #20BC77;
     color: #FFFFFF;
     border: none;
@@ -138,14 +138,14 @@ th.sorting, th.sorting_desc {
     padding-right: 15px;
     padding-left: 15px;
 }
-#add_item_alertas:hover {
+button.add_item_alertas:hover {
     background-color: #627288;
 }
-#add_item_alertas:focus {
+button.add_item_alertas:focus {
     background-color: #20BC77;
 }
 
-#ver_graf_alertas {
+button.ver_graf_alertas {
     background-color: #224390;
     color: #FFFFFF;
     border: none;
@@ -156,10 +156,10 @@ th.sorting, th.sorting_desc {
     padding-right: 15px;
     padding-left: 15px;
 }
-#ver_graf_alertas:hover {
+button.ver_graf_alertas:hover {
     background-color: #627288;
 }
-#ver_graf_alertas:focus {
+button.ver_graf_alertas:focus {
     background-color: #224390;
 }
 
@@ -169,4 +169,46 @@ input.input_alertas {
     border-radius: 5px;
     border: 1px solid #d1d3e2;
     text-align: center;
+}
+
+#ver_pedido_excesso_fornec {
+    background-color: #224390;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+#ver_pedido_excesso_fornec:hover{
+    background-color: #627288;
+}
+#ver_pedido_excesso_fornec:focus {
+     background-color: #224390;
+}
+
+#modal-ver-pedido_excesso_fornec {
+    max-width: 1100px;
+    font-size: 14px;
+}
+
+#btn-expo-modal-excesso_fornec {
+    background-color: #20BC77;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+    display: none;
+}
+#btn-expo-modal-excesso_fornec:hover {
+    background-color: #627288;
+}
+#btn-expo-modal-excesso_fornec:focus {
+    background-color: #20BC77;
 }

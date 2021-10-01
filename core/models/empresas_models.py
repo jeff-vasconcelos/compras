@@ -84,10 +84,11 @@ class Alerta(models.Model):
     empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='alerta_empresa')
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-    campo_um = models.CharField(max_length=255, null=True, blank=True)
-    campo_dois = models.CharField(max_length=255, null=True, blank=True)
-    campo_tres = models.CharField(max_length=255, null=True, blank=True)
-    campo_quatro = models.CharField(max_length=255, null=True, blank=True)
+    dde = models.CharField(max_length=255, null=True, blank=True)
+    media = models.CharField(max_length=255, null=True, blank=True)
+    principio_ativo = models.CharField(max_length=255, null=True, blank=True)
+    data_entrada = models.CharField(max_length=255, null=True, blank=True)
+    id_produto = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Alerta'

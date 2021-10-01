@@ -1,30 +1,70 @@
-const ProdutosSelecionar = document.getElementById('results-produtos')
-const inputPrCompraDigitada = document.getElementById('pr_compra')
-//const inputMargemDigitada = document.getElementById('porc_margem')
-// const inputPrSugeridoDigitada = document.getElementById('pr_sugerido')
-// const inputDDEDigitada = document.getElementById('dde')
-const inputQtDigitada = document.getElementById('qt_digit')
 
-const botaoExportarPedido = document.getElementById('btn-expo-modal-analise')
-const botaoPedidoSessao = document.getElementById('add_pedido_sessao')
-const botaoVerPedidoSessao = document.getElementById('ver_pedido_sessao')
-const resultPedidoSessao = document.getElementById('tbody_pedidos_sessao')
 
-const botaoRemoverPedidoSessao = document.getElementsByName('botao_remover_prod_sessao')
-const modalPedidosSessao = document.getElementById('modal-ver-pedido-geral')
+const botaoExportarExcessoFornec = document.getElementById('btn-expo-modal-excesso_fornec')
 
-const mensagemSucesso = document.getElementById('div-mensagem-sucesso')
-const mensagemAlerta = document.getElementById('div-mensagem-alerta')
-const mensagemErro = document.getElementById('div-mensagem-erro')
+//const resultsPedidoExcessoFornec = document.getElementById('tbody_pedidos_sessao')
 
+//const botaoRemoverPedidoSessao = document.getElementsByName('botao_remover_prod_sessao')
+//const modalPedidosSessao = document.getElementById('modal-ver-pedido-geral')
+
+const verPedidoExcessoFornec = document.getElementById('ver_pedido_excesso_fornec')
+
+const msmSucessoExcessoFornec = document.getElementById('div-mensagem-sucesso_excesso_fornec')
+const msmAlertaExcessoFornec = document.getElementById('div-mensagem-alerta_excesso_fornec')
+
+const resultsPedidoExcessoFornec = document.getElementById('tbody_pedidos_excesso_fornec')
+
+const csrf_ = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+
+function GetNome_alerta(CodProd) {
+
+    const filial_excesso_fornec = document.getElementById('filial_excesso_fornec-'+CodProd)
+    const produtos_excesso_fornec = document.getElementById('produto_excesso_fornec-'+CodProd)
+    const input_valor_excesso_fornec = document.getElementById('vl_digit_excesso_fornec-'+CodProd)
+    const input_quantidade_excesso_fornec = document.getElementById('qt_digit_excesso_fornec-'+CodProd)
+
+
+    const produto = produtos_excesso_fornec.value
+    const filial = filial_excesso_fornec.value
+
+    const qt_dig = input_quantidade_excesso_fornec.value
+    var qt_digitada = 0
+    if (qt_dig === "") {
+        qt_digitada = 0
+    } else {
+        qt_digitada = qt_dig
+    }
+
+    // PEGANDO PR COMPRA
+    const p_comp = input_valor_excesso_fornec.value
+    var p_compra = 0
+    if (p_comp === "") {
+        p_compra = 0
+    } else {
+        p_compra = p_comp
+    }
+
+    input_quantidade_excesso_fornec.value = ''
+    input_valor_excesso_fornec.value = ''
+    console.log(p_compra)
+    console.log(qt_digitada)
+    console.log(produto)
+    console.log(filial)
+
+
+    add_pedido_excesso_fornec(produto, qt_digitada, p_compra, filial)
+
+    //alert(NomeBotao);
+}
 
 // ADD PRODUTO AO PEDIDO NA SESSAO
-const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
+const add_pedido_excesso_fornec = (produto, qt_digitada, pr_compra, filial) => {
     $.ajax({
         type: 'POST',
         url: '/painel/add-produto-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf,
+            'csrfmiddlewaretoken': csrf_,
             'produto': produto,
             'qt_digitada': qt_digitada,
             'pr_compra': pr_compra,
@@ -35,9 +75,8 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
             const resposta = pedido_sessao.data
 
             if (resposta === "SUCESSO") {
-                inputQtDigitada.value = ""
-                inputPrCompraDigitada.value = ""
-                mensagemSucesso.innerHTML += `
+
+                msmSucessoExcessoFornec.innerHTML += `
                     <div class="alert alert-success d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
                             <use xlink:href="#check-circle-fill"/>
@@ -49,9 +88,8 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
                 `
 
             } else {
-                inputQtDigitada.value = ""
-                inputPrCompraDigitada.value = ""
-                mensagemAlerta.innerHTML += `
+
+                msmAlertaExcessoFornec.innerHTML += `
                     <div class="alert alert-warning d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
                             <use xlink:href="#exclamation-triangle-fill"/>
@@ -74,65 +112,10 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
         }
     });
 }
-botaoPedidoSessao.addEventListener('click', e => {
-    // PEGANDO PRODUTO SELECIONADO
-    const produtoSelecionado = ProdutosSelecionar.value
-    const filialSelecionado = listaFiliais.value
-
-
-    // PEGANDO QT DIGITADA
-    const qt_dig = inputQtDigitada.value
-    var qt_digitada = 0
-    if (qt_dig === "") {
-        qt_digitada = 0
-    } else {
-        qt_digitada = qt_dig
-    }
-
-    // PEGANDO PR COMPRA
-    const p_comp = inputPrCompraDigitada.value
-    var p_compra = 0
-    if (p_comp === "") {
-        p_compra = 0
-    } else {
-        p_compra = p_comp
-    }
-
-
-    // PEGANDO MARGEM
-    // const mar = inputMargemDigitada.value
-    // var margem = 0
-    // if (mar === "") {
-    //     margem = 0
-    // } else {
-    //     margem = mar
-    // }
-
-    // // PEGANDO PR SUGERIDO
-    // const p_sug = inputPrSugeridoDigitada.value
-    // var p_sugerido = 0
-    // if (p_sug === "") {
-    //     p_sugerido = 0
-    // } else {
-    //     p_sugerido = p_sug
-    // }
-    //
-    // // PEGANDO DDE
-    // const dde_p = inputDDEDigitada.value
-    // var dde = 0
-    // if (dde_p === "") {
-    //     dde = 0
-    // } else {
-    //     dde = dde_p
-    // }
-
-
-    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, filialSelecionado)
-})
 
 
 // VER PEDIDO NA SESSAO
-const verPedidoSessao = () => {
+const ver_pedido_excesso_fornec = () => {
     $.ajax({
         type: 'GET',
         url: '/painel/ver-produto-pedido/',
@@ -141,22 +124,22 @@ const verPedidoSessao = () => {
             const data = pedido_sessao.data
 
             if (data === "FALSE") {
-                botaoExportarPedido.style.display = 'none'
+                botaoExportarExcessoFornec.style.display = 'none'
             }
 
             if (Array.isArray(data)) {
-                resultPedidoSessao.innerHTML = ""
+                resultsPedidoExcessoFornec.innerHTML = ""
                 data.forEach(prod => {
-                    resultPedidoSessao.innerHTML += `
+                    resultsPedidoExcessoFornec.innerHTML += `
                     <tr>
                         <td>${prod.ped_cod_filial}</td>
                         <td>${prod.ped_produto_cod}</td>
                         <td>${prod.ped_produto_nome}</td>
                         <td>${prod.ped_pr_compra}</td>
                         <td>${prod.ped_qt_digitada}</td>
-                        
+
                         <td>
-                            <button onclick="rm_prod_pedido_sessao(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="botao_remover_p_sessao btn btn-danger btn-sm">
+                            <button onclick="rm_prod_pedido_excesso_fornec(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="botao_remover_p_sessao btn btn-danger btn-sm">
                                 <i class="fas fa-times-circle fa-1x"></i>
                             </button>
                         </td>
@@ -170,22 +153,22 @@ const verPedidoSessao = () => {
         }
     });
 }
-botaoVerPedidoSessao.addEventListener('click', e => {
-    verPedidoSessao()
+verPedidoExcessoFornec.addEventListener('click', e => {
+    ver_pedido_excesso_fornec()
 })
 
 
 // REMOVER PRODUTO AO PEDIDO NA SESSAO
-const rmPedidoSessao = (produto) => {
+const rmPedidoExcessoFornec = (produto) => {
     $.ajax({
         type: 'POST',
         url: '/painel/rm-produto-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf,
+            'csrfmiddlewaretoken': csrf_,
             'produto': produto
         },
         success: (pedido_sessao) => {
-            mensagemSucesso.innerHTML += `
+            msmSucessoExcessoFornec.innerHTML += `
                     <div class="alert alert-success d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
                             <use xlink:href="#check-circle-fill"/>
@@ -195,9 +178,9 @@ const rmPedidoSessao = (produto) => {
                         </div>
                     </div>
                 `
-            resultPedidoSessao.innerHTML = ""
+            resultsPedidoExcessoFornec.innerHTML = ""
             // location.reload();
-            $(".modal-pedido").modal('hide');
+            $(".modal_pedido_excesso_fornec").modal('hide');
 
             $(document).ready(function () {
                 // show the alert
@@ -212,9 +195,9 @@ const rmPedidoSessao = (produto) => {
 
 }
 
-function rm_prod_pedido_sessao(prod_id) {
+function rm_prod_pedido_excesso_fornec(prod_id) {
     const produto = prod_id
-    rmPedidoSessao(produto)
+    rmPedidoExcessoFornec(produto)
 }
 
 
@@ -235,11 +218,11 @@ const exportPedidoSessao = (fornecedor) => {
     });
 }
 
-botaoExportarPedido.addEventListener("click", e => {
+botaoExportarExcessoFornec.addEventListener("click", e => {
     const fornecedor = document.getElementById("fornec_select_id").value
-    resultPedidoSessao.innerHTML = ""
-    document.getElementById("search-pedido-fornec").value='';
-    $(".modal-pedido").modal('hide');
+    resultsPedidoExcessoFornec.innerHTML = ""
+    document.getElementById("search-pedido-excesso-fornec").value='';
+    $(".modal_pedido_excesso_fornec").modal('hide');
 
     $(document).ready(function () {
         // show the alert

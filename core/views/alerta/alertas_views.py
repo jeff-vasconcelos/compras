@@ -45,11 +45,9 @@ def excesso_fornecedor(request):
             'fornecedores': p_fornec
         }
 
-        return render(request,
-                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/excesso_fornec.html', context)
+        return render(request, 'aplicacao/paginas/fornecedor/excesso_fornec.html', context)
     else:
-        return render(request,
-                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/excesso_fornec.html')
+        return render(request, 'aplicacao/paginas/fornecedor/excesso_fornec.html')
 
 
 @login_required
@@ -68,7 +66,7 @@ def ver_excesso_fornecedor(request, cod_fornecedor):
     }
 
     return render(request,
-                  'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ver_excesso_fornec.html', context)
+                  'aplicacao/paginas/fornecedor/ver_excesso_fornec.html', context)
 
 
 @login_required
@@ -107,11 +105,9 @@ def ruptura_fornecedor(request):
             'fornecedores': p_fornec
         }
 
-        return render(request,
-                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ruptura_fornec.html', context)
+        return render(request, 'aplicacao/paginas/fornecedor/ruptura_fornec.html', context)
     else:
-        return render(request,
-                      'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ruptura_fornec.html')
+        return render(request, 'aplicacao/paginas/fornecedor/ruptura_fornec.html')
 
 
 @login_required
@@ -130,8 +126,7 @@ def ver_ruptura_fornecedor(request, cod_fornecedor):
         'fornecedor': fornec
     }
 
-    return render(request,
-                  'aplicacao/paginas/alertas/../../../templates/aplicacao/paginas/fornecedor/ver_ruptura_fornec.html', context)
+    return render(request, 'aplicacao/paginas/fornecedor/ver_ruptura_fornec.html', context)
 
 
 # ALERTA EXCESSO
@@ -375,6 +370,10 @@ def alerta_db(id_empresa, produtos):
             valor = round(i['valor_sugestao'], 0)
             valor_excesso = i['vl_excesso']
 
+            produto = Produto.objects.get(empresa_id__exact=id_empresa,
+                                          cod_produto=i['cod_produto'],
+                                          cod_fornecedor=i['cod_fornecedor'])
+
             b = Alerta.objects.create(
                 cod_filial=i['filial'],
                 cod_produto=i['cod_produto'],
@@ -390,11 +389,12 @@ def alerta_db(id_empresa, produtos):
                 fornecedor=i['fornecedor'],
                 cod_fornecedor=i['cod_fornecedor'],
                 empresa=empresa,
-                campo_um=i['dde'],
+                dde=i['dde'],
                 #campo_dois=i['media_ajustada'],
-                campo_dois=i['media'],
-                campo_tres=i['principio_ativo'],
-                campo_quatro=i['dt_ult_entrada']
+                media=i['media'],
+                principio_ativo=i['principio_ativo'],
+                data_entrada=i['dt_ult_entrada'],
+                id_produto=produto.id
             )
             b.save()
 

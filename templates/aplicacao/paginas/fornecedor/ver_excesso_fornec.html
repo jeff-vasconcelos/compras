@@ -13,6 +13,8 @@
 {% block scripts %}
 
     <script src="{% static 'aplicacao/js/fornecedor/pedido_sessao.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/fornecedor/pesquisar_pedido_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/mascara_preco.js' %}" defer></script>
 
     <script>
         $(document).ready(function () {
@@ -27,9 +29,17 @@
 
 
 {% block conteudo %}
+
+    <div class="div-mensagem-sucesso" id="div-mensagem-sucesso_excesso_fornec">
+    </div>
+
+    <div class="div-mensagem-alerta" id="div-mensagem-alerta_excesso_fornec">
+    </div>
+
+
     <div class="row">
         <div class="col-6">
-            <h2>Alertas</h2>
+            <h2>{{ fornecedor.desc_fornecedor }}</h2>
         </div>
         <div class="col-6 float-right" style="text-align: right; padding-top: 10px">
             {% if request.user.usuario.empresa.atualizacao_alerta %}
@@ -43,68 +53,23 @@
 
     <hr>
     <div class="card shadow mb-4">
-        <!--
         <div class="card-header py-3">
             <div class="row">
 
                 <div class="col-6 float-left">
 
-                    <a id="btn-print-excesso" href="{% url 'pdf_excesso' %}" type="button" target="_blank"
-                       class="btn btn-primary btn-sm">
-                        Imprimir
-                    </a>
+                    <h5>Excesso por Fornecedor</h5>
 
                 </div>
 
-                <div class="col-6">
-                    <div class="row float-right">
-
-                        <div class="col" style="flex-grow: 0">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        id="dropdownMenuCurva">
-                                    Curva
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuCurva">
-                                    <a class="dropdown-item" href="{% url 'alerta_excesso_curva' "todos" %}">Todas as
-                                        curvas</a>
-                                    <a class="dropdown-item" href="{% url 'alerta_excesso_curva' "A" %}">Curva A</a>
-                                    <a class="dropdown-item" href="{% url 'alerta_excesso_curva' "B" %}">Curva B</a>
-                                    <a class="dropdown-item" href="{% url 'alerta_excesso_curva' "C" %}">Curva C</a>
-                                    <a class="dropdown-item" href="{% url 'alerta_excesso_curva' "D" %}">Curva D</a>
-                                    <a class="dropdown-item" href="{% url 'alerta_excesso_curva' "E" %}">Curva E</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col" style="flex-grow: 0">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        id="dropdownMenuFilial">
-                                    Filial
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuFilial">
-                                    <a class="dropdown-item" href="{% url 'alerta_excesso_filial' 0 %}">Todas as
-                                        filiais</a>
-
-                                    {% for filial in filiais %}
-                                        <a class="dropdown-item"
-                                           href="{% url 'alerta_excesso_filial' filial.cod_filial %}">
-            {{ filial.desc_filial }}</a>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="col-6" align="right">
+                    <button id="ver_pedido_excesso_fornec" class="btn btn-secondary btn-sm ver-pedido" type="button"
+                            data-toggle="modal" data-target=".modal_pedido_excesso_fornec">Ver pedido
+                    </button>
                 </div>
 
             </div>
         </div>
-        -->
-
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -127,7 +92,7 @@
                         {% endif %}
 
                         <th>Açôes.</th>
-                        
+
                     </tr>
                     </thead>
 
@@ -139,31 +104,50 @@
                                 <td class="status">{{ produto.cod_filial }}</td>
                                 <td>{{ produto.cod_produto|to_str }} - {{ produto.desc_produto }}</td>
                                 <td class="status excesso">{{ produto.estado_estoque }}</td>
-                                <td class="status">{{ produto.campo_quatro }}</td>
+                                <td class="status">{{ produto.data_entrada }}</td>
                                 <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
                                 <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
                                 <td class="numero">{{ produto.qt_excesso|floatformat:0 }}</td>
                                 <td class="numero">R$ {{ produto.vl_excesso|floatformat:2 }}</td>
                                 <td class="curva">{{ produto.curva }}</td>
-                                <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
-                                <td class="numero">{{ produto.campo_dois|floatformat:1 }}</td>
+                                <td class="numero">{{ produto.dde|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.media|floatformat:1 }}</td>
 
                                 {% if p_ativo == True %}
                                     <td class="numero">{{ produto.campo_tres }}</td>
                                 {% endif %}
 
                                 <td>
-                                    <input class="input_alertas" type="text" name="qt_digit_alertas" id="qt_digit_alertas" placeholder="Qtd">
-                                    <input class="input_alertas" type="text" name="vl_digit_alertas" id="vl_digit_alertas" placeholder="Preço">
+                                    <form>
+                                        {% csrf_token %}
+                                    </form>
+                                    <input id="filial_excesso_fornec-{{ produto.id_produto|to_str }}" hidden
+                                           value="{{ produto.cod_filial|to_str }}">
 
-                                    <button id="add_item_alertas" class="btn btn-secondary btn-sm adicionar-item">
+                                    <input id="produto_excesso_fornec-{{ produto.id_produto|to_str }}" hidden
+                                           value="{{ produto.id_produto|to_str }}">
+
+                                    <input class="input_alertas" type="text"
+                                           id="qt_digit_excesso_fornec-{{ produto.id_produto|to_str }}"
+                                           placeholder="Qtd">
+
+                                    <input class="input_alertas" type="text"
+                                           id="vl_digit_excesso_fornec-{{ produto.id_produto|to_str }}"
+                                           placeholder="Preço" onKeyUp="mascaraMoeda(this, event)" value="">
+
+                                    <button name="{{ produto.id_produto|to_str }}"
+                                            onclick="GetNome_alerta(this.name)"
+                                            class="add_item_alertas">
                                         Adicionar item
                                     </button>
+                                    <!-- id="add_item_alertas_fornec" -->
 
-                                    <button id="ver_graf_alertas" class="btn btn-secondary btn-sm adicionar-item"
-                                            type="button" data-toggle="modal" data-target=".modal_graf_alertas">
+                                    <button class="ver_graf_alertas"
+                                            type="button" data-toggle="modal" data-target=".modal_graf_excesso_fornec">
                                         Gráficos
                                     </button>
+
+
                                 </td>
 
                             </tr>
@@ -177,32 +161,73 @@
         </div>
     </div>
 
-    <!-- MODAL -->
-    <div id="modal_graf_alertas" class="modal fade modal_graf_alertas" tabindex="-1" role="dialog"
+
+
+
+
+    <!-- MODAL ITENS PEDIDOS  -->
+    <div id="modal-ver-pedido-geral" class="modal fade modal_pedido_excesso_fornec" tabindex="-1" role="dialog"
          aria-labelledby="myLargeModalLabel"
          aria-hidden="true">
 
-        <div class="modal-dialog" id="modal_grafico">
+        <div class="modal-dialog" id="modal-ver-pedido_excesso_fornec">
             <div class="modal-content">
                 <div class="modal-header">
-
                     <div class="col-6">
-                        <h5 class="modal-title">Série Histórica</h5>
+                        <h5 class="modal-title">Ver pedido</h5>
+                    </div>
+                    <div class="col-6">
+                        <input id="fornec_select_id" type="hidden" value="">
+                        <input id="search-pedido-excesso-fornec" type="text" class="form-control"
+                               name="pedido_fornecedor"
+                               placeholder="Selecionar Fornecedor">
+
+                        <div class="row">
+                            <div class="col check-div-fornec">
+                                <div class="form-check" id="result-pedido-excesso-fornec">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
                 <div class="modal-body">
 
-                    <!-- mapas -->
+                    <table width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Cód. filial</th>
+                            <th>Cód. prod</th>
+                            <th>Descrição produto</th>
+                            <th>Preço</th>
+                            <th>Quantidade</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody id="tbody_pedidos_excesso_fornec">
+
+                        </tbody>
+
+                    </table>
 
                 </div>
                 <div class="modal-footer">
+
                     <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
                             data-dismiss="modal">Voltar
                     </button>
+                    <a href="{% url 'exportar-pedido-sessao' %}" id="btn-expo-modal-excesso_fornec" type="button"
+                       class="btn btn-primary btn-sm">Exportar <i
+                            class="fas fa-chevron-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 
 {% endblock %}

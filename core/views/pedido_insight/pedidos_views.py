@@ -40,6 +40,7 @@ def ver_pedidos_insight(request, pk, template_name='aplicacao/paginas/pedidos/ve
 def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
+
         if produto_id != "0":
 
             cod_filial = request.POST.get('filial')

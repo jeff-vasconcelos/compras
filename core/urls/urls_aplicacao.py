@@ -35,8 +35,8 @@ urlpatterns = [
     path('alertas/excesso/fornecedor/', excesso_fornecedor, name='alerta_excesso_fornecedor'),
     path('alertas/ruptura/fornecedor/', ruptura_fornecedor, name='alerta_ruptura_fornecedor'),
 
-    path('alertas/excesso/fornecedor/<int:cod_fornecedor>', ver_excesso_fornecedor, name='ver_excesso_fornecedor'),
-    path('alertas/ruptura/fornecedor/<int:cod_fornecedor>', ver_ruptura_fornecedor, name='ver_ruptura_fornecedor'),
+    path('alertas/excesso/fornecedor/<int:cod_fornecedor>/', ver_excesso_fornecedor, name='ver_excesso_fornecedor'),
+    path('alertas/ruptura/fornecedor/<int:cod_fornecedor>/', ver_ruptura_fornecedor, name='ver_ruptura_fornecedor'),
 
     path('alertas/excesso/', alerta_all_excesso, name='alerta_all_excesso'),
     path('alertas/ruptura/', alerta_all_ruptura, name='alerta_all_ruptura'),
