@@ -140,7 +140,7 @@
                             {% if produto.estado_estoque == 'RUPTURA' %}
                                 <tr class="ruptura">
                                     <td class="status">{{ produto.cod_filial }}</td>
-                                    <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
+                                    <td>{{ produto.cod_produto|to_str }} - {{ produto.desc_produto }}</td>
                                     <td class="status ruptura">{{ produto.estado_estoque }}</td>
                                     <td class="status">{{ produto.data_entrada }}</td>
                                     <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
