@@ -15,7 +15,7 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 @login_required
 def pedido_painel(request, template_name='aplicacao/paginas/pedidos/pedidos.html'):
     id_empresa = request.user.usuario.empresa_id
-    pedidos = PedidoInsight.objects.filter(empresa__id=id_empresa)
+    pedidos = PedidoInsight.objects.filter(empresa__id=id_empresa).order_by('-id')
 
     contexto = {
         'pedidos': pedidos
@@ -40,7 +40,7 @@ def ver_pedidos_insight(request, pk, template_name='aplicacao/paginas/pedidos/ve
 def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
-
+        print(produto_id)
         if produto_id != "0":
 
             cod_filial = request.POST.get('filial')
@@ -112,7 +112,8 @@ def rm_prod_pedido_sessao(request):
         return JsonResponse({'data': 0})
 
 
-def pedido_save_db(request) -> object:
+def pedido_save_db(request):
+    global data
     if request.is_ajax():
         id_fornecedor = request.POST.get('fornecedor')
 
@@ -146,6 +147,7 @@ def pedido_save_db(request) -> object:
             empresa=empresa
         )
         p.save()
+        print(p)
 
         # SALVAR ITENS DO PEDIDO
         for value in pedido.values():
@@ -164,7 +166,8 @@ def pedido_save_db(request) -> object:
             )
 
             p_i.save()
+            print(p_i)
 
             lista.append(temp)
-
-    return JsonResponse({})
+        data = "SUCESSO"
+    return JsonResponse({'data': data})

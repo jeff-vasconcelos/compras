@@ -12,8 +12,8 @@
 
 {% block scripts %}
 
-    <script src="{% static 'aplicacao/js/fornecedor/pedido_sessao.js' %}" defer></script>
-    <script src="{% static 'aplicacao/js/fornecedor/pesquisar_pedido_fornecedor.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/fornecedor/pedido_sessao_excesso.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/fornecedor/pesquisar_pedido_fornecedor_excesso.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/mascara_preco.js' %}" defer></script>
 
     <script>
@@ -177,7 +177,7 @@
                         <h5 class="modal-title">Ver pedido</h5>
                     </div>
                     <div class="col-6">
-                        <input id="fornec_select_id" type="hidden" value="">
+                        <input id="select_fornec_excesso_id" type="hidden" value="">
                         <input id="search-pedido-excesso-fornec" type="text" class="form-control"
                                name="pedido_fornecedor"
                                placeholder="Selecionar Fornecedor">

@@ -373,7 +373,7 @@ def alerta_db(id_empresa, produtos):
             produto = Produto.objects.get(empresa_id__exact=id_empresa,
                                           cod_produto=i['cod_produto'],
                                           cod_fornecedor=i['cod_fornecedor'])
-
+            print(produto.id)
             b = Alerta.objects.create(
                 cod_filial=i['filial'],
                 cod_produto=i['cod_produto'],

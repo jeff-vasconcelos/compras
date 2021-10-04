@@ -1,30 +1,63 @@
-const ProdutosSelecionar = document.getElementById('results-produtos')
-const inputPrCompraDigitada = document.getElementById('pr_compra')
-const inputMargemDigitada = document.getElementById('porc_margem')
-// const inputPrSugeridoDigitada = document.getElementById('pr_sugerido')
-// const inputDDEDigitada = document.getElementById('dde')
-const inputQtDigitada = document.getElementById('qt_digit')
 
-const botaoExportarPedido = document.getElementById('btn-expo-modal-analise')
-const botaoPedidoSessao = document.getElementById('add_pedido_sessao')
-const botaoVerPedidoSessao = document.getElementById('ver_pedido_sessao')
-const resultPedidoSessao = document.getElementById('tbody_pedidos_sessao')
 
-const botaoRemoverPedidoSessao = document.getElementsByName('botao_remover_prod_sessao')
-const modalPedidosSessao = document.getElementById('modal-ver-pedido-geral')
+const botaoExportarRupturaFornec = document.getElementById('btn-expo-modal-ruptura_fornec')
 
-const mensagemSucesso = document.getElementById('div-mensagem-sucesso')
-const mensagemAlerta = document.getElementById('div-mensagem-alerta')
-const mensagemErro = document.getElementById('div-mensagem-erro')
+const verPedidoRupturaFornec = document.getElementById('ver_pedido_ruptura_fornec')
 
+const msmSucessoRupturaFornec = document.getElementById('div-mensagem-sucesso_ruptura_fornec')
+const msmAlertaRupturaFornec = document.getElementById('div-mensagem-alerta_ruptura_fornec')
+
+const resultsPedidoRupturaFornec = document.getElementById('tbody_pedidos_ruptura_fornec')
+
+const csrf_ = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+
+function GetNome_alerta(CodProd) {
+
+    const filial_ruptura_fornec = document.getElementById('filial_ruptura_fornec-'+CodProd)
+    const produtos_ruptura_fornec = document.getElementById('produto_ruptura_fornec-'+CodProd)
+    const input_valor_ruptura_fornec = document.getElementById('vl_digit_ruptura_fornec-'+CodProd)
+    const input_quantidade_ruptura_fornec = document.getElementById('qt_digit_ruptura_fornec-'+CodProd)
+
+
+    const produto = produtos_ruptura_fornec.value
+    const filial = filial_ruptura_fornec.value
+
+    console.log(produto)
+
+    const qt_dig = input_quantidade_ruptura_fornec.value
+    var qt_digitada = 0
+    if (qt_dig === "") {
+        qt_digitada = 0
+    } else {
+        qt_digitada = qt_dig
+    }
+
+    // PEGANDO PR COMPRA
+    const p_comp = input_valor_ruptura_fornec.value
+    var p_compra = 0
+    if (p_comp === "") {
+        p_compra = 0
+    } else {
+        p_compra = p_comp
+    }
+
+    input_quantidade_ruptura_fornec.value = ''
+    input_valor_ruptura_fornec.value = ''
+
+
+    add_pedido_ruptura_fornec(produto, qt_digitada, p_compra, filial)
+
+    //alert(NomeBotao);
+}
 
 // ADD PRODUTO AO PEDIDO NA SESSAO
-const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
+const add_pedido_ruptura_fornec = (produto, qt_digitada, pr_compra, filial) => {
     $.ajax({
         type: 'POST',
         url: '/painel/add-produto-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf,
+            'csrfmiddlewaretoken': csrf_,
             'produto': produto,
             'qt_digitada': qt_digitada,
             'pr_compra': pr_compra,
@@ -35,9 +68,8 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
             const resposta = pedido_sessao.data
 
             if (resposta === "SUCESSO") {
-                inputQtDigitada.value = ""
-                inputPrCompraDigitada.value = ""
-                mensagemSucesso.innerHTML += `
+
+                msmSucessoRupturaFornec.innerHTML += `
                     <div class="alert alert-success d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
                             <use xlink:href="#check-circle-fill"/>
@@ -49,9 +81,8 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
                 `
 
             } else {
-                inputQtDigitada.value = ""
-                inputPrCompraDigitada.value = ""
-                mensagemAlerta.innerHTML += `
+
+                msmAlertaRupturaFornec.innerHTML += `
                     <div class="alert alert-warning d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
                             <use xlink:href="#exclamation-triangle-fill"/>
@@ -74,65 +105,10 @@ const addPedidoSessao = (produto, qt_digitada, pr_compra, filial) => {
         }
     });
 }
-botaoPedidoSessao.addEventListener('click', e => {
-    // PEGANDO PRODUTO SELECIONADO
-    const produtoSelecionado = ProdutosSelecionar.value
-    const filialSelecionado = listaFiliais.value
-
-
-    // PEGANDO QT DIGITADA
-    const qt_dig = inputQtDigitada.value
-    var qt_digitada = 0
-    if (qt_dig === "") {
-        qt_digitada = 0
-    } else {
-        qt_digitada = qt_dig
-    }
-
-    // PEGANDO PR COMPRA
-    const p_comp = inputPrCompraDigitada.value
-    var p_compra = 0
-    if (p_comp === "") {
-        p_compra = 0
-    } else {
-        p_compra = p_comp
-    }
-
-
-    // PEGANDO MARGEM
-    // const mar = inputMargemDigitada.value
-    // var margem = 0
-    // if (mar === "") {
-    //     margem = 0
-    // } else {
-    //     margem = mar
-    // }
-
-    // // PEGANDO PR SUGERIDO
-    // const p_sug = inputPrSugeridoDigitada.value
-    // var p_sugerido = 0
-    // if (p_sug === "") {
-    //     p_sugerido = 0
-    // } else {
-    //     p_sugerido = p_sug
-    // }
-    //
-    // // PEGANDO DDE
-    // const dde_p = inputDDEDigitada.value
-    // var dde = 0
-    // if (dde_p === "") {
-    //     dde = 0
-    // } else {
-    //     dde = dde_p
-    // }
-
-
-    addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, filialSelecionado)
-})
 
 
 // VER PEDIDO NA SESSAO
-const verPedidoSessao = () => {
+const ver_pedido_ruptura_fornec = () => {
     $.ajax({
         type: 'GET',
         url: '/painel/ver-produto-pedido/',
@@ -141,22 +117,22 @@ const verPedidoSessao = () => {
             const data = pedido_sessao.data
 
             if (data === "FALSE") {
-                botaoExportarPedido.style.display = 'none'
+                botaoExportarRupturaFornec.style.display = 'none'
             }
 
             if (Array.isArray(data)) {
-                resultPedidoSessao.innerHTML = ""
+                resultsPedidoRupturaFornec.innerHTML = ""
                 data.forEach(prod => {
-                    resultPedidoSessao.innerHTML += `
+                    resultsPedidoRupturaFornec.innerHTML += `
                     <tr>
                         <td>${prod.ped_cod_filial}</td>
                         <td>${prod.ped_produto_cod}</td>
                         <td>${prod.ped_produto_nome}</td>
                         <td>${prod.ped_pr_compra}</td>
                         <td>${prod.ped_qt_digitada}</td>
-                        
+
                         <td>
-                            <button onclick="rm_prod_pedido_sessao(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="botao_remover_p_sessao btn btn-danger btn-sm">
+                            <button onclick="rm_prod_pedido_ruptura_fornec(this.id)" type="button" name="botao_remover_prod_sessao" id="${prod.ped_produto_id}" class="botao_remover_p_sessao btn btn-danger btn-sm">
                                 <i class="fas fa-times-circle fa-1x"></i>
                             </button>
                         </td>
@@ -170,22 +146,22 @@ const verPedidoSessao = () => {
         }
     });
 }
-botaoVerPedidoSessao.addEventListener('click', e => {
-    verPedidoSessao()
+verPedidoRupturaFornec.addEventListener('click', e => {
+    ver_pedido_ruptura_fornec()
 })
 
 
 // REMOVER PRODUTO AO PEDIDO NA SESSAO
-const rmPedidoSessao = (produto) => {
+const rmPedidoRupturaFornec = (produto) => {
     $.ajax({
         type: 'POST',
         url: '/painel/rm-produto-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf,
+            'csrfmiddlewaretoken': csrf_,
             'produto': produto
         },
         success: (pedido_sessao) => {
-            mensagemSucesso.innerHTML += `
+            msmSucessoRupturaFornec.innerHTML += `
                     <div class="alert alert-success d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
                             <use xlink:href="#check-circle-fill"/>
@@ -195,9 +171,9 @@ const rmPedidoSessao = (produto) => {
                         </div>
                     </div>
                 `
-            resultPedidoSessao.innerHTML = ""
+            resultsPedidoRupturaFornec.innerHTML = ""
             // location.reload();
-            $(".modal-pedido").modal('hide');
+            $(".modal_pedido_ruptura_fornec").modal('hide');
 
             $(document).ready(function () {
                 // show the alert
@@ -212,21 +188,22 @@ const rmPedidoSessao = (produto) => {
 
 }
 
-function rm_prod_pedido_sessao(prod_id) {
+function rm_prod_pedido_ruptura_fornec(prod_id) {
     const produto = prod_id
-    rmPedidoSessao(produto)
+    rmPedidoRupturaFornec(produto)
 }
 
 
-const exportPedidoSessao = (fornecedor) => {
+const exportPedidoRupturaFornec = (fornecedor) => {
     $.ajax({
         type: 'POST',
         url: '/painel/fornecedor-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf,
+            'csrfmiddlewaretoken': csrf_,
             'fornecedor': fornecedor
         },
-        success: () => {
+        success: (response) => {
+            console.log(response.data)
 
         },
         error: function (error) {
@@ -235,11 +212,15 @@ const exportPedidoSessao = (fornecedor) => {
     });
 }
 
-botaoExportarPedido.addEventListener("click", e => {
-    const fornecedor = document.getElementById("fornec_select_id").value
-    resultPedidoSessao.innerHTML = ""
-    document.getElementById("search-pedido-fornec").value='';
-    $(".modal-pedido").modal('hide');
+botaoExportarRupturaFornec.addEventListener("click", e => {
+
+    const fornecedor = document.getElementById("select_fornec_ruptura_id").value
+
+    exportPedidoRupturaFornec(fornecedor);
+
+    resultsPedidoRupturaFornec.innerHTML = ""
+    document.getElementById("search-pedido-ruptura-fornec").value='';
+    $(".modal_pedido_ruptura_fornec").modal('hide');
 
     $(document).ready(function () {
         // show the alert
@@ -247,7 +228,5 @@ botaoExportarPedido.addEventListener("click", e => {
             $(".alert").alert('close');
         }, 6000);
     });
-
-    exportPedidoSessao(fornecedor);
 
 })

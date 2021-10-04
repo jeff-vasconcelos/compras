@@ -75,7 +75,7 @@ function selecao_fornecedor_pedido_excesso_fornec() {
             const idCheck = FornecedoresExcessoFornec[i].id;
 
             document.getElementById("search-pedido-excesso-fornec").value=textoLabelCheck;
-            document.getElementById("fornec_select_id").value=idCheck;
+            document.getElementById("select_fornec_excesso_id").value=idCheck;
 
             if (checkFornecedorExcessoFornec.indexOf(idCheck) > -1) {
 
@@ -90,6 +90,7 @@ function selecao_fornecedor_pedido_excesso_fornec() {
             }
         }
     }
+    console.log(checkFornecedorExcessoFornec)
 
     const fornecedores_selecionados = new FormData()
     fornecedores_selecionados.append('csrfmiddlewaretoken', csrf_)

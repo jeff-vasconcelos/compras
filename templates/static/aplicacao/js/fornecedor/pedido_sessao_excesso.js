@@ -2,11 +2,6 @@
 
 const botaoExportarExcessoFornec = document.getElementById('btn-expo-modal-excesso_fornec')
 
-//const resultsPedidoExcessoFornec = document.getElementById('tbody_pedidos_sessao')
-
-//const botaoRemoverPedidoSessao = document.getElementsByName('botao_remover_prod_sessao')
-//const modalPedidosSessao = document.getElementById('modal-ver-pedido-geral')
-
 const verPedidoExcessoFornec = document.getElementById('ver_pedido_excesso_fornec')
 
 const msmSucessoExcessoFornec = document.getElementById('div-mensagem-sucesso_excesso_fornec')
@@ -47,10 +42,6 @@ function GetNome_alerta(CodProd) {
 
     input_quantidade_excesso_fornec.value = ''
     input_valor_excesso_fornec.value = ''
-    console.log(p_compra)
-    console.log(qt_digitada)
-    console.log(produto)
-    console.log(filial)
 
 
     add_pedido_excesso_fornec(produto, qt_digitada, p_compra, filial)
@@ -201,25 +192,30 @@ function rm_prod_pedido_excesso_fornec(prod_id) {
 }
 
 
-const exportPedidoSessao = (fornecedor) => {
+const exportPedidoExcessoFornec = (fornecedor) => {
     $.ajax({
         type: 'POST',
         url: '/painel/fornecedor-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf,
+            'csrfmiddlewaretoken': csrf_,
             'fornecedor': fornecedor
         },
-        success: () => {
+        success: (response) => {
+            console.log(response.data)
 
         },
         error: function (error) {
-            console.log(error)
+
         }
     });
 }
 
 botaoExportarExcessoFornec.addEventListener("click", e => {
-    const fornecedor = document.getElementById("fornec_select_id").value
+
+    const fornecedor = document.getElementById("select_fornec_excesso_id").value
+
+    exportPedidoExcessoFornec(fornecedor);
+
     resultsPedidoExcessoFornec.innerHTML = ""
     document.getElementById("search-pedido-excesso-fornec").value='';
     $(".modal_pedido_excesso_fornec").modal('hide');
@@ -230,7 +226,7 @@ botaoExportarExcessoFornec.addEventListener("click", e => {
             $(".alert").alert('close');
         }, 6000);
     });
-    console.log(fornecedor)
-    exportPedidoSessao(fornecedor);
+
+
 
 })

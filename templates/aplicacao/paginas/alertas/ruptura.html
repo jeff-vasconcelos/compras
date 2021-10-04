@@ -119,17 +119,17 @@
                                     <td class="status">{{ produto.cod_filial }}</td>
                                     <td>{{ produto.cod_produto|to_str }} - {{ produto.desc_produto }}</td>
                                     <td class="status parcial">{{ produto.estado_estoque }}</td>
-                                    <td class="status">{{ produto.campo_quatro }}</td>
+                                    <td class="status">{{ produto.data_entrada }}</td>
                                     <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
                                     <td class="numero">R$ {{ produto.valor|floatformat:2 }}</td>
                                     <td class="curva">{{ produto.curva }}</td>
-                                    <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.campo_dois|floatformat:1 }}</td>
+                                    <td class="numero">{{ produto.dde|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.media|floatformat:1 }}</td>
 
                                     {% if p_ativo == True %}
-                                        <td class="numero">{{ produto.campo_tres }}</td>
+                                        <td class="numero">{{ produto.principio_ativo }}</td>
                                     {% endif %}
 
                                     <td>{{ produto.cod_fornecedor|to_str }} - {{ produto.fornecedor }}</td>
@@ -142,17 +142,17 @@
                                     <td class="status">{{ produto.cod_filial }}</td>
                                     <td>{{ produto.cod_produto }} - {{ produto.desc_produto }}</td>
                                     <td class="status ruptura">{{ produto.estado_estoque }}</td>
-                                    <td class="status">{{ produto.campo_quatro }}</td>
+                                    <td class="status">{{ produto.data_entrada }}</td>
                                     <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
                                     <td class="numero">{{ produto.valor }}</td>
                                     <td class="curva">{{ produto.curva }}</td>
-                                    <td class="numero">{{ produto.campo_um|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.campo_dois|floatformat:1 }}</td>
+                                    <td class="numero">{{ produto.dde|floatformat:0 }}</td>
+                                    <td class="numero">{{ produto.media|floatformat:1 }}</td>
 
                                      {% if p_ativo == True %}
-                                        <td class="numero">{{ produto.campo_tres }}</td>
+                                        <td class="numero">{{ produto.principio_ativo }}</td>
                                     {% endif %}
 
                                     <td>{{ produto.cod_fornecedor }} - {{ produto.fornecedor }}</td>
