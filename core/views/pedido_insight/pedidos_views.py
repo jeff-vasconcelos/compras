@@ -40,7 +40,7 @@ def ver_pedidos_insight(request, pk, template_name='aplicacao/paginas/pedidos/ve
 def add_prod_pedido_sessao(request):
     if request.is_ajax():
         produto_id = request.POST.get('produto')
-        print(produto_id)
+
         if produto_id != "0":
 
             cod_filial = request.POST.get('filial')
@@ -147,7 +147,6 @@ def pedido_save_db(request):
             empresa=empresa
         )
         p.save()
-        print(p)
 
         # SALVAR ITENS DO PEDIDO
         for value in pedido.values():
@@ -166,7 +165,6 @@ def pedido_save_db(request):
             )
 
             p_i.save()
-            print(p_i)
 
             lista.append(temp)
         data = "SUCESSO"

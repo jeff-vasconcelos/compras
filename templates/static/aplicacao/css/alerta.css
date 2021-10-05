@@ -194,6 +194,18 @@ input.input_alertas {
     font-size: 14px;
 }
 
+#modal-ver-graf_excesso_fornec {
+    max-width: 1500px;
+    min-width: 1100px;
+    font-size: 14px;
+}
+
+#modal-ver-graf_ruptura_fornec {
+    max-width: 1500px;
+    min-width: 1100px;
+    font-size: 14px;
+}
+
 #modal-ver-pedido_ruptura_fornec {
     max-width: 1100px;
     font-size: 14px;

@@ -9,6 +9,7 @@ from core.views.alerta.alertas_views import *
 from core.views.configuracao.configuracao_views import *
 from core.export_files.generate_pdf import *
 from core.views.pedido_insight.pedidos_views import *
+from core.views.fornecedor.fornecedor_views import *
 
 
 urlpatterns = [
@@ -32,14 +33,17 @@ urlpatterns = [
     path('alertas/ruptura/curva/<str:curva>', alerta_ruptura_curva, name='alerta_ruptura_curva'),
     path('alertas/ruptura/filial/<int:filial>', alerta_ruptura_filial, name='alerta_ruptura_filial'),
 
+    path('alertas/excesso/', alerta_all_excesso, name='alerta_all_excesso'),
+    path('alertas/ruptura/', alerta_all_ruptura, name='alerta_all_ruptura'),
+
+    # FORNECEDOR ALERTAS
     path('alertas/excesso/fornecedor/', excesso_fornecedor, name='alerta_excesso_fornecedor'),
     path('alertas/ruptura/fornecedor/', ruptura_fornecedor, name='alerta_ruptura_fornecedor'),
-
     path('alertas/excesso/fornecedor/<int:cod_fornecedor>/', ver_excesso_fornecedor, name='ver_excesso_fornecedor'),
     path('alertas/ruptura/fornecedor/<int:cod_fornecedor>/', ver_ruptura_fornecedor, name='ver_ruptura_fornecedor'),
 
-    path('alertas/excesso/', alerta_all_excesso, name='alerta_all_excesso'),
-    path('alertas/ruptura/', alerta_all_ruptura, name='alerta_all_ruptura'),
+    path('request/fornecedor/graf/', graficos_alert_fornec, name='request_fornec_graf'),
+
 
     # PEDIDOS
     path('add-produto-pedido/', add_prod_pedido_sessao, name='add-prod-pedido-sessao'),
@@ -82,6 +86,7 @@ urlpatterns = [
     path('pdf/pedidos/<int:pk>', pdf_pedidos_insight, name='pdf_pedidos_insight'),
     path('pdf/alertas/excesso/', pdf_excesso, name='pdf_excesso'),
     path('pdf/alertas/ruptura/', pdf_ruptura, name='pdf_ruptura'),
+
 
     # TODO rota de testes
     path('testando/', teste, name='testando'),

@@ -14,6 +14,7 @@
 
     <script src="{% static 'aplicacao/js/fornecedor/pedido_sessao_excesso.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/fornecedor/pesquisar_pedido_fornecedor_excesso.js' %}" defer></script>
+    <script src="{% static 'aplicacao/js/fornecedor/graficos_excesso.js' %}" defer></script>
     <script src="{% static 'aplicacao/js/mascara_preco.js' %}" defer></script>
 
     <script>
@@ -142,8 +143,11 @@
                                     </button>
                                     <!-- id="add_item_alertas_fornec" -->
 
-                                    <button class="ver_graf_alertas"
-                                            type="button" data-toggle="modal" data-target=".modal_graf_excesso_fornec">
+
+                                    <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
+                                            onclick="GetNome_grafico_excesso(this.name)"
+                                            type="button" data-toggle="modal"
+                                            data-target=".modal_graf_excesso_fornec">
                                         Gráficos
                                     </button>
 
@@ -226,6 +230,103 @@
             </div>
         </div>
     </div>
+
+
+    <!-- MODAL GRAFICO -->
+    <div id="modal-ver-pedido-geral" class="modal fade modal_graf_excesso_fornec" tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog" id="modal-ver-graf_excesso_fornec">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <div class="col-6">
+                        <h5 class="modal-title">Gráficos</h5>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="col-md-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-body" id="grafico-serie-hist">
+
+                                <div class="row">
+                                    <!--
+                                    <div class="col-4">
+                                        <p id="titulo_vendasxmes">Vendas x Mês</p>
+                                        <table>
+                                            <tr id="th_tabela_totais">
+
+                                            </tr>
+
+                                            <tr id="td_tabela_totais">
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    -->
+                                    <div class="col-4">
+                                        <p class="texto-grafico-analise">Série histórica de vendas</p>
+                                    </div>
+                                    <div class="col-4"></div>
+                                </div>
+
+                                <div id="div-graf-um">
+                                    <div class="chart-bar" id="div-grafico-umFornecExcesso">
+                                        <canvas id="ChartSerieHistFornecExcesso"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <style>
+                        #div-graf-um {
+                            overflow-x: auto;
+                            white-space: nowrap;
+                        }
+
+                        #div-grafico-um {
+                            width: 2000px;
+                        }
+                    </style>
+
+                    <div class="col-md-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-body">
+                                <p class="texto-grafico-analise">Cobertura de estoque</p>
+                                <div style="overflow-x: auto; white-space: nowrap;">
+                                    <div class="chart-bar" style="width:2000px;" id="div-grafico-doisFornecExcesso">
+                                        <canvas id="ChartCoberturaFornecExcesso"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
+                            data-dismiss="modal">Voltar
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
 
 
 
