@@ -144,12 +144,11 @@
 
 
                                         <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
-                                            onclick="GetNome_grafico_ruptura(this.name)"
-                                            type="button" data-toggle="modal"
-                                            data-target=".modal_graf_ruptura_fornec">
-                                        Gráficos
-                                    </button>
-
+                                                onclick="GetNome_grafico_ruptura(this.name)"
+                                                type="button" data-toggle="modal"
+                                                data-target=".modal_graf_ruptura_fornec">
+                                            Gráficos
+                                        </button>
 
 
                                     </td>
@@ -200,13 +199,13 @@
                                         </button>
                                         <!-- id="add_item_alertas_fornec" -->
 
-                                        <!--
-                                        <button class="ver_graf_alertas"
+                                        <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
+                                                onclick="GetNome_grafico_ruptura(this.name)"
                                                 type="button" data-toggle="modal"
                                                 data-target=".modal_graf_ruptura_fornec">
                                             Gráficos
                                         </button>
-                                        -->
+
 
                                     </td>
 
@@ -309,28 +308,28 @@
                             <div class="card-body" id="grafico-serie-hist">
 
                                 <div class="row">
-                                    <!--
+
                                     <div class="col-4">
-                                        <p id="titulo_vendasxmes">Vendas x Mês</p>
+                                        <p id="titulo_vendasxmes_ruptura_fornec">Vendas x Mês</p>
                                         <table>
-                                            <tr id="th_tabela_totais">
+                                            <tr id="th_tabela_totais_ruptura_fornec">
 
                                             </tr>
 
-                                            <tr id="td_tabela_totais">
+                                            <tr id="td_tabela_totais_ruptura_fornec">
 
                                             </tr>
                                         </table>
                                     </div>
-                                    -->
+
                                     <div class="col-4">
                                         <p class="texto-grafico-analise">Série histórica de vendas</p>
                                     </div>
                                     <div class="col-4"></div>
                                 </div>
 
-                                <div id="div-graf-um">
-                                    <div class="chart-bar" id="div-grafico-umFornecRuptura">
+                                <div id="div-graf-um" style="overflow-x: auto; white-space: nowrap;">
+                                    <div style="width:2000px;" class="chart-bar" id="div-grafico-umFornecRuptura">
                                         <canvas id="ChartSerieHistFornecRuptura"></canvas>
                                     </div>
                                 </div>
@@ -338,16 +337,6 @@
                         </div>
                     </div>
 
-                    <style>
-                        #div-graf-um {
-                            overflow-x: auto;
-                            white-space: nowrap;
-                        }
-
-                        #div-grafico-um {
-                            width: 2000px;
-                        }
-                    </style>
 
                     <div class="col-md-12">
                         <div class="card shadow mb-4">

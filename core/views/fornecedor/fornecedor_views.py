@@ -6,7 +6,9 @@ from api.models.fornecedor import Fornecedor
 from api.models.produto import Produto
 from core.models.empresas_models import Alerta
 from core.models.parametros_models import Parametro
-from core.views.analise.analise_views import mapas_serie
+from core.views.analise.analise_views import graficos_serie
+from core.views.analise.vendas import vendas
+from core.views.utils.datas import data_mes
 
 
 @login_required
@@ -133,23 +135,44 @@ def graficos_alert_fornec(request):
             produto_id = int(request.POST.get('produto'))
             cod_filial = request.POST.get('filial')
 
-            print(produto_id)
-            print(cod_filial)
-
             produto = Produto.objects.get(id=produto_id)
             cod_produto = produto.cod_produto
-            print(cod_produto)
 
             parametros = Parametro.objects.get(empresa_id=id_empresa)
             periodo = parametros.periodo
 
+            #grafico
+            graficos = graficos_serie(id_empresa, cod_produto, cod_filial, periodo)
 
-            mapa = mapas_serie(id_empresa, cod_produto, cod_filial, periodo)
-            data = [mapa]
+            # VENDAS MES
+            vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo, [cod_filial])
+
+            total_venda = vendas_p
+            total_venda['data'] = pd.to_datetime(total_venda['data'])
+            total_venda['mes'] = total_venda['data'].map(lambda x: 100 * x.year + x.month)
+            total_vendas = total_venda.groupby(['mes', 'cod_filial'])['qt_vendas'].sum().reset_index()
+            total_vendas['mes'] = total_vendas['mes'].astype(str)
+            df_total_vendas = total_vendas.query('cod_filial == @cod_filial')
+
+            lista_total_vendas = []
+
+            for index, row in df_total_vendas.iterrows():
+                mes = row['mes'][4:]
+                ano = row['mes'][:4]
+                qt = row['qt_vendas']
+
+                dicionario = {
+                    'mes': data_mes(mes),
+                    'ano': ano,
+                    'quantidade': qt
+                }
+                lista_total_vendas.append(dicionario)
+
+            data = [graficos, lista_total_vendas]
 
             return JsonResponse({'data': data})
 
         except Exception as error:
-            print(error)
+            return JsonResponse({'data':error})
 
     return JsonResponse({})

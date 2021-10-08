@@ -890,7 +890,7 @@ def selecionar_produto(request) -> object:
 
                 # ENVIO DE DADOS PARA JS
                 data = []
-                mapa = mapas_serie(id_empresa, cod_produto, filial_selecionada, periodo)
+                mapa = graficos_serie(id_empresa, cod_produto, filial_selecionada, periodo)
 
                 data.append(inf_filiais)  # 0
                 data.append(mapa)  # 1
@@ -909,7 +909,7 @@ def selecionar_produto(request) -> object:
     return JsonResponse({})
 
 
-def mapas_serie(id_empresa, cod_produto, cod_filial, periodo):
+def graficos_serie(id_empresa, cod_produto, cod_filial, periodo):
     info_prod = None
     lista_filiais = []
     lista_filiais.append(cod_filial)
