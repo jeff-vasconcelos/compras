@@ -230,8 +230,6 @@ def db_grafico_dois(id_empresa):
 
     curva = abc(lista_fornecedor, id_empresa, parametros.periodo)
 
-    print(curva)
-
     la, lb, lc, ld, le = [], [], [], [], []
 
     for index, row in curva.iterrows():
@@ -239,16 +237,16 @@ def db_grafico_dois(id_empresa):
         if row['curva'] == 'A':
             la.append(float(row['vl_total_vendido']))
 
-        if row['curva'] == 'B':
+        elif row['curva'] == 'B':
             lb.append(float(row['vl_total_vendido']))
 
-        if row['curva'] == 'C':
+        elif row['curva'] == 'C':
             lc.append(float(row['vl_total_vendido']))
 
-        if row['curva'] == 'D':
+        elif row['curva'] == 'D':
             ld.append(float(row['vl_total_vendido']))
 
-        if row['curva'] == 'E':
+        elif row['curva'] == 'E':
             le.append(float(row['vl_total_vendido']))
 
     # curva A

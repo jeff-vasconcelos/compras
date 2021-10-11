@@ -41,12 +41,14 @@ def get_produtos(id_empresa, id_fornecedor):
 
 
 def get_filiais(id_empresa):
-    empresa = id_empresa
-    filiais = Filial.objects.filter(empresa__id__exact=empresa)
+    filiais = Filial.objects.filter(empresa__id__exact=id_empresa)
     return filiais
 
 
 def get_fornecedores(id_empresa):
-    fornecedores = Fornecedor.objects.filter(empresa__id__exact=id_empresa)
-    return fornecedores
+    qs_fornec = Fornecedor.objects.filter(empresa__id__exact=id_empresa)
+    lista_fornecedores = []
+    for f in qs_fornec:
+        lista_fornecedores.append(f.cod_fornecedor)
+    return lista_fornecedores
 
