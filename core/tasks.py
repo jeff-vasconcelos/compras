@@ -18,7 +18,7 @@ def processa_email(request, id_empresa):
 
 
 @shared_task
-def processa_teste(request, id_empresa):
+def processa_teste(id_empresa):
     print("INICIANDO TASK DE TESTES...")
-    teste(request, id_empresa)
+    teste(id_empresa)
     print("TASK DE TESTES CONCLUIDA!")
