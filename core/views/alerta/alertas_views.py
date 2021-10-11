@@ -423,9 +423,9 @@ def rotina_email(request, id_empresa):
 
 #TODO FUNÇÃO DE TESTE - REMOVER
 #TESTE
-def teste(request, id_empresa):
-    empresa = Empresa.objects.get(id=id_empresa)
-    produtos = alertas(1)
+def teste(id_empresa):
+
+    produtos = alertas(id_empresa)
 
     grafico_um = processa_grafico_um(produtos)
     #dados_estoque = dados_estoque_home(produtos)
@@ -435,15 +435,3 @@ def teste(request, id_empresa):
     db_grafico_um(id_empresa, grafico_um)
     #db_dados_estoque(1, dados_estoque)
     # db_grafico_dois(1)
-    #
-    # # TODO testando pedido excluido do winthor
-    # valida_pedidos_excluidos(1)
-    # pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=1)
-    # pedidos_existentes.delete()
-
-    # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
-    # if empresa.envia_email:
-    #     print('vai enviar e-mail')
-    #     send_email_alerta(request, 1)
-
-    # return render(request, template_name)
