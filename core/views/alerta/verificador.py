@@ -52,3 +52,8 @@ def get_fornecedores(id_empresa):
         lista_fornecedores.append(f.cod_fornecedor)
     return lista_fornecedores
 
+
+def get_fornecedores_qs(id_empresa):
+    qs_fornec = Fornecedor.objects.filter(empresa__id__exact=id_empresa)
+    return qs_fornec
+

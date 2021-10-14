@@ -185,9 +185,10 @@ def alertas(id_empresa):
     lista_alertas = []
     parametros = Parametro.objects.get(empresa__id=id_empresa)
 
-    fornecedores = get_fornecedores(id_empresa)
+    fornecedores = get_fornecedores_qs(id_empresa)
 
     for fornecedor in fornecedores:
+
         leadtime = fornecedor.leadtime
         t_reposicao = fornecedor.ciclo_reposicao
 
@@ -422,16 +423,17 @@ def rotina_email(request, id_empresa):
 
 
 #TODO FUNÇÃO DE TESTE - REMOVER
-#TESTE
-def teste(id_empresa):
+def teste(request, template_name='testando_alerta.html'):
+    empresa = Empresa.objects.get(id=1)
 
-    produtos = alertas(id_empresa)
+    produtos = alertas(1)
 
     grafico_um = processa_grafico_um(produtos)
-    #dados_estoque = dados_estoque_home(produtos)
+    dados_estoque = dados_estoque_home(produtos)
 
-    alerta_db(id_empresa, produtos)
+    alerta_db(1, produtos)
 
-    db_grafico_um(id_empresa, grafico_um)
-    #db_dados_estoque(1, dados_estoque)
-    # db_grafico_dois(1)
+    db_grafico_um(1, grafico_um)
+    db_dados_estoque(1, dados_estoque)
+    db_grafico_dois(1)
+    return render(request, template_name)
