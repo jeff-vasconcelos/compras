@@ -54,6 +54,7 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
         ruptura = str(produto_dados['ruptura'].unique()).strip('[]')
         condicao_est = str(produto_dados['condicao_estoque'].unique()).strip('[]')
         valor_excesso = str(produto_dados['vl_excesso'].unique()).strip('[]')
+        quantidade_calc = str(produto_dados['quantidade_calc'].unique()).strip('[]')
 
         data = []
         itens_analise = {
@@ -84,7 +85,9 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
             'media_simples': float(produto_dados['media'].unique()),
             'qt_excesso': float(produto_dados['qt_excesso'].unique()),
             'vl_excesso': valor_excesso.replace("'", ""),
+            'quantidade_calc': float(quantidade_calc.replace("'", ""))
         }
+
 
         data.append(itens_analise)
 
@@ -303,6 +306,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             # vl_excesso = locale.currency(vl_e, grouping=True)
 
             prod_resumo['qt_excesso'] = qt_excesso.round(0)
+            prod_resumo['quantidade_calc'] = qt_excesso.round(0)
             prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'EXCESSO'
 
@@ -310,6 +314,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             vl_e = 0
             # vl_excesso = locale.currency(vl_e, grouping=True)
             prod_resumo['qt_excesso'] = 0
+            prod_resumo['quantidade_calc'] = estoque_a['qt_disponivel']
             prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'NORMAL'
 
@@ -317,6 +322,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             vl_e = 0
             # vl_excesso = locale.currency(vl_e, grouping=True)
             prod_resumo['qt_excesso'] = 0
+            prod_resumo['quantidade_calc'] = estoque_a['qt_disponivel']
             prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'PARCIAL'
 
@@ -324,6 +330,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
             vl_e = 0
             # vl_excesso = locale.currency(vl_e, grouping=True)
             prod_resumo['qt_excesso'] = 0
+            prod_resumo['quantidade_calc'] = estoque_a['qt_disponivel']
             prod_resumo['vl_excesso'] = vl_e
             condicao_estoque = 'RUPTURA'
 

@@ -14,6 +14,8 @@ from core.models.parametros_models import Email
 from core.models.usuarios_models import User
 from django.utils import timezone
 from core.views.alerta.processa_home import *
+from core.views.home.functions_home import save_grafico_curva, save_grafico_faturamento, save_dados_estoque
+
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
@@ -232,6 +234,7 @@ def alertas(id_empresa):
                         'fornecedor': row.fornecedor,
                         'cod_fornecedor': row.cod_fornecedor,
                         'dde': row.dde,
+                        'quantidade_calc': row.quantidade_calc,
                         # 'media_ajustada': row.media_ajustada,
                         'media': row.media_simples,
                         'principio_ativo': row.principio_ativo,
@@ -428,12 +431,19 @@ def teste(request, template_name='testando_alerta.html'):
 
     produtos = alertas(1)
 
-    grafico_um = processa_grafico_um(produtos)
-    dados_estoque = dados_estoque_home(produtos)
+    #save_grafico_curva(1,produtos)
 
-    alerta_db(1, produtos)
+    #save_grafico_faturamento(1)
+    save_dados_estoque(1, produtos)
 
-    db_grafico_um(1, grafico_um)
-    db_dados_estoque(1, dados_estoque)
-    db_grafico_dois(1)
+
+
+    # grafico_um = processa_grafico_um(produtos)
+    # dados_estoque = dados_estoque_home(produtos)
+    #
+    # alerta_db(1, produtos)
+    #
+    # db_grafico_um(1, grafico_um)
+    # db_dados_estoque(1, dados_estoque)
+    # db_grafico_dois(1)
     return render(request, template_name)
