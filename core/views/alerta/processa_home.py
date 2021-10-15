@@ -1,5 +1,5 @@
+# TODO REMOVER FUNÇÕES E ARQUIVO (FOI SUBSTITUIDO E REFATORADO EM 'functions_home.py')
 import locale
-
 from core.views.alerta.curva import abc
 from core.views.alerta.verificador import get_fornecedores
 from core.models.empresas_models import Empresa

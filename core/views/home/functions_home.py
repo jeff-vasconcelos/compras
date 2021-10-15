@@ -1,11 +1,8 @@
 import locale
 import pandas as pd
-import datetime
-from api.models.venda import Venda
 from core.models.empresas_models import Empresa
 from core.models.parametros_models import GraficoCurva, DadosEstoque, GraficoFaturamento, Parametro
-from core.views.alerta.verificador import get_filiais
-from core.views.utils.functions_calc import calcula_curva
+from core.views.utils.abc_functions import abc_home
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
@@ -139,34 +136,5 @@ def total_sku_por_condicao_e_curva(produtos):
     results = df.groupby(['curva', 'condicao_estoque']).size().reset_index(name='skus')
     results = pd.pivot_table(results, values='skus', index='curva', columns='condicao_estoque').reset_index()
     results = results.fillna(0)
-
-    return results
-
-
-def abc_home(id_empresa, periodo):
-    """
-        Função consulta o DB na tabela de vendas e realiza calculos de curva ABC desconsiderando fornecedores
-    """
-
-    data_inicio = datetime.date.today()
-    data_fim = data_inicio - datetime.timedelta(days=periodo - 1)
-
-    filiais = get_filiais(id_empresa)
-
-    lista_vendas = []
-
-    for filial in filiais:
-        vendas_df = pd.DataFrame(Venda.objects.filter(
-            cod_filial__exact=filial.cod_filial,
-            data__range=[data_fim, data_inicio],
-            empresa__id__exact=id_empresa
-        ).values())
-
-        if not vendas_df.empty:
-            vendas_ = vendas_df
-            lista = vendas_.values.tolist()
-            lista_vendas.append(lista)
-
-    results = calcula_curva(lista_vendas)
 
     return results

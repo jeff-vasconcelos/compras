@@ -1,4 +1,67 @@
 import pandas as pd
+import datetime
+
+from api.models.venda import Venda
+from core.views.alerta.verificador import get_filiais
+
+# TODO TRABLHANDO NESTA CLASS 15/10
+from core.views.utils.datas import intervalo_periodo
+
+
+def abc_home(id_empresa, periodo):
+    """
+        Função consulta o DB na tabela de vendas e realiza calculos de curva ABC desconsiderando fornecedores
+    """
+
+    inicio, fim = intervalo_periodo(periodo)
+
+    filiais = get_filiais(id_empresa)
+
+    lista_vendas = []
+
+    for filial in filiais:
+        vendas_df = pd.DataFrame(Venda.objects.filter(
+            cod_filial__exact=filial.cod_filial,
+            data__range=[fim, inicio],
+            empresa__id__exact=id_empresa
+        ).values())
+
+        if not vendas_df.empty:
+            vendas_ = vendas_df
+            lista = vendas_.values.tolist()
+            lista_vendas.append(lista)
+
+    results = calcula_curva(lista_vendas)
+
+    return results
+
+
+def abc_fornecedores(lista_fornecedores, id_empresa, periodo):
+    """
+        Função consulta o DB na tabela de vendas e realiza calculos de curva ABC considerando fornecedores
+    """
+
+    inicio, fim = intervalo_periodo(periodo)
+    filiais = get_filiais(id_empresa)
+
+    lista_vendas = []
+
+    for filial in filiais:
+        vendas_df = pd.DataFrame(Venda.objects.filter(
+            cod_fornecedor__in=lista_fornecedores,
+            cod_filial__exact=filial.cod_filial,
+            data__range=[fim, inicio],
+            empresa__id__exact=id_empresa
+        ).values())
+
+        if not vendas_df.empty:
+            vendas_ = vendas_df
+            lista = vendas_.values.tolist()
+            lista_vendas.append(lista)
+
+    results = calcula_curva(lista_vendas)
+
+    return results
 
 
 def calcula_curva(lista_vendas):

@@ -91,3 +91,9 @@ def data_mes(m):
         mes = "Dez"
 
     return mes
+
+def intervalo_periodo(periodo):
+    data_inicio = datetime.date.today()
+    data_fim = data_inicio - datetime.timedelta(days=periodo - 1)
+
+    return data_inicio, data_fim

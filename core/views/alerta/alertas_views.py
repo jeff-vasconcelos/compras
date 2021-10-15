@@ -433,8 +433,9 @@ def teste(request, template_name='testando_alerta.html'):
 
     #save_grafico_curva(1,produtos)
 
-    #save_grafico_faturamento(1)
-    save_dados_estoque(1, produtos)
+    save_grafico_faturamento(1)
+
+    #save_dados_estoque(1, produtos)
 
 
 
