@@ -55,7 +55,7 @@ urlpatterns = [
     path('pedidos/ver/<int:pk>', ver_pedidos_insight, name='ver_pedidos_insight'),
 
     # PAGINAS
-    path('home/', home_painel, name='home_painel'),
+    path('home/', home_page, name='home_painel'),
     path('analise/', analise_painel, name='analise_painel'),
     # path('alertas/', alerta_painel, name='alertas_painel'),
     path('configuracoes/', configuracao_painel, name='configuracao_painel'),

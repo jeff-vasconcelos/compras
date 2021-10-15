@@ -3,66 +3,67 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from core.models.parametros_models import DadosEstoque, GraficoCurva, GraficoFaturamento
 import locale
+import pandas as pd
+
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
+# TODO (Status: Validando)
 @login_required
-def home_painel(request, template_name='aplicacao/paginas/home.html'):
+def home_page(request, template_name='aplicacao/paginas/home.html'):
+    """
+        View responsável por renderiazar template de HOME
+    """
 
     id_empresa = request.user.usuario.empresa_id
     dados_estoque = DadosEstoque.objects.filter(empresa__id=id_empresa)
-    grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
+    grafico_curva = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
 
-    # DADOS DE ESTOQUE
-    t_skus = 0
-    t_normal = 0
-    t_parcial = 0
-    t_ruptura = 0
-    t_excesso = 0
+    dados_df = pd.DataFrame(
+        DadosEstoque.objects.filter(empresa__id=id_empresa).order_by('curva').values()
+    )
 
-    for dados in dados_estoque:
-        t_skus = t_skus + dados.skus
-        t_normal = t_normal + dados.normal
-        t_parcial = t_parcial + dados.parcial
-        t_ruptura = t_ruptura + dados.ruptura
-        t_excesso = t_excesso + dados.excesso
+    total_normal = dados_df['normal'].sum()
+    total_parcial = dados_df['parcial'].sum()
+    total_ruptura = dados_df['ruptura'].sum()
+    total_excesso = dados_df['excesso'].sum()
+    total_skus = dados_df['skus'].sum()
 
     totais_dados_estoque = {
-        't_skus': t_skus,
-        't_normal': t_normal,
-        't_parcial': t_parcial,
-        't_ruptura': t_ruptura,
-        't_excesso': t_excesso
+        'total_normal': total_normal,
+        'total_parcial': total_parcial,
+        'total_ruptura': total_ruptura,
+        'total_excesso': total_excesso,
+        'total_skus': total_skus
     }
 
-
-    #GRAFICO UM
-    g_um = []
-    for g in grafico_um:
-
-        f_normal = float(g.normal)
-        f_parcial = float(g.parcial)
-        f_excesso = float(g.excesso)
-        f_total = float(g.total)
-
-        dic_garfico = {
+    # Gráfico Curva
+    lista_grafico_curva = []
+    for g in grafico_curva:
+        disc_grafico = {
             'curva': g.curva,
-            'normal': locale.currency(f_normal, grouping=True),
-            'parcial': locale.currency(f_parcial, grouping=True),
-            'excesso': locale.currency(f_excesso, grouping=True),
-            'total': locale.currency(f_total, grouping=True)
+            'normal': locale.currency(float(g.normal), grouping=True),
+            'parcial': locale.currency(float(g.parcial), grouping=True),
+            'excesso': locale.currency(float(g.excesso), grouping=True),
+            'total': locale.currency(float(g.total), grouping=True)
         }
-        g_um.append(dic_garfico)
+        lista_grafico_curva.append(disc_grafico)
 
-    contexto = {
-        'dadosestoque': dados_estoque,
+    context = {
+        'dados_estoque': dados_estoque,
         'totais_dados_estoque': totais_dados_estoque,
-        'grafico_um': g_um
+        'grafico_curva': lista_grafico_curva
     }
-    return render(request, template_name, contexto)
+
+    return render(request, template_name, context)
 
 
+# TODO (Status: Validando)
 def home_graficos(request):
+    """
+        View responsável por enviar aos gráficos as respectivas informações
+    """
+
     try:
         id_empresa = request.user.usuario.empresa_id
         grafico_um = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
@@ -70,7 +71,7 @@ def home_graficos(request):
 
         data = []
 
-        # GRAFICO UM
+        # Gráfico curva
         porcent_curva = []
 
         for a in grafico_um:
@@ -80,60 +81,54 @@ def home_graficos(request):
             total = float(a.total)
 
             if normal != 0:
-                p_normal = round(normal * 100 / total, 2)
+                part_normal = round(normal * 100 / total, 2)
             else:
-                p_normal = 0
+                part_normal = 0
 
             if parcial != 0:
-                p_parcial = round(parcial * 100 / total, 2)
+                part_parcial = round(parcial * 100 / total, 2)
             else:
-                p_parcial = 0
+                part_parcial = 0
 
             if excesso != 0:
-                p_excesso = round(excesso * 100 / total, 2)
+                part_excesso = round(excesso * 100 / total, 2)
             else:
-                p_excesso = 0
+                part_excesso = 0
 
             curva_porc = {
                 'curva': a.curva,
-                'p_normal': p_normal,
-                'p_parcial': p_parcial,
-                'p_excesso': p_excesso
+                'normal': part_normal,
+                'parcial': part_parcial,
+                'excesso': part_excesso
             }
 
             porcent_curva.append(curva_porc)
 
-        # GRAFICO DOIS
-        valor_curva_fatura = []
+        # Gráfico faturamento
         curvas = []
         valores = []
-        porcentagem = []
+        participacao = []
 
         for b in grafico_dois:
             curvas.append(b.curva)
             valores.append(b.total)
-
-        faturamento_total = sum(valores)
-
-        for vl in grafico_dois:
-            part = round(vl.total * 100 / faturamento_total, 2)
-            porcentagem.append(part)
+            participacao.append(b.participacao)
 
         curva_valor = {
             'curva': curvas,
             'valor': valores,
-            'porcent': porcentagem
+            'porcentagem': participacao
         }
 
-        valor_curva_fatura.append(curva_valor)
+        curva_faturamento = [curva_valor]
 
-        # LISTA COM TODOS OS DADOS
+        # Enviando dados a requisição do ajax
         data.append(porcent_curva)
-        data.append(valor_curva_fatura)
+        data.append(curva_faturamento)
 
         return JsonResponse({'data': data})
 
     except Exception as error:
-        d = [1, str(error)]
+        data = [1, str(error)]
 
-        return JsonResponse({'data': d})
+        return JsonResponse({'data': data})

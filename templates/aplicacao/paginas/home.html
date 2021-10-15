@@ -15,42 +15,6 @@
 
 {% block conteudo %}
 
-    <style>
-        div.card_curvas {
-            margin-left: auto;
-            margin-right: auto;
-            width: 10%;
-        }
-
-        h6.curvas_text {
-            font-size: 14px;
-        }
-
-        th.tabela-home-head {
-            border-bottom: solid 1px black;
-            border-right: solid 1px black;
-            text-align: center;
-        }
-
-        td.tabela-home-body {
-            border-right: solid 1px black;
-            text-align: center;
-        }
-
-        th.tabela-home-foot {
-            border-right: solid 1px black;
-            text-align: center;
-        }
-
-        th.tabela-home-last, td.tabela-home-last {
-            text-align: center;
-        }
-
-        #excesso-table-home {
-            border-bottom: solid 1px black;
-        }
-    </style>
-
     <div class="row">
         <div class="col" style="padding-top: 10px; padding-bottom: 10px; text-align: right">
             {% if request.user.usuario.empresa.atualizacao_alerta %}
@@ -64,8 +28,8 @@
 
     <!-- CARDS -->
     <div class="row">
-        {% if grafico_um %}
-            {% for g_um in grafico_um %}
+        {% if grafico_curva %}
+            {% for g_um in grafico_curva %}
                 <div class="card_curvas col">
                     <div class="card shadow mb-4 cards-home-info">
                         <div class="card-body">
@@ -74,6 +38,7 @@
                                     <h5>Curva {{ g_um.curva }}</h5>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-12" style="margin-right: auto; margin-left: auto">
                                     <div class="chart-pie pt-4">
@@ -81,6 +46,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row" style="margin-top: 23px; padding-top: 20px">
 
                                 <div class="col-5">
@@ -125,8 +91,8 @@
                         </thead>
 
                         <tbody>
-                        {% if dadosestoque %}
-                            {% for dados in dadosestoque %}
+                        {% if dados_estoque %}
+                            {% for dados in dados_estoque %}
                                 <tr>
                                     <td class="tabela-home-body">{{ dados.curva }}</td>
                                     <td class="tabela-home-body">{{ dados.skus }}</td>
@@ -143,11 +109,11 @@
 
                         <tr>
                             <th class="tabela-home-foot">Total</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_skus }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_normal }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_parcial }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.t_ruptura }}</th>
-                            <th class="tabela-home-last">{{ totais_dados_estoque.t_excesso }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_skus }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_normal }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_parcial }}</th>
+                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_ruptura }}</th>
+                            <th class="tabela-home-last">{{ totais_dados_estoque.total_excesso }}</th>
                         </tr>
 
                         </tfoot>
@@ -177,6 +143,41 @@
         </div>
     </div>
 
+    <style>
+        div.card_curvas {
+            margin-left: auto;
+            margin-right: auto;
+            width: 10%;
+        }
+
+        h6.curvas_text {
+            font-size: 14px;
+        }
+
+        th.tabela-home-head {
+            border-bottom: solid 1px black;
+            border-right: solid 1px black;
+            text-align: center;
+        }
+
+        td.tabela-home-body {
+            border-right: solid 1px black;
+            text-align: center;
+        }
+
+        th.tabela-home-foot {
+            border-right: solid 1px black;
+            text-align: center;
+        }
+
+        th.tabela-home-last, td.tabela-home-last {
+            text-align: center;
+        }
+
+        #excesso-table-home {
+            border-bottom: solid 1px black;
+        }
+    </style>
 
 
 {% endblock conteudo %}
