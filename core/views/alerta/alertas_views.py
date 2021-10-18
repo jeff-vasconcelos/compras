@@ -218,6 +218,7 @@ def alertas(id_empresa):
 
 
                 for index, row in infor_filiais.iterrows():
+                    print(row.condicao_estoque)
                     alertas_produtos = {
                         'filial': row.filial,
                         'cod_produto': row.cod_produto,
@@ -431,11 +432,11 @@ def teste(request, template_name='testando_alerta.html'):
 
     produtos = alertas(1)
 
-    #save_grafico_curva(1,produtos)
+    save_grafico_curva(1,produtos)
 
     save_grafico_faturamento(1)
 
-    #save_dados_estoque(1, produtos)
+    save_dados_estoque(1, produtos)
 
 
 
