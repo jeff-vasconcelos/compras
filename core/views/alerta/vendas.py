@@ -155,6 +155,7 @@ def vendas(cod_produto, id_empresa, periodo):
                 'dias_s_vendas': [d_sem_vendas], 'dias_vendas': [d_vendas],
                 'media': [media], 'maximo': [maximo], 'desvio': [d_padrao.round(2)],
                 'max_media': [max_media.round(2)],
+                'embalagem': produto_qs.embalagem,
                 #'media_ajustada': [round(media_ajustada, 2)],
                 'quantidade_un_caixa': produto_qs.quantidade_un_cx,
                 'media_preco_praticado': media_preco_vendas

@@ -135,6 +135,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         prod_resumo['sugestao'] = sugestao
         prod_resumo['media'] = media.round(2)
+        prod_resumo['embalagem'] = info.embalagem.unique()
         prod_resumo['porcent_media'] = porcent_media.round(2)
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
@@ -149,7 +150,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
         # Função responsável pela classificação da condição de estoque
-        results_condicao_estoque = define_condicao_estoque(produto_resumo=prod_resumo, tempo_estoque=temp_est,
+        results_condicao_estoque = define_condicao_estoque(produto_resumo=prod_resumo, tempo_reposicao=temp_est,
                                                            dde=dde, media=media,
                                                            estoque_disponivel=est_disponivel,
                                                            dde_ponto_reposicao=dde_ponto_rep,

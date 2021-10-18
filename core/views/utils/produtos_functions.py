@@ -1,45 +1,125 @@
 import math
 import pandas as pd
 from scipy.stats import norm
+import locale
+
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-def define_condicao_estoque(produto_resumo, tempo_estoque, dde,
-                            media, estoque_disponivel,
-                            dde_ponto_reposicao, preco_custo, ):
+def define_condicao_estoque(produto_resumo, tempo_reposicao, dde,
+                            media, estoque_disponivel, dde_ponto_reposicao,
+                            preco_custo, tempo_reposicao_fornecedor=''):
     """
         Função responsável por definir qual a codição do estoque do produto
     """
+    if tempo_reposicao_fornecedor:
+        if tempo_reposicao > tempo_reposicao_fornecedor:
+            if tempo_reposicao < dde:
+                tamanho = media * tempo_reposicao_fornecedor
+                qt_excesso = estoque_disponivel - tamanho
+                valor_e = qt_excesso * preco_custo
 
-    if tempo_estoque < dde:
-        tamanho = media * tempo_estoque
-        qt_excesso = estoque_disponivel - tamanho
-        valor_e = qt_excesso * preco_custo
+                vl_excesso = locale.currency(valor_e.round(2), grouping=True)
 
-        produto_resumo['qt_excesso'] = qt_excesso.round(0)
-        produto_resumo['quantidade_calc'] = qt_excesso.round(0)
-        produto_resumo['vl_excesso'] = valor_e.round(2)
-        condicao_estoque = 'EXCESSO'
+                produto_resumo['qt_excesso'] = qt_excesso.round(0)
+                produto_resumo['quantidade_calc'] = qt_excesso.round(0)
+                produto_resumo['vl_excesso'] = vl_excesso
+                produto_resumo['sugestao'] = 0
+                condicao_estoque = 'EXCESSO'
 
-    elif tempo_estoque >= dde > dde_ponto_reposicao:
-        produto_resumo['qt_excesso'] = 0
-        produto_resumo['quantidade_calc'] = estoque_disponivel
-        produto_resumo['vl_excesso'] = 0
-        condicao_estoque = 'NORMAL'
+            elif tempo_reposicao >= dde > dde_ponto_reposicao:
 
-    elif dde_ponto_reposicao >= dde > 0:
+                vl_excesso = locale.currency(0, grouping=True)
+                produto_resumo['qt_excesso'] = 0
+                produto_resumo['quantidade_calc'] = estoque_disponivel
+                produto_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'NORMAL'
 
-        produto_resumo['qt_excesso'] = 0
-        produto_resumo['quantidade_calc'] = estoque_disponivel
-        produto_resumo['vl_excesso'] = 0
-        condicao_estoque = 'PARCIAL'
+            elif dde_ponto_reposicao >= dde > 0:
+                vl_excesso = locale.currency(0, grouping=True)
+                produto_resumo['qt_excesso'] = 0
+                produto_resumo['quantidade_calc'] = estoque_disponivel
+                produto_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'PARCIAL'
+
+            else:
+                vl_excesso = locale.currency(0, grouping=True)
+                produto_resumo['qt_excesso'] = 0
+                produto_resumo['quantidade_calc'] = estoque_disponivel
+                produto_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'RUPTURA'
+
+            produto_resumo['condicao_estoque'] = condicao_estoque
+
+        else:
+            if tempo_reposicao_fornecedor < dde:
+                tamanho = media * tempo_reposicao_fornecedor
+                qt_excesso = estoque_disponivel - tamanho
+                valor_e = qt_excesso * preco_custo
+
+                vl_excesso = locale.currency(valor_e.round(2), grouping=True)
+
+                produto_resumo['qt_excesso'] = qt_excesso.round(0)
+                produto_resumo['quantidade_calc'] = qt_excesso.round(0)
+                produto_resumo['vl_excesso'] = vl_excesso
+                produto_resumo['sugestao'] = 0
+                condicao_estoque = 'EXCESSO'
+
+            elif tempo_reposicao_fornecedor >= dde > dde_ponto_reposicao:
+                vl_excesso = locale.currency(0, grouping=True)
+                produto_resumo['qt_excesso'] = 0
+                produto_resumo['quantidade_calc'] = estoque_disponivel
+                produto_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'NORMAL'
+
+            elif dde_ponto_reposicao >= dde > 0:
+                vl_excesso = locale.currency(0, grouping=True)
+                produto_resumo['qt_excesso'] = 0
+                produto_resumo['quantidade_calc'] = estoque_disponivel
+                produto_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'PARCIAL'
+
+            else:
+                vl_excesso = locale.currency(0, grouping=True)
+                produto_resumo['qt_excesso'] = 0
+                produto_resumo['quantidade_calc'] = estoque_disponivel
+                produto_resumo['vl_excesso'] = vl_excesso
+                condicao_estoque = 'RUPTURA'
+
+            produto_resumo['condicao_estoque'] = condicao_estoque
 
     else:
-        produto_resumo['qt_excesso'] = 0
-        produto_resumo['quantidade_calc'] = estoque_disponivel
-        produto_resumo['vl_excesso'] = 0
-        condicao_estoque = 'RUPTURA'
 
-    produto_resumo['condicao_estoque'] = condicao_estoque
+        if tempo_reposicao < dde:
+            tamanho = media * tempo_reposicao
+            qt_excesso = estoque_disponivel - tamanho
+            valor_e = qt_excesso * preco_custo
+
+            produto_resumo['qt_excesso'] = qt_excesso.round(0)
+            produto_resumo['quantidade_calc'] = qt_excesso.round(0)
+            produto_resumo['vl_excesso'] = valor_e.round(2)
+            condicao_estoque = 'EXCESSO'
+
+        elif tempo_reposicao >= dde > dde_ponto_reposicao:
+            produto_resumo['qt_excesso'] = 0
+            produto_resumo['quantidade_calc'] = estoque_disponivel
+            produto_resumo['vl_excesso'] = 0
+            condicao_estoque = 'NORMAL'
+
+        elif dde_ponto_reposicao >= dde > 0:
+
+            produto_resumo['qt_excesso'] = 0
+            produto_resumo['quantidade_calc'] = estoque_disponivel
+            produto_resumo['vl_excesso'] = 0
+            condicao_estoque = 'PARCIAL'
+
+        else:
+            produto_resumo['qt_excesso'] = 0
+            produto_resumo['quantidade_calc'] = estoque_disponivel
+            produto_resumo['vl_excesso'] = 0
+            condicao_estoque = 'RUPTURA'
+
+        produto_resumo['condicao_estoque'] = condicao_estoque
 
     resumo = produto_resumo.assign(**produto_resumo.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict(
         "records")
@@ -139,16 +219,20 @@ def organiza_informacoes_produto(produto_dados, lista_resumo):
     condicao_est = str(produto_dados['condicao_estoque'].unique()).strip('[]')
     valor_excesso = str(produto_dados['vl_excesso'].unique()).strip('[]')
     quantidade_calc = str(produto_dados['quantidade_calc'].unique()).strip('[]')
+    embalagem = str(produto_dados['embalagem'].unique()).strip('[]')
+    valor_ult_entrada = float(produto_dados['vl_ult_ent'].unique())
 
     data = []
     itens_analise = {
+        'embalagem': embalagem.replace("'", ""),
         'filial': int(produto_dados['cod_filial'].unique()),
         'estoque': int(produto_dados['estoque_dispon'].unique()),
         'avaria': int(produto_dados['avarias'].unique()),
+        'qt_bloqueada': int(produto_dados['qt_bloqueada'].unique()),
         'saldo': int(produto_dados['saldo'].unique()),
         'dt_ult_entrada': dt_u_entrada[0],
         'qt_ult_entrada': int(produto_dados['qt_ult_ent'].unique()),
-        'vl_ult_entrada': float(produto_dados['vl_ult_ent'].unique()),
+        'vl_ult_entrada': round(valor_ult_entrada, 2),
         'dde': float(produto_dados['dde'].unique()),
         'est_seguranca': float(produto_dados['estoque_segur'].unique()),
         'p_reposicao': float(produto_dados['ponto_repo'].unique()),
@@ -212,3 +296,12 @@ def calcula_ruptura(df_vendas, df_info_produto, desvio, media, preco_custo, prec
     porcent_ruptura = (d_sem_estoque / total_linha) * 100
 
     return porcent_media, porcent_ruptura, margem, cor_ruptura, ruptura
+
+
+def total_vendas_mes(df_vendas):
+    total_venda = df_vendas.copy()
+    total_venda['data'] = pd.to_datetime(total_venda['data'])
+    total_venda['mes'] = total_venda['data'].map(lambda x: 100 * x.year + x.month)
+    total_vendas = total_venda.groupby(['mes', 'cod_filial'])['qt_vendas'].sum().reset_index()
+
+    return total_vendas

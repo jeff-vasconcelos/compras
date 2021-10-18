@@ -904,7 +904,7 @@ def selecionar_produto(request) -> object:
 
         except Exception as error:
             d = [1, str(error)]
-
+            print(str(error))
             return JsonResponse({'data': d})
     return JsonResponse({})
 

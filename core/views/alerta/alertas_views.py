@@ -194,7 +194,6 @@ def alertas(id_empresa):
         leadtime = fornecedor.leadtime
         t_reposicao = fornecedor.ciclo_reposicao
 
-
         produtos = get_produtos(id_empresa, fornecedor.id)
 
         for produto in produtos:
@@ -215,7 +214,6 @@ def alertas(id_empresa):
                 infor_filiais['principio_ativo'] = produto.principio_ativo
                 infor_filiais['fornecedor'] = fornecedor.desc_fornecedor
                 infor_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
-
 
                 for index, row in infor_filiais.iterrows():
                     print(row.condicao_estoque)
@@ -247,7 +245,6 @@ def alertas(id_empresa):
 
 
 def alerta_db(id_empresa, produtos):
-
     itens = Alerta.objects.all().filter(
         empresa__id__exact=id_empresa
     )
@@ -259,7 +256,6 @@ def alerta_db(id_empresa, produtos):
 
     for i in produtos:
         if i["qt_excesso"] > 0 or i["condicao_estoque"] != "NORMAL":
-
             valor = round(i['valor_sugestao'], 0)
             valor_excesso = i['vl_excesso']
 
@@ -283,7 +279,7 @@ def alerta_db(id_empresa, produtos):
                 cod_fornecedor=i['cod_fornecedor'],
                 empresa=empresa,
                 dde=i['dde'],
-                #campo_dois=i['media_ajustada'],
+                # campo_dois=i['media_ajustada'],
                 media=i['media'],
                 principio_ativo=i['principio_ativo'],
                 data_entrada=i['dt_ult_entrada'],
@@ -336,7 +332,6 @@ def send_email_alerta(request, id_empresa):
 
 
 def pdf_generate(request):
-
     itens = Alerta.objects.all().filter(
         empresa__id__exact=1
     ).order_by('estado_estoque')
@@ -385,7 +380,6 @@ def pdf_generate(request):
             p.setFont('Times-Roman', 8)
             contador_y = 285
 
-
     p.showPage()
     p.save()
     pdf = buffer.getvalue()
@@ -426,19 +420,17 @@ def rotina_email(request, id_empresa):
         print("NÃO FOI POSSIVEL ENVIAR O(S) EMAIL(S)")
 
 
-#TODO FUNÇÃO DE TESTE - REMOVER
+# TODO FUNÇÃO DE TESTE - REMOVER
 def teste(request, template_name='testando_alerta.html'):
     empresa = Empresa.objects.get(id=1)
 
     produtos = alertas(1)
 
-    save_grafico_curva(1,produtos)
+    save_grafico_curva(1, produtos)
 
     save_grafico_faturamento(1)
 
     save_dados_estoque(1, produtos)
-
-
 
     # grafico_um = processa_grafico_um(produtos)
     # dados_estoque = dados_estoque_home(produtos)
