@@ -13,7 +13,7 @@ from reportlab.lib.utils import ImageReader
 from core.models.parametros_models import Email
 from core.models.usuarios_models import User
 from django.utils import timezone
-from core.views.alerta.processa_home import *
+#from core.views.alerta.processa_home import *
 from core.views.home.functions_home import save_grafico_curva, save_grafico_faturamento, save_dados_estoque
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')

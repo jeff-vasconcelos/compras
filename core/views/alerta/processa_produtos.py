@@ -1,12 +1,13 @@
 import locale
 from api.models.fornecedor import Fornecedor
-from core.views.alerta.estoque import estoque_atual
-from core.views.alerta.pedidos import pedidos_compra
-from core.views.alerta.entradas import ultima_entrada
+# from core.views.alerta.estoque import estoque_atual
 from core.views.alerta.vendas import vendas
 from core.models.parametros_models import Parametro
 from core.views.utils.produtos_functions import *
 from core.views.utils.abc_functions import abc_fornecedores
+from core.views.utils.entradas import ultima_entrada
+from core.views.utils.pedidos import pedidos_compra
+from core.views.utils.estoque import estoque_atual
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
@@ -42,9 +43,12 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     global resumo_produto
     parametros = Parametro.objects.get(empresa_id=id_empresa)
     fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor, empresa__id__exact=id_empresa)
-    pedidos = pedidos_compra(cod_produto, id_empresa)
-    u_entrada = ultima_entrada(cod_produto, id_empresa, periodo)
-    e_atual = estoque_atual(cod_produto, id_empresa)
+
+    # ja ajustados
+    pedidos = pedidos_compra(cod_produto=cod_produto, id_empresa=id_empresa)
+    u_entrada = ultima_entrada(cod_produto=cod_produto, id_empresa=id_empresa, periodo=periodo)
+    e_atual = estoque_atual(cod_produto=cod_produto, id_empresa=id_empresa)
+
     vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo)
 
     lista_resumo = []
@@ -70,8 +74,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         vendas_ = vendas_p.query('cod_filial == @filial')
 
         estoque_ = e_atual.query('cod_filial == @filial')
-        curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial') \
-            .reset_index(drop=True)
+        curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial').reset_index(drop=True)
 
         if entradas_.empty:
             dt_ult_entrada = "-"

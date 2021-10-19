@@ -344,6 +344,8 @@ const graficoRuptura = (filial, produto) => {
                 }
             });
 
+            th_tabela_totais_ruptura_fornec.innerHTML = ''
+            td_tabela_totais_ruptura_fornec.innerHTML = ''
 
             if (Array.isArray(totais)) {
                 totais.forEach(t_mes => {

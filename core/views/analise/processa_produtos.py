@@ -1,12 +1,12 @@
 from api.models.fornecedor import Fornecedor
-from core.views.analise.curva import abc
-from core.views.analise.estoque import estoque_atual
-from core.views.analise.pedidos import pedidos_compra
-from core.views.analise.entradas import ultima_entrada
+from core.views.utils.estoque import estoque_atual
+# from core.views.analise.pedidos import pedidos_compra
 from core.views.analise.vendas import vendas
 from core.models.parametros_models import Parametro
 from core.views.utils.abc_functions import abc_fornecedores
 from core.views.utils.produtos_functions import *
+from core.views.utils.entradas import ultima_entrada
+from core.views.utils.pedidos import pedidos_compra
 import pandas as pd
 import locale
 
@@ -33,11 +33,15 @@ def a_multifiliais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repo
 def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, lista_filiais):
     global resumo_produto, total_vendas, vendas_
     parametros = Parametro.objects.get(empresa_id=id_empresa)
-    pedidos = pedidos_compra(cod_produto, id_empresa, lista_filiais)
-    u_entrada = ultima_entrada(cod_produto, id_empresa, periodo, lista_filiais)
-    e_atual = estoque_atual(cod_produto, id_empresa, lista_filiais)
-    vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
     fornecedor = Fornecedor.objects.get(cod_fornecedor=cod_fornecedor, empresa__id__exact=id_empresa)
+
+    # ja ajustados
+    pedidos = pedidos_compra(cod_produto=cod_produto, id_empresa=id_empresa, lista_filiais=lista_filiais)
+    u_entrada = ultima_entrada(cod_produto=cod_produto, id_empresa=id_empresa, periodo=periodo,
+                               lista_filiais=lista_filiais)
+    e_atual = estoque_atual(cod_produto=cod_produto, id_empresa=id_empresa, lista_filiais=lista_filiais)
+
+    vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo, lista_filiais)
 
     lista_fornecedor = []
     lista_resumo = []
@@ -45,10 +49,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     lista_fornecedor.append(cod_fornecedor)
 
     curva = abc_fornecedores(lista_fornecedor, id_empresa, periodo)
-
-    # filiais = []
-    # for i, v in info_produto.cod_filial.iteritems():
-    #     filiais.append(v)
 
     for filial in lista_filiais:
         if pedidos is not None:

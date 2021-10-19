@@ -344,6 +344,8 @@ const graficoExcesso = (filial, produto) => {
                 }
             });
 
+            th_tabela_totais_excesso_fornec.innerHTML = ''
+            td_tabela_totais_excesso_fornec.innerHTML = ''
 
             if (Array.isArray(totais)) {
                 totais.forEach(t_mes => {
@@ -351,7 +353,6 @@ const graficoExcesso = (filial, produto) => {
                             <th class="th_totais">${t_mes.mes} de ${t_mes.ano}</th>
 
                             `
-
                     td_tabela_totais_excesso_fornec.innerHTML += `
                             <td class="td_totais">${t_mes.quantidade}</td>
                             
