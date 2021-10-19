@@ -293,7 +293,7 @@ def filtrar_produto_produto(request):
         return JsonResponse({'data': res_fil_prod})
     return JsonResponse({})
 
-
+#TODO CORRIGIR CURVA
 def filtrar_produto_curva(request):
     id_empresa = request.user.usuario.empresa_id
     if request.is_ajax():

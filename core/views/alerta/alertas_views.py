@@ -1,8 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.shortcuts import render
-from api.models.pedido_duplicado import PedidoDuplicado
-from api.views import valida_pedidos_excluidos
 from core.views.alerta.processa_produtos import *
 from core.views.alerta.verificador import *
 from core.models.empresas_models import *
@@ -13,8 +11,6 @@ from reportlab.lib.utils import ImageReader
 from core.models.parametros_models import Email
 from core.models.usuarios_models import User
 from django.utils import timezone
-#from core.views.alerta.processa_home import *
-from core.views.home.functions_home import save_grafico_curva, save_grafico_faturamento, save_dados_estoque
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
@@ -181,69 +177,6 @@ def alerta_ruptura_curva(request, curva, template_name='aplicacao/paginas/alerta
     return render(request, template_name, contexto)
 
 
-def alertas(id_empresa):
-    global alertas_produtos, infor_filiais, condicao
-
-    lista_alertas = []
-    parametros = Parametro.objects.get(empresa__id=id_empresa)
-
-    fornecedores = get_fornecedores_qs(id_empresa)
-
-    for fornecedor in fornecedores:
-
-        leadtime = fornecedor.leadtime
-        t_reposicao = fornecedor.ciclo_reposicao
-
-        produtos = get_produtos(id_empresa, fornecedor.id)
-
-        for produto in produtos:
-            verif_produto = verifica_produto(produto.cod_produto, id_empresa, parametros.periodo)
-
-            if verif_produto == True:
-                infor_filiais = processa_produtos_filiais(
-                    produto.cod_produto,
-                    fornecedor.cod_fornecedor,
-                    id_empresa,
-                    leadtime,
-                    t_reposicao,
-                    parametros.periodo
-                )
-
-                infor_filiais['cod_produto'] = produto.cod_produto
-                infor_filiais['desc_produto'] = produto.desc_produto
-                infor_filiais['principio_ativo'] = produto.principio_ativo
-                infor_filiais['fornecedor'] = fornecedor.desc_fornecedor
-                infor_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
-
-                for index, row in infor_filiais.iterrows():
-                    print(row.condicao_estoque)
-                    alertas_produtos = {
-                        'filial': row.filial,
-                        'cod_produto': row.cod_produto,
-                        'desc_produto': row.desc_produto,
-                        'saldo': row.saldo,
-                        'sugestao_unidade': row.sugestao,
-                        'valor_sugestao': row.valor_sugestao,
-                        'condicao_estoque': row.condicao_estoque,
-                        'estoque': row.estoque,
-                        'qt_excesso': row.qt_excesso,
-                        'vl_excesso': row.vl_excesso,
-                        'curva': row.curva,
-                        'custo': row.custo,
-                        'fornecedor': row.fornecedor,
-                        'cod_fornecedor': row.cod_fornecedor,
-                        'dde': row.dde,
-                        'quantidade_calc': row.quantidade_calc,
-                        # 'media_ajustada': row.media_ajustada,
-                        'media': row.media_simples,
-                        'principio_ativo': row.principio_ativo,
-                        'dt_ult_entrada': row.dt_ult_entrada
-                    }
-
-                    lista_alertas.append(alertas_produtos)
-    return lista_alertas
-
-
 def alerta_db(id_empresa, produtos):
     itens = Alerta.objects.all().filter(
         empresa__id__exact=id_empresa
@@ -262,7 +195,6 @@ def alerta_db(id_empresa, produtos):
             produto = Produto.objects.get(empresa_id__exact=id_empresa,
                                           cod_produto=i['cod_produto'],
                                           cod_fornecedor=i['cod_fornecedor'])
-            print(produto.id)
             b = Alerta.objects.create(
                 cod_filial=i['filial'],
                 cod_produto=i['cod_produto'],
@@ -386,58 +318,54 @@ def pdf_generate(request):
     buffer.close()
     return pdf
 
-
-# ROTINA DE EXECUÇÃO DE ALERTA
-def rotina_alerta(request, id_empresa):
-    empresa = Empresa.objects.get(id=id_empresa)
-    print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
-
-    produtos = alertas(id_empresa)
-    grafico_um = processa_grafico_um(produtos)
-    dados_estoque = dados_estoque_home(produtos)
-
-    alerta_db(id_empresa, produtos)
-
-    db_grafico_um(id_empresa, grafico_um)
-    db_dados_estoque(id_empresa, dados_estoque)
-
-
-# ROTINA DE EXECUÇÃO DE EMAIL
-def rotina_email(request, id_empresa):
-    empresa = Empresa.objects.get(id=id_empresa)
-    pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
-
-    # TODO testando pedido excluido do winthor
-    valida_pedidos_excluidos(id_empresa)
-    pedidos_existentes.delete()
-
-    # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
-    try:
-        if empresa.envia_email:
-            print(f"ENVIANDO EMAIL(S) DE {empresa.nome_fantasia}")
-            send_email_alerta(request, id_empresa)
-    except:
-        print("NÃO FOI POSSIVEL ENVIAR O(S) EMAIL(S)")
-
-
-# TODO FUNÇÃO DE TESTE - REMOVER
-def teste(request, template_name='testando_alerta.html'):
-    empresa = Empresa.objects.get(id=1)
-
-    produtos = alertas(1)
-
-    save_grafico_curva(1, produtos)
-
-    save_grafico_faturamento(1)
-
-    save_dados_estoque(1, produtos)
-
-    # grafico_um = processa_grafico_um(produtos)
-    # dados_estoque = dados_estoque_home(produtos)
-    #
-    # alerta_db(1, produtos)
-    #
-    # db_grafico_um(1, grafico_um)
-    # db_dados_estoque(1, dados_estoque)
-    # db_grafico_dois(1)
-    return render(request, template_name)
+#
+# # ROTINA DE EXECUÇÃO DE ALERTA
+# def rotina_alerta(request, id_empresa):
+#     empresa = Empresa.objects.get(id=id_empresa)
+#     print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
+#
+#     # Executa e processa dados de alerta
+#     produtos_alerta = processa_produtos_alerta_home(id_empresa, curva_home=False)
+#
+#     # Executa e processa dados de home
+#     produtos_home = processa_produtos_alerta_home(id_empresa, curva_home=True)
+#
+#     save_grafico_curva(id_empresa, produtos_home)
+#     save_grafico_faturamento(id_empresa)
+#     save_dados_estoque(id_empresa, produtos_home)
+#     alerta_db(id_empresa, produtos_alerta)
+#
+#
+# # ROTINA DE EXECUÇÃO DE EMAIL
+# def rotina_email(request, id_empresa):
+#     empresa = Empresa.objects.get(id=id_empresa)
+#     pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
+#
+#     # TODO testando pedido excluido do winthor
+#     valida_pedidos_excluidos(id_empresa)
+#     pedidos_existentes.delete()
+#
+#     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
+#     try:
+#         if empresa.envia_email:
+#             print(f"ENVIANDO EMAIL(S) DE {empresa.nome_fantasia}")
+#             send_email_alerta(request, id_empresa)
+#     except:
+#         print("NÃO FOI POSSIVEL ENVIAR O(S) EMAIL(S)")
+#
+#
+# # TODO FUNÇÃO DE TESTE - REMOVER
+# def teste(request, template_name='testando_alerta.html'):
+#     id_empresa=1
+#     empresa = Empresa.objects.get(id=id_empresa)
+#     print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
+#
+#     produtos_alerta = processa_produtos_alerta_home(id_empresa, curva_home=False)
+#     produtos_home = processa_produtos_alerta_home(id_empresa, curva_home=True)
+#
+#     save_grafico_curva(id_empresa, produtos_home)
+#     save_grafico_faturamento(id_empresa)
+#     save_dados_estoque(id_empresa, produtos_home)
+#     alerta_db(id_empresa, produtos_alerta)
+#
+#     return render(request, template_name)

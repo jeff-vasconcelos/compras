@@ -10,6 +10,7 @@ from core.views.configuracao.configuracao_views import *
 from core.export_files.generate_pdf import *
 from core.views.pedido_insight.pedidos_views import *
 from core.views.fornecedor.fornecedor_views import *
+from core.views.utils.rotinas import teste
 
 
 urlpatterns = [

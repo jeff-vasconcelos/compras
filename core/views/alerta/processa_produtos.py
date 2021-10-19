@@ -1,10 +1,10 @@
 import locale
 from api.models.fornecedor import Fornecedor
-# from core.views.alerta.estoque import estoque_atual
 from core.views.alerta.vendas import vendas
 from core.models.parametros_models import Parametro
+from core.views.alerta.verificador import get_fornecedores_qs, get_produtos, verifica_produto
 from core.views.utils.produtos_functions import *
-from core.views.utils.abc_functions import abc_fornecedores
+from core.views.utils.abc_functions import abc_fornecedores, abc_home
 from core.views.utils.entradas import ultima_entrada
 from core.views.utils.pedidos import pedidos_compra
 from core.views.utils.estoque import estoque_atual
@@ -12,13 +12,15 @@ from core.views.utils.estoque import estoque_atual
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
+def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, curva_home):
     """
 
     """
 
     global results
-    informacaoes_produto = dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo)
+    informacaoes_produto = dados_produto(cod_produto, cod_fornecedor,
+                                         id_empresa, leadtime,
+                                         tempo_reposicao, periodo, curva_home)
 
     lista_resumo = []
 
@@ -36,7 +38,7 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
     return dados_produtos_filiais
 
 
-def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo):
+def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, curva_home):
     """
 
     """
@@ -54,7 +56,12 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     lista_resumo = []
     lista_fornecedor = [cod_fornecedor]
 
-    curva = abc_fornecedores(lista_fornecedor, id_empresa, periodo)
+    if curva_home:
+        curva = abc_home(id_empresa, periodo)
+        print('ABC HOME')
+    else:
+        curva = abc_fornecedores(lista_fornecedor, id_empresa, periodo)
+        print('ABC POR FORNECEDOR')
 
     filiais = []
     for i, v in info_produto.cod_filial.iteritems():
@@ -153,7 +160,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
         # Função responsável pela classificação da condição de estoque
-        results_condicao_estoque = define_condicao_estoque(produto_resumo=prod_resumo, tempo_reposicao=temp_est,
+        results_condicao_estoque = define_condicao_estoque(produto_resumo=prod_resumo,
+                                                           tempo_reposicao=temp_est,
                                                            dde=dde, media=media,
                                                            estoque_disponivel=est_disponivel,
                                                            dde_ponto_reposicao=dde_ponto_rep,
@@ -169,3 +177,66 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         resumo_produto = pd.DataFrame(lista_fim)
 
     return resumo_produto
+
+
+def processa_produtos_alerta_home(id_empresa, curva_home):
+    global alertas_produtos, infor_filiais, condicao
+
+    lista_alertas = []
+    parametros = Parametro.objects.get(empresa__id=id_empresa)
+
+    fornecedores = get_fornecedores_qs(id_empresa)
+
+    for fornecedor in fornecedores:
+
+        leadtime = fornecedor.leadtime
+        t_reposicao = fornecedor.ciclo_reposicao
+
+        produtos = get_produtos(id_empresa, fornecedor.id)
+
+        for produto in produtos:
+            verif_produto = verifica_produto(produto.cod_produto, id_empresa, parametros.periodo)
+
+            if verif_produto == True:
+                infor_filiais = processa_produtos_filiais(
+                    produto.cod_produto,
+                    fornecedor.cod_fornecedor,
+                    id_empresa,
+                    leadtime,
+                    t_reposicao,
+                    parametros.periodo,
+                    curva_home
+                )
+
+                infor_filiais['cod_produto'] = produto.cod_produto
+                infor_filiais['desc_produto'] = produto.desc_produto
+                infor_filiais['principio_ativo'] = produto.principio_ativo
+                infor_filiais['fornecedor'] = fornecedor.desc_fornecedor
+                infor_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
+
+                for index, row in infor_filiais.iterrows():
+                    alertas_produtos = {
+                        'filial': row.filial,
+                        'cod_produto': row.cod_produto,
+                        'desc_produto': row.desc_produto,
+                        'saldo': row.saldo,
+                        'sugestao_unidade': row.sugestao,
+                        'valor_sugestao': row.valor_sugestao,
+                        'condicao_estoque': row.condicao_estoque,
+                        'estoque': row.estoque,
+                        'qt_excesso': row.qt_excesso,
+                        'vl_excesso': row.vl_excesso,
+                        'curva': row.curva,
+                        'custo': row.custo,
+                        'fornecedor': row.fornecedor,
+                        'cod_fornecedor': row.cod_fornecedor,
+                        'dde': row.dde,
+                        'quantidade_calc': row.quantidade_calc,
+                        # 'media_ajustada': row.media_ajustada,
+                        'media': row.media_simples,
+                        'principio_ativo': row.principio_ativo,
+                        'dt_ult_entrada': row.dt_ult_entrada
+                    }
+
+                    lista_alertas.append(alertas_produtos)
+    return lista_alertas
