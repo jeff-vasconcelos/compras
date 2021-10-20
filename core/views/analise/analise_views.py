@@ -20,6 +20,8 @@ import pandas as pd
 from core.views.analise.vendas import vendas
 from core.models.pedidos_models import *
 
+from core.views.utils.abc_functions import abc_fornecedores
+
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
@@ -337,8 +339,9 @@ def filtrar_produto_curva(request):
                         cod_fornec = i.cod_fornecedor
                         list_fornec.append(cod_fornec)
 
-                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
-                    # (cod_fornecedor, id_empresa, periodo, lista_filiais)
+                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
+                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+
                     curva_f = curva_f.query('curva== @curva')
 
                     if not curva_f.empty:
@@ -395,7 +398,8 @@ def filtrar_produto_curva(request):
                         cod_fornec = i.fornecedor.cod_fornecedor
                         list_fornec.append(cod_fornec)
 
-                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
+                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
                     curva_f = curva_f.query('curva== @curva')
 
                     if not curva_f.empty:
@@ -453,7 +457,8 @@ def filtrar_produto_curva(request):
                         cod_fornec = i.cod_fornecedor
                         list_fornec.append(cod_fornec)
 
-                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
+                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
 
                     curva_f = curva_f.query('curva== @curva')
 
@@ -511,8 +516,9 @@ def filtrar_produto_curva(request):
                         cod_fornec = i.cod_fornecedor
                         list_fornec.append(cod_fornec)
 
-                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
-                    # (cod_fornecedor, id_empresa, periodo, lista_filiais)
+                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
+                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+
                     curva_f = curva_f.query('curva== @curva')
 
                     if not curva_f.empty:
@@ -568,7 +574,8 @@ def filtrar_produto_curva(request):
                         cod_fornec = i.fornecedor.cod_fornecedor
                         list_fornec.append(cod_fornec)
 
-                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
+                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
                     curva_f = curva_f.query('curva== @curva')
 
                     if not curva_f.empty:
@@ -625,7 +632,8 @@ def filtrar_produto_curva(request):
                         cod_fornec = i.cod_fornecedor
                         list_fornec.append(cod_fornec)
 
-                    curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
+                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
 
                     curva_f = curva_f.query('curva== @curva')
 

@@ -97,9 +97,9 @@ def home_graficos(request):
 
             curva_porc = {
                 'curva': a.curva,
-                'normal': part_normal,
-                'parcial': part_parcial,
-                'excesso': part_excesso
+                'part_normal': part_normal,
+                'part_parcial': part_parcial,
+                'part_excesso': part_excesso
             }
 
             porcent_curva.append(curva_porc)

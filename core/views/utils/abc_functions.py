@@ -46,6 +46,7 @@ def abc_fornecedores(lista_fornecedores, id_empresa, periodo):
 
     lista_vendas = []
 
+
     for filial in filiais:
         vendas_df = pd.DataFrame(Venda.objects.filter(
             cod_fornecedor__in=lista_fornecedores,

@@ -58,10 +58,10 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
     if curva_home:
         curva = abc_home(id_empresa, periodo)
-        print('ABC HOME')
+
     else:
         curva = abc_fornecedores(lista_fornecedor, id_empresa, periodo)
-        print('ABC POR FORNECEDOR')
+
 
     filiais = []
     for i, v in info_produto.cod_filial.iteritems():

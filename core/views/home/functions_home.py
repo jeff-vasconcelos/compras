@@ -83,7 +83,7 @@ def save_grafico_faturamento(id_empresa):
         f = GraficoFaturamento.objects.create(
             curva=row['curva'],
             total=row['vl_total_vendido'],
-            # parcticipacao=row['porcentagem'],
+            participacao=row['porcentagem'],
             empresa=empresa
         )
         f.save()

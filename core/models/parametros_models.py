@@ -75,6 +75,7 @@ class GraficoFaturamento(models.Model):
     total = models.FloatField(null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='grafruptura_empresa',
                                 blank=True, null=True)
+    participacao = models.FloatField(null=True, blank=True)
 
     class Meta:
         verbose_name = 'Home - Grafico Dois'

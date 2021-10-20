@@ -209,7 +209,7 @@ $.ajax({
                             backgroundColor: "#ffbc40",
                             hoverBackgroundColor: "#ffbc40",
                             borderColor: "#ffbc40",
-                            data: curvaRuptura.porcent,
+                            data: curvaRuptura.porcentagem,
                             maxBarThickness: 35,
                         }
 
