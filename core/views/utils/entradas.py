@@ -41,7 +41,6 @@ def qs_ultima_entrada(cod_produto, filial, periodo, id_empresa, lista_entrada):
         u_entrada_ = u_entrada_df
         lista = u_entrada_.values.tolist()
         lista_entrada.append(lista)
-
     return lista_entrada
 
 

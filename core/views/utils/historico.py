@@ -17,10 +17,8 @@ def historico_estoque(cod_produto, id_empresa, periodo, lista_filiais=''):
     else:
         filiais = get_filiais(id_empresa)
         for filial in filiais:
-            # print('executou')
             results_lista = qs_historico(cod_produto=cod_produto, filial=filial.cod_filial,
                                          periodo=periodo, id_empresa=id_empresa, lista_historico=lista_historico)
-
         return process_historico(results_lista)
 
 def qs_historico(cod_produto, filial, periodo, id_empresa, lista_historico):

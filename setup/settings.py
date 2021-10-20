@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -98,11 +98,11 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'cluster'),
         'USER': os.environ.get('DB_USER', 'cluster'),
         'PASSWORD': os.environ.get('DB_PASS', 'clus123ter'),
-        'HOST': '172.30.126.3',
-        'PORT': '5432',
+        'HOST': '177.136.201.66',
+        'PORT': '30222',
     }
 }
-
+"""
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 

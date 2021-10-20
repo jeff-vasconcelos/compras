@@ -10,10 +10,18 @@ from api.models.pedido_duplicado import PedidoDuplicado
 # ROTINA DE EXECUÇÃO DE ALERTA
 def rotina_alerta(request, id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
-    print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
+    print(f"PROCESSANDO DADOS (ALERTA) DE {empresa.id} - {empresa.nome_fantasia}")
 
     # Executa e processa dados de alerta
     produtos_alerta = processa_produtos_alerta_home(id_empresa, curva_home=False)
+
+    alerta_db(id_empresa, produtos_alerta)
+
+
+# ROTINA DE EXECUÇÃO DE HOME
+def rotina_home(request, id_empresa):
+    empresa = Empresa.objects.get(id=id_empresa)
+    print(f"PROCESSANDO DADOS (HOME) DE {empresa.id} - {empresa.nome_fantasia}")
 
     # Executa e processa dados de home
     produtos_home = processa_produtos_alerta_home(id_empresa, curva_home=True)
@@ -21,17 +29,15 @@ def rotina_alerta(request, id_empresa):
     save_grafico_curva(id_empresa, produtos_home)
     save_grafico_faturamento(id_empresa)
     save_dados_estoque(id_empresa, produtos_home)
-    alerta_db(id_empresa, produtos_alerta)
+
+    pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
+    valida_pedidos_excluidos(id_empresa)
+    pedidos_existentes.delete()
 
 
 # ROTINA DE EXECUÇÃO DE EMAIL
 def rotina_email(request, id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
-    pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
-
-    # TODO testando pedido excluido do winthor
-    valida_pedidos_excluidos(id_empresa)
-    pedidos_existentes.delete()
 
     # SE HABILITADA A OPÇÃO DE ENVIO DE EMAIL - CADASTRO DA EMPRESA
     try:

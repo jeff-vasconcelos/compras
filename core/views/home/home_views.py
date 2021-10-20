@@ -14,48 +14,49 @@ def home_page(request, template_name='aplicacao/paginas/home.html'):
     """
         View responsável por renderiazar template de HOME
     """
+    try:
+        id_empresa = request.user.usuario.empresa_id
+        dados_estoque = DadosEstoque.objects.filter(empresa__id=id_empresa)
+        grafico_curva = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
 
-    id_empresa = request.user.usuario.empresa_id
-    dados_estoque = DadosEstoque.objects.filter(empresa__id=id_empresa)
-    grafico_curva = GraficoCurva.objects.filter(empresa__id=id_empresa).order_by('curva')
+        dados_df = pd.DataFrame(
+            DadosEstoque.objects.filter(empresa__id=id_empresa).order_by('curva').values()
+        )
 
-    dados_df = pd.DataFrame(
-        DadosEstoque.objects.filter(empresa__id=id_empresa).order_by('curva').values()
-    )
+        total_normal = dados_df['normal'].sum()
+        total_parcial = dados_df['parcial'].sum()
+        total_ruptura = dados_df['ruptura'].sum()
+        total_excesso = dados_df['excesso'].sum()
+        total_skus = dados_df['skus'].sum()
 
-    total_normal = dados_df['normal'].sum()
-    total_parcial = dados_df['parcial'].sum()
-    total_ruptura = dados_df['ruptura'].sum()
-    total_excesso = dados_df['excesso'].sum()
-    total_skus = dados_df['skus'].sum()
-
-    totais_dados_estoque = {
-        'total_normal': total_normal,
-        'total_parcial': total_parcial,
-        'total_ruptura': total_ruptura,
-        'total_excesso': total_excesso,
-        'total_skus': total_skus
-    }
-
-    # Gráfico Curva
-    lista_grafico_curva = []
-    for g in grafico_curva:
-        disc_grafico = {
-            'curva': g.curva,
-            'normal': locale.currency(float(g.normal), grouping=True),
-            'parcial': locale.currency(float(g.parcial), grouping=True),
-            'excesso': locale.currency(float(g.excesso), grouping=True),
-            'total': locale.currency(float(g.total), grouping=True)
+        totais_dados_estoque = {
+            'total_normal': total_normal,
+            'total_parcial': total_parcial,
+            'total_ruptura': total_ruptura,
+            'total_excesso': total_excesso,
+            'total_skus': total_skus
         }
-        lista_grafico_curva.append(disc_grafico)
 
-    context = {
-        'dados_estoque': dados_estoque,
-        'totais_dados_estoque': totais_dados_estoque,
-        'grafico_curva': lista_grafico_curva
-    }
+        # Gráfico Curva
+        lista_grafico_curva = []
+        for g in grafico_curva:
+            disc_grafico = {
+                'curva': g.curva,
+                'normal': locale.currency(float(g.normal), grouping=True),
+                'parcial': locale.currency(float(g.parcial), grouping=True),
+                'excesso': locale.currency(float(g.excesso), grouping=True),
+                'total': locale.currency(float(g.total), grouping=True)
+            }
+            lista_grafico_curva.append(disc_grafico)
 
-    return render(request, template_name, context)
+        context = {
+            'dados_estoque': dados_estoque,
+            'totais_dados_estoque': totais_dados_estoque,
+            'grafico_curva': lista_grafico_curva
+        }
+        return render(request, template_name, context)
+    except:
+        return render(request, template_name)
 
 
 # TODO (Status: Validando)

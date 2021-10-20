@@ -92,7 +92,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         prod_resumo['qt_bloqueada'] = estoque_['qt_bloqueada']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
-        prod_resumo['vl_ult_ent'] = vl_ult_entrada,
+        prod_resumo['vl_ult_ent'] = vl_ult_entrada
 
         valida_media = math.isnan(info.media.unique())
         if not valida_media:
