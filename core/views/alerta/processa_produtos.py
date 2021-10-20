@@ -144,18 +144,18 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         temp_est = fornecedor.tempo_estoque
 
         prod_resumo['sugestao'] = sugestao
-        prod_resumo['media'] = media.round(2)
+        prod_resumo['media'] =round(media, 2)
         prod_resumo['embalagem'] = info.embalagem.unique()
-        prod_resumo['porcent_media'] = porcent_media.round(2)
+        prod_resumo['porcent_media'] = round(porcent_media, 2)
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
-        prod_resumo['margem'] = margem.round(2)
+        prod_resumo['margem'] = round(margem, 2)
         prod_resumo['estoque_segur'] = estoque_seguranca
-        prod_resumo['preco_venda_tabela'] = preco_tabela.round(2)
+        prod_resumo['preco_venda_tabela'] = round(preco_tabela, 2)
         prod_resumo['qt_unit_caixa'] = info.quantidade_un_caixa.unique()
         prod_resumo['ruptura'] = ruptura
-        prod_resumo['dde'] = dde.round(2)
-        prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
+        prod_resumo['dde'] = round(dde, 2)
+        prod_resumo['ruptura_porc'] = round(porcent_ruptura, 2)
         prod_resumo['cor_ruptura'] = cor_ruptura
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
