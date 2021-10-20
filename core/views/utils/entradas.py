@@ -6,10 +6,12 @@ from core.views.utils.datas import intervalo_periodo
 
 def ultima_entrada(cod_produto, id_empresa, periodo, lista_filiais=''):
     global results_lista
+    lista_entrada = []
+
     if lista_filiais:
         for filial in lista_filiais:
             results_lista = qs_ultima_entrada(cod_produto=cod_produto, filial=filial, periodo=periodo,
-                                              id_empresa=id_empresa)
+                                              id_empresa=id_empresa, lista_entrada=lista_entrada)
 
         return process_ultima_entrada(lista_entrada=results_lista)
 
@@ -18,14 +20,14 @@ def ultima_entrada(cod_produto, id_empresa, periodo, lista_filiais=''):
 
         for filial in filiais:
             results_lista = qs_ultima_entrada(cod_produto=cod_produto, filial=filial.cod_filial, periodo=periodo,
-                                              id_empresa=id_empresa)
+                                              id_empresa=id_empresa, lista_entrada=lista_entrada)
 
         return process_ultima_entrada(lista_entrada=results_lista)
 
 
-def qs_ultima_entrada(cod_produto, filial, periodo, id_empresa):
+def qs_ultima_entrada(cod_produto, filial, periodo, id_empresa, lista_entrada):
     inicio, fim = intervalo_periodo(periodo)
-    lista_entrada = []
+
 
     u_entrada_df = pd.DataFrame(Entrada.objects.filter(
         cod_produto__exact=cod_produto,
@@ -40,10 +42,11 @@ def qs_ultima_entrada(cod_produto, filial, periodo, id_empresa):
         lista = u_entrada_.values.tolist()
         lista_entrada.append(lista)
 
-        return lista_entrada
+    return lista_entrada
 
 
 def process_ultima_entrada(lista_entrada):
+    global entrada
     list_entradas = []
     if lista_entrada:
         for i in lista_entrada:
@@ -66,6 +69,7 @@ def process_ultima_entrada(lista_entrada):
                     lista_fim.append(b)
 
             entrada = pd.DataFrame(lista_fim)
+
         return entrada
 
     else:

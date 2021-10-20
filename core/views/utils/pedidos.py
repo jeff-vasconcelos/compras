@@ -5,11 +5,11 @@ import datetime
 
 
 def pedidos_compra(cod_produto, id_empresa, lista_filiais=''):
-
+    lista_pedidos = []
     if lista_filiais:
         for filial in lista_filiais:
             results_lista = qs_pedidos(cod_produto=cod_produto, filial=filial,
-                                       id_empresa=id_empresa)
+                                       id_empresa=id_empresa, lista_pedidos=lista_pedidos)
 
         return process_pedidos(results_lista)
 
@@ -19,15 +19,15 @@ def pedidos_compra(cod_produto, id_empresa, lista_filiais=''):
 
         for filial in filiais:
             results_lista = qs_pedidos(cod_produto=cod_produto, filial=filial.cod_filial,
-                                       id_empresa=id_empresa)
+                                       id_empresa=id_empresa, lista_pedidos=lista_pedidos)
 
         return process_pedidos(results_lista)
 
 
-def qs_pedidos(cod_produto, filial, id_empresa):
+def qs_pedidos(cod_produto, filial, id_empresa, lista_pedidos):
     data_inicio = datetime.date.today()
     data_fim = data_inicio - datetime.timedelta(days=90 - 1)
-    lista_pedidos = []
+
 
     df = pd.DataFrame(Pedido.objects.all().filter(
         cod_produto__exact=cod_produto,

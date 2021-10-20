@@ -1,7 +1,8 @@
 import numpy
 from api.models.produto import Produto
 from api.models.venda import Venda
-from core.views.analise.historico import historico_estoque
+#from core.views.analise.historico import historico_estoque
+from core.views.utils.historico import historico_estoque
 from core.views.utils.datas import dia_semana_mes_ano
 import pandas as pd
 import datetime

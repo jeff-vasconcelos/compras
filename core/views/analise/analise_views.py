@@ -11,9 +11,10 @@ from api.models.venda import Venda
 from core.views.alerta.verificador import verifica_produto
 from core.models.parametros_models import Parametro
 from core.views.analise.processa_produtos import a_multifiliais
-from core.views.alerta.dados_faturamento import curva_abc
+#from core.views.alerta.dados_faturamento import curva_abc
 from core.views.utils.datas import dia_semana_mes_ano, data_mes
-from core.views.analise.historico import historico_estoque
+#from core.views.analise.historico import historico_estoque
+from core.views.utils.historico import historico_estoque
 from core.views.analise.pedidos_pendentes import pedidos_todos
 from core.models.empresas_models import Filial
 import pandas as pd

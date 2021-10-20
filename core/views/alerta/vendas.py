@@ -1,7 +1,8 @@
 import numpy
 
 from api.models.venda import Venda
-from core.views.alerta.historico import historico_estoque
+#from core.views.alerta.historico import historico_estoque
+from core.views.utils.historico import historico_estoque
 from api.models.produto import Produto
 from core.views.alerta.verificador import get_filiais
 from core.views.utils.datas import dia_semana_mes_ano
