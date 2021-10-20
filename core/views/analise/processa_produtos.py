@@ -78,7 +78,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         # PEGANDO MEDIA, MEDIA AJUSTADA E DESVIO PADRAO
         info = info_produto.query('cod_filial == @filial')
-        media = info.media.unique()
+        #media = info.media.unique()
         desvio = info.desvio.unique()
 
         # Função responsável por somar saldos de pedidos pendentes
@@ -92,7 +92,16 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         prod_resumo['qt_bloqueada'] = estoque_['qt_bloqueada']
         prod_resumo['dt_ult_ent'] = dt_ult_entrada
         prod_resumo['qt_ult_ent'] = qt_ult_entrada
-        prod_resumo['vl_ult_ent'] = vl_ult_entrada
+        prod_resumo['vl_ult_ent'] = vl_ult_entrada,
+
+        valida_media = math.isnan(info.media.unique())
+        if not valida_media:
+            media = info.media.unique()
+            prod_resumo['media'] = media.round(2)
+        else:
+            media = 0.1
+            prod_resumo['media'] = round(media, 2)
+
         prod_resumo['dias_estoque_estim'] = (prod_resumo['estoque_dispon'] / media).round(0)
 
         preco_custo = estoque_.custo_ult_entrada.unique()
@@ -125,18 +134,18 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         est_disponivel = prod_resumo['estoque_dispon'].unique()
 
         prod_resumo['sugestao'] = sugestao
-        prod_resumo['media'] = round(media, 2)
+        prod_resumo['media'] = media.round(2)
         prod_resumo['embalagem'] = info.embalagem.unique()
-        prod_resumo['porcent_media'] = round(porcent_media, 2)
+        prod_resumo['porcent_media'] = porcent_media.round(2)
         prod_resumo['desvio'] = desvio
         prod_resumo['curva'] = curva_.curva
-        prod_resumo['margem'] = round(margem, 2)
+        prod_resumo['margem'] = margem.round(2)
         prod_resumo['estoque_segur'] = estoque_seguranca
-        prod_resumo['preco_venda_tabela'] = round(preco_tabela, 2)
+        prod_resumo['preco_venda_tabela'] = preco_tabela.round(2)
         prod_resumo['qt_unit_caixa'] = info.quantidade_un_caixa.unique()
         prod_resumo['ruptura'] = ruptura
-        prod_resumo['dde'] = round(dde, 2)
-        prod_resumo['ruptura_porc'] = round(porcent_ruptura, 2)
+        prod_resumo['dde'] = dde.round(2)
+        prod_resumo['ruptura_porc'] = porcent_ruptura.round(2)
         prod_resumo['cor_ruptura'] = cor_ruptura
 
         # Função responsável pela classificação da condição de estoque
