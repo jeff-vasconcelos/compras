@@ -8,7 +8,7 @@ from api.models.pedido_duplicado import PedidoDuplicado
 
 
 # ROTINA DE EXECUÇÃO DE ALERTA
-def rotina_alerta(request, id_empresa):
+def rotina_alerta(id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
     print(f"PROCESSANDO DADOS (ALERTA) DE {empresa.id} - {empresa.nome_fantasia}")
 
@@ -19,7 +19,7 @@ def rotina_alerta(request, id_empresa):
 
 
 # ROTINA DE EXECUÇÃO DE HOME
-def rotina_home(request, id_empresa):
+def rotina_home(id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
     print(f"PROCESSANDO DADOS (HOME) DE {empresa.id} - {empresa.nome_fantasia}")
 
