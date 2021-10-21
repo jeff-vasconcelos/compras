@@ -62,10 +62,16 @@
                 </div>
 
                 <div class="col-6" align="right">
-                    <a href="{% url 'alerta_ruptura_fornecedor' %}" id="btn-canc-modal-analise" type="button" class="btn btn-secondary btn-sm"
-                            data-dismiss="modal">Voltar
+                    <a href="{% url 'alerta_ruptura_fornecedor' %}" id="btn-canc-modal-analise" type="button"
+                       class="btn btn-secondary btn-sm"
+                       data-dismiss="modal">Voltar
                     </a>
 
+                    <button id="botao_ruptura_fornec_adicionar"
+                            onclick="CarregaInputs()"
+                            class="add_item_alertas">
+                        Adicionar ao pedido
+                    </button>
 
                     <button id="ver_pedido_ruptura_fornec" class="btn btn-secondary btn-sm ver-pedido" type="button"
                             data-toggle="modal" data-target=".modal_pedido_ruptura_fornec">Ver pedido
@@ -126,26 +132,35 @@
                                         <form>
                                             {% csrf_token %}
                                         </form>
-                                        <input id="filial_ruptura_fornec-{{ produto.id_produto|to_str }}"
-                                               value="{{ produto.cod_filial|to_str }}" hidden>
+                                        <input name="input_ruptura_fornec_filial" hidden
+                                               id="input_ruptura_fornec_filial_{{ produto.id_produto|to_str }}"
+                                               value="{{ produto.cod_filial|to_str }}">
 
-                                        <input id="produto_ruptura_fornec-{{ produto.id_produto|to_str }}"
-                                               value="{{ produto.id_produto|to_str }}" hidden>
+                                        <input name="input_ruptura_fornec_idproduto" hidden
+                                               id="input_ruptura_fornec_idproduto_{{ produto.id_produto|to_str }}"
+                                               value="{{ produto.id_produto|to_str }}">
+
+                                        <input name="input_ruptura_fornec_media" hidden
+                                               id="input_ruptura_fornec_media_{{ produto.id_produto|to_str }}"
+                                               value="{{ produto.media|floatformat:1 }}">
 
                                         <input class="input_alertas" type="text"
-                                               id="qt_digit_ruptura_fornec-{{ produto.id_produto|to_str }}"
+                                               name="{{ produto.id_produto|to_str }}"
+                                               onkeyup="myFunctionUPPer(this.name)"
+                                               id="input_ruptura_fornec_quantidade_{{ produto.id_produto|to_str }}"
                                                placeholder="Qtd">
+                                        <!--input_ruptura_fornec_quantidade-->
 
                                         <input class="input_alertas" type="text"
-                                               id="vl_digit_ruptura_fornec-{{ produto.id_produto|to_str }}"
+                                               name="input_ruptura_fornec_preco"
+                                               id="input_ruptura_fornec_preco_{{ produto.id_produto|to_str }}"
                                                placeholder="Preço" onKeyUp="mascaraMoeda(this, event)" value="">
 
-                                        <button name="{{ produto.id_produto|to_str }}"
-                                                onclick="GetNome_alerta(this.name)"
-                                                class="add_item_alertas">
-                                            Adicionar item
-                                        </button>
-                                        <!-- id="add_item_alertas_fornec" -->
+
+                                        <input class="input_alertas" type="text" value=""
+                                               id="input_ruptura_fornec_dde_{{ produto.id_produto|to_str }}"
+                                               placeholder="DDE"
+                                               aria-label="Disabled input example" disabled readonly>
 
 
                                         <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"

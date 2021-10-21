@@ -5,6 +5,7 @@ const th_tabela_totais_ruptura_fornec = document.getElementById('th_tabela_totai
 const td_tabela_totais_ruptura_fornec = document.getElementById('td_tabela_totais_ruptura_fornec')
 const titulo_vendasxmes_ruptura_fornec = document.getElementById('titulo_vendasxmes_ruptura_fornec')
 
+
 function GetNome_grafico_ruptura(CodProd) {
 
     const filial_ruptura_fornec = document.getElementById('filial_ruptura_fornec-' + CodProd)

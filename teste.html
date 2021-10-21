@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>teste</title>
+</head>
+
+<body>
+
+<ul>
+    <li><input name="nameval" type="text" value="2"/></li>
+    <li><input name="nameval" type="text" value="55"/></li>
+    <li><input name="nameval" type="text" value="10"/></li>
+    <li><input name="nameval" type="text" value=""/></li>
+</ul>
+
+<ul>
+    <li><input name="namevalues" type="text" value="25"/></li>
+    <li><input name="namevalues" type="text" value="5"/></li>
+    <li><input name="namevalues" type="text" value="100"/></li>
+    <li><input name="namevalues" type="text" value="569"/></li>
+</ul>
+
+<input onClick="pegaValor()" value="mostrar" type="button" name="cmdSalvar" id="cmdSalvar"/>
+
+</body>
+<script>
+    function pegaValor() {
+        var elemento = document.getElementsByName('nameval');
+        var elemento_x = document.getElementsByName('namevalues');
+
+        let variavel_um
+        let variavel_dois
+
+        console.log(elemento)
+        console.log(elemento_x)
+
+        for (i = 0; i < elemento.length; i++) {
+            var e = elemento[i];
+
+
+
+            if (e.value === '') {
+                console.log('vazio')
+
+            } else {
+                console.log('não vazio')
+                variavel_um = e.value
+            }
+        }
+        for (i = 0; i < elemento_x.length; i++) {
+            var x = elemento_x[i];
+
+            if (x.value === '') {
+                console.log('vazio')
+
+            } else {
+                console.log('não vazio')
+                variavel_dois = x.value
+            }
+        }
+
+        if (variavel_dois.length !== variavel_um) {
+            alert("Error, por favor verifique os campos")
+        }
+    }
+</script>
+</html>
