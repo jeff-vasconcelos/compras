@@ -125,7 +125,6 @@ def add_pedido_sessao_fornecedores(request):
             for (f, p, q , r) in zip(lista_filiais, lista_produtos, lista_quantidade, lista_precos):
 
                 produto_qs = Produto.objects.get(id=p)
-                print(produto_qs.desc_produto)
 
                 pedido[produto_qs.id] = {
                     'ped_produto_id': produto_qs.id,

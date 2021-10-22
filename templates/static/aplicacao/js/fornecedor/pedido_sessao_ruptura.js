@@ -39,7 +39,8 @@ function CarregaInputs() {
     // Pegando preços digitados
     indices.forEach(function (v) {
         let preco = input_valor_ruptura_fornec[v];
-        valores_ruptura.push(preco.value.replace(",", "."))
+        let valor_preco = preco.value.replace(".", "")
+        valores_ruptura.push(valor_preco.replace(",", "."))
         preco.value = ''
     });
 

@@ -110,129 +110,71 @@
                     {% if produtos %}
                         {% for produto in produtos %}
 
-                            {% if produto.estado_estoque == 'PARCIAL' %}
-                                <tr class="parcial">
-                                    <td class="status">{{ produto.cod_filial|to_str }}</td>
-                                    <td>{{ produto.cod_produto|to_str }} - {{ produto.desc_produto }}</td>
+                            <tr class="parcial">
+                                <td class="status">{{ produto.cod_filial|to_str }}</td>
+                                <td>{{ produto.cod_produto|to_str }} - {{ produto.desc_produto }}</td>
+                                {% if produto.estado_estoque == 'PARCIAL' %}
                                     <td class="status parcial">{{ produto.estado_estoque }}</td>
-                                    <td class="status">{{ produto.data_entrada }}</td>
-                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                                    <td class="numero">R$ {{ produto.valor|floatformat:2 }}</td>
-                                    <td class="curva">{{ produto.curva }}</td>
-                                    <td class="numero">{{ produto.dde|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.media|floatformat:1 }}</td>
-
-                                    {% if p_ativo == True %}
-                                        <td class="numero">{{ produto.principio_ativo }}</td>
-                                    {% endif %}
-
-                                    <td>
-                                        <form>
-                                            {% csrf_token %}
-                                        </form>
-                                        <input name="input_ruptura_fornec_filial" hidden
-                                               id="input_ruptura_fornec_filial_{{ produto.id_produto|to_str }}"
-                                               value="{{ produto.cod_filial|to_str }}">
-
-                                        <input name="input_ruptura_fornec_idproduto" hidden
-                                               id="input_ruptura_fornec_idproduto_{{ produto.id_produto|to_str }}"
-                                               value="{{ produto.id_produto|to_str }}">
-
-                                        <input name="input_ruptura_fornec_media" hidden
-                                               id="input_ruptura_fornec_media_{{ produto.id_produto|to_str }}"
-                                               value="{{ produto.media|floatformat:1 }}">
-
-                                        <input class="input_alertas input_ruptura_fornec_quantidade" type="text"
-                                               name="{{ produto.id_produto|to_str }}"
-                                               onkeyup="calculaDDERuptura(this.name)"
-                                               id="input_ruptura_fornec_quantidade_{{ produto.id_produto|to_str }}"
-                                               placeholder="Qtd">
-                                        <!--input_ruptura_fornec_quantidade-->
-
-                                        <input class="input_alertas" type="text"
-                                               name="input_ruptura_fornec_preco"
-                                               id="input_ruptura_fornec_preco_{{ produto.id_produto|to_str }}"
-                                               placeholder="Preço" onKeyUp="mascaraMoeda(this, event)" value="">
-
-
-                                        <input class="input_alertas" type="text" value=""
-                                               id="input_ruptura_fornec_dde_{{ produto.id_produto|to_str }}"
-                                               placeholder="DDE"
-                                               aria-label="Disabled input example" disabled readonly>
-
-
-                                        <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
-                                                onclick="GetNome_grafico_ruptura(this.name)"
-                                                type="button" data-toggle="modal"
-                                                data-target=".modal_graf_ruptura_fornec">
-                                            Gráficos
-                                        </button>
-
-
-                                    </td>
-                                </tr>
-                            {% endif %}
-
-                            {% if produto.estado_estoque == 'RUPTURA' %}
-                                <tr class="ruptura">
-                                    <td class="status">{{ produto.cod_filial|to_str }}</td>
-                                    <td>{{ produto.cod_produto|to_str }} - {{ produto.desc_produto }}</td>
+                                {% else %}
                                     <td class="status ruptura">{{ produto.estado_estoque }}</td>
-                                    <td class="status">{{ produto.data_entrada }}</td>
-                                    <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.valor }}</td>
-                                    <td class="curva">{{ produto.curva }}</td>
-                                    <td class="numero">{{ produto.dde|floatformat:0 }}</td>
-                                    <td class="numero">{{ produto.media|floatformat:1 }}</td>
+                                {% endif %}
+                                <td class="status">{{ produto.data_entrada }}</td>
+                                <td class="numero">{{ produto.estoque|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.saldo|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.sugestao|floatformat:0 }}</td>
+                                <td class="numero">R$ {{ produto.valor|floatformat:2 }}</td>
+                                <td class="curva">{{ produto.curva }}</td>
+                                <td class="numero">{{ produto.dde|floatformat:0 }}</td>
+                                <td class="numero">{{ produto.media|floatformat:1 }}</td>
 
-                                    {% if p_ativo == True %}
-                                        <td class="numero">{{ produto.principio_ativo }}</td>
-                                    {% endif %}
+                                {% if p_ativo == True %}
+                                    <td class="numero">{{ produto.principio_ativo }}</td>
+                                {% endif %}
 
+                                <td>
+                                    <form>
+                                        {% csrf_token %}
+                                    </form>
+                                    <input name="input_ruptura_fornec_filial" hidden
+                                           id="input_ruptura_fornec_filial_{{ produto.id_produto|to_str }}"
+                                           value="{{ produto.cod_filial|to_str }}">
 
-                                    <td>
-                                        <form>
-                                            {% csrf_token %}
-                                        </form>
-                                        <input id="filial_ruptura_fornec-{{ produto.id_produto|to_str }}"
-                                               value="{{ produto.cod_filial|to_str }}" hidden>
+                                    <input name="input_ruptura_fornec_idproduto" hidden
+                                           id="input_ruptura_fornec_idproduto_{{ produto.id_produto|to_str }}"
+                                           value="{{ produto.id_produto|to_str }}">
 
-                                        <input id="produto_ruptura_fornec-{{ produto.id_produto|to_str }}"
-                                               value="{{ produto.id_produto|to_str }}" hidden>
+                                    <input name="input_ruptura_fornec_media" hidden
+                                           id="input_ruptura_fornec_media_{{ produto.id_produto|to_str }}"
+                                           value="{{ produto.media|floatformat:1 }}">
 
-                                        <input class="input_alertas" type="text"
-                                               id="qt_digit_ruptura_fornec-{{ produto.id_produto|to_str }}"
-                                               placeholder="Qtd">
+                                    <input class="input_alertas input_ruptura_fornec_quantidade" type="text"
+                                           name="{{ produto.id_produto|to_str }}"
+                                           onkeyup="calculaDDERuptura(this.name)"
+                                           id="input_ruptura_fornec_quantidade_{{ produto.id_produto|to_str }}"
+                                           placeholder="Qtd">
+                                    <!--input_ruptura_fornec_quantidade-->
 
-                                        <input class="input_alertas" type="text"
-                                               id="vl_digit_ruptura_fornec-{{ produto.id_produto|to_str }}"
-                                               placeholder="Preço" onKeyUp="mascaraMoeda(this, event)" value="">
-
-                                        <button name="{{ produto.id_produto|to_str }}"
-                                                onclick="GetNome_alerta(this.name)"
-                                                class="add_item_alertas">
-                                            Adicionar item
-                                        </button>
-                                        <!-- id="add_item_alertas_fornec" -->
-
-                                        <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
-                                                onclick="GetNome_grafico_ruptura(this.name)"
-                                                type="button" data-toggle="modal"
-                                                data-target=".modal_graf_ruptura_fornec">
-                                            Gráficos
-                                        </button>
+                                    <input class="input_alertas" type="text"
+                                           name="input_ruptura_fornec_preco"
+                                           id="input_ruptura_fornec_preco_{{ produto.id_produto|to_str }}"
+                                           placeholder="Preço" onKeyUp="mascaraMoeda(this, event)" value="">
 
 
-                                    </td>
+                                    <input class="input_alertas" type="text" value=""
+                                           id="input_ruptura_fornec_dde_{{ produto.id_produto|to_str }}"
+                                           placeholder="DDE"
+                                           aria-label="Disabled input example" disabled readonly>
 
-                                </tr>
-                            {% endif %}
 
+                                    <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
+                                            onclick="GetNome_grafico_ruptura(this.name)"
+                                            type="button" data-toggle="modal"
+                                            data-target=".modal_graf_ruptura_fornec">
+                                        Gráficos
+                                    </button>
 
+                                </td>
+                            </tr>
 
                         {% endfor %}
                     {% endif %}

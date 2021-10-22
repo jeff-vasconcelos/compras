@@ -69,6 +69,12 @@
                             data-dismiss="modal">Voltar
                     </a>
 
+                     <button id="botao_excesso_fornec_adicionar"
+                            onclick="CarregaInputsExcesso()"
+                            class="add_item_alertas">
+                        Adicionar ao pedido
+                    </button>
+
                     <button id="ver_pedido_excesso_fornec" class="btn btn-secondary btn-sm ver-pedido" type="button"
                             data-toggle="modal" data-target=".modal_pedido_excesso_fornec">Ver pedido
                     </button>
@@ -125,36 +131,45 @@
 
                                 <td>
                                     <form>
-                                        {% csrf_token %}
-                                    </form>
-                                    <input id="filial_excesso_fornec-{{ produto.id_produto|to_str }}" hidden
-                                           value="{{ produto.cod_filial|to_str }}">
+                                            {% csrf_token %}
+                                        </form>
+                                        <input name="input_excesso_fornec_filial" hidden
+                                               id="input_excesso_fornec_filial_{{ produto.id_produto|to_str }}"
+                                               value="{{ produto.cod_filial|to_str }}">
 
-                                    <input id="produto_excesso_fornec-{{ produto.id_produto|to_str }}" hidden
-                                           value="{{ produto.id_produto|to_str }}">
+                                        <input name="input_excesso_fornec_idproduto" hidden
+                                               id="input_excesso_fornec_idproduto_{{ produto.id_produto|to_str }}"
+                                               value="{{ produto.id_produto|to_str }}">
 
-                                    <input class="input_alertas" type="text"
-                                           id="qt_digit_excesso_fornec-{{ produto.id_produto|to_str }}"
-                                           placeholder="Qtd">
+                                        <input name="input_excesso_fornec_media" hidden
+                                               id="input_excesso_fornec_media_{{ produto.id_produto|to_str }}"
+                                               value="{{ produto.media|floatformat:1 }}">
 
-                                    <input class="input_alertas" type="text"
-                                           id="vl_digit_excesso_fornec-{{ produto.id_produto|to_str }}"
-                                           placeholder="Preço" onKeyUp="mascaraMoeda(this, event)" value="">
+                                        <input class="input_alertas input_excesso_fornec_quantidade" type="text"
+                                               name="{{ produto.id_produto|to_str }}"
+                                               onkeyup="calculaDDEExcesso(this.name)"
+                                               id="input_excesso_fornec_quantidade_{{ produto.id_produto|to_str }}"
+                                               placeholder="Qtd">
+                                        <!--input_excesso_fornec_quantidade-->
 
-                                    <button name="{{ produto.id_produto|to_str }}"
-                                            onclick="GetNome_alerta(this.name)"
-                                            class="add_item_alertas">
-                                        Adicionar item
-                                    </button>
-                                    <!-- id="add_item_alertas_fornec" -->
+                                        <input class="input_alertas" type="text"
+                                               name="input_excesso_fornec_preco"
+                                               id="input_excesso_fornec_preco_{{ produto.id_produto|to_str }}"
+                                               placeholder="Preço" onKeyUp="mascaraMoeda(this, event)" value="">
 
 
-                                    <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
-                                            onclick="GetNome_grafico_excesso(this.name)"
-                                            type="button" data-toggle="modal"
-                                            data-target=".modal_graf_excesso_fornec">
-                                        Gráficos
-                                    </button>
+                                        <input class="input_alertas" type="text" value=""
+                                               id="input_excesso_fornec_dde_{{ produto.id_produto|to_str }}"
+                                               placeholder="DDE"
+                                               aria-label="Disabled input example" disabled readonly>
+
+
+                                        <button class="ver_graf_alertas" name="{{ produto.id_produto|to_str }}"
+                                                onclick="GetNome_grafico_excesso(this.name)"
+                                                type="button" data-toggle="modal"
+                                                data-target=".modal_graf_excesso_fornec">
+                                            Gráficos
+                                        </button>
 
 
                                 </td>

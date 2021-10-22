@@ -1,3 +1,6 @@
+import datetime
+
+from django.utils import timezone
 from django.shortcuts import render
 from core.views.alerta.alertas_views import send_email_alerta, alerta_db
 from core.views.home.functions_home import save_grafico_curva, save_grafico_faturamento, save_dados_estoque
@@ -29,6 +32,10 @@ def rotina_home(id_empresa):
     save_grafico_curva(id_empresa, produtos_home)
     save_grafico_faturamento(id_empresa)
     save_dados_estoque(id_empresa, produtos_home)
+
+    data_hora = datetime.datetime.now(tz=timezone.utc)
+    empresa.atualizacao_home = data_hora
+    empresa.save()
 
     pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
     valida_pedidos_excluidos(id_empresa)

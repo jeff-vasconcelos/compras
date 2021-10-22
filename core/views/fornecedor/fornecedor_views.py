@@ -47,13 +47,14 @@ def excesso_fornecedor(request):
 
 
 @login_required
-def ver_excesso_fornecedor(request, cod_fornecedor):
+def ver_excesso_fornecedor(request, cod_fornecedor, filial):
     empresa = request.user.usuario.empresa_id
     fornec = Fornecedor.objects.get(empresa_id=empresa, cod_fornecedor__exact=cod_fornecedor)
     produtos_fornec = Alerta.objects.filter(
         empresa__id__exact=empresa,
         estado_estoque='EXCESSO',
-        cod_fornecedor__exact=cod_fornecedor
+        cod_fornecedor__exact=cod_fornecedor,
+        cod_filial=filial
     )
 
     context = {
@@ -108,14 +109,15 @@ def ruptura_fornecedor(request):
 
 
 @login_required
-def ver_ruptura_fornecedor(request, cod_fornecedor):
+def ver_ruptura_fornecedor(request, cod_fornecedor, filial):
     empresa = request.user.usuario.empresa_id
     fornec = Fornecedor.objects.get(empresa_id=empresa, cod_fornecedor__exact=cod_fornecedor)
     estado = ['RUPTURA', 'PARCIAL']
     produtos_fornec = Alerta.objects.filter(
         empresa__id__exact=empresa,
         estado_estoque__in=estado,
-        cod_fornecedor__exact=cod_fornecedor
+        cod_fornecedor__exact=cod_fornecedor,
+        cod_filial=filial
     )
 
     context = {

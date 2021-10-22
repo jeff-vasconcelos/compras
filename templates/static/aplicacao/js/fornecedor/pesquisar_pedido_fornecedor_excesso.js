@@ -8,7 +8,7 @@ const BuscarFornecPedidoExcessoFornc = (fornec) => {
         type: 'POST',
         url: '/painel/search/fornec',
         data: {
-            'csrfmiddlewaretoken': csrf_,
+            'csrfmiddlewaretoken': csrf_e,
             'fornecedor': fornec,
         },
         success: (res_f) => {
@@ -93,7 +93,7 @@ function selecao_fornecedor_pedido_excesso_fornec() {
     console.log(checkFornecedorExcessoFornec)
 
     const fornecedores_selecionados = new FormData()
-    fornecedores_selecionados.append('csrfmiddlewaretoken', csrf_)
+    fornecedores_selecionados.append('csrfmiddlewaretoken', csrf_e)
     fornecedores_selecionados.append('fornecedor', checkFornecedorExcessoFornec)
 
     filterFornecpedExcessoFornc(fornecedores_selecionados)

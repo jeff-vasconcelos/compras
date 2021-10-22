@@ -204,21 +204,17 @@ def filtrar_produto_fornecedor(request):
         res_fil_fornec = None
         fornecedor = request.POST.get('fornecedor')
         fornecedor = fornecedor.replace(",", " ")
-        print('fornecedor', fornecedor)
 
         a = fornecedor.split()
-        print(a)
         b = []
 
         for elemento in a:
             b.append(int(elemento))
 
-        print(b)
         lista_fornecedor = []
         for i in b:
             lista_fornecedor.append(int(i))
 
-        print(lista_fornecedor)
         qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by(
             'desc_produto')
 

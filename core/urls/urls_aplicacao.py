@@ -40,8 +40,8 @@ urlpatterns = [
     # FORNECEDOR ALERTAS
     path('alertas/excesso/fornecedor/', excesso_fornecedor, name='alerta_excesso_fornecedor'),
     path('alertas/ruptura/fornecedor/', ruptura_fornecedor, name='alerta_ruptura_fornecedor'),
-    path('alertas/excesso/fornecedor/<int:cod_fornecedor>/', ver_excesso_fornecedor, name='ver_excesso_fornecedor'),
-    path('alertas/ruptura/fornecedor/<int:cod_fornecedor>/', ver_ruptura_fornecedor, name='ver_ruptura_fornecedor'),
+    path('alertas/excesso/fornecedor/<int:cod_fornecedor>/<int:filial>/', ver_excesso_fornecedor, name='ver_excesso_fornecedor'),
+    path('alertas/ruptura/fornecedor/<int:cod_fornecedor>/<int:filial>/', ver_ruptura_fornecedor, name='ver_ruptura_fornecedor'),
 
     path('request/fornecedor/graf/', graficos_alert_fornec, name='request_fornec_graf'),
 

@@ -35,6 +35,7 @@ class Empresa(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     atualizacao_alerta = models.DateTimeField(null=True, blank=True)
+    atualizacao_home = models.DateTimeField(null=True, blank=True)
     quantidade_alerta = models.IntegerField(blank=True, null=True)
 
     envia_email = models.BooleanField(default=True, verbose_name='Enviar E-mails de alerta')

@@ -8,8 +8,8 @@ const titulo_vendasxmes_excesso_fornec = document.getElementById('titulo_vendasx
 
 function GetNome_grafico_excesso(CodProd) {
 
-    const filial_excesso_fornec = document.getElementById('filial_excesso_fornec-' + CodProd)
-    const produtos_excesso_fornec = document.getElementById('produto_excesso_fornec-' + CodProd)
+    const filial_excesso_fornec = document.getElementById('input_excesso_fornec_filial_' + CodProd)
+    const produtos_excesso_fornec = document.getElementById('input_excesso_fornec_idproduto_' + CodProd)
 
     const produto = produtos_excesso_fornec.value
     const filial = filial_excesso_fornec.value

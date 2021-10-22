@@ -9,58 +9,95 @@ const msmAlertaExcessoFornec = document.getElementById('div-mensagem-alerta_exce
 
 const resultsPedidoExcessoFornec = document.getElementById('tbody_pedidos_excesso_fornec')
 
-const csrf_ = document.getElementsByName('csrfmiddlewaretoken')[0].value
+const csrf_e = document.getElementsByName('csrfmiddlewaretoken')[0].value
 
 
-function GetNome_alerta(CodProd) {
+function CarregaInputsExcesso() {
 
-    const filial_excesso_fornec = document.getElementById('filial_excesso_fornec-'+CodProd)
-    const produtos_excesso_fornec = document.getElementById('produto_excesso_fornec-'+CodProd)
-    const input_valor_excesso_fornec = document.getElementById('vl_digit_excesso_fornec-'+CodProd)
-    const input_quantidade_excesso_fornec = document.getElementById('qt_digit_excesso_fornec-'+CodProd)
+    const input_filial_excesso_fornec = document.getElementsByName('input_excesso_fornec_filial')
+    const input_produtos_excesso_fornec = document.getElementsByName('input_excesso_fornec_idproduto')
+    const input_quantidade_excesso_fornec = document.getElementsByClassName('input_excesso_fornec_quantidade')
+    const input_valor_excesso_fornec = document.getElementsByName('input_excesso_fornec_preco')
+
+    const filiais_excesso = []
+    const produtos_excesso = []
+    const quantidades_excesso = []
+    const valores_excesso = []
+
+    const indices = []
 
 
-    const produto = produtos_excesso_fornec.value
-    const filial = filial_excesso_fornec.value
-
-    const qt_dig = input_quantidade_excesso_fornec.value
-    var qt_digitada = 0
-    if (qt_dig === "") {
-        qt_digitada = 0
-    } else {
-        qt_digitada = qt_dig
+    // Pegando quantidades digitadas
+    for (let i = 0; i < input_quantidade_excesso_fornec.length; i++) {
+        let quantidade = input_quantidade_excesso_fornec[i];
+        // console.log(quantidades_excesso)
+        if (quantidade.value !== '') {
+            quantidades_excesso.push(quantidade.value.replace(",", "."))
+            indices.push(i)
+            quantidade.value = ''
+        }
     }
 
-    // PEGANDO PR COMPRA
-    const p_comp = input_valor_excesso_fornec.value
-    var p_compra = 0
-    if (p_comp === "") {
-        p_compra = 0
-    } else {
-        p_compra = p_comp
-    }
+    // Pegando preços digitados
+    indices.forEach(function (v) {
+        let preco = input_valor_excesso_fornec[v];
+        let valor_preco = preco.value.replace(".", "")
+        valores_excesso.push(valor_preco.replace(",", "."))
+        preco.value = ''
+    });
 
-    input_quantidade_excesso_fornec.value = ''
-    input_valor_excesso_fornec.value = ''
+    // Pegando codigos de filiais
+    indices.forEach(function (i) {
+        let filial = input_filial_excesso_fornec[i];
+        filiais_excesso.push(filial.value)
+    });
 
 
-    add_pedido_excesso_fornec(produto, qt_digitada, p_compra, filial)
+    // Pegando ids de produtos
+    indices.forEach(function (p) {
+        let prodt = input_produtos_excesso_fornec[p];
+        produtos_excesso.push(prodt.value)
+    });
 
-    //alert(NomeBotao);
+
+    console.log('filiais', filiais_excesso)
+    console.log('produtos', produtos_excesso)
+    console.log('quantidades', quantidades_excesso)
+    console.log('preços', valores_excesso)
+
+    const fornecedores_excesso = new FormData()
+    fornecedores_excesso.append('csrfmiddlewaretoken', csrf_e)
+    fornecedores_excesso.append('filiais', filiais_excesso)
+    fornecedores_excesso.append('produtos', produtos_excesso)
+    fornecedores_excesso.append('quantidades', quantidades_excesso)
+    fornecedores_excesso.append('precos', valores_excesso)
+
+    add_pedido_excesso_fornec(fornecedores_excesso)
+
 }
 
+function calculaDDEExcesso(id_produto) {
+    let input_qt_digitada = document.getElementById("input_excesso_fornec_quantidade_" + id_produto);
+    let input_media = document.getElementById("input_excesso_fornec_media_" + id_produto);
+    let input_dde = document.getElementById("input_excesso_fornec_dde_" + id_produto);
+
+    let media = parseFloat(input_media.value)
+    let qt_digitada = parseFloat(input_qt_digitada.value)
+
+    input_dde.value = Math.round(qt_digitada / media)
+
+    // qt_digitada.value = qt_digitada.value.toUpperCase();
+}
+
+
 // ADD PRODUTO AO PEDIDO NA SESSAO
-const add_pedido_excesso_fornec = (produto, qt_digitada, pr_compra, filial) => {
+const add_pedido_excesso_fornec = (dados_prods_excesso) => {
     $.ajax({
         type: 'POST',
-        url: '/painel/add-produto-pedido/',
-        data: {
-            'csrfmiddlewaretoken': csrf_,
-            'produto': produto,
-            'qt_digitada': qt_digitada,
-            'pr_compra': pr_compra,
-            'filial': filial
-        },
+        url: '/painel/add-produtos-pedido-fornecedores/',
+        data: dados_prods_excesso,
+        processData: false,
+        contentType: false,
         success: (pedido_sessao) => {
             console.log(pedido_sessao.data)
             const resposta = pedido_sessao.data
@@ -86,7 +123,7 @@ const add_pedido_excesso_fornec = (produto, qt_digitada, pr_compra, filial) => {
                             <use xlink:href="#exclamation-triangle-fill"/>
                         </svg>
                         <div>
-                            &nbsp; Por favor selecione um produto!
+                            &nbsp; Por favor selecione um produto ou verifique se os campos dos produtos estão preenchidos!
                         </div>
                     </div>
                 `
@@ -155,7 +192,7 @@ const rmPedidoExcessoFornec = (produto) => {
         type: 'POST',
         url: '/painel/rm-produto-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf_,
+            'csrfmiddlewaretoken': csrf_e,
             'produto': produto
         },
         success: (pedido_sessao) => {
@@ -197,7 +234,7 @@ const exportPedidoExcessoFornec = (fornecedor) => {
         type: 'POST',
         url: '/painel/fornecedor-pedido/',
         data: {
-            'csrfmiddlewaretoken': csrf_,
+            'csrfmiddlewaretoken': csrf_e,
             'fornecedor': fornecedor
         },
         success: (response) => {

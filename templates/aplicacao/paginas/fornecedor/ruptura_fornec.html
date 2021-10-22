@@ -67,7 +67,7 @@
                                     <td class="numero">R$ {{ fornecedor.valor|floatformat:2 }}</td>
 
                                     <td>
-                                        <a href="{% url 'ver_ruptura_fornecedor' fornecedor.cod_fornecedor %}"
+                                        <a href="{% url 'ver_ruptura_fornecedor' fornecedor.cod_fornecedor fornecedor.cod_filial %}"
                                            class="botao-ver-pinsight btn btn-secondary btn-sm" title="Visualizar"
                                            role="button" aria-pressed="true">
                                             Visualizar
