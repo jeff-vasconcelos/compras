@@ -12,14 +12,9 @@ const csrf_ = document.getElementsByName('csrfmiddlewaretoken')[0].value
 
 function CarregaInputs() {
 
-    // const filial_ruptura_fornec = document.getElementById('filial_ruptura_fornec-'+CodProd)
-    // const produtos_ruptura_fornec = document.getElementById('produto_ruptura_fornec-'+CodProd)
-    // const input_valor_ruptura_fornec = document.getElementById('vl_digit_ruptura_fornec-'+CodProd)
-    // const input_quantidade_ruptura_fornec = document.getElementById('qt_digit_ruptura_fornec-'+CodProd)
-
     const input_filial_ruptura_fornec = document.getElementsByName('input_ruptura_fornec_filial')
     const input_produtos_ruptura_fornec = document.getElementsByName('input_ruptura_fornec_idproduto')
-    const input_quantidade_ruptura_fornec = document.getElementsByName('input_ruptura_fornec_quantidade')
+    const input_quantidade_ruptura_fornec = document.getElementsByClassName('input_ruptura_fornec_quantidade')
     const input_valor_ruptura_fornec = document.getElementsByName('input_ruptura_fornec_preco')
 
     const filiais_ruptura = []
@@ -33,26 +28,20 @@ function CarregaInputs() {
     // Pegando quantidades digitadas
     for (let i = 0; i < input_quantidade_ruptura_fornec.length; i++) {
         let quantidade = input_quantidade_ruptura_fornec[i];
-
-        if (quantidade.value === '') {
-
-        } else {
-            quantidades_ruptura.push(quantidade.value)
+        // console.log(quantidades_ruptura)
+        if (quantidade.value !== '') {
+            quantidades_ruptura.push(quantidade.value.replace(",", "."))
             indices.push(i)
+            quantidade.value = ''
         }
     }
 
     // Pegando preços digitados
-    for (let i = 0; i < input_valor_ruptura_fornec.length; i++) {
-        let preco = input_valor_ruptura_fornec[i];
-
-        if (preco.value === '') {
-
-        } else {
-            valores_ruptura.push(preco.value)
-        }
-    }
-
+    indices.forEach(function (v) {
+        let preco = input_valor_ruptura_fornec[v];
+        valores_ruptura.push(preco.value.replace(",", "."))
+        preco.value = ''
+    });
 
     // Pegando codigos de filiais
     indices.forEach(function (i) {
@@ -73,10 +62,18 @@ function CarregaInputs() {
     console.log('quantidades', quantidades_ruptura)
     console.log('preços', valores_ruptura)
 
+    const fornecedores_ruptura = new FormData()
+    fornecedores_ruptura.append('csrfmiddlewaretoken', csrf_)
+    fornecedores_ruptura.append('filiais', filiais_ruptura)
+    fornecedores_ruptura.append('produtos', produtos_ruptura)
+    fornecedores_ruptura.append('quantidades', quantidades_ruptura)
+    fornecedores_ruptura.append('precos', valores_ruptura)
+
+    add_pedido_ruptura_fornec(fornecedores_ruptura)
 
 }
 
-function myFunctionUPPer(id_produto) {
+function calculaDDERuptura(id_produto) {
     let input_qt_digitada = document.getElementById("input_ruptura_fornec_quantidade_" + id_produto);
     let input_media = document.getElementById("input_ruptura_fornec_media_" + id_produto);
     let input_dde = document.getElementById("input_ruptura_fornec_dde_" + id_produto);
@@ -84,30 +81,21 @@ function myFunctionUPPer(id_produto) {
     let media = parseFloat(input_media.value)
     let qt_digitada = parseFloat(input_qt_digitada.value)
 
-    console.log('media', media)
-    console.log('qt', qt_digitada)
-
-    let dde = Math.round(qt_digitada / media)
-
-    console.log(dde)
-
-    input_dde.value = dde
+    input_dde.value = Math.round(qt_digitada / media)
 
     // qt_digitada.value = qt_digitada.value.toUpperCase();
 }
 
+
 // ADD PRODUTO AO PEDIDO NA SESSAO
-const add_pedido_ruptura_fornec = (produto, qt_digitada, pr_compra, filial) => {
+const add_pedido_ruptura_fornec = (dados_prods_ruptura) => {
+    console.log(dados_prods_ruptura)
     $.ajax({
         type: 'POST',
-        url: '/painel/add-produto-pedido/',
-        data: {
-            'csrfmiddlewaretoken': csrf_,
-            'produto': produto,
-            'qt_digitada': qt_digitada,
-            'pr_compra': pr_compra,
-            'filial': filial
-        },
+        url: '/painel/add-produtos-pedido-fornecedores/',
+        data: dados_prods_ruptura,
+        processData: false,
+        contentType: false,
         success: (pedido_sessao) => {
             console.log(pedido_sessao.data)
             const resposta = pedido_sessao.data

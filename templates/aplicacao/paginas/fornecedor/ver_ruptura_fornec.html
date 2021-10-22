@@ -144,9 +144,9 @@
                                                id="input_ruptura_fornec_media_{{ produto.id_produto|to_str }}"
                                                value="{{ produto.media|floatformat:1 }}">
 
-                                        <input class="input_alertas" type="text"
+                                        <input class="input_alertas input_ruptura_fornec_quantidade" type="text"
                                                name="{{ produto.id_produto|to_str }}"
-                                               onkeyup="myFunctionUPPer(this.name)"
+                                               onkeyup="calculaDDERuptura(this.name)"
                                                id="input_ruptura_fornec_quantidade_{{ produto.id_produto|to_str }}"
                                                placeholder="Qtd">
                                         <!--input_ruptura_fornec_quantidade-->

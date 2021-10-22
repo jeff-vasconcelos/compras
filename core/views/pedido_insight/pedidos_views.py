@@ -9,6 +9,7 @@ from django.shortcuts import render
 from api.models.fornecedor import Fornecedor
 from api.models.produto import Produto
 from core.models.pedidos_models import *
+
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
@@ -30,7 +31,7 @@ def ver_pedidos_insight(request, pk, template_name='aplicacao/paginas/pedidos/ve
     itens = ItemPedidoInsight.objects.filter(pedido=pedido.pk)
 
     contexto = {
-        'itens':itens,
+        'itens': itens,
         'pedido': pedido
     }
 
@@ -74,6 +75,68 @@ def add_prod_pedido_sessao(request):
             }
 
             request.session.save()
+
+            res = "SUCESSO"
+            return JsonResponse({'data': res})
+        else:
+            res = "FALHOU"
+            return JsonResponse({'data': res})
+
+
+def add_pedido_sessao_fornecedores(request):
+    if request.is_ajax():
+        produto_id = request.POST.get('produtos')
+
+        if produto_id != "":
+
+            # PEGANDO E TRATANDO DADOS DE FILIAIS DA REQUISIÇÃO
+            filial = request.POST.get('filiais')
+            l_filiais = get_data_request(filial)
+            lista_filiais = convert_data_request_int(l_filiais)
+
+            # PEGANDO E TRATANDO DADOS DE PRODUTOS DA REQUISIÇÃO
+            idprod = request.POST.get('produtos')
+            l_produtos = get_data_request(idprod)
+            lista_produtos = convert_data_request_int(l_produtos)
+
+
+            # PEGANDO E TRATANDO DADOS DE QUANTIDADE DA REQUISIÇÃO
+            quantidade = request.POST.get('quantidades')
+            l_quantidade = get_data_request(quantidade)
+            lista_quantidade = convert_data_request_float(l_quantidade)
+
+            # PEGANDO E TRATANDO DADOS DE PRECOS DA REQUISIÇÃO
+            precos = request.POST.get('precos')
+            l_precos = get_data_request(precos)
+            lista_precos = convert_data_request_float(l_precos)
+
+            # VERIFICANDO SE CAMPOS TEM QUANTIDADES COMPATIVEIS
+            if len(lista_quantidade) != len(lista_precos):
+                res = "FALHOU"
+                return JsonResponse({'data': res})
+
+            # SESSAO
+            if not request.session.get('pedido_produto'):
+                request.session['pedido_produto'] = {}
+                request.session.save()
+
+            pedido = request.session['pedido_produto']
+
+            for (f, p, q , r) in zip(lista_filiais, lista_produtos, lista_quantidade, lista_precos):
+
+                produto_qs = Produto.objects.get(id=p)
+                print(produto_qs.desc_produto)
+
+                pedido[produto_qs.id] = {
+                    'ped_produto_id': produto_qs.id,
+                    'ped_produto_cod': produto_qs.cod_produto,
+                    'ped_produto_nome': produto_qs.desc_produto,
+                    'ped_cod_filial': f,
+                    'ped_pr_compra': r,
+                    'ped_qt_digitada': q,
+                }
+
+                request.session.save()
 
             res = "SUCESSO"
             return JsonResponse({'data': res})
@@ -169,3 +232,28 @@ def pedido_save_db(request):
             lista.append(temp)
         data = "SUCESSO"
     return JsonResponse({'data': data})
+
+
+def get_data_request(lista):
+    data_req = lista.replace(",", " ")
+    data_req = data_req.split()
+    lista_requisicao = []
+    for dr in data_req:
+        lista_requisicao.append(dr)
+
+    return lista_requisicao
+
+def convert_data_request_int(lista):
+    lista_int = []
+    for i in lista:
+        lista_int.append(int(i))
+
+    return lista_int
+
+
+def convert_data_request_float(lista):
+    lista_float = []
+    for i in lista:
+        lista_float.append(float(i))
+
+    return lista_float

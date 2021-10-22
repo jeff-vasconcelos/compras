@@ -8,8 +8,8 @@ const titulo_vendasxmes_ruptura_fornec = document.getElementById('titulo_vendasx
 
 function GetNome_grafico_ruptura(CodProd) {
 
-    const filial_ruptura_fornec = document.getElementById('filial_ruptura_fornec-' + CodProd)
-    const produtos_ruptura_fornec = document.getElementById('produto_ruptura_fornec-' + CodProd)
+    const filial_ruptura_fornec = document.getElementById('input_ruptura_fornec_filial_' + CodProd)
+    const produtos_ruptura_fornec = document.getElementById('input_ruptura_fornec_idproduto_' + CodProd)
 
     const produto = produtos_ruptura_fornec.value
     const filial = filial_ruptura_fornec.value

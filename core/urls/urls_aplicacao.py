@@ -48,6 +48,7 @@ urlpatterns = [
 
     # PEDIDOS
     path('add-produto-pedido/', add_prod_pedido_sessao, name='add-prod-pedido-sessao'),
+    path('add-produtos-pedido-fornecedores/', add_pedido_sessao_fornecedores, name='add-produtos-pedido-fornecedores'),
     path('ver-produto-pedido/', ver_prod_pedido_sessao, name='ver-prod-pedido-sessao'),
     path('rm-produto-pedido/', rm_prod_pedido_sessao, name='rm-prod-pedido-sessao'),
     path('exportar-produto-pedido/', export_xls, name='exportar-pedido-sessao'),
