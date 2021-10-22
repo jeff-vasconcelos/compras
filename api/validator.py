@@ -101,21 +101,22 @@ def valida_pedido(data):
         pedido_existe = PedidoDuplicado.objects.filter(
             cod_produto=cod_produto,
             cod_filial=cod_filial,
+            cod_fornecedor=data['cod_fornecedor'],
             empresa=cod_empresa,
             saldo=saldo,
             num_pedido=pedido,
             data=date
         ).exists()
 
-        if pedido_existe == False:
+        if not pedido_existe:
             b = PedidoDuplicado.objects.create(
-                cod_produto = data['cod_produto'],
-                cod_filial = data['cod_filial'],
+                cod_produto = cod_produto,
+                cod_filial = cod_filial,
                 cod_fornecedor = data['cod_fornecedor'],
-                saldo = data['saldo'],
-                num_pedido = data['num_pedido'],
-                data = data['data'],
-                empresa = data['empresa']
+                saldo = saldo,
+                num_pedido = pedido,
+                data = date,
+                empresa = cod_empresa
             )
             b.save()
 
