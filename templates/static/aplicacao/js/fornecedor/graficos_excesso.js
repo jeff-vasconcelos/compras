@@ -23,7 +23,7 @@ const graficoExcesso = (filial, produto) => {
         type: 'POST',
         url: '/painel/request/fornecedor/graf/',
         data: {
-            'csrfmiddlewaretoken': csrf_,
+            'csrfmiddlewaretoken': csrf_e,
             'filial': filial,
             'produto': produto,
         },
