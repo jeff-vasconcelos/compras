@@ -126,6 +126,8 @@ botaoPedidoSessao.addEventListener('click', e => {
     //     dde = dde_p
     // }
 
+    let input_dde = document.getElementById("input_analise_dde");
+    input_dde.value = ''
 
     addPedidoSessao(produtoSelecionado, qt_digitada, p_compra, filialSelecionado)
 })

@@ -193,30 +193,30 @@
                 </div>
             </div>
         </div>
-    <!--
-        <div class="col-xl-3 col-lg-3">
-            <div class="card shadow mb-4 cards-home-info">
-                <div class="card-body cards-home-body">
-                    <div class="row cards-home-titulo">
-                        <div class="col-7">
-                            Media Ajustada
+        <!--
+            <div class="col-xl-3 col-lg-3">
+                <div class="card shadow mb-4 cards-home-info">
+                    <div class="card-body cards-home-body">
+                        <div class="row cards-home-titulo">
+                            <div class="col-7">
+                                Media Ajustada
+                            </div>
+                            <div class="col-5 cards-home-porc" id="porc_media">
+                                -
+                            </div>
                         </div>
-                        <div class="col-5 cards-home-porc" id="porc_media">
-                            -
-                        </div>
-                    </div>
-                    <div class="row cards-home-valores">
-                        <div class="col-1 cards-home-sifrao">
+                        <div class="row cards-home-valores">
+                            <div class="col-1 cards-home-sifrao">
 
-                        </div>
-                        <div class="col-11 cards-home-valor" id="valor_media">
-                            -
+                            </div>
+                            <div class="col-11 cards-home-valor" id="valor_media">
+                                -
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    -->
+        -->
         <div class="col-xl-3 col-lg-3">
             <div class="card shadow mb-4 cards-home-info">
                 <div class="card-body cards-home-body">
@@ -295,7 +295,7 @@
                                 <th class="tabela-info-th" colspan="5">Dados filiais</th>
                                 <th class="tabela-info-th" colspan="4">Dados de entrada</th>
                                 <th class="tabela-info-th" colspan="7">Dados estatísticos</th>
-                                <th class="tabela-info-th" colspan="2">Preço prat.</th>
+                                <!--<th class="tabela-info-th" colspan="2">Preço prat.</th>-->
                                 <!--                                <th class="tabela-info-th-d" colspan="4">Digitar pedido de compra</th>-->
                             </tr>
                             </thead>
@@ -317,8 +317,10 @@
                                 <th class="tabela-info">Und Caixa</th>
                                 <th class="tabela-info">Sugestão Und</th>
                                 <th class="tabela-info">Excesso</th>
+                                <!--
                                 <th class="tabela-info">Pr. tabela</th>
                                 <th class="tabela-info">Margem</th>
+                                -->
                                 <!--                                <th>Qt digitada</th>-->
                                 <!--                                <th>Pr. compra</th>-->
                                 <!--                                <th>% margem</th>-->
@@ -354,10 +356,15 @@
                             </tr>
                             <tr>
                                 <td class="tabela-form">
-                                    <input class="input-tabela-analise" name="qt_digitada" id="qt_digit">
+                                    <!--<input class="input-tabela-analise" name="qt_digitada" id="qt_digit">-->
+
+                                <input class="input-tabela-analise" type="text"
+                                       name="qt_digitada" id="qt_digit"
+                                       onkeyup="calculaDDEAnalise()">
+
                                 </td>
                                 <td class="tabela-form">
-                                    <input type="Text" class="input-tabela-analise" name="pr_compra" id="pr_compra"
+                                    <input type="text" class="input-tabela-analise" name="pr_compra" id="pr_compra"
                                            onKeyUp="mascaraMoeda(this, event)" value="">
                                 </td>
                                 <!--
@@ -367,10 +374,18 @@
                                 <td class="tabela-form">
                                     <input class="input-tabela-analise" name="pr_sugerido" id="pr_sugerido">
                                 </td>
-                                <td class="tabela-form">
-                                    <input class="input-tabela-analise" name="dde" id="dde">
-                                </td>
                                 -->
+
+                                <td class="tabela-form">
+
+                                    <input hidden id="input_analise_media" value="">
+
+                                    <input class="input-tabela-analise" type="text" value=""
+                                           id="input_analise_dde"
+                                           placeholder="DDE"
+                                           aria-label="Disabled input example" disabled readonly>
+                                </td>
+
                             </tr>
                             </tbody>
 

@@ -3,6 +3,8 @@ const th_tabela_totais = document.getElementById('th_tabela_totais')
 const td_tabela_totais = document.getElementById('td_tabela_totais')
 const titulo_vendasxmes = document.getElementById('titulo_vendasxmes')
 
+// INPUT DE MEDIA PARA DDE
+const input_analise_media = document.getElementById('input_analise_media')
 
 const listaProdutosSelecionar = document.getElementById('results-produtos')
 const listaFiliais = document.getElementById('filtro-filial')
@@ -75,8 +77,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Cx Fech.</th>
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
-                            <th class="tabela-info">Pr. tabela</th>
-                            <th class="tabela-info">Margem</th>
+<!--                            <th class="tabela-info">Pr. tabela</th>-->
+<!--                            <th class="tabela-info">Margem</th>-->
                             <!--                                <th>Qt digitada</th>-->
                             <!--                                <th>Pr. compra</th>-->
                             <!--                                <th>% margem</th>-->
@@ -140,8 +142,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Cx Fech.</th>
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
-                            <th class="tabela-info">Pr. tabela</th>
-                            <th class="tabela-info">Margem</th>
+<!--                            <th class="tabela-info">Pr. tabela</th>-->
+<!--                            <th class="tabela-info">Margem</th>-->
                             <!--                                <th>Qt digitada</th>-->
                             <!--                                <th>Pr. compra</th>-->
                             <!--                                <th>% margem</th>-->
@@ -520,8 +522,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
                             <th class="tabela-info">Excesso</th>
-                            <th class="tabela-info">Pr. tabela</th>
-                            <th class="tabela-info">Margem</th>
+<!--                            <th class="tabela-info">Pr. tabela</th>-->
+<!--                            <th class="tabela-info">Margem</th>-->
                             <!--                                <th>Qt digitada</th>-->
                             <!--                                <th>Pr. compra</th>-->
                             <!--                                <th>% margem</th>-->
@@ -561,8 +563,8 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
                             <th class="tabela-info">Excesso</th>
-                            <th class="tabela-info">Pr. tabela</th>
-                            <th class="tabela-info">Margem</th>
+<!--                            <th class="tabela-info">Pr. tabela</th>-->
+<!--                            <th class="tabela-info">Margem</th>-->
                             <!--                                <th>Qt digitada</th>-->
                             <!--                                <th>Pr. compra</th>-->
                             <!--                                <th>% margem</th>-->
@@ -624,10 +626,11 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <td class="tabela-info">${produto_info.sugestao_unidade}</td>
                             <td class="tabela-info">${produto_info.sugestao}</td>
                             <td class="tabela-info">${produto_info.qt_excesso}</td>
-                            <td class="tabela-info">R$ ${produto_info.preco_tabela}</td>
-                            <td class="tabela-info">${produto_info.margem} %</td>
-                          
+                                              
                             `
+                            //     <td
+                            // className = "tabela-info" > R$ ${produto_info.preco_tabela} < /td>
+                            // <td className="tabela-info">${produto_info.margem} %</td>
                         })
                     }
 
@@ -667,6 +670,9 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     porc_ruptura.innerHTML += `
                         ${informacoes.ruptura_porc} %
                     `
+                    // console.log(informacoes.media_simples)
+                    input_analise_media.value = informacoes.media_simples
+                    console.log(input_analise_media.value)
 
                 }
             }
@@ -810,4 +816,25 @@ t_reposicao.addEventListener('keyup', a => {
 
     sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
 })
+
+
+function calculaDDEAnalise() {
+    let input_qt_digitada = document.getElementById("qt_digit");
+    let input_media = document.getElementById("input_analise_media");
+    let input_dde = document.getElementById("input_analise_dde");
+
+    if (input_media.value !== '' && input_qt_digitada.value !== '') {
+        let media = parseFloat(input_media.value)
+        let qt_digitada = parseFloat(input_qt_digitada.value)
+
+        input_dde.value = Math.round(qt_digitada / media)
+    } else {
+        input_dde.value = 0
+    }
+
+
+
+
+    // qt_digitada.value = qt_digitada.value.toUpperCase();
+}
 
