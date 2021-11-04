@@ -11,7 +11,7 @@ def processa_alerta(id_empresa):
 
 
 @shared_task
-def processa_home(request, id_empresa):
+def processa_home(id_empresa):
     print("INICIANDO TASK DE HOME...")
     rotina_home(id_empresa)
     print("TASK DE HOME CONCLUIDA!")
