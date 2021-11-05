@@ -17,9 +17,11 @@ from datetime import date, timedelta
 def rotina_alerta(id_empresa):
     empresa = Empresa.objects.get(id=id_empresa)
     print(f"PROCESSANDO DADOS (ALERTA) DE {empresa.id} - {empresa.nome_fantasia}")
+    parametros = Parametro.objects.get(empresa__id=id_empresa)
+    curva_filial = []
 
     # Executa e processa dados de alerta
-    produtos_alerta = processa_produtos_alerta_home(id_empresa, curva_home=False)
+    produtos_alerta = processa_produtos_alerta_home(id_empresa, parametros.periodo, curva_filial, curva_home=False)
 
     alerta_db(id_empresa, produtos_alerta)
 
@@ -30,7 +32,9 @@ def rotina_home(id_empresa):
     print(f"PROCESSANDO DADOS (HOME) DE {empresa.id} - {empresa.nome_fantasia}")
 
     # Executa e processa dados de home
-    produtos_home = processa_produtos_alerta_home(id_empresa, curva_home=True)
+    parametros = Parametro.objects.get(empresa__id=id_empresa)
+    curva_filial = abc_home(id_empresa, parametros.periodo)
+    produtos_home = processa_produtos_alerta_home(id_empresa, parametros.periodo, curva_filial, curva_home=True)
 
     print("SALVANDO DADOS EM GRAFICOS")
     save_grafico_curva(id_empresa, produtos_home)
@@ -62,9 +66,15 @@ def teste(request, template_name='testando_alerta.html'):
     id_empresa=1
     empresa = Empresa.objects.get(id=id_empresa)
     print(f"PROCESSANDO DADOS DE {empresa.id} - {empresa.nome_fantasia}")
+    curva_filial = ''
 
-    produtos_alerta = processa_produtos_alerta_home(id_empresa, curva_home=False)
-    produtos_home = processa_produtos_alerta_home(id_empresa, curva_home=True)
+    produtos_alerta = processa_produtos_alerta_home(id_empresa, 120, curva_filial, curva_home=False)
+
+    curva_filial = abc_home(id_empresa, 120)
+
+    # Executa e processa dados de home
+    produtos_home = processa_produtos_alerta_home(id_empresa, 120, curva_filial, curva_home=True)
+
 
     save_grafico_curva(id_empresa, produtos_home)
     save_grafico_faturamento(id_empresa)

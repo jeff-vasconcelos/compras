@@ -12,15 +12,14 @@ from core.views.utils.estoque import estoque_atual
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, curva_home):
+def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, curva_filial, curva_home):
     """
 
     """
-
     global results
     informacaoes_produto = dados_produto(cod_produto, cod_fornecedor,
                                          id_empresa, leadtime,
-                                         tempo_reposicao, periodo, curva_home)
+                                         tempo_reposicao, periodo, curva_filial, curva_home)
 
     lista_resumo = []
 
@@ -38,7 +37,7 @@ def processa_produtos_filiais(cod_produto, cod_fornecedor, id_empresa, leadtime,
     return dados_produtos_filiais
 
 
-def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, curva_home):
+def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_reposicao, periodo, curva_filial, curva_home):
     """
 
     """
@@ -56,13 +55,10 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     lista_resumo = []
     lista_fornecedor = [cod_fornecedor]
 
-    if curva_home:
-        curva = abc_home(id_empresa, periodo)
-        print("Testando - Gerou dados de curva por filial")
-
-    else:
+    if not curva_home:
         curva = abc_fornecedores(lista_fornecedor, id_empresa, periodo)
-
+    else:
+        curva = curva_filial
 
     filiais = []
     for i, v in info_produto.cod_filial.iteritems():
@@ -182,11 +178,10 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     return resumo_produto
 
 
-def processa_produtos_alerta_home(id_empresa, curva_home):
+def processa_produtos_alerta_home(id_empresa, periodo, curva_filial, curva_home):
     global alertas_produtos, infor_filiais, condicao
 
     lista_alertas = []
-    parametros = Parametro.objects.get(empresa__id=id_empresa)
 
     fornecedores = get_fornecedores_qs(id_empresa)
 
@@ -198,7 +193,7 @@ def processa_produtos_alerta_home(id_empresa, curva_home):
         produtos = get_produtos(id_empresa, fornecedor.id)
 
         for produto in produtos:
-            verif_produto = verifica_produto(produto.cod_produto, id_empresa, parametros.periodo)
+            verif_produto = verifica_produto(produto.cod_produto, id_empresa, periodo)
 
             if verif_produto == True:
                 infor_filiais = processa_produtos_filiais(
@@ -207,7 +202,8 @@ def processa_produtos_alerta_home(id_empresa, curva_home):
                     id_empresa,
                     leadtime,
                     t_reposicao,
-                    parametros.periodo,
+                    periodo,
+                    curva_filial,
                     curva_home
                 )
 
