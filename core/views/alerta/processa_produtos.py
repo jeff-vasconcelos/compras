@@ -58,6 +58,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
     if curva_home:
         curva = abc_home(id_empresa, periodo)
+        print("Testando - Gerou dados de curva por filial")
 
     else:
         curva = abc_fornecedores(lista_fornecedor, id_empresa, periodo)

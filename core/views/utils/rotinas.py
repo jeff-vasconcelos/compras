@@ -32,6 +32,7 @@ def rotina_home(id_empresa):
     # Executa e processa dados de home
     produtos_home = processa_produtos_alerta_home(id_empresa, curva_home=True)
 
+    print("SALVANDO DADOS EM GRAFICOS")
     save_grafico_curva(id_empresa, produtos_home)
     save_grafico_faturamento(id_empresa)
     save_dados_estoque(id_empresa, produtos_home)
