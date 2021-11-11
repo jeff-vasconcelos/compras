@@ -71,6 +71,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Qt. ult. Ent.</th>
                             <th class="tabela-info">Vl. ult. Ent.</th>
                             <th class="tabela-info">Embal.</th>
+                            <th class="tabela-info">Qt. Cx</th>
                             <th class="tabela-info">DDE</th>
                             <th class="tabela-info">Est. seg.</th>
                             <th class="tabela-info">Ponto rep.</th>
@@ -136,6 +137,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Qt. ult. Ent.</th>
                             <th class="tabela-info">Vl. ult. Ent.</th>
                             <th class="tabela-info">Embal.</th>
+                            <th class="tabela-info">Qt. Cx</th>
                             <th class="tabela-info">DDE</th>
                             <th class="tabela-info">Est. seg.</th>
                             <th class="tabela-info">Ponto rep.</th>
@@ -515,6 +517,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Qt. ult. Ent.</th>
                             <th class="tabela-info">Vl. ult. Ent.</th>
                             <th class="tabela-info">Embal.</th>
+                            <th class="tabela-info">Qt. Cx</th>
                             <th class="tabela-info">DDE</th>
                             <th class="tabela-info">Est. seg.</th>
                             <th class="tabela-info">Ponto rep.</th>
@@ -556,6 +559,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Qt. ult. Ent.</th>
                             <th class="tabela-info">Vl. ult. Ent.</th>
                             <th class="tabela-info">Embal.</th>
+                            <th class="tabela-info">Qt. Cx</th> 
                             <th class="tabela-info">DDE</th>
                             <th class="tabela-info">Est. seg.</th>
                             <th class="tabela-info">Ponto rep.</th>
@@ -619,6 +623,7 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <td class="tabela-info">${produto_info.qt_ult_entrada}</td>
                             <td class="tabela-info">R$ ${produto_info.vl_ult_entrada}</td>
                             <td class="tabela-info">${produto_info.embalagem}</td>
+                            <td class="tabela-info">${produto_info.quantidade_caixa}</td>
                             <td class="tabela-info">${produto_info.dde}</td>
                             <td class="tabela-info">${produto_info.est_seguranca}</td>
                             <td class="tabela-info">${produto_info.p_reposicao}</td>
@@ -672,7 +677,6 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                     `
                     // console.log(informacoes.media_simples)
                     input_analise_media.value = informacoes.media_simples
-                    console.log(input_analise_media.value)
 
                 }
             }

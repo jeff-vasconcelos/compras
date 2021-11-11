@@ -225,6 +225,7 @@ def organiza_informacoes_produto(produto_dados, lista_resumo):
     data = []
     itens_analise = {
         'embalagem': embalagem.replace("'", ""),
+        'quantidade_caixa': qt_un_caixa,
         'filial': int(produto_dados['cod_filial'].unique()),
         'estoque': int(produto_dados['estoque_dispon'].unique()),
         'avaria': int(produto_dados['avarias'].unique()),

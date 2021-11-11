@@ -67,6 +67,12 @@
                        data-dismiss="modal">Voltar
                     </a>
 
+                    <button id="botao_fornec_adicionar_sugestao_preco"
+                            onclick="CarregarSugestaoPreco()"
+                            class="add_item_alertas">
+                        Considerar sugestão
+                    </button>
+
                     <button id="botao_ruptura_fornec_adicionar"
                             onclick="CarregaInputs()"
                             class="add_item_alertas">
@@ -147,6 +153,11 @@
                                            id="input_ruptura_fornec_media_{{ produto.id_produto|to_str }}"
                                            value="{{ produto.media|floatformat:1 }}">
 
+                                    <input name="input_ruptura_fornec_sugestao" hidden
+                                           name="input_ruptura_fornec_sugestao"
+                                           id="input_ruptura_fornec_sugestao_{{ produto.id_produto|to_str }}"
+                                           value="{{ produto.sugestao|floatformat:1 }}">
+
                                     <input class="input_alertas input_ruptura_fornec_quantidade" type="text"
                                            name="{{ produto.id_produto|to_str }}"
                                            onkeyup="calculaDDERuptura(this.name)"
@@ -162,6 +173,7 @@
 
                                     <input class="input_alertas" type="text" value=""
                                            id="input_ruptura_fornec_dde_{{ produto.id_produto|to_str }}"
+                                           name="input_ruptura_fornec_dde"
                                            placeholder="DDE"
                                            aria-label="Disabled input example" disabled readonly>
 

@@ -74,6 +74,55 @@ function CarregaInputs() {
 
 }
 
+
+function CarregarSugestaoPreco() {
+
+    let sugestao_lista = []
+    let indice = []
+    let valores_sugestao = []
+
+    let inputs_ids_produtos = document.getElementsByClassName("input_ruptura_fornec_quantidade");
+    let inputs_sugestao = document.getElementsByName("input_ruptura_fornec_sugestao");
+    let medias = document.getElementsByName("input_ruptura_fornec_media");
+    let ddes = document.getElementsByName("input_ruptura_fornec_dde");
+
+    for (let i = 0; i < inputs_sugestao.length; i++) {
+        let sugest = inputs_sugestao[i];
+        if (sugest.value !== '') {
+            sugestao_lista.push(sugest.value.replace(",", "."))
+            indice.push(i)
+        }
+    }
+
+    indice.forEach(function (v) {
+        let sugestao = inputs_sugestao[v];
+        let valor_sugestao = sugestao.value.replace(".", "")
+
+        valores_sugestao.push(valor_sugestao.replace(",0", ""))
+        // sugestao.value = ''
+        console.log(valores_sugestao)
+    });
+
+    for (let i = 0; i < inputs_ids_produtos.length; i++) {
+        let id_prod = inputs_ids_produtos[i];
+        let media = parseFloat(medias[i].value);
+        let qt = parseFloat(valores_sugestao[i]);
+        let dde = Math.round(qt / media);
+        ddes[i].value = dde;
+        id_prod.value = qt;
+    }
+
+    // let input_dde = document.getElementById("input_ruptura_fornec_dde_" + id_produto);
+
+    // let media = parseFloat(input_media.value)
+    // let qt_digitada = parseFloat(input_qt_digitada.value)
+    //
+    // input_dde.value = Math.round(qt_digitada / media)
+
+    // qt_digitada.value = qt_digitada.value.toUpperCase();
+}
+
+
 function calculaDDERuptura(id_produto) {
     let input_qt_digitada = document.getElementById("input_ruptura_fornec_quantidade_" + id_produto);
     let input_media = document.getElementById("input_ruptura_fornec_media_" + id_produto);

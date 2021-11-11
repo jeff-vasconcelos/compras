@@ -32,13 +32,15 @@ def excesso_fornecedor(request):
         por_fornecedor = df.groupby(['cod_fornecedor', 'fornecedor', 'cod_filial'])[list_val_cus].sum().round(2).reset_index()
 
         result = pd.merge(por_fornecedor, counts_df, how="right", on=['cod_fornecedor'])
+        valor_total_excesso = sum(por_fornecedor['vl_excesso'])
 
         result = result.drop_duplicates(subset=['cod_fornecedor', 'cod_filial'], keep='first')
 
-        p_fornec =  result.to_dict('records')
+        p_fornec = result.to_dict('records')
 
         context = {
-            'fornecedores': p_fornec
+            'fornecedores': p_fornec,
+            'valor_total_excesso': valor_total_excesso
         }
 
         return render(request, 'aplicacao/paginas/fornecedor/excesso_fornec.html', context)
