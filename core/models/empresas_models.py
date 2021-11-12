@@ -90,6 +90,7 @@ class Alerta(models.Model):
     principio_ativo = models.CharField(max_length=255, null=True, blank=True)
     data_entrada = models.CharField(max_length=255, null=True, blank=True)
     id_produto = models.CharField(max_length=255, null=True, blank=True)
+    preco_venda = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Alerta'

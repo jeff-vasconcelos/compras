@@ -69,7 +69,7 @@
 
                     <button id="botao_fornec_adicionar_sugestao_preco"
                             onclick="CarregarSugestaoPreco()"
-                            class="add_item_alertas">
+                            class="add_itens_sugestao">
                         Considerar sugestão
                     </button>
 
@@ -154,9 +154,12 @@
                                            value="{{ produto.media|floatformat:1 }}">
 
                                     <input name="input_ruptura_fornec_sugestao" hidden
-                                           name="input_ruptura_fornec_sugestao"
                                            id="input_ruptura_fornec_sugestao_{{ produto.id_produto|to_str }}"
                                            value="{{ produto.sugestao|floatformat:1 }}">
+
+                                    <input name="input_ruptura_fornec_preco_venda" hidden
+                                           id="input_ruptura_fornec_preco_venda_{{ produto.id_produto|to_str }}"
+                                           value="{{ produto.preco_venda|floatformat:2 }}">
 
                                     <input class="input_alertas input_ruptura_fornec_quantidade" type="text"
                                            name="{{ produto.id_produto|to_str }}"
@@ -164,6 +167,7 @@
                                            id="input_ruptura_fornec_quantidade_{{ produto.id_produto|to_str }}"
                                            placeholder="Qtd">
                                     <!--input_ruptura_fornec_quantidade-->
+
 
                                     <input class="input_alertas" type="text"
                                            name="input_ruptura_fornec_preco"

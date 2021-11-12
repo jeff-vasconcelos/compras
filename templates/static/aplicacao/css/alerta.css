@@ -145,6 +145,24 @@ button.add_item_alertas:focus {
     background-color: #20BC77;
 }
 
+button.add_itens_sugestao {
+    background-color: #ffa500;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    height: 28px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+button.add_itens_sugestao:hover {
+    background-color: #627288;
+}
+button.add_itens_sugestao:focus {
+    background-color: #ffa500;
+}
+
 button.ver_graf_alertas {
     background-color: #224390;
     color: #FFFFFF;

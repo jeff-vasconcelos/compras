@@ -58,11 +58,6 @@ function CarregaInputs() {
     });
 
 
-    console.log('filiais', filiais_ruptura)
-    console.log('produtos', produtos_ruptura)
-    console.log('quantidades', quantidades_ruptura)
-    console.log('preços', valores_ruptura)
-
     const fornecedores_ruptura = new FormData()
     fornecedores_ruptura.append('csrfmiddlewaretoken', csrf_)
     fornecedores_ruptura.append('filiais', filiais_ruptura)
@@ -83,8 +78,12 @@ function CarregarSugestaoPreco() {
 
     let inputs_ids_produtos = document.getElementsByClassName("input_ruptura_fornec_quantidade");
     let inputs_sugestao = document.getElementsByName("input_ruptura_fornec_sugestao");
+    let inputs_precos = document.getElementsByName("input_ruptura_fornec_preco");
+
     let medias = document.getElementsByName("input_ruptura_fornec_media");
     let ddes = document.getElementsByName("input_ruptura_fornec_dde");
+    let precos_sugestao = document.getElementsByName("input_ruptura_fornec_preco_venda");
+
 
     for (let i = 0; i < inputs_sugestao.length; i++) {
         let sugest = inputs_sugestao[i];
@@ -99,29 +98,36 @@ function CarregarSugestaoPreco() {
         let valor_sugestao = sugestao.value.replace(".", "")
 
         valores_sugestao.push(valor_sugestao.replace(",0", ""))
-        // sugestao.value = ''
-        console.log(valores_sugestao)
     });
 
     for (let i = 0; i < inputs_ids_produtos.length; i++) {
         let id_prod = inputs_ids_produtos[i];
         let media = parseFloat(medias[i].value);
         let qt = parseFloat(valores_sugestao[i]);
-        let dde = Math.round(qt / media);
-        ddes[i].value = dde;
+
+        mascaraPreco(precos_sugestao[i], inputs_precos[i])
+
+        ddes[i].value = Math.round(qt / media);
         id_prod.value = qt;
     }
-
-    // let input_dde = document.getElementById("input_ruptura_fornec_dde_" + id_produto);
-
-    // let media = parseFloat(input_media.value)
-    // let qt_digitada = parseFloat(input_qt_digitada.value)
-    //
-    // input_dde.value = Math.round(qt_digitada / media)
-
-    // qt_digitada.value = qt_digitada.value.toUpperCase();
 }
 
+function mascaraPreco(preco, input_preco) {
+    let valor_preco = preco.value.replace(/[^\d]+/gi, '').reverse();
+    let resultado = "";
+    let mascara = "##.###.###,##".reverse();
+    for (let x = 0, y = 0; x < mascara.length && y < valor_preco.length;) {
+        if (mascara.charAt(x) !== '#') {
+            resultado += mascara.charAt(x);
+            x++;
+        } else {
+            resultado += valor_preco.charAt(y);
+            y++;
+            x++;
+        }
+    }
+    input_preco.value = resultado.reverse();
+}
 
 function calculaDDERuptura(id_produto) {
     let input_qt_digitada = document.getElementById("input_ruptura_fornec_quantidade_" + id_produto);
@@ -132,14 +138,11 @@ function calculaDDERuptura(id_produto) {
     let qt_digitada = parseFloat(input_qt_digitada.value)
 
     input_dde.value = Math.round(qt_digitada / media)
-
-    // qt_digitada.value = qt_digitada.value.toUpperCase();
 }
 
 
 // ADD PRODUTO AO PEDIDO NA SESSAO
 const add_pedido_ruptura_fornec = (dados_prods_ruptura) => {
-    console.log(dados_prods_ruptura)
     $.ajax({
         type: 'POST',
         url: '/painel/add-produtos-pedido-fornecedores/',
@@ -158,7 +161,7 @@ const add_pedido_ruptura_fornec = (dados_prods_ruptura) => {
                             <use xlink:href="#check-circle-fill"/>
                         </svg>
                         <div>
-                            &nbsp; Produto <strong>adicionado</strong> ao pedido com sucesso!
+                            &nbsp; Produtos <strong>adicionados</strong> ao pedido com sucesso!
                         </div>
                     </div>
                 `
@@ -290,7 +293,7 @@ const exportPedidoRupturaFornec = (fornecedor) => {
 
         },
         error: function (error) {
-
+            console.log(error)
         }
     });
 }
