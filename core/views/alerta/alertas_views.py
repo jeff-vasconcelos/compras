@@ -216,7 +216,7 @@ def alerta_db(id_empresa, produtos):
                 principio_ativo=i['principio_ativo'],
                 data_entrada=i['dt_ult_entrada'],
                 id_produto=produto.id,
-                preco_venda=i['preco_tabela']
+                preco_venda=i['vl_ult_entrada']
             )
             b.save()
 

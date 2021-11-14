@@ -235,7 +235,7 @@ def processa_produtos_alerta_home(id_empresa, periodo, curva_filial, curva_home)
                         'media': row.media_simples,
                         'principio_ativo': row.principio_ativo,
                         'dt_ult_entrada': row.dt_ult_entrada,
-                        'preco_tabela': row.preco_tabela,
+                        'vl_ult_entrada': row.vl_ult_entrada,
                     }
 
                     lista_alertas.append(alertas_produtos)
