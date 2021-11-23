@@ -10,7 +10,6 @@ from api.models.entrada import Entrada
 from api.models.venda import Venda
 
 
-
 class ProdutoViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Produto.objects.all()
@@ -51,4 +50,3 @@ class VendaViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Venda.objects.all()
     serializer_class = VendasSerializer
-

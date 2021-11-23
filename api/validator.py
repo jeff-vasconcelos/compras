@@ -12,13 +12,14 @@ def valida_produto(data):
     cod_produto = data['cod_produto']
     cod_empresa = data['empresa']
 
-    codproduto = Produto.objects.filter(
+    qs_produto = Produto.objects.filter(
         cod_produto=cod_produto, empresa=cod_empresa
     ).exists()
 
-    if codproduto == False:
+    if not qs_produto:
         return True
     else:
+        update_product(data)
         return False
 
 
@@ -26,13 +27,14 @@ def valida_fornecedor(data):
     cod_fornecedor = data['cod_fornecedor']
     cod_empresa = data['empresa']
 
-    codfornecedor = Fornecedor.objects.filter(
+    qs_fornecedor = Fornecedor.objects.filter(
         cod_fornecedor=cod_fornecedor, empresa=cod_empresa
     ).exists()
 
-    if codfornecedor == False:
+    if not qs_fornecedor:
         return True
     else:
+        update_fornecedor(data)
         return False
 
 
@@ -110,13 +112,13 @@ def valida_pedido(data):
 
         if not pedido_existe:
             b = PedidoDuplicado.objects.create(
-                cod_produto = cod_produto,
-                cod_filial = cod_filial,
-                cod_fornecedor = data['cod_fornecedor'],
-                saldo = saldo,
-                num_pedido = pedido,
-                data = date,
-                empresa = cod_empresa
+                cod_produto=cod_produto,
+                cod_filial=cod_filial,
+                cod_fornecedor=data['cod_fornecedor'],
+                saldo=saldo,
+                num_pedido=pedido,
+                data=date,
+                empresa=cod_empresa
             )
             b.save()
 
@@ -171,3 +173,40 @@ def valida_venda(data):
         return True
     else:
         return False
+
+
+def update_product(data):
+    qs_produto = Produto.objects.get(
+        cod_produto__exact=data['cod_produto'],
+        empresa=data['empresa']
+    )
+
+    qs_produto.desc_produto = data['desc_produto']
+    qs_produto.embalagem = data['embalagem']
+    qs_produto.quantidade_un_cx = data['quantidade_un_cx']
+    qs_produto.marca = data['marca']
+    qs_produto.peso_liquido = data['peso_liquido']
+    qs_produto.principio_ativo = data['principio_ativo']
+    qs_produto.cod_fabrica = data['cod_fabrica']
+    qs_produto.cod_fornecedor = data['cod_fornecedor']
+    qs_produto.cod_auxiliar = data['cod_auxiliar']
+    qs_produto.cod_depto = data['cod_depto']
+    qs_produto.cod_sec = data['cod_sec']
+    qs_produto.cod_depto = data['cod_depto']
+    qs_produto.desc_departamento = data['desc_departamento']
+    qs_produto.desc_secao = data['desc_secao']
+
+    qs_produto.save()
+
+
+def update_fornecedor(data):
+    qs_fornecedor = Fornecedor.objects.get(
+        cod_fornecedor__exact=data['cod_fornecedor'],
+        empresa=data['empresa']
+    )
+
+    qs_fornecedor.desc_fornecedor = data['desc_fornecedor']
+    qs_fornecedor.cnpj = data['cnpj']
+    qs_fornecedor.iestadual = data['iestadual']
+
+    qs_fornecedor.save()
