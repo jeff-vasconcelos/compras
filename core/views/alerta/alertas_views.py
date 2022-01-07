@@ -192,9 +192,12 @@ def alerta_db(id_empresa, produtos):
             valor = round(i['valor_sugestao'], 0)
             valor_excesso = i['vl_excesso']
 
-            produto = Produto.objects.get(empresa_id__exact=id_empresa,
+            print(i['cod_produto'])
+
+            produto = Produto.objects.get(empresa_id=id_empresa,
                                           cod_produto=i['cod_produto'],
                                           cod_fornecedor=i['cod_fornecedor'])
+
             b = Alerta.objects.create(
                 cod_filial=i['filial'],
                 cod_produto=i['cod_produto'],
