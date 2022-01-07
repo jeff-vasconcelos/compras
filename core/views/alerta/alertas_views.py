@@ -192,38 +192,41 @@ def alerta_db(id_empresa, produtos):
             valor = round(i['valor_sugestao'], 0)
             valor_excesso = i['vl_excesso']
 
-            print(i['cod_produto'])
+            try:
+                produto = Produto.objects.get(empresa_id=id_empresa,
+                                              cod_produto=i['cod_produto'],
+                                              cod_fornecedor=i['cod_fornecedor'])
+            except Produto.DoesNotExist:
+                produto = None
 
-            produto = Produto.objects.get(empresa_id=id_empresa,
-                                          cod_produto=i['cod_produto'],
-                                          cod_fornecedor=i['cod_fornecedor'])
+            if produto:
 
-            b = Alerta.objects.create(
-                cod_filial=i['filial'],
-                cod_produto=i['cod_produto'],
-                desc_produto=i['desc_produto'],
-                saldo=round(i['saldo'], 0),
-                estado_estoque=i['condicao_estoque'],
-                valor=valor,
-                sugestao=round(i['sugestao_unidade'], 0),
-                estoque=round(i['estoque'], 0),
-                qt_excesso=round(i['qt_excesso'], 0),
-                vl_excesso=valor_excesso.replace("'", ""),
-                curva=i['curva'],
-                fornecedor=i['fornecedor'],
-                cod_fornecedor=i['cod_fornecedor'],
-                empresa=empresa,
-                dde=i['dde'],
-                # campo_dois=i['media_ajustada'],
-                media=i['media'],
-                principio_ativo=i['principio_ativo'],
-                data_entrada=i['dt_ult_entrada'],
-                id_produto=produto.id,
-                preco_venda=i['vl_ult_entrada']
-            )
-            b.save()
+                b = Alerta.objects.create(
+                    cod_filial=i['filial'],
+                    cod_produto=i['cod_produto'],
+                    desc_produto=i['desc_produto'],
+                    saldo=round(i['saldo'], 0),
+                    estado_estoque=i['condicao_estoque'],
+                    valor=valor,
+                    sugestao=round(i['sugestao_unidade'], 0),
+                    estoque=round(i['estoque'], 0),
+                    qt_excesso=round(i['qt_excesso'], 0),
+                    vl_excesso=valor_excesso.replace("'", ""),
+                    curva=i['curva'],
+                    fornecedor=i['fornecedor'],
+                    cod_fornecedor=i['cod_fornecedor'],
+                    empresa=empresa,
+                    dde=i['dde'],
+                    # campo_dois=i['media_ajustada'],
+                    media=i['media'],
+                    principio_ativo=i['principio_ativo'],
+                    data_entrada=i['dt_ult_entrada'],
+                    id_produto=produto.id,
+                    preco_venda=i['vl_ult_entrada']
+                )
+                b.save()
 
-            contador_alerta = contador_alerta + 1
+                contador_alerta = contador_alerta + 1
 
     data_hora = datetime.datetime.now(tz=timezone.utc)
     empresa.atualizacao_alerta = data_hora
