@@ -9,9 +9,9 @@ class PedidoInsight(models.Model):
     usuario = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateField(auto_now_add=True, null=True, blank=True, verbose_name='Criado em:')
 
-    campo_um = models.CharField(max_length=255, blank=True, null=True)
-    campo_dois = models.CharField(max_length=255, blank=True, null=True)
-    campo_tres = models.CharField(max_length=255, blank=True, null=True)
+    # campo_um = models.CharField(max_length=255, blank=True, null=True)
+    # campo_dois = models.CharField(max_length=255, blank=True, null=True)
+    # campo_tres = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Pedido Insight'
@@ -32,9 +32,9 @@ class ItemPedidoInsight(models.Model):
     pedido = models.ForeignKey(PedidoInsight, on_delete=models.CASCADE, related_name='pedidos_insight_itens',
                                 blank=True, null=True)
 
-    campo_um = models.CharField(max_length=255, blank=True, null=True)
-    campo_dois = models.CharField(max_length=255, blank=True, null=True)
-    campo_tres = models.CharField(max_length=255, blank=True, null=True)
+    # campo_um = models.CharField(max_length=255, blank=True, null=True)
+    # campo_dois = models.CharField(max_length=255, blank=True, null=True)
+    # campo_tres = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Item - Pedido Insight'

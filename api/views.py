@@ -10,43 +10,43 @@ from api.models.entrada import Entrada
 from api.models.venda import Venda
 
 
-class ProdutoViewSet(viewsets.ModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
 
 
-class FornecedorViewSet(viewsets.ModelViewSet):
+class ProviderViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Fornecedor.objects.all()
     serializer_class = FornecedorSerializer
 
 
-class EstoqueAtualViewSet(viewsets.ModelViewSet):
+class StockCurrentViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Estoque.objects.all()
     serializer_class = EstoqueSerializer
 
 
-class HistEstoqueViewSet(viewsets.ModelViewSet):
+class StockHistoryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Historico.objects.all()
     serializer_class = HistoricoSerializer
 
 
-class PedidoViewSet(viewsets.ModelViewSet):
+class OrderBuyViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Pedido.objects.all()
     serializer_class = PedidoSerializer
 
 
-class UltEntradaViewSet(viewsets.ModelViewSet):
+class EntryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Entrada.objects.all()
     serializer_class = EntradaSerializer
 
 
-class VendaViewSet(viewsets.ModelViewSet):
+class SaleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Venda.objects.all()
     serializer_class = VendasSerializer

@@ -43,9 +43,9 @@ class Empresa(models.Model):
 
     qt_usuarios_logados = models.IntegerField(blank=True, null=True, verbose_name='Quantidade de usuários logados')
 
-    campo_um = models.CharField(max_length=255, null=True, blank=True)
-    campo_dois = models.CharField(max_length=255, null=True, blank=True)
-    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+    # campo_um = models.CharField(max_length=255, null=True, blank=True)
+    # campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    # campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.nome_fantasia
@@ -56,9 +56,9 @@ class Filial(models.Model):
     desc_filial = models.CharField(max_length=255, blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True, on_delete=models.CASCADE, related_name='filial_empresa')
 
-    campo_um = models.CharField(max_length=255, null=True, blank=True)
-    campo_dois = models.CharField(max_length=255, null=True, blank=True)
-    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+    # campo_um = models.CharField(max_length=255, null=True, blank=True)
+    # campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    # campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Filial'

@@ -5,7 +5,7 @@ from api.models.historico import Historico
 from api.models.pedido import Pedido
 from api.models.entrada import Entrada
 from api.models.venda import Venda
-from api.models.pedido_duplicado import PedidoDuplicado
+# from api.models.pedido_duplicado import PedidoDuplicado
 
 
 def valida_produto(data):
@@ -80,48 +80,20 @@ def valida_hist_estoque(data):
         return False
 
 
-def valida_pedido(data):
-    cod_produto = data['cod_produto']
-    cod_filial = data['cod_filial']
-    cod_empresa = data['empresa']
-    pedido = data['num_pedido']
-    saldo = data['saldo']
-    date = data['data']
+def validate_order(data):
 
-    pedido = Pedido.objects.filter(
-        cod_produto=cod_produto,
-        cod_filial=cod_filial,
-        empresa=cod_empresa,
-        saldo=saldo,
-        num_pedido=pedido,
-        data=date
+    buy_order = Pedido.objects.filter(
+        cod_produto=data['cod_produto'],
+        cod_filial=data['cod_filial'],
+        empresa=data['empresa'],
+        num_pedido=data['num_pedido'],
+        saldo=data['saldo'],
+        data=data['data']
     ).exists()
 
-    if pedido == False:
+    if not buy_order:
         return True
     else:
-        pedido_existe = PedidoDuplicado.objects.filter(
-            cod_produto=cod_produto,
-            cod_filial=cod_filial,
-            cod_fornecedor=data['cod_fornecedor'],
-            empresa=cod_empresa,
-            saldo=saldo,
-            num_pedido=pedido,
-            data=date
-        ).exists()
-
-        if not pedido_existe:
-            b = PedidoDuplicado.objects.create(
-                cod_produto=cod_produto,
-                cod_filial=cod_filial,
-                cod_fornecedor=data['cod_fornecedor'],
-                saldo=saldo,
-                num_pedido=pedido,
-                data=date,
-                empresa=cod_empresa
-            )
-            b.save()
-
         return False
 
 

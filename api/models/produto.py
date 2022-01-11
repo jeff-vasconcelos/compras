@@ -26,9 +26,9 @@ class Produto(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='produto',
                                 blank=True, null=True)
     
-    campo_um = models.CharField(max_length=255, null=True, blank=True)
-    campo_dois = models.CharField(max_length=255, null=True, blank=True)
-    campo_tres = models.CharField(max_length=255, null=True, blank=True)
+    # campo_um = models.CharField(max_length=255, null=True, blank=True)
+    # campo_dois = models.CharField(max_length=255, null=True, blank=True)
+    # campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
 
     def save(self, *args, **kwargs):

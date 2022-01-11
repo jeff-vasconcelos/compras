@@ -4,32 +4,38 @@ from api.views import *
 from rest_framework import routers
 
 
-""" Rotas da API """
+""" API routes """
 router = routers.DefaultRouter()
-router.register('produto', ProdutoViewSet)
-router.register('fornecedor', FornecedorViewSet)
-router.register('estoque-atual', EstoqueAtualViewSet)
-router.register('historico-estoque', HistEstoqueViewSet)
-router.register('pedido-compra', PedidoViewSet)
-router.register('ultima-entrada', UltEntradaViewSet)
-router.register('venda', VendaViewSet)
+
+router.register('providers', ProviderViewSet)
+router.register('products', ProductViewSet)
+router.register('stock-histories', StockHistoryViewSet)
+router.register('product-sales', SaleViewSet)
+router.register('buy-orders', OrderBuyViewSet)
+router.register('entry-products', EntryViewSet)
+router.register('stock-current', StockCurrentViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls)),
+    # ENDPOINT DE STATUS DA API
     path('integration/', access_valid, name='access_valid'),
 
-    path('integration/fornecedor/', FornecedorCreate.as_view(), name='integration_fornecedor_create'),
-    path('integration/produto/', ProdutoCreate.as_view(), name='integration_produto_create'),
+    # ENDPOINTS PARA CRIAR REGISTROS NO BANCO DE DADOS NA ETAPA DE INTEGRACAO AGENDADA
+    path('', include(router.urls)),
 
-    path('integration/fornecedor/empresa/<str:pk>/', listar_fornecedor_empresa, name='listar_fornecedor_empresa'),
-    path('integration/produto/empresa/<str:pk>/', listar_produtos_empresa, name='listar_produtos_empresa'),
-    path('integration/filial/empresa/<str:pk>/', listar_filiais_empresa, name='listar_filial_empresa'),
+    # ENDPOINTS PARA CRIAR REGISTROS NO BANCO DE DADOS NA ETAPA DE INTEGRACAO
+    path('integration/providers/', ProvidersCreate.as_view(), name='providers_integration_create'),
+    path('integration/products/', ProductCreate.as_view(), name='products_integration_create'),
+    path('integration/stock-histories/', StockHistoryCreate.as_view(), name='histories_integration_create'),
+    path('integration/product-sales/', SalesCreate.as_view(), name='sales_integration_create'),
+    path('integration/buy-orders/', OrdersCreate.as_view(), name='orders_integration_create'),
+    path('integration/entry-products/', EntryCreate.as_view(), name='entry_integration_create'),
+    path('integration/stock-current/', StockCreate.as_view(), name='stock_integration_create'),
 
-    path('integration/historico/', HistoricoCreate.as_view(), name='integration_historico_create'),
-    path('integration/venda/', VendaCreate.as_view(), name='integration_venda_create'),
-    path('integration/pedido/', PedidoCreate.as_view(), name='integration_pedido_create'),
-    path('integration/entrada/', EntradaCreate.as_view(), name='integration_entrada_create'),
-    path('integration/estoque/', EstoqueCreate.as_view(), name='integration_estoque_create'),
-
+    # ENDPOINTS PARA LISTAR: FORNECEDORES, PRODUTOS, FILIAIS, PEDIDOS E REMOVER PEDIDO POR EMPRESA (EMPRESA_ID)
+    path('integration/providers-company/<str:pk>/', list_providers_by_company, name='orders_list_by_company'),
+    path('integration/products-company/<str:pk>/', list_products_by_company, name='products_list_by_company'),
+    path('integration/branches-company/<str:pk>/', list_branches_by_company, name='branches_list_by_company'),
+    path('integration/orders-company/<str:pk>/', list_orders_by_company, name='orders_list_by_company'),
+    path('integration/orders-company/delete/<str:pk>/', delete_duplicate_orders_by_company, name='orders_delete_by_company'),
 ]
