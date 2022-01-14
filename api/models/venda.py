@@ -26,9 +26,9 @@ class Venda(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_venda',
                                 blank=True, null=True)
     
-    # campo_um = models.CharField(max_length=255, blank=True, null=True)
-    # campo_dois = models.CharField(max_length=255, blank=True, null=True)
-    # campo_tres = models.CharField(max_length=255, blank=True, null=True)
+    campo_um = models.CharField(max_length=255, blank=True, null=True)
+    campo_dois = models.CharField(max_length=255, blank=True, null=True)
+    campo_tres = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:
