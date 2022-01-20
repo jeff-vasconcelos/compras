@@ -10,56 +10,80 @@ from api.models.venda import Venda
 from core.models.empresas_models import Filial
 
 
-class FilialSerializer(serializers.ModelSerializer):
+class BranchesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Filial
         fields = '__all__'
         ordering = ['-id']
 
 
-class FornecSerializer(serializers.ModelSerializer):
+class BranchesGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Filial
+        fields = ['cod_filial', ]
+
+
+class ProvidersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fornecedor
         fields = '__all__'
         ordering = ['-id']
 
 
-class ProdSerializer(serializers.ModelSerializer):
+class ProvidersGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fornecedor
+        fields = ['cod_fornecedor', ]
+
+
+class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produto
         fields = '__all__'
         ordering = ['-id']
 
 
-class HistSerializer(serializers.ModelSerializer):
+class ProductsGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Produto
+        fields = ['cod_produto', ]
+
+
+class HistoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historico
         fields = '__all__'
         ordering = ['-id']
 
 
-class VendaSerializer(serializers.ModelSerializer):
+class SalesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venda
         fields = '__all__'
         ordering = ['-id']
 
 
-class PedSerializer(serializers.ModelSerializer):
+class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pedido
         fields = '__all__'
         ordering = ['-id']
 
 
-class EntSerializer(serializers.ModelSerializer):
+class OrdersGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pedido
+        fields = ['num_pedido', ]
+
+
+class EntriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Entrada
         fields = '__all__'
         ordering = ['-id']
 
 
-class EstSerializer(serializers.ModelSerializer):
+class StocksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estoque
         fields = '__all__'

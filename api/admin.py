@@ -7,7 +7,7 @@ from api.models.produto import Produto
 from api.models.entrada import Entrada
 from api.models.venda import Venda
 
-from api.models.pedido_duplicado import PedidoDuplicado
+# from api.models.pedido_duplicado import PedidoDuplicado
 
 
 """ Adicionando dados da API de Produtos no Admin do DJANGO """
@@ -76,4 +76,4 @@ admin.site.register(Historico, HistoricoAdmin)
 admin.site.register(Pedido, PedidoAdmin)
 admin.site.register(Entrada, EntradaAdmin)
 admin.site.register(Venda, VendaAdmin)
-admin.site.register(PedidoDuplicado)
+# admin.site.register(PedidoDuplicado)

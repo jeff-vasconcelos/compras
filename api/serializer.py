@@ -7,7 +7,7 @@ from api.models.historico import Historico
 from api.models.pedido import Pedido
 from api.models.entrada import Entrada
 from api.models.venda import Venda
-from api.models.pedido_duplicado import PedidoDuplicado
+# from api.models.pedido_duplicado import PedidoDuplicado
 from core.models.empresas_models import Filial, Empresa
 
 
@@ -129,7 +129,7 @@ class PedidoSerializer(serializers.ModelSerializer):
         if not qs_filial:
             raise serializers.ValidationError({'filial': "nao cadastrada"})
 
-        if not valida_pedido(data):
+        if not validate_order(data):
             raise serializers.ValidationError({'pedido de compra': "registro ja existe!"})
 
         return data

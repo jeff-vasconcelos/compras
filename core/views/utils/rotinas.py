@@ -8,7 +8,7 @@ from core.views.alerta.alertas_views import send_email_alerta, alerta_db
 from core.views.home.functions_home import save_grafico_curva, save_grafico_faturamento, save_dados_estoque
 from core.views.alerta.processa_produtos import *
 from core.models.empresas_models import Empresa
-from api.models.pedido_duplicado import PedidoDuplicado
+# from api.models.pedido_duplicado import PedidoDuplicado
 from django.db.models import Q
 from datetime import date, timedelta
 
@@ -45,7 +45,7 @@ def rotina_home(id_empresa):
     empresa.atualizacao_home = data_hora
     empresa.save()
 
-    valida_pedidos_excluidos(id_empresa)
+    # valida_pedidos_excluidos(id_empresa)
 
 
 # ROTINA DE EXECUÇÃO DE EMAIL
@@ -81,32 +81,32 @@ def teste(request, template_name='testando_alerta.html'):
     save_dados_estoque(id_empresa, produtos_home)
     alerta_db(id_empresa, produtos_alerta)
 
-    valida_pedidos_excluidos(id_empresa)
+    # valida_pedidos_excluidos(id_empresa)
 
     return render(request, template_name)
 
 
-def valida_pedidos_excluidos(id_empresa):
-    global pedidos
-    pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
-    lista_produtos_ped = []
-
-    if pedidos_existentes:
-        for i in pedidos_existentes:
-            lista_produtos_ped.append(i.cod_produto)
-
-        existe = list(set(lista_produtos_ped))
-
-        #hoje = date.today()
-
-        pedidos = Pedido.objects.filter(
-            empresa__id=id_empresa
-        ).exclude(Q(cod_produto__in=existe))
-        #).exclude(Q(cod_produto__in=existe) | Q(created_at=hoje))
-
-        if pedidos:
-
-            pedidos.delete()
-            pedidos_existentes.delete()
-
-    return None
+# def valida_pedidos_excluidos(id_empresa):
+#     global pedidos
+#     pedidos_existentes = PedidoDuplicado.objects.filter(empresa__id=id_empresa)
+#     lista_produtos_ped = []
+#
+#     if pedidos_existentes:
+#         for i in pedidos_existentes:
+#             lista_produtos_ped.append(i.cod_produto)
+#
+#         existe = list(set(lista_produtos_ped))
+#
+#         #hoje = date.today()
+#
+#         pedidos = Pedido.objects.filter(
+#             empresa__id=id_empresa
+#         ).exclude(Q(cod_produto__in=existe))
+#         #).exclude(Q(cod_produto__in=existe) | Q(created_at=hoje))
+#
+#         if pedidos:
+#
+#             pedidos.delete()
+#             pedidos_existentes.delete()
+#
+#     return None
