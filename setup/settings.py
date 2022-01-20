@@ -1,17 +1,16 @@
 import os
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@')
 
 DEBUG = False
-#DEBUG = os.environ.get('DEBUG')
+# DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['187.0.214.183', 'insight.ecluster.com.br']
 
-#ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
 
 LOGIN_URL = '/'
 
@@ -73,38 +72,33 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'setup.wsgi.application'
-
-if DEBUG:
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+"""
 
-
-else:
-
-    DATABASES = {
-        'default': {
-            'ENGINE': os.environ.get('DB_ENGINE'),
-            'NAME': os.environ.get('DB_NAME'),
-            'USER': os.environ.get('DB_USER'),
-            'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': os.environ.get('DB_HOST'),
-            'PORT': os.environ.get('DB_PORT'),
-            # 'HOST': '177.136.201.66',
-            # 'PORT': '30222',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME', 'cluster'),
+        'USER': os.environ.get('DB_USER', 'cluster'),
+        'PASSWORD': os.environ.get('DB_PASS', 'clus123ter'),
+        'HOST': '172.30.126.3',
+        'PORT': '5432',
+        # 'HOST': '177.136.201.66',
+        # 'PORT': '30222',
     }
+}
 
-    # CONFIG SSL
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
+# CONFIG SSL
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -130,7 +124,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join('templates/static')]
