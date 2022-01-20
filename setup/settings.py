@@ -3,7 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@')
+#SECRET_KEY = os.environ.get('SECRET_KEY', 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@')
+SECRET_KEY = 'pc#&s_x-+hi7ly1li$9z=&)z^9*iu(w)wruukoddo=t4ue-183'
 
 DEBUG = False
 # DEBUG = os.environ.get('DEBUG')
