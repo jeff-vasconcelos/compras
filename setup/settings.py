@@ -1,19 +1,26 @@
 import os
 from pathlib import Path
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-#SECRET_KEY = os.environ.get('SECRET_KEY', 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@')
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'pc#&s_x-+hi7ly1li$9z=&)z^9*iu(w)wruukoddo=t4ue-183'
+# SECRET_KEY = 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@'
 
+# SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = True
 DEBUG = False
-# DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['187.0.214.183', 'insight.ecluster.com.br']
-
-# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['insight.ecluster.com.br', '187.0.214.183']
 
 LOGIN_URL = '/'
+
+# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -73,6 +80,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'setup.wsgi.application'
+
+# Database
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 """
 DATABASES = {
     'default': {
@@ -81,7 +91,6 @@ DATABASES = {
     }
 }
 """
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -95,11 +104,8 @@ DATABASES = {
     }
 }
 
-# CONFIG SSL
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# Password validation
+# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -116,6 +122,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Internationalization
+# https://docs.djangoproject.com/en/3.1/topics/i18n/
+
 LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
@@ -126,6 +135,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join('templates/static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -134,12 +146,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
-
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
-    # ],
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -148,13 +158,6 @@ REST_FRAMEWORK = {
 
 # SMTP CONFIGURATION
 
-# EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
-# EMAIL_HOST = os.environ.get('EMAIL_HOST')
-# EMAIL_PORT = os.environ.get('EMAIL_PORT')
-# EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
-# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -162,6 +165,15 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'contato.insight.cluster@gmail.com'
 EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
 
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.ecluster.com.br'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'contato-insight@ecluster.com.br'
+EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
+"""
 # 24 horas de sessão
 SESSION_COOKIE_AGE = 86400
 
@@ -174,9 +186,9 @@ INTERNAL_IPS = [
 ]
 
 # CELERY STUFF
+BROKER_URL = 'redis://localhost:6379'
 CELERY_IMPORTS = ("core.tasks",)
-BROKER_URL = os.environ.get('BROKER_URL')
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -186,5 +198,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 THOUSAND_SEPARATOR = '.',
 USE_THOUSAND_SEPARATOR = True
+
+# CONFIG SSL
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
