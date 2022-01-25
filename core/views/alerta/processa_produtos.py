@@ -49,7 +49,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     pedidos = pedidos_compra(cod_produto=cod_produto, id_empresa=id_empresa)
     u_entrada = ultima_entrada(cod_produto=cod_produto, id_empresa=id_empresa, periodo=periodo)
     e_atual = estoque_atual(cod_produto=cod_produto, id_empresa=id_empresa)
-    print(cod_produto)
 
     vendas_p, info_produto = vendas(cod_produto, id_empresa, periodo)
 
@@ -79,7 +78,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
         vendas_ = vendas_p.query('cod_filial == @filial')
 
         estoque_ = e_atual.query('cod_filial == @filial')
-        print(filial)
+
         curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial').reset_index(drop=True)
 
         if entradas_.empty:
