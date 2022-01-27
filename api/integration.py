@@ -45,7 +45,7 @@ def list_branches_by_company(request, pk):
 def list_orders_by_company(request, pk):
 
     start_date = datetime.date.today()
-    end_date = start_date - datetime.timedelta(days=90 - 1)
+    end_date = start_date - datetime.timedelta(days=30 - 1)
 
     qs = Pedido.objects.filter(empresa_id=pk, data__range=[end_date, start_date]).order_by('-id')
     serializer = OrdersGetSerializer(qs, many=True)
