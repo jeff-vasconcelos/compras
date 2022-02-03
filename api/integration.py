@@ -52,6 +52,17 @@ def list_orders_by_company(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['GET', ])
+@permission_classes((IsAuthenticated, ))
+def list_stock_by_company(request, pk):
+
+    today = datetime.date.today()
+
+    qs = Estoque.objects.filter(empresa_id=pk, data=today).order_by('-id')
+    serializer = StockGetSerializer(qs, many=True)
+    return Response(serializer.data)
+
+
 # FUNÇÃO PARA REMOVER PEDIDOS APAGADOS NO BANCO DE DADOS DE ORIGEM (ERP)
 @api_view(['DELETE', ])
 @permission_classes((IsAuthenticated, ))

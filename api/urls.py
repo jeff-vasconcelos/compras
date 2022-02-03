@@ -42,4 +42,6 @@ urlpatterns = [
     path('integration/branches-company/<str:pk>/', list_branches_by_company, name='branches_list_by_company'),
     path('integration/orders-company/<str:pk>/', list_orders_by_company, name='orders_list_by_company'),
     path('integration/orders-company/delete/<str:pk>/', delete_duplicate_orders_by_company, name='orders_delete_by_company'),
+
+    path('integration/stock-company/<str:pk>/', list_stock_by_company, name='stock_by_company'),
 ]

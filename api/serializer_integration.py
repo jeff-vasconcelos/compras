@@ -73,7 +73,13 @@ class OrdersSerializer(serializers.ModelSerializer):
 class OrdersGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pedido
-        fields = ['num_pedido', ]
+        fields = ['num_pedido', 'cod_produto', 'cod_filial', 'saldo', 'data']
+
+
+class StockGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Estoque
+        fields = ['cod_produto', 'cod_filial', 'qt_geral', 'qt_disponivel', 'data', 'preco_venda']
 
 
 class EntriesSerializer(serializers.ModelSerializer):
