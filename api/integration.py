@@ -69,8 +69,9 @@ def list_stock_by_company(request, pk):
 def delete_duplicate_orders_by_company(request, pk):
 
     order_number = request.data['num_pedido']
+    code_product = request.data['cod_produto']
 
-    qs_orders = Pedido.objects.filter(empresa_id=pk, num_pedido=order_number)
+    qs_orders = Pedido.objects.filter(empresa_id=pk, num_pedido=order_number, cod_produto=code_product)
 
     if not qs_orders:
         return JsonResponse({"error": "order not found"}, status=404)

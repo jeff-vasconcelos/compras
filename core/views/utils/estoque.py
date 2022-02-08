@@ -31,9 +31,6 @@ def qs_estoque(cod_produto, filial, id_empresa, lista_estoque):
         empresa__id__exact=id_empresa
     ).order_by('-id')[:1].values())
 
-    print("RESULTADO DA CONSULTA AO DB")
-    print(cod_produto)
-
     if not estoque_a.empty:
         estoque_ = estoque_a.drop_duplicates(subset=['cod_filial'], keep='first')
         lista = estoque_.values.tolist()
@@ -68,8 +65,5 @@ def process_estoque(lista_estoque):
                 lista_fim.append(b)
 
     disponivel_est = pd.DataFrame(lista_fim)
-
-    print("DATAFRAME ESTOQUE DISPONIVEL - FUNÇÃO PROCESS ESTOQUE")
-    print(disponivel_est)
 
     return disponivel_est
