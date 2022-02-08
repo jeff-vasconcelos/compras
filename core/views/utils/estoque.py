@@ -32,6 +32,7 @@ def qs_estoque(cod_produto, filial, id_empresa, lista_estoque):
     ).order_by('-id')[:1].values())
 
     print("RESULTADO DA CONSULTA AO DB")
+    print(cod_produto)
     print(estoque_a)
 
     if not estoque_a.empty:
