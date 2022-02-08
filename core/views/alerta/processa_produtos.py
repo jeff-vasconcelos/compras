@@ -77,6 +77,7 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
         vendas_ = vendas_p.query('cod_filial == @filial')
 
+        print(e_atual.info())
         estoque_ = e_atual.query('cod_filial == @filial')
 
         curva_ = curva.query('cod_produto == @cod_produto & cod_filial == @filial').reset_index(drop=True)
