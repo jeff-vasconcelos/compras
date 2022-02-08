@@ -33,7 +33,6 @@ def qs_estoque(cod_produto, filial, id_empresa, lista_estoque):
 
     print("RESULTADO DA CONSULTA AO DB")
     print(cod_produto)
-    print(estoque_a)
 
     if not estoque_a.empty:
         estoque_ = estoque_a.drop_duplicates(subset=['cod_filial'], keep='first')
