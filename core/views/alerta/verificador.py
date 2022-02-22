@@ -2,6 +2,7 @@ import datetime
 from api.models.fornecedor import Fornecedor
 from core.models.empresas_models import Filial
 from api.models.produto import Produto
+from api.models.estoque import Estoque
 from api.models.venda import Venda
 
 
@@ -21,10 +22,15 @@ def verifica_produto(cod_produto, id_empresa, periodo):
         empresa__id__exact=id_empresa
     )
 
+    estoque = Estoque.objects.filter(
+        cod_produto__exact=cod_produto,
+        empresa__id__exact=id_empresa
+    ).order_by('-id')
+
     politica_fornecedor = produto.fornecedor.tempo_estoque
 
     if politica_fornecedor is not None:
-        if vendas:
+        if vendas and estoque:
             return True
         else:
             return False
@@ -32,8 +38,16 @@ def verifica_produto(cod_produto, id_empresa, periodo):
         return False
 
 
+# def get_produtos(id_empresa, id_fornecedor):
+#     produtos = Produto.objects.filter(
+#         empresa__id__exact=id_empresa,
+#         fornecedor__id__exact=id_fornecedor
+#     )
+#     return produtos
+
+
 def get_produtos(id_empresa, id_fornecedor):
-    produtos = Produto.objects.filter(
+    produtos = Estoque.objects.filter(
         empresa__id__exact=id_empresa,
         fornecedor__id__exact=id_fornecedor
     )

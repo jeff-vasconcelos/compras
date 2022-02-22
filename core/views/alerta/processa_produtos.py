@@ -199,7 +199,7 @@ def processa_produtos_alerta_home(id_empresa, periodo, curva_filial, curva_home)
         for produto in produtos:
             verif_produto = verifica_produto(produto.cod_produto, id_empresa, periodo)
 
-            if verif_produto == True:
+            if verif_produto:
                 infor_filiais = processa_produtos_filiais(
                     produto.cod_produto,
                     fornecedor.cod_fornecedor,
