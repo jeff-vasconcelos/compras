@@ -38,16 +38,8 @@ def verifica_produto(cod_produto, id_empresa, periodo):
         return False
 
 
-# def get_produtos(id_empresa, id_fornecedor):
-#     produtos = Produto.objects.filter(
-#         empresa__id__exact=id_empresa,
-#         fornecedor__id__exact=id_fornecedor
-#     )
-#     return produtos
-
-
 def get_produtos(id_empresa, id_fornecedor):
-    produtos = Estoque.objects.filter(
+    produtos = Produto.objects.filter(
         empresa__id__exact=id_empresa,
         fornecedor__id__exact=id_fornecedor
     )
