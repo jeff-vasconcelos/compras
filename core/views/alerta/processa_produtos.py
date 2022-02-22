@@ -41,8 +41,6 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
     """
 
     """
-    print("FUNÇÃO DADOS PRODUTOS")
-    print(cod_produto)
 
     global resumo_produto
     parametros = Parametro.objects.get(empresa_id=id_empresa)
