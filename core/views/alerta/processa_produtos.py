@@ -60,11 +60,8 @@ def dados_produto(cod_produto, cod_fornecedor, id_empresa, leadtime, tempo_repos
 
     if not curva_home:
         curva = abc_fornecedores(lista_fornecedor, id_empresa, periodo)
-        print(curva.head(1))
     else:
-        print('PASSOU AQUI! #################')
         curva = curva_filial
-        print(curva)
 
     filiais = []
     for i, v in info_produto.cod_filial.iteritems():
