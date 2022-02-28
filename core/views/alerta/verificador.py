@@ -24,6 +24,7 @@ def verifica_produto(cod_produto, id_empresa, periodo):
 
     estoque = Estoque.objects.filter(
         cod_produto__exact=cod_produto,
+        data__range=[data_fim, data_inicio],
         empresa__id__exact=id_empresa
     ).order_by('-id')
 

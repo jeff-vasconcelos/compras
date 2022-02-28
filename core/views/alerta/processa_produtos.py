@@ -189,56 +189,63 @@ def processa_produtos_alerta_home(id_empresa, periodo, curva_filial, curva_home)
 
     for fornecedor in fornecedores:
 
-        leadtime = fornecedor.leadtime
-        t_reposicao = fornecedor.ciclo_reposicao
+        try:
 
-        produtos = get_produtos(id_empresa, fornecedor.id)
+            leadtime = fornecedor.leadtime
+            t_reposicao = fornecedor.ciclo_reposicao
 
-        for produto in produtos:
-            verif_produto = verifica_produto(produto.cod_produto, id_empresa, periodo)
+            produtos = get_produtos(id_empresa, fornecedor.id)
 
-            if verif_produto:
-                infor_filiais = processa_produtos_filiais(
-                    produto.cod_produto,
-                    fornecedor.cod_fornecedor,
-                    id_empresa,
-                    leadtime,
-                    t_reposicao,
-                    periodo,
-                    curva_filial,
-                    curva_home
-                )
+            for produto in produtos:
+                verif_produto = verifica_produto(produto.cod_produto, id_empresa, periodo)
 
-                infor_filiais['cod_produto'] = produto.cod_produto
-                infor_filiais['desc_produto'] = produto.desc_produto
-                infor_filiais['principio_ativo'] = produto.principio_ativo
-                infor_filiais['fornecedor'] = fornecedor.desc_fornecedor
-                infor_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
+                if verif_produto:
+                    infor_filiais = processa_produtos_filiais(
+                        produto.cod_produto,
+                        fornecedor.cod_fornecedor,
+                        id_empresa,
+                        leadtime,
+                        t_reposicao,
+                        periodo,
+                        curva_filial,
+                        curva_home
+                    )
 
-                for index, row in infor_filiais.iterrows():
-                    alertas_produtos = {
-                        'filial': row.filial,
-                        'cod_produto': row.cod_produto,
-                        'desc_produto': row.desc_produto,
-                        'saldo': row.saldo,
-                        'sugestao_unidade': row.sugestao,
-                        'valor_sugestao': row.valor_sugestao,
-                        'condicao_estoque': row.condicao_estoque,
-                        'estoque': row.estoque,
-                        'qt_excesso': row.qt_excesso,
-                        'vl_excesso': row.vl_excesso,
-                        'curva': row.curva,
-                        'custo': row.custo,
-                        'fornecedor': row.fornecedor,
-                        'cod_fornecedor': row.cod_fornecedor,
-                        'dde': row.dde,
-                        'quantidade_calc': row.quantidade_calc,
-                        # 'media_ajustada': row.media_ajustada,
-                        'media': row.media_simples,
-                        'principio_ativo': row.principio_ativo,
-                        'dt_ult_entrada': row.dt_ult_entrada,
-                        'vl_ult_entrada': row.vl_ult_entrada,
-                    }
+                    infor_filiais['cod_produto'] = produto.cod_produto
+                    infor_filiais['desc_produto'] = produto.desc_produto
+                    infor_filiais['principio_ativo'] = produto.principio_ativo
+                    infor_filiais['fornecedor'] = fornecedor.desc_fornecedor
+                    infor_filiais['cod_fornecedor'] = fornecedor.cod_fornecedor
 
-                    lista_alertas.append(alertas_produtos)
+                    for index, row in infor_filiais.iterrows():
+                        alertas_produtos = {
+                            'filial': row.filial,
+                            'cod_produto': row.cod_produto,
+                            'desc_produto': row.desc_produto,
+                            'saldo': row.saldo,
+                            'sugestao_unidade': row.sugestao,
+                            'valor_sugestao': row.valor_sugestao,
+                            'condicao_estoque': row.condicao_estoque,
+                            'estoque': row.estoque,
+                            'qt_excesso': row.qt_excesso,
+                            'vl_excesso': row.vl_excesso,
+                            'curva': row.curva,
+                            'custo': row.custo,
+                            'fornecedor': row.fornecedor,
+                            'cod_fornecedor': row.cod_fornecedor,
+                            'dde': row.dde,
+                            'quantidade_calc': row.quantidade_calc,
+                            # 'media_ajustada': row.media_ajustada,
+                            'media': row.media_simples,
+                            'principio_ativo': row.principio_ativo,
+                            'dt_ult_entrada': row.dt_ult_entrada,
+                            'vl_ult_entrada': row.vl_ult_entrada,
+                        }
+
+                        lista_alertas.append(alertas_produtos)
+
+        except Exception as e:
+            print(e)
+            raise e
+
     return lista_alertas
