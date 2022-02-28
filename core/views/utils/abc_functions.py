@@ -44,6 +44,8 @@ def abc_fornecedores(lista_fornecedores, id_empresa, periodo):
     inicio, fim = intervalo_periodo(periodo)
     filiais = get_filiais(id_empresa)
 
+    print(inicio, fim)
+
     lista_vendas = []
 
 
