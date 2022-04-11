@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.validator import *
+
 from api.models.produto import Produto
 from api.models.fornecedor import Fornecedor
 from api.models.estoque import Estoque
@@ -7,191 +7,149 @@ from api.models.historico import Historico
 from api.models.pedido import Pedido
 from api.models.entrada import Entrada
 from api.models.venda import Venda
-# from api.models.pedido_duplicado import PedidoDuplicado
-from core.models.empresas_models import Filial, Empresa
+from api.validator import (ValidExistsData,
+                           ProviderCheckUpdate,
+                           ProductCheckUpdate,
+                           OrderCheckUpdate,
+                           StockCheckUpdate)
 
 
-class ProdutoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Produto
-        fields = '__all__'
-
-    def validate(self, data):
-        if not valida_produto(data):
-            raise serializers.ValidationError({'produto': "registro já existe!"})
-
-        fornecedor = data['cod_fornecedor']
-        empresa = data['empresa']
-        fornec = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
-
-        if not fornec:
-            raise serializers.ValidationError({'fornecedor': "nao cadastrado"})
-
-        return data
-
-
-class FornecedorSerializer(serializers.ModelSerializer):
+class ProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fornecedor
         fields = '__all__'
 
     def validate(self, data):
-        if not valida_fornecedor(data):
-            raise serializers.ValidationError({'fornecedor': "registro ja existe"})
+        query = ValidExistsData.provider_exists(data)
+        if query:
+            ProviderCheckUpdate.check_provider_data(data, query)
+            raise serializers.ValidationError({'message': "provider already exists"})
 
         return data
 
 
-class EstoqueSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Estoque
+        model = Produto
         fields = '__all__'
 
     def validate(self, data):
+        if not ValidExistsData.provider_exists(data):
+            raise serializers.ValidationError({'message': "provider does not exists"})
 
-        fornecedor = data['cod_fornecedor']
-        empresa = data['empresa']
-        produto = data['cod_produto']
-        filial = data['cod_filial']
-
-        qs_fornecedor = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
-        qs_filial = Filial.objects.filter(cod_filial=filial, empresa=empresa)
-        qs_produto = Produto.objects.filter(cod_produto=produto, empresa=empresa)
-
-        if not qs_fornecedor:
-            raise serializers.ValidationError({'fornecedor': "nao cadastrado"})
-
-        if not qs_produto:
-            raise serializers.ValidationError({'produto': "nao cadastrado"})
-
-        if not qs_filial:
-            raise serializers.ValidationError({'filial': "nao cadastrada"})
-
-        if not valida_estoque_atual(data):
-            raise serializers.ValidationError({'estoque atual': "registro ja existe!"})
+        query = ValidExistsData.product_exists(data)
+        if query:
+            ProductCheckUpdate.check_product_data(data, query)
+            raise serializers.ValidationError({'message': "product already exists"})
 
         return data
 
 
-class HistoricoSerializer(serializers.ModelSerializer):
+class SaleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Venda
+        fields = '__all__'
+
+    def validate(self, data):
+        if not ValidExistsData.provider_exists(data):
+            raise serializers.ValidationError({'message': "provider does not exists"})
+
+        if ValidExistsData.branch_exists(data):
+            raise serializers.ValidationError({'message': "branch does not exists"})
+
+        if ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product already exists"})
+
+        if ValidExistsData.sale_exists(data):
+            raise serializers.ValidationError({'message': "registry already exists"})
+
+        return data
+
+
+class HistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Historico
         fields = '__all__'
 
     def validate(self, data):
+        if not ValidExistsData.provider_exists(data):
+            raise serializers.ValidationError({'message': "provider does not exists"})
 
-        fornecedor = data['cod_fornecedor']
-        empresa = data['empresa']
-        produto = data['cod_produto']
-        filial = data['cod_filial']
+        if ValidExistsData.branch_exists(data):
+            raise serializers.ValidationError({'message': "branch does not exists"})
 
-        qs_fornecedor = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
-        qs_filial = Filial.objects.filter(cod_filial=filial, empresa=empresa)
-        qs_produto = Produto.objects.filter(cod_produto=produto, empresa=empresa)
+        if ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product already exists"})
 
-        if not qs_fornecedor:
-            raise serializers.ValidationError({'fornecedor': "nao cadastrado"})
-
-        if not qs_produto:
-            raise serializers.ValidationError({'produto': "nao cadastrado"})
-
-        if not qs_filial:
-            raise serializers.ValidationError({'filial': "nao cadastrada"})
-
-        if not valida_hist_estoque(data):
-            raise serializers.ValidationError({'historico estoque': "registro ja existe!"})
+        if ValidExistsData.history_exists(data):
+            raise serializers.ValidationError({'message': "registry already exists"})
 
         return data
 
 
-class PedidoSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pedido
         fields = '__all__'
 
     def validate(self, data):
+        if not ValidExistsData.provider_exists(data):
+            raise serializers.ValidationError({'message': "provider does not exists"})
 
-        fornecedor = data['cod_fornecedor']
-        empresa = data['empresa']
-        produto = data['cod_produto']
-        filial = data['cod_filial']
+        if ValidExistsData.branch_exists(data):
+            raise serializers.ValidationError({'message': "branch does not exists"})
 
-        qs_fornecedor = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
-        qs_filial = Filial.objects.filter(cod_filial=filial, empresa=empresa)
-        qs_produto = Produto.objects.filter(cod_produto=produto, empresa=empresa)
+        if ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product already exists"})
 
-        if not qs_fornecedor:
-            raise serializers.ValidationError({'fornecedor': "nao cadastrado"})
-
-        if not qs_produto:
-            raise serializers.ValidationError({'produto': "nao cadastrado"})
-
-        if not qs_filial:
-            raise serializers.ValidationError({'filial': "nao cadastrada"})
-
-        if not validate_order(data):
-            raise serializers.ValidationError({'pedido de compra': "registro ja existe!"})
+        query = ValidExistsData.order_exists(data)
+        if query:
+            OrderCheckUpdate.check_order_data(data, query)
+            raise serializers.ValidationError({'message': "registry already exists"})
 
         return data
 
 
-class EntradaSerializer(serializers.ModelSerializer):
+class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entrada
         fields = '__all__'
 
     def validate(self, data):
 
-        fornecedor = data['cod_fornecedor']
-        empresa = data['empresa']
-        produto = data['cod_produto']
-        filial = data['cod_filial']
+        if not ValidExistsData.provider_exists(data):
+            raise serializers.ValidationError({'message': "provider does not exists"})
 
-        qs_fornecedor = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
-        qs_filial = Filial.objects.filter(cod_filial=filial, empresa=empresa)
-        qs_produto = Produto.objects.filter(cod_produto=produto, empresa=empresa)
+        if ValidExistsData.branch_exists(data):
+            raise serializers.ValidationError({'message': "branch does not exists"})
 
-        if not qs_fornecedor:
-            raise serializers.ValidationError({'fornecedor': "nao cadastrado"})
+        if ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product already exists"})
 
-        if not qs_produto:
-            raise serializers.ValidationError({'produto': "nao cadastrado"})
-
-        if not qs_filial:
-            raise serializers.ValidationError({'filial': "nao cadastrada"})
-
-        if not valida_ultentrada(data):
-            raise serializers.ValidationError({'ultima entrada': "registro ja existe!"})
+        if ValidExistsData.entry_exists(data):
+            raise serializers.ValidationError({'message': "registry already exists"})
 
         return data
 
 
-class VendasSerializer(serializers.ModelSerializer):
+class StockSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Venda
+        model = Estoque
         fields = '__all__'
 
     def validate(self, data):
+        if not ValidExistsData.provider_exists(data):
+            raise serializers.ValidationError({'message': "provider does not exists"})
 
-        fornecedor = data['cod_fornecedor']
-        empresa = data['empresa']
-        produto = data['cod_produto']
-        filial = data['cod_filial']
+        if ValidExistsData.branch_exists(data):
+            raise serializers.ValidationError({'message': "branch does not exists"})
 
-        qs_fornecedor = Fornecedor.objects.filter(cod_fornecedor=fornecedor, empresa=empresa)
-        qs_filial = Filial.objects.filter(cod_filial=filial, empresa=empresa)
-        qs_produto = Produto.objects.filter(cod_produto=produto, empresa=empresa)
+        if ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product already exists"})
 
-        if not qs_fornecedor:
-            raise serializers.ValidationError({'fornecedor': "nao cadastrada"})
-
-        if not qs_produto:
-            raise serializers.ValidationError({'produto': "nao cadastrada"})
-
-        if not qs_filial:
-            raise serializers.ValidationError({'filial': "nao cadastrada"})
-
-        if not valida_venda(data):
-            raise serializers.ValidationError({'venda': "registro ja existe!"})
+        query = ValidExistsData.stock_exists(data)
+        if query:
+            StockCheckUpdate.check_stock_data(data, query)
+            raise serializers.ValidationError({'message': "registry already exists"})
 
         return data

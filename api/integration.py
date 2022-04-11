@@ -1,10 +1,13 @@
 import datetime
+from django.utils import timezone
+import pytz
 
+from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from api.serializer_integration import *
 from core.models.empresas_models import Filial
 
@@ -19,7 +22,8 @@ def access_valid(request):
 @api_view(['GET', ])
 @permission_classes((IsAuthenticated, ))
 def list_products_by_company(request, pk):
-    qs = Produto.objects.filter(empresa_id=pk).order_by('-id')
+    qs = Produto.objects.filter(empresa_id=pk,
+                                is_active=True).order_by('-id')
     serializer = ProductsGetSerializer(qs, many=True)
     return Response(serializer.data)
 
@@ -47,7 +51,9 @@ def list_orders_by_company(request, pk):
     start_date = datetime.date.today()
     end_date = start_date - datetime.timedelta(days=90)
 
-    qs = Pedido.objects.filter(empresa_id=pk, data__range=[end_date, start_date]).order_by('-id')
+    qs = Pedido.objects.filter(empresa_id=pk,
+                               data__range=[end_date, start_date],
+                               produto__is_active=True).order_by('-id')
     serializer = OrdersGetSerializer(qs, many=True)
     return Response(serializer.data)
 
@@ -56,29 +62,73 @@ def list_orders_by_company(request, pk):
 @permission_classes((IsAuthenticated, ))
 def list_stock_by_company(request, pk):
 
-    today = datetime.date.today()
 
-    qs = Estoque.objects.filter(empresa_id=pk, data=today).order_by('-id')
+    one_hundred = timezone.now() - datetime.timedelta(minutes = 100)
+
+    qs = Estoque.objects.filter(
+        created_at__gt=one_hundred,
+        empresa_id=pk,
+        produto__is_active=True).order_by('-id')
+
+    print(qs)
+
     serializer = StockGetSerializer(qs, many=True)
     return Response(serializer.data)
 
 
-# FUNÇÃO PARA REMOVER PEDIDOS APAGADOS NO BANCO DE DADOS DE ORIGEM (ERP)
-@api_view(['DELETE', ])
+@api_view(['GET', ])
+@permission_classes((AllowAny, ))
+def check_history_by_company(request, pk):
+
+    today = datetime.date.today()
+    yesterday = today - datetime.timedelta(days=2)
+
+    qs = Historico.objects.filter(empresa_id=pk,
+                                  data__range=[yesterday, today])
+
+    if not qs:
+        return JsonResponse({"response": "false"}, status=200)
+    return JsonResponse({"response": "true"}, status=200)
+
+
+@api_view(['POST', ])
 @permission_classes((IsAuthenticated, ))
-def delete_duplicate_orders_by_company(request, pk):
+def delete_orders_by_company(request, pk):
+    try:
 
-    order_number = request.data['num_pedido']
-    code_product = request.data['cod_produto']
+        qs_orders = Pedido.objects.filter(empresa_id=pk,
+                                          num_pedido=request.data['num_pedido'],
+                                          cod_produto=request.data['cod_produto']).first()
 
-    qs_orders = Pedido.objects.filter(empresa_id=pk, num_pedido=order_number, cod_produto=code_product)
+        if not qs_orders:
+            return JsonResponse({"error": "order not found"}, status=404)
 
-    if not qs_orders:
-        return JsonResponse({"error": "order not found"}, status=404)
+        qs_orders.delete()
 
-    qs_orders.delete()
+        return JsonResponse({"success": "orders successfully removed"}, status=200)
 
-    return JsonResponse({"success": "orders successfully removed"}, status=200)
+    except Exception as e:
+        raise e
+
+
+@api_view(['POST', ])
+@permission_classes((IsAuthenticated, ))
+def inactive_product_by_company(request, pk):
+    try:
+
+        product_query = Produto.objects.filter(cod_produto=request.data['cod_produto'],
+                                               empresa_id=pk).first()
+
+        if not product_query:
+            return JsonResponse({"message": "product not found"}, status=404)
+
+        product_query.is_active = False
+        product_query.save()
+
+        return JsonResponse({"message": "the product is no longer active"}, status=200)
+
+    except Exception as e:
+        raise e
 
 
 class ProvidersCreate(generics.CreateAPIView):

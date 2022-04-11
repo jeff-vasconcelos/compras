@@ -16,7 +16,8 @@ class Venda(models.Model):
     num_nota = models.IntegerField(null=True, blank=True)
     rca = models.CharField(max_length=255, null=True, blank=True)
     supervisor = models.CharField(max_length=255, null=True, blank=True)
-    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_venda',
                                 blank=True, null=True)

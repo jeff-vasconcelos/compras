@@ -19,7 +19,9 @@ class Produto(models.Model):
     desc_departamento = models.CharField(max_length=255, null=True, blank=True)
     desc_secao = models.CharField(max_length=255, null=True, blank=True)
     cod_fornecedor = models.IntegerField(null=False, blank=False)
-    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True, null=True, blank=True)
     
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_produto',
                                 blank=True, null=True)

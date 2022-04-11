@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.validator import *
+
 from api.models.produto import Produto
 from api.models.fornecedor import Fornecedor
 from api.models.estoque import Estoque
@@ -17,12 +17,6 @@ class BranchesSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
 
-class BranchesGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Filial
-        fields = ['cod_filial', ]
-
-
 class ProvidersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fornecedor
@@ -30,23 +24,11 @@ class ProvidersSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
 
-class ProvidersGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Fornecedor
-        fields = ['cod_fornecedor', ]
-
-
 class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produto
         fields = '__all__'
         ordering = ['-id']
-
-
-class ProductsGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Produto
-        fields = ['cod_produto', ]
 
 
 class HistoriesSerializer(serializers.ModelSerializer):
@@ -70,18 +52,6 @@ class OrdersSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
 
-class OrdersGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Pedido
-        fields = ['num_pedido', 'cod_produto', 'cod_filial', 'saldo', 'data']
-
-
-class StockGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Estoque
-        fields = ['cod_produto', 'cod_filial', 'qt_geral', 'qt_disponivel', 'data', 'preco_venda']
-
-
 class EntriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Entrada
@@ -94,3 +64,40 @@ class StocksSerializer(serializers.ModelSerializer):
         model = Estoque
         fields = '__all__'
         ordering = ['-id']
+
+
+class ProvidersGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fornecedor
+        fields = ['cod_fornecedor', ]
+
+
+class BranchesGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Filial
+        fields = ['cod_filial', ]
+
+
+class ProductsGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Produto
+        fields = ['cod_produto', ]
+
+
+class OrdersGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pedido
+        fields = ['num_pedido',
+                  'cod_produto',
+                  'cod_filial',
+                  'saldo',
+                  'data']
+
+
+class StockGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Estoque
+        fields = ['cod_produto',
+                  'cod_filial',
+                  'qt_geral',
+                  'qt_disponivel']

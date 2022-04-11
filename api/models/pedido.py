@@ -11,7 +11,8 @@ class Pedido(models.Model):
     saldo = models.FloatField(null=False, blank=False)
     num_pedido = models.IntegerField(null=False, blank=False)
     data = models.DateField(null=False, blank=False)
-    created_at = models.DateField(auto_now_add=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_pedidos',
                                 blank=True, null=True)
