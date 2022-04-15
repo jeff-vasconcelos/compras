@@ -904,8 +904,6 @@ def selecionar_produto(request) -> object:
                 data.append(inf_filiais)  # 0
                 data.append(mapa)  # 1
                 data.append(info_prod_filiais)  # 2
-                print(inf_filiais)
-                print(info_prod_filiais)
                 data.append(lista_total_vendas)  # 3
 
                 return JsonResponse({'data': data})

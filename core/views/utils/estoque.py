@@ -55,7 +55,6 @@ def process_estoque(lista_estoque):
         df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
 
         disponivel = df
-        print(df)
         disponiveis = disponivel.assign(
             **disponivel.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
 
