@@ -45,7 +45,7 @@ def vendas(cod_produto, id_empresa, periodo, lista_filiais):
         if i:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_vendas", "preco_unit",
                                           "custo_fin", "data", "cliente", "num_nota", "cod_usur", "supervisor", "created_at",
-                                          "produto_id", "fornecedor_id", "filial_id", "empresa_id", "campo_um",
+                                          "updated_at", "produto_id", "fornecedor_id", "filial_id", "empresa_id", "campo_um",
                                           "campo_dois", "campo_tres"
                                           ])
 

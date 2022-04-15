@@ -92,12 +92,3 @@ class OrdersGetSerializer(serializers.ModelSerializer):
                   'cod_filial',
                   'saldo',
                   'data']
-
-
-class StockGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Estoque
-        fields = ['cod_produto',
-                  'cod_filial',
-                  'qt_geral',
-                  'qt_disponivel']

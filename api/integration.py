@@ -58,39 +58,6 @@ def list_orders_by_company(request, pk):
     return Response(serializer.data)
 
 
-@api_view(['GET', ])
-@permission_classes((IsAuthenticated, ))
-def list_stock_by_company(request, pk):
-
-
-    one_hundred = timezone.now() - datetime.timedelta(minutes = 100)
-
-    qs = Estoque.objects.filter(
-        created_at__gt=one_hundred,
-        empresa_id=pk,
-        produto__is_active=True).order_by('-id')
-
-    print(qs)
-
-    serializer = StockGetSerializer(qs, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET', ])
-@permission_classes((AllowAny, ))
-def check_history_by_company(request, pk):
-
-    today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=2)
-
-    qs = Historico.objects.filter(empresa_id=pk,
-                                  data__range=[yesterday, today])
-
-    if not qs:
-        return JsonResponse({"response": "false"}, status=200)
-    return JsonResponse({"response": "true"}, status=200)
-
-
 @api_view(['POST', ])
 @permission_classes((IsAuthenticated, ))
 def delete_orders_by_company(request, pk):

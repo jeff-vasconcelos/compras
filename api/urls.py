@@ -40,9 +40,6 @@ urlpatterns = [
     path('integration/products-company/<str:pk>/', list_products_by_company, name='products_list_by_company'),
     path('integration/branches-company/<str:pk>/', list_branches_by_company, name='branches_list_by_company'),
     path('integration/orders-company/<str:pk>/', list_orders_by_company, name='orders_list_by_company'),
-    path('integration/stock-company/<str:pk>/', list_stock_by_company, name='stock_list_by_company'),
-
-    path('integration/history-company/<str:pk>/', check_history_by_company, name='history_check_by_company'),
 
     # DELETE ENDPOINTS
     path('integration/delete/orders/<str:pk>/', delete_orders_by_company, name='orders_delete_by_company'),

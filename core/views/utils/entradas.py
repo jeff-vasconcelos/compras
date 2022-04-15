@@ -50,7 +50,7 @@ def process_ultima_entrada(lista_entrada):
     if lista_entrada:
         for i in lista_entrada:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_ult_entrada",
-                                          "vl_ult_entrada", "data", "created_at", "produto_id", "fornecedor_id",
+                                          "vl_ult_entrada", "data", "created_at", "updated_at", "produto_id", "fornecedor_id",
                                           "filial_id", "empresa_id", "campo_um", "campo_dois", "campo_tres"
                                           ])
 

@@ -51,7 +51,7 @@ def process_pedidos(lista_pedidos):
 
         for i in lista_pedidos:
             df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "saldo", "num_pedido",
-                                          "data", "created_at","produto_id", "fornecedor_id", "filial_id", "empresa_id",
+                                          "data", "created_at", "updated_at", "produto_id", "fornecedor_id", "filial_id", "empresa_id",
                                           "campo_um", "campo_dois", "campo_tres"
                                           ])
 

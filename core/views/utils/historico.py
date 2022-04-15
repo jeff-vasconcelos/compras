@@ -44,7 +44,7 @@ def process_historico(lista_historico):
     list_est_histor=[]
     for i in lista_historico:
         df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_estoque", "data",
-                                      "created_at", "produto_id", "fornecedor_id", "filial_id", "empresa_id",
+                                      "created_at", "updated_at", "produto_id", "fornecedor_id", "filial_id", "empresa_id",
                                       "campo_um", "campo_dois", "campo_tres"
                                       ])
 

@@ -47,7 +47,7 @@ def process_estoque(lista_estoque):
     for i in lista_estoque:
         df = pd.DataFrame(i, columns=["id", "cod_produto", "cod_filial", "cod_fornecedor", "qt_geral", "qt_indenizada",
                                       "qt_reservada", "qt_pendente", "qt_bloqueada", "qt_disponivel", "preco_venda",
-                                      "custo_ult_entrada", "data", "created_at", "produto_id", "fornecedor_id",
+                                      "custo_ult_entrada", "data", "created_at", "updated_at", "produto_id", "fornecedor_id",
                                       "filial_id",
                                       "empresa_id", "campo_um", "campo_dois", "campo_tres"
                                       ])
@@ -55,6 +55,7 @@ def process_estoque(lista_estoque):
         df.drop(columns=["campo_um", "campo_dois", "campo_tres"], inplace=True)
 
         disponivel = df
+        print(df)
         disponiveis = disponivel.assign(
             **disponivel.select_dtypes(["datetime"]).astype(str).to_dict("list")).to_dict("records")
 
