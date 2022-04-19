@@ -54,11 +54,11 @@ class SaleSerializer(serializers.ModelSerializer):
         if not ValidExistsData.provider_exists(data):
             raise serializers.ValidationError({'message': "provider does not exists"})
 
-        if ValidExistsData.branch_exists(data):
+        if not ValidExistsData.branch_exists(data):
             raise serializers.ValidationError({'message': "branch does not exists"})
 
-        if ValidExistsData.product_exists(data):
-            raise serializers.ValidationError({'message': "product already exists"})
+        if not ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product does not exists"})
 
         if ValidExistsData.sale_exists(data):
             raise serializers.ValidationError({'message': "registry already exists"})
@@ -75,11 +75,11 @@ class HistorySerializer(serializers.ModelSerializer):
         if not ValidExistsData.provider_exists(data):
             raise serializers.ValidationError({'message': "provider does not exists"})
 
-        if ValidExistsData.branch_exists(data):
+        if not ValidExistsData.branch_exists(data):
             raise serializers.ValidationError({'message': "branch does not exists"})
 
-        if ValidExistsData.product_exists(data):
-            raise serializers.ValidationError({'message': "product already exists"})
+        if not ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product does not exists"})
 
         if ValidExistsData.history_exists(data):
             raise serializers.ValidationError({'message': "registry already exists"})
@@ -96,11 +96,11 @@ class OrderSerializer(serializers.ModelSerializer):
         if not ValidExistsData.provider_exists(data):
             raise serializers.ValidationError({'message': "provider does not exists"})
 
-        if ValidExistsData.branch_exists(data):
+        if not ValidExistsData.branch_exists(data):
             raise serializers.ValidationError({'message': "branch does not exists"})
 
-        if ValidExistsData.product_exists(data):
-            raise serializers.ValidationError({'message': "product already exists"})
+        if not ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product does not exists"})
 
         query = ValidExistsData.order_exists(data)
         if query:
@@ -120,10 +120,10 @@ class EntrySerializer(serializers.ModelSerializer):
         if not ValidExistsData.provider_exists(data):
             raise serializers.ValidationError({'message': "provider does not exists"})
 
-        if ValidExistsData.branch_exists(data):
+        if not ValidExistsData.branch_exists(data):
             raise serializers.ValidationError({'message': "branch does not exists"})
 
-        if ValidExistsData.product_exists(data):
+        if not ValidExistsData.product_exists(data):
             raise serializers.ValidationError({'message': "product already exists"})
 
         if ValidExistsData.entry_exists(data):
@@ -141,11 +141,11 @@ class StockSerializer(serializers.ModelSerializer):
         if not ValidExistsData.provider_exists(data):
             raise serializers.ValidationError({'message': "provider does not exists"})
 
-        if ValidExistsData.branch_exists(data):
+        if not ValidExistsData.branch_exists(data):
             raise serializers.ValidationError({'message': "branch does not exists"})
 
-        if ValidExistsData.product_exists(data):
-            raise serializers.ValidationError({'message': "product already exists"})
+        if not ValidExistsData.product_exists(data):
+            raise serializers.ValidationError({'message': "product does not exists"})
 
         query = ValidExistsData.stock_exists(data)
         if query:
