@@ -8,7 +8,7 @@ from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
 from api.models.produto import *
 from api.models.venda import Venda
-from core.views.alerta.verificador import verifica_produto
+from core.views.alerta.verificador import verifica_produto, check_sales_by_period
 from core.models.parametros_models import Parametro
 from core.views.analise.processa_produtos import a_multifiliais
 #from core.views.alerta.dados_faturamento import curva_abc
@@ -47,42 +47,46 @@ def analise_painel(request, template_name='aplicacao/paginas/analise.html'):
 
 
 def buscar_produto(request):
-    empresa = request.user.usuario.empresa_id
+
+    company_id = request.user.usuario.empresa_id
+
     if request.is_ajax():
-        res = None
-        produto = request.POST.get('produto')
+        researched_product = request.POST.get('produto')
 
         pattern_int = re.compile(r"(0|-?[1-9][0-9]*)")
 
-        if pattern_int.match(produto):
-            qs = Produto.objects.filter(
-                Q(cod_produto__icontains=produto),
-                Q(empresa__id__exact=empresa)
+        if pattern_int.match(researched_product):
+            qs_product = Produto.objects.filter(
+                Q(cod_produto__icontains=researched_product),
+                Q(empresa__id__exact=company_id),
+                Q(is_active=True)
             )[:15]
 
-            if len(qs) > 0 and len(produto) > 0:
+            if len(qs_product) > 0 and len(researched_product) > 0:
                 data = []
-                for prod in qs:
-                    item = {
-                        'pk': prod.pk,
-                        'nome': prod.desc_produto,
-                        'cod': prod.cod_produto,
-                        'emb': prod.embalagem
-                    }
-                    data.append(item)
+                for product in qs_product:
+                    if check_sales_by_period(company_id=company_id, product=qs_product):
+                        item = {
+                            'pk': product.pk,
+                            'nome': product.desc_produto,
+                            'cod': product.cod_produto,
+                            'emb': product.embalagem
+                        }
+                        data.append(item)
                 res = data
             else:
                 res = "Nada encontrado!"
             return JsonResponse({'data': res})
 
         else:
-            if len(produto) >= 3:
+            if len(researched_product) >= 3:
                 qs = Produto.objects.filter(
-                    Q(desc_produto__icontains=produto),
-                    Q(empresa__id__exact=empresa)
+                    Q(desc_produto__icontains=researched_product),
+                    Q(empresa__id__exact=company_id),
+                    Q(is_active=True)
                 )[:15]
 
-                if len(qs) > 0 and len(produto) > 0:
+                if len(qs) > 0 and len(researched_product) > 0:
                     data = []
                     for prod in qs:
                         item = {
@@ -105,26 +109,28 @@ def buscar_produto(request):
 
 
 def buscar_fornecedor(request):
-    empresa = request.user.usuario.empresa_id
+
+    company_id = request.user.usuario.empresa_id
+
     if request.is_ajax():
-        res_f = None
-        fornecedor = request.POST.get('fornecedor')
+
+        researched_provider = request.POST.get('fornecedor')
 
         pattern_int = re.compile(r"(0|-?[1-9][0-9]*)")
 
-        if pattern_int.match(fornecedor):
-            qs = Fornecedor.objects.filter(
-                Q(cod_fornecedor__icontains=fornecedor),
-                Q(empresa__id__exact=empresa)
+        if pattern_int.match(researched_provider):
+            qs_providers = Fornecedor.objects.filter(
+                Q(cod_fornecedor__icontains=researched_provider),
+                Q(empresa__id__exact=company_id)
             )[:15]
 
-            if len(qs) > 0 and len(fornecedor) > 0:
+            if len(qs_providers) > 0 and len(researched_provider) > 0:
                 data = []
-                for fornec in qs:
+                for provider in qs_providers:
                     item = {
-                        'pk': fornec.pk,
-                        'nome': fornec.desc_fornecedor,
-                        'cod': fornec.cod_fornecedor
+                        'pk': provider.pk,
+                        'nome': provider.desc_fornecedor,
+                        'cod': provider.cod_fornecedor
                     }
                     data.append(item)
                 res_f = data
@@ -133,14 +139,14 @@ def buscar_fornecedor(request):
             return JsonResponse({'data': res_f})
 
         else:
-            if len(fornecedor) >= 3:
+            if len(researched_provider) >= 3:
 
                 qs = Fornecedor.objects.filter(
-                    Q(desc_fornecedor__icontains=fornecedor),
-                    Q(empresa__id__exact=empresa)
+                    Q(desc_fornecedor__icontains=researched_provider),
+                    Q(empresa__id__exact=company_id)
                 )[:15]
 
-                if len(qs) > 0 and len(fornecedor) > 0:
+                if len(qs) > 0 and len(researched_provider) > 0:
                     data = []
                     for fornec in qs:
                         item = {
@@ -170,7 +176,8 @@ def buscar_pricipioativo(request):
         if len(produto) >= 3:
             qs = Produto.objects.filter(
                 Q(principio_ativo__icontains=produto),
-                Q(empresa__id__exact=empresa)
+                Q(empresa__id__exact=empresa),
+                Q(is_active=True)
             )[:15]
 
             if len(qs) > 0 and len(produto) > 0:
@@ -198,116 +205,200 @@ def buscar_pricipioativo(request):
     return JsonResponse({})
 
 
-def filtrar_produto_fornecedor(request):
-    empresa = request.user.usuario.empresa_id
+def products_chosen_by_provider_search(request):
+
+    company_id = request.user.usuario.empresa_id
+
     if request.is_ajax():
-        res_fil_fornec = None
-        fornecedor = request.POST.get('fornecedor')
-        fornecedor = fornecedor.replace(",", " ")
+        id_researched_providers = request.POST.get('fornecedor').replace(",", " ")
 
-        a = fornecedor.split()
-        b = []
+        a = id_researched_providers.split()
+        b = [int(e) for e in a]
 
-        for elemento in a:
-            b.append(int(elemento))
+        researched_providers_list = [int(i) for i in b]
 
-        lista_fornecedor = []
-        for i in b:
-            lista_fornecedor.append(int(i))
+        qs_products = Produto.objects.filter(fornecedor_id__in=researched_providers_list,
+                                             empresa__id__exact=company_id,
+                                             is_active=True).order_by('desc_produto')
 
-        qs = Produto.objects.filter(fornecedor_id__in=lista_fornecedor, empresa__id__exact=empresa).order_by(
-            'desc_produto')
-
-        if len(qs) > 0 and len(lista_fornecedor) > 0:
-            marcas = []
-            marcas_itens = []
-
+        if len(qs_products) > 0 and len(researched_providers_list) > 0:
+            brand = []
             data = []
-            for prod in qs:
-                item = {
-                    'pk': prod.pk,
-                    'nome': prod.desc_produto,
-                    'cod': prod.cod_produto,
-                }
-                if prod.marca not in marcas and prod.marca is not None:
-                    marcas.append(prod.marca)
-                data.append(item)
 
-            for i in marcas:
-                itens_marcas = {
-                    'marca_p': i,
-                    'marca_p_desc': i
-                }
-                marcas_itens.append(itens_marcas)
+            for product in qs_products:
+                if check_sales_by_period(company_id=company_id, product=qs_products):
+                    item = {
+                        'pk': product.pk,
+                        'nome': product.desc_produto,
+                        'cod': product.cod_produto,
+                    }
+                    if product.marca not in brand and product.marca is not None:
+                        brand.append(product.marca)
 
-            res_fil_fornec = []
-            res_fil_fornec.append(data)
-            res_fil_fornec.append(marcas_itens)
+                    data.append(item)
+
+            brands_list = [{'marca_p': i,'marca_p_desc': i} for i in brand]
+
+            results_researched_providers = [data, brands_list]
         else:
-            res_fil_fornec = "Nada encontrado!"
-        return JsonResponse({'data': res_fil_fornec})
+            results_researched_providers = "Nada encontrado!"
+        return JsonResponse({'data': results_researched_providers})
     return JsonResponse({})
 
 
-def filtrar_produto_produto(request):
-    empresa = request.user.usuario.empresa_id
+def products_chosen_by_product_search(request):
+
+    company_id = request.user.usuario.empresa_id
+
     if request.is_ajax():
-        res_fil_prod = None
-        produto = request.POST.get('produto')
-        produto = produto.replace(",", " ")
-        a = produto.split()
-        b = []
-        for elemento in a:
-            b.append(int(elemento))
+        id_researched_products = request.POST.get('produto').replace(",", " ")
 
-        lista_produto = []
-        for i in b:
-            lista_produto.append(int(i))
+        a = id_researched_products.split()
+        b = [int(e) for e in a]
 
-        qs = Produto.objects.filter(id__in=lista_produto, empresa__id__exact=empresa).order_by('desc_produto')
+        researched_products_list = [int(i) for i in b]
 
-        if len(qs) > 0 and len(lista_produto) > 0:
-            marcas = []
-            marcas_itens = []
+        qs_products = Produto.objects.filter(id__in=researched_products_list,
+                                    empresa__id__exact=company_id,
+                                    is_active=True).order_by('desc_produto')
 
+        if len(qs_products) > 0 and len(researched_products_list) > 0:
+            brand = []
             data = []
-            for prod in qs:
+
+            for product in qs_products:
+
                 item = {
-                    'pk': prod.pk,
-                    'nome': prod.desc_produto,
-                    'cod': prod.cod_produto,
+                    'pk': product.pk,
+                    'nome': product.desc_produto,
+                    'cod': product.cod_produto,
                 }
-                if prod.marca not in marcas and prod.marca is not None:
-                    marcas.append(prod.marca)
+                if product.marca not in brand and product.marca is not None:
+                    brand.append(product.marca)
+
                 data.append(item)
 
-            for i in marcas:
-                itens_marcas = {
-                    'marca_p': i,
-                    'marca_p_desc': i
-                }
-                marcas_itens.append(itens_marcas)
+            brands_list = [{'marca_p': i, 'marca_p_desc': i} for i in brand]
 
-            res_fil_prod = []
-            res_fil_prod.append(data)
-            res_fil_prod.append(marcas_itens)
+            results_researched_products = [data, brands_list]
         else:
-            res_fil_prod = "Nada encontrado!"
-        return JsonResponse({'data': res_fil_prod})
+            results_researched_products = "Nada encontrado!"
+        return JsonResponse({'data': results_researched_products})
     return JsonResponse({})
 
 #TODO CORRIGIR CURVA
 def filtrar_produto_curva(request):
-    id_empresa = request.user.usuario.empresa_id
+
+    company_id = request.user.usuario.empresa_id
+
     if request.is_ajax():
-        id_fornecedor = request.POST.get('fornecedor')
-        id_produto = request.POST.get('produto')
-        principio = request.POST.get('principio')
+        id_providers = request.POST.get('fornecedor')
+        id_products = request.POST.get('produto')
+        active_principle = request.POST.get('principio')
+        curve = request.POST.get('curva')
+        brand = request.POST.get('marca')
 
-        curva = request.POST.get('curva')
-        marca = request.POST.get('marca')
+        parameters = Parametro.objects.get(empresa_id=company_id)
 
-        parametros = Parametro.objects.get(empresa_id=id_empresa)
+        if not curve == '0':
+
+            # CURVE BY PROVIDER
+            if id_providers is not None and id_providers != '':
+                id_providers_rpc = id_providers.replace(",", " ")
+
+                a = id_providers_rpc.split()
+                b = [int(e) for e in a]
+
+                id_providers_list = [int(i) for i in b]
+
+                qs_providers = Fornecedor.objects.filter(id__in=id_providers_list,
+                                                   empresa__id__exact=company_id)
+
+                provide_code_list = [i.cod_fornecedor for i in qs_providers]
+
+                dataframe_abc_providers = abc_fornecedores(lista_fornecedores=provide_code_list,
+                                                           id_empresa=company_id,
+                                                           periodo=parameters.periodo)
+
+                # curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
+
+                dataframe_abc_providers = dataframe_abc_providers.query('curva == @curve')
+
+                if not dataframe_abc_providers.empty:
+                    code_products = dataframe_abc_providers['cod_produto']
+                    products_list = [int(items[1]) for items in code_products.iteritems()]
+
+                    if brand != '0':
+                        qs_products = Produto.objects.filter(cod_produto__in=products_list,
+                                                             empresa__id__exact=company_id,
+                                                             is_active=True,
+                                                             marca=brand).order_by('desc_produto')
+
+                    else:
+                        qs_products = Produto.objects.filter(cod_produto__in=products_list,
+                                                             empresa__id__exact=company_id,
+                                                             is_active=True).order_by('desc_produto')
+
+                    if len(qs_products) > 0 and len(products_list) > 0:
+                        data = [{'pk': product.pk,'nome': product.desc_produto,'cod': product.cod_produto,}for product in qs_products]
+
+                        results_by_curve_and_provider = data
+                    else:
+                        results_by_curve_and_provider = "Nada encontrado!"
+                    return JsonResponse({'data': results_by_curve_and_provider})
+                else:
+                    results_by_curve_and_provider = "FALSE"
+                    return JsonResponse({'data': results_by_curve_and_provider})
+
+            # CURVE BY PRODUCT
+            if id_products is not None and id_products != '':
+
+                id_products_rpc = id_products.replace(",", " ")
+
+                a = id_products_rpc.split()
+                b = [int(e) for e in a]
+
+                id_products_list = [int(i) for i in b]
+
+                qs_product = Produto.objects.filter(id__in=id_products_list,
+                                                    empresa__id__exact=company_id,
+                                                    is_active=True)
+
+                provide_code_list = [i.fornecedor.cod_fornecedor for i in qs_product]
+
+                dataframe_abc_providers = abc_fornecedores(lista_fornecedores=provide_code_list,
+                                                           id_empresa=company_id,
+                                                           periodo=parameters.periodo)
+
+                dataframe_abc_providers = dataframe_abc_providers.query('curva == @curve')
+
+                if not dataframe_abc_providers.empty:
+                    code_products = dataframe_abc_providers['cod_produto']
+                    products_list = [int(i[1]) for i in code_products.iteritems() if i[0] in id_products_list]
+
+                    if brand != '0':
+                        qs_products = Produto.objects.filter(cod_produto__in=products_list,
+                                                             empresa__id__exact=company_id,
+                                                             is_active=True,
+                                                             marca=brand).order_by('desc_produto')
+                    else:
+                        qs_products = Produto.objects.filter(cod_produto__in=products_list,
+                                                             empresa__id__exact=company_id,
+                                                             is_active=True).order_by('desc_produto')
+
+                    if len(qs_products) > 0 and len(products_list) > 0:
+                        data = [{'pk': product.pk,'nome': product.desc_produto,'cod': product.cod_produto}for product in qs_products]
+
+                        results_by_curve_and_products = data
+                        return JsonResponse({'data': results_by_curve_and_products})
+
+                    else:
+                        return JsonResponse({'data': "FALSE"})
+                else:
+                    results_by_curve_and_products = "FALSE"
+                    return JsonResponse({'data': results_by_curve_and_products})
+
+
 
         if curva == '0':
             return JsonResponse({})
@@ -316,63 +407,7 @@ def filtrar_produto_curva(request):
 
             if marca != '0':
 
-                # BUSCANDO POR FORNECEDOR
-                if id_fornecedor is not None and id_fornecedor != '':
-                    fornecedor = id_fornecedor.replace(",", " ")
 
-                    a = fornecedor.split()
-                    b = []
-
-                    for elemento in a:
-                        b.append(int(elemento))
-
-                    lista_fornecedor = []
-                    for i in b:
-                        lista_fornecedor.append(int(i))
-
-                    fornec = Fornecedor.objects.filter(
-                        id__in=lista_fornecedor,
-                        empresa__id__exact=id_empresa
-                    )
-
-                    list_fornec = []
-                    for i in fornec:
-                        cod_fornec = i.cod_fornecedor
-                        list_fornec.append(cod_fornec)
-
-                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
-                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
-
-                    curva_f = curva_f.query('curva== @curva')
-
-                    if not curva_f.empty:
-                        codprod = curva_f['cod_produto']
-                        list_produto = []
-                        for items in codprod.iteritems():
-                            list_produto.append(int(items[1]))
-
-                        qs = Produto.objects.filter(
-                            cod_produto__in=list_produto,
-                            empresa__id__exact=id_empresa,
-                            marca=marca
-                        ).order_by('desc_produto')
-
-                        if len(qs) > 0 and len(list_produto) > 0:
-                            data = []
-                            for prod in qs:
-                                item = {
-                                    'pk': prod.pk,
-                                    'nome': prod.desc_produto,
-                                    'cod': prod.cod_produto,
-                                }
-                                data.append(item)
-                            res_fil_curva = data
-                        else:
-                            res_fil_curva = "Nada encontrado!"
-                        return JsonResponse({'data': res_fil_curva})
-                    else:
-                        res = "FALSE"
-                        return JsonResponse({'data': res})
 
                 # BUSCANDO POR PRODUTO
                 if id_produto is not None and id_produto != '':
@@ -391,7 +426,8 @@ def filtrar_produto_curva(request):
 
                     prod = Produto.objects.filter(
                         id__in=lista_produto,
-                        empresa__id__exact=id_empresa
+                        empresa__id__exact=id_empresa,
+                        is_active=True
                     )
 
                     list_fornec = []
@@ -406,6 +442,7 @@ def filtrar_produto_curva(request):
                     if not curva_f.empty:
                         codprod = curva_f['cod_produto']
                         list_produto = []
+
                         for items in codprod.iteritems():
                             if items[0] in lista_produto:
                                 list_produto.append(int(items[1]))
@@ -413,8 +450,8 @@ def filtrar_produto_curva(request):
                         qs = Produto.objects.filter(
                             cod_produto__in=list_produto,
                             empresa__id__exact=id_empresa,
-                            marca=marca
-                        ).order_by('desc_produto')
+                            is_active=True,
+                            marca=marca).order_by('desc_produto')
 
                         if len(qs) > 0 and len(list_produto) > 0:
                             data = []
@@ -450,7 +487,8 @@ def filtrar_produto_curva(request):
 
                     prod = Produto.objects.filter(
                         principio_ativo__in=lista_p_ativo,
-                        empresa__id__exact=id_empresa
+                        empresa__id__exact=id_empresa,
+                        is_active=True
                     )
 
                     list_fornec = []
@@ -472,6 +510,7 @@ def filtrar_produto_curva(request):
                         qs = Produto.objects.filter(
                             cod_produto__in=list_produto,
                             empresa__id__exact=id_empresa,
+                            is_active=True,
                             marca=marca
                         ).order_by('desc_produto')
 
@@ -493,62 +532,6 @@ def filtrar_produto_curva(request):
                         return JsonResponse({'data': res})
 
             else:
-                # BUSCA POR FORNECEDOR
-                if id_fornecedor is not None and id_fornecedor != '':
-                    fornecedor = id_fornecedor.replace(",", " ")
-
-                    a = fornecedor.split()
-                    b = []
-
-                    for elemento in a:
-                        b.append(int(elemento))
-
-                    lista_fornecedor = []
-                    for i in b:
-                        lista_fornecedor.append(int(i))
-
-                    fornec = Fornecedor.objects.filter(
-                        id__in=lista_fornecedor,
-                        empresa__id__exact=id_empresa
-                    )
-
-                    list_fornec = []
-                    for i in fornec:
-                        cod_fornec = i.cod_fornecedor
-                        list_fornec.append(cod_fornec)
-
-                    curva_f = abc_fornecedores(list_fornec, id_empresa, parametros.periodo)
-                    #curva_f = curva_abc(list_fornec, id_empresa, parametros.periodo)
-
-                    curva_f = curva_f.query('curva== @curva')
-
-                    if not curva_f.empty:
-                        codprod = curva_f['cod_produto']
-                        list_produto = []
-                        for items in codprod.iteritems():
-                            list_produto.append(int(items[1]))
-
-                        qs = Produto.objects.filter(
-                            cod_produto__in=list_produto,
-                            empresa__id__exact=id_empresa
-                        ).order_by('desc_produto')
-
-                        if len(qs) > 0 and len(list_produto) > 0:
-                            data = []
-                            for prod in qs:
-                                item = {
-                                    'pk': prod.pk,
-                                    'nome': prod.desc_produto,
-                                    'cod': prod.cod_produto,
-                                }
-                                data.append(item)
-                            res_fil_curva = data
-                        else:
-                            res_fil_curva = "Nada encontrado!"
-                        return JsonResponse({'data': res_fil_curva})
-                    else:
-                        res = "FALSE"
-                        return JsonResponse({'data': res})
 
                 # BUSCA POR PRODUTO
                 if id_produto is not None and id_produto != '':
@@ -567,7 +550,8 @@ def filtrar_produto_curva(request):
 
                     prod = Produto.objects.filter(
                         id__in=lista_produto,
-                        empresa__id__exact=id_empresa
+                        empresa__id__exact=id_empresa,
+                        is_active=True
                     )
 
                     list_fornec = []
@@ -588,7 +572,8 @@ def filtrar_produto_curva(request):
 
                         qs = Produto.objects.filter(
                             cod_produto__in=list_produto,
-                            empresa__id__exact=id_empresa
+                            empresa__id__exact=id_empresa,
+                            is_active=True
                         ).order_by('desc_produto')
 
                         if len(qs) > 0 and len(list_produto) > 0:
@@ -625,7 +610,8 @@ def filtrar_produto_curva(request):
 
                     prod = Produto.objects.filter(
                         principio_ativo__in=lista_p_ativo,
-                        empresa__id__exact=id_empresa
+                        empresa__id__exact=id_empresa,
+                        is_active=True
                     )
 
                     list_fornec = []
@@ -646,7 +632,8 @@ def filtrar_produto_curva(request):
 
                         qs = Produto.objects.filter(
                             cod_produto__in=list_produto,
-                            empresa__id__exact=id_empresa
+                            empresa__id__exact=id_empresa,
+                            is_active=True
                         ).order_by('desc_produto')
 
                         if len(qs) > 0 and len(list_produto) > 0:
@@ -695,7 +682,8 @@ def filtrar_produto_marca(request):
             qs = Produto.objects.filter(
                 marca=marca,
                 fornecedor_id__in=lista_fornecedor,
-                empresa__id__exact=id_empresa
+                empresa__id__exact=id_empresa,
+                is_active=True
             ).order_by('desc_produto')
 
             if len(qs) > 0:
@@ -728,7 +716,8 @@ def filtrar_produto_marca(request):
             qs = Produto.objects.filter(
                 marca=marca,
                 id__in=lista_produto,
-                empresa__id__exact=id_empresa
+                empresa__id__exact=id_empresa,
+                is_active=True
             ).order_by('desc_produto')
 
             if len(qs) > 0:
@@ -751,7 +740,8 @@ def filtrar_produto_marca(request):
             qs = Produto.objects.filter(
                 marca=marca,
                 principio_ativo__in=principio_ativo,
-                empresa__id__exact=id_empresa
+                empresa__id__exact=id_empresa,
+                is_active=True
             ).order_by('desc_produto')
 
             if len(qs) > 0:
@@ -778,7 +768,8 @@ def filtrar_produto_principio(request):
 
         qs = Produto.objects.filter(
             principio_ativo__in=principio_ativo,
-            empresa__id__exact=empresa
+            empresa__id__exact=empresa,
+            is_active=True
         ).order_by('desc_produto')
 
         if len(qs) > 0 and len(principio_ativo) > 0:
@@ -828,7 +819,8 @@ def selecionar_produto(request) -> object:
             # VERIFICANDO SE HOUVE VENDAS NO PERIODO INDEPENDE DA FILIAL
             qs = Produto.objects.get(
                 id=id_produto,
-                empresa__id=id_empresa
+                empresa__id=id_empresa,
+                is_active=True
             )
 
             parametros = Parametro.objects.get(

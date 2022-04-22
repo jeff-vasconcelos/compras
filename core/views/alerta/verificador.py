@@ -4,6 +4,7 @@ from core.models.empresas_models import Filial
 from api.models.produto import Produto
 from api.models.estoque import Estoque
 from api.models.venda import Venda
+from core.models.parametros_models import Parametro
 
 
 def verifica_produto(cod_produto, id_empresa, periodo):
@@ -19,7 +20,8 @@ def verifica_produto(cod_produto, id_empresa, periodo):
 
     produto = Produto.objects.get(
         cod_produto__exact=cod_produto,
-        empresa__id__exact=id_empresa
+        empresa__id__exact=id_empresa,
+        is_active=True
     )
 
     estoque = Estoque.objects.filter(
@@ -37,6 +39,23 @@ def verifica_produto(cod_produto, id_empresa, periodo):
             return False
     else:
         return False
+
+
+def check_sales_by_period(company_id, product):
+    parameters = Parametro.objects.get(empresa_id=company_id)
+
+    data_inicio = datetime.date.today()
+    data_fim = data_inicio - datetime.timedelta(days=parameters.periodo - 1)
+
+    sales = Venda.objects.filter(
+        cod_produto__exact=product.cod_produto,
+        data__range=[data_fim, data_inicio],
+        empresa__id__exact=company_id
+    ).exists()
+
+    if sales:
+        return True
+    return False
 
 
 def get_produtos(id_empresa, id_fornecedor):
