@@ -1,26 +1,26 @@
 import os
 from pathlib import Path
+from environ import Env
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+env = Env(
+    DEBUG=(bool, False),
+    SECURE_SSL_REDIRECT=(bool, False),
+    SESSION_COOKIE_SECURE=(bool, False),
+    CSRF_COOKIE_SECURE=(bool, False),
+    CSRF_COOKIE_HTTPONLY=(bool, True),
+    SESSION_COOKIE_HTTPONLY=(bool, True)
+)
+Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pc#&s_x-+hi7ly1li$9z=&)z^9*iu(w)wruukoddo=t4ue-183'
-# SECRET_KEY = 'eu897!j4e&zmsnuxd%)8^mgnzz7$gv$a%%iux(@n2xd93pc(5@'
+SECRET_KEY = env.str('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-#DEBUG = False
 
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['insight.ecluster.com.br', '187.0.214.183']
+ALLOWED_HOSTS = env.list('HOSTS')
 
 LOGIN_URL = '/'
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,10 +37,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_celery_beat',
     'django_crontab',
-
-    # TODO Remover app debug_toolbar
     'debug_toolbar',
-
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -53,8 +50,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # TODO Remover middleware debug_toolbar
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -81,27 +76,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'setup.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-"""
+CORS_ORIGIN_ALLOW_ALL = True
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME', 'cluster'),
-        'USER': os.environ.get('DB_USER', 'cluster'),
-        'PASSWORD': os.environ.get('DB_PASS', 'clus123ter'),
-        'HOST': '172.30.126.3',
-        'PORT': '5432',
-        # 'HOST': '177.136.201.66',
-        # 'PORT': '30222',
-    }
+    'default': env.db_url('DB_URL')
 }
 
 # Password validation
@@ -158,38 +136,29 @@ REST_FRAMEWORK = {
 }
 
 # SMTP CONFIGURATION
+EMAIL_BACKEND = env.str('EMAIL_BACKEND')
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_PORT = env.int('EMAIL_PORT')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
+EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'contato.insight.cluster@gmail.com'
-EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
-
-"""
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.ecluster.com.br'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'contato-insight@ecluster.com.br'
-EMAIL_HOST_PASSWORD = '#Contato@Insight$1'
-"""
 # 24 horas de sessão
 SESSION_COOKIE_AGE = 86400
 
 # Salvar a cada requisição
 SESSION_SAVE_EVERY_REQUEST = False
 
-# TODO Remover debug_toolbar
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
 # CELERY STUFF
-BROKER_URL = 'redis://localhost:6379'
+REDIS_URL = env.str('REDIS_URL')
+BROKER_URL = REDIS_URL
 CELERY_IMPORTS = ("core.tasks",)
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
