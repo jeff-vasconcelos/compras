@@ -1,5 +1,5 @@
 import pandas as pd
-from api.models.historico import Historico
+from app.models.historico import Historico
 from core.views.alerta.verificador import get_filiais
 from core.views.utils.datas import intervalo_periodo
 

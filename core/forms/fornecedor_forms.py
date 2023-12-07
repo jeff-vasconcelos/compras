@@ -1,5 +1,5 @@
 from django import forms
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 
 
 class FornecedorForm(forms.ModelForm):

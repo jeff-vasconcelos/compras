@@ -1,7 +1,7 @@
 import pandas as pd
 import datetime
 
-from api.models.venda import Venda
+from app.models.venda import Venda
 from core.views.alerta.verificador import get_filiais
 
 # TODO TRABLHANDO NESTA CLASS 15/10

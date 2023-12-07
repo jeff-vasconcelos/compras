@@ -1,4 +1,4 @@
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 from core.views.utils.estoque import estoque_atual
 # from core.views.analise.pedidos import pedidos_compra
 from core.views.analise.vendas import vendas

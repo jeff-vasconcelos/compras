@@ -1,32 +1,25 @@
 from django.db import models
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 from core.models.empresas_models import Empresa, Filial
-from api.models.produto import Produto
+from app.models.produto import Produto
 
 
-class Estoque(models.Model):
+class Historico(models.Model):
     cod_produto = models.IntegerField(null=False, blank=False)
     cod_filial = models.IntegerField(null=False, blank=False)
     cod_fornecedor = models.IntegerField(null=False, blank=False)
-    qt_geral = models.FloatField(null=False, blank=False)
-    qt_indenizada = models.FloatField(null=False, blank=False)
-    qt_reservada = models.FloatField(null=False, blank=False)
-    qt_pendente = models.FloatField(null=False, blank=False)
-    qt_bloqueada = models.FloatField(null=False, blank=False)
-    qt_disponivel = models.FloatField(null=False, blank=False)
-    preco_venda = models.FloatField(null=False, blank=False)
-    custo_ult_entrada = models.FloatField(null=False, blank=False)
+    qt_estoque = models.FloatField(null=False, blank=False)
     data = models.DateField(null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_estoqueatual',
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_historicoestoque',
                                 blank=True, null=True)
-    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_estoqueatual',
+    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_historicoestoque',
                                    blank=True, null=True)
     filial = models.ForeignKey(Filial, on_delete=models.CASCADE, null=True, blank=True,
-                               related_name='filial_estoqueatual')
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_estoqueatual',
+                               related_name='filial_historicoestoque')
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_historicoestoque',
                                 blank=True, null=True)
     
     campo_um = models.CharField(max_length=255, null=True, blank=True)
@@ -34,8 +27,8 @@ class Estoque(models.Model):
     campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Estoque'
-        verbose_name_plural = 'Estoque'
+        verbose_name = 'Histórico'
+        verbose_name_plural = 'Históricos'
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:

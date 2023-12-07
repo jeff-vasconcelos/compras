@@ -1,4 +1,4 @@
-from api.models.pedido import Pedido
+from app.models.pedido import Pedido
 from core.views.alerta.verificador import get_filiais
 import pandas as pd
 import datetime

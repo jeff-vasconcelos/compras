@@ -3,12 +3,12 @@ import datetime
 from django.utils import timezone
 from django.shortcuts import render
 
-from api.models.pedido import Pedido
+from app.models.pedido import Pedido
 from core.views.alerta.alertas_views import send_email_alerta, alerta_db
 from core.views.home.functions_home import save_grafico_curva, save_grafico_faturamento, save_dados_estoque
 from core.views.alerta.processa_produtos import *
 from core.models.empresas_models import Empresa
-# from api.models.pedido_duplicado import PedidoDuplicado
+# from app.models.pedido_duplicado import PedidoDuplicado
 from django.db.models import Q
 from datetime import date, timedelta
 

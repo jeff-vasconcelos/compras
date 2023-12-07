@@ -1,13 +1,13 @@
 from django.contrib import admin
-from api.models.estoque import Estoque
-from api.models.fornecedor import Fornecedor
-from api.models.historico import Historico
-from api.models.pedido import Pedido
-from api.models.produto import Produto
-from api.models.entrada import Entrada
-from api.models.venda import Venda
+from app.models.estoque import Estoque
+from app.models.fornecedor import Fornecedor
+from app.models.historico import Historico
+from app.models.pedido import Pedido
+from app.models.produto import Produto
+from app.models.entrada import Entrada
+from app.models.venda import Venda
 
-# from api.models.pedido_duplicado import PedidoDuplicado
+# from app.models.pedido_duplicado import PedidoDuplicado
 
 
 """ Adicionando dados da API de Produtos no Admin do DJANGO """

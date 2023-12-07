@@ -1,108 +1,110 @@
 from core.models.empresas_models import Filial
 
-from api.models.fornecedor import Fornecedor
-from api.models.produto import Produto
-from api.models.venda import Venda
-from api.models.historico import Historico
-from api.models.pedido import Pedido
-from api.models.entrada import Entrada
-from api.models.estoque import Estoque
+from app.models.fornecedor import Fornecedor
+from app.models.produto import Produto
+from app.models.venda import Venda
+from app.models.historico import Historico
+from app.models.pedido import Pedido
+from app.models.entrada import Entrada
+from app.models.estoque import Estoque
 
 
-class ValidExistsData:
+class ValidatesDataExists:
     @staticmethod
     def provider_exists(data):
-        provider_query = Fornecedor.objects.filter(cod_fornecedor=data['cod_fornecedor'],
-                                                   empresa=data['empresa']).first()
-
-        if provider_query:
-            return provider_query
-        return False
+        try:
+            provider = Fornecedor.objects.get(cod_fornecedor=data['cod_fornecedor'],
+                                              empresa=data['empresa'])
+            return provider
+        except Fornecedor.DoesNotExist:
+            return None
 
     @staticmethod
     def product_exists(data):
-        product_query = Produto.objects.filter(cod_produto=data['cod_produto'],
-                                               empresa=data['empresa']).first()
-
-        if product_query:
-            return product_query
-        return False
+        try:
+            product = Produto.objects.get(cod_produto=data['cod_produto'],
+                                          empresa=data['empresa'])
+            return product
+        except Produto.DoesNotExist:
+            return None
 
     @staticmethod
     def branch_exists(data):
-        branch_query = Filial.objects.filter(cod_filial=data['cod_filial'],
-                                             empresa=data['empresa']).exists()
-
-        if branch_query:
-            return True
-        return False
+        try:
+            branch = Filial.objects.get(cod_filial=data['cod_filial'],
+                                        empresa=data['empresa'])
+            return branch
+        except Filial.DoesNotExist:
+            return None
 
     @staticmethod
     def sale_exists(data):
-        sale_query = Venda.objects.filter(cod_produto=data['cod_produto'],
-                                          empresa=data['empresa'],
-                                          cod_filial=data['cod_filial'],
-                                          cod_fornecedor=data['cod_fornecedor'],
-                                          data=data['data'],
-                                          qt_venda=data['qt_venda'],
-                                          preco_unitario=data['preco_unitario'],
-                                          custo_financeiro=data['preco_unitario'],
-                                          cliente=data['cliente'],
-                                          num_nota=data['num_nota']).first()
-
-        if sale_query:
-            return True
-        return False
+        try:
+            sale = Venda.objects.get(cod_produto=data['cod_produto'],
+                                     empresa=data['empresa'],
+                                     cod_filial=data['cod_filial'],
+                                     cod_fornecedor=data['cod_fornecedor'],
+                                     data=data['data'],
+                                     qt_venda=data['qt_venda'],
+                                     preco_unitario=data['preco_unitario'],
+                                     custo_financeiro=data['preco_unitario'],
+                                     cliente=data['cliente'],
+                                     num_nota=data['num_nota'])
+            return sale
+        except Venda.DoesNotExist:
+            return None
 
     @staticmethod
     def history_exists(data):
-        history_query = Historico.objects.filter(cod_produto=data['cod_produto'],
-                                                 cod_filial=data['cod_filial'],
-                                                 empresa=data['empresa'],
-                                                 cod_fornecedor=data['cod_fornecedor'],
-                                                 qt_estoque=data['qt_estoque'],
-                                                 data=data['data']).first()
-
-        if history_query:
-            return True
-        return False
-
-    @staticmethod
-    def entry_exists(data):
-        entry_query = Entrada.objects.filter(cod_produto=data['cod_produto'],
-                                             cod_filial=data['cod_filial'],
-                                             empresa=data['empresa'],
-                                             qt_ult_entrada=data['qt_ult_entrada'],
-                                             cod_fornecedor=data['cod_fornecedor'],
-                                             data=data['data']).first()
-
-        if entry_query:
-            return True
-        return False
-
-    @staticmethod
-    def order_exists(data):
-        order_query = Pedido.objects.filter(cod_produto=data['cod_produto'],
+        try:
+            history = Historico.objects.get(cod_produto=data['cod_produto'],
                                             cod_filial=data['cod_filial'],
                                             empresa=data['empresa'],
                                             cod_fornecedor=data['cod_fornecedor'],
-                                            num_pedido=data['num_pedido'],
-                                            data=data['data']).first()
+                                            qt_estoque=data['qt_estoque'],
+                                            data=data['data'])
+            return history
+        except Historico.DoesNotExist:
+            return None
 
-        if order_query:
-            return order_query
-        return False
+    @staticmethod
+    def entry_exists(data):
+        try:
+            entry = Entrada.objects.get(cod_produto=data['cod_produto'],
+                                        cod_filial=data['cod_filial'],
+                                        empresa=data['empresa'],
+                                        qt_ult_entrada=data['qt_ult_entrada'],
+                                        cod_fornecedor=data['cod_fornecedor'],
+                                        data=data['data'])
+            return entry
+        except Entrada.DoesNotExist:
+            return None
+
+
+    @staticmethod
+    def order_exists(data):
+        try:
+            order = Pedido.objects.get(cod_produto=data['cod_produto'],
+                                                cod_filial=data['cod_filial'],
+                                                empresa=data['empresa'],
+                                                cod_fornecedor=data['cod_fornecedor'],
+                                                num_pedido=data['num_pedido'],
+                                                data=data['data'])
+            return order
+        except Pedido.DoesNotExist:
+            return None
+
 
     @staticmethod
     def stock_exists(data):
-        stock_query = Estoque.objects.filter(cod_produto=data['cod_produto'],
-                                             cod_filial=data['cod_filial'],
-                                             empresa=data['empresa'],
-                                             cod_fornecedor=data['cod_fornecedor']).first()
-
-        if stock_query:
-            return stock_query
-        return False
+        try:
+            stock = Estoque.objects.get(cod_produto=data['cod_produto'],
+                                                 cod_filial=data['cod_filial'],
+                                                 empresa=data['empresa'],
+                                                 cod_fornecedor=data['cod_fornecedor'])
+            return stock
+        except Estoque.DoesNotExist:
+            return None
 
 
 class ProviderCheckUpdate:

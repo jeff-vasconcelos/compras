@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'api',
+    'app',
     'core',
     'rest_framework',
     'rest_framework.authtoken',
@@ -156,10 +156,13 @@ INTERNAL_IPS = [
 
 # CELERY STUFF
 REDIS_URL = env.str('REDIS_URL')
-BROKER_URL = REDIS_URL
-CELERY_IMPORTS = ("core.tasks",)
-CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_IMPORTS = ('core.tasks',)
 CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_ENABLE_UTC = False
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ALWAYS_EAGER = False
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Sao_Paulo'

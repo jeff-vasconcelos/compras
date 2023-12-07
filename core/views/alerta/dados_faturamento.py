@@ -1,4 +1,4 @@
-from api.models.venda import Venda
+from app.models.venda import Venda
 import pandas as pd
 import datetime
 from core.views.analise.filiais import get_filiais

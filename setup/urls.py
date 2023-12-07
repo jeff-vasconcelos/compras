@@ -8,8 +8,8 @@ from rest_framework.authtoken import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-    path('api-token-auth', views.obtain_auth_token, name='api-token-auth'),
+    path('app/', include('app.urls')),
+    path('app-token-auth', views.obtain_auth_token, name='app-token-auth'),
     path('administracao/painel/', include('core.urls.urls_administracao')),
     path('painel/', include('core.urls.urls_aplicacao')),
     path('', include('core.urls.urls_login')),

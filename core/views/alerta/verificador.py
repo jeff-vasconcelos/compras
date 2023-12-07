@@ -1,9 +1,9 @@
 import datetime
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 from core.models.empresas_models import Filial
-from api.models.produto import Produto
-from api.models.estoque import Estoque
-from api.models.venda import Venda
+from app.models.produto import Produto
+from app.models.estoque import Estoque
+from app.models.venda import Venda
 from core.models.parametros_models import Parametro
 
 

@@ -1,5 +1,5 @@
 import locale
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 from core.views.alerta.vendas import vendas
 from core.models.parametros_models import Parametro
 from core.views.alerta.verificador import get_fornecedores_qs, get_produtos, verifica_produto

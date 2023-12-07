@@ -1,5 +1,5 @@
 import pandas as pd
-from api.models.estoque import Estoque
+from app.models.estoque import Estoque
 
 from core.views.alerta.verificador import get_filiais
 

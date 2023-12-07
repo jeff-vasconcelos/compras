@@ -1,6 +1,6 @@
 from django.db import models
 from core.models.empresas_models import Empresa
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 
 
 class Produto(models.Model):

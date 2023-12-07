@@ -4,12 +4,8 @@ from celery import Celery
 from celery.schedules import crontab
 from django.conf import settings
 
-# set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'setup.settings')
-app = Celery('setup', broker="redis://localhost:6379", backend="redis://localhost:6379")
-
-# Using a string here means the worker will not have to
-# pickle the object when using Windows.
+app = Celery('setup')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
 
@@ -20,14 +16,12 @@ app.conf.beat_schedule = {
         "args": ("request", 0)
     },
 
-    #EMAIL
+    # EMAIL
     'email': {
         'task': 'core.tasks.processa_email',
         'schedule': 1,
         "args": ("request", 0)
     },
-
-
 
 }
 

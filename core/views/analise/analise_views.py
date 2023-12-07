@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
-from api.models.produto import *
-from api.models.venda import Venda
+from app.models.produto import *
+from app.models.venda import Venda
 from core.views.alerta.verificador import verifica_produto, check_sales_by_period
 from core.models.parametros_models import Parametro
 from core.views.analise.processa_produtos import a_multifiliais

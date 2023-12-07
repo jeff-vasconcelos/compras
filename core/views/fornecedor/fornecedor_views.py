@@ -2,8 +2,8 @@ import pandas as pd
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
-from api.models.fornecedor import Fornecedor
-from api.models.produto import Produto
+from app.models.fornecedor import Fornecedor
+from app.models.produto import Produto
 from core.models.empresas_models import Alerta
 from core.models.parametros_models import Parametro
 from core.views.analise.analise_views import graficos_serie

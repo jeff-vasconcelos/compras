@@ -1,26 +1,25 @@
 from django.db import models
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 from core.models.empresas_models import Empresa, Filial
-from api.models.produto import Produto
+from app.models.produto import Produto
 
 
-class Entrada(models.Model):
+class Pedido(models.Model):
     cod_produto = models.IntegerField(null=False, blank=False)
     cod_filial = models.IntegerField(null=False, blank=False)
     cod_fornecedor = models.IntegerField(null=False, blank=False)
-    qt_ult_entrada = models.FloatField(null=False, blank=False)
-    vl_ult_entrada = models.FloatField(null=False, blank=False)
+    saldo = models.FloatField(null=False, blank=False)
+    num_pedido = models.IntegerField(null=False, blank=False)
     data = models.DateField(null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_entrada',
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produto_pedidos',
                                 blank=True, null=True)
-    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_entrada',
+    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, related_name='fornecedor_pedidos',
                                    blank=True, null=True)
-    filial = models.ForeignKey(Filial, on_delete=models.CASCADE, null=True, blank=True,
-                               related_name='filial_entrada')
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_entrada',
+    filial = models.ForeignKey(Filial, on_delete=models.CASCADE, null=True, blank=True, related_name='filial_pedidos')
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='empresa_pedidos',
                                 blank=True, null=True)
     
     campo_um = models.CharField(max_length=255, null=True, blank=True)
@@ -28,8 +27,8 @@ class Entrada(models.Model):
     campo_tres = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Entrada'
-        verbose_name_plural = 'Entradas'
+        verbose_name = 'Pedido'
+        verbose_name_plural = 'Pedidos'
 
     def save(self, *args, **kwargs):
         if not self.fornecedor:

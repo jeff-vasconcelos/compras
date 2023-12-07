@@ -1,7 +1,7 @@
 from django.db import models
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 from core.models.empresas_models import Empresa, Filial
-from api.models.produto import Produto
+from app.models.produto import Produto
 
 
 class Venda(models.Model):

@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 ('campo_dois', models.CharField(blank=True, max_length=255, null=True)),
                 ('campo_tres', models.CharField(blank=True, max_length=255, null=True)),
                 ('empresa', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto', to='core.empresa')),
-                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_produto', to='api.fornecedor')),
+                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_produto', to='app.fornecedor')),
             ],
         ),
         migrations.CreateModel(
@@ -87,8 +87,8 @@ class Migration(migrations.Migration):
                 ('campo_tres', models.CharField(blank=True, max_length=255, null=True)),
                 ('empresa', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='empresa_venda', to='core.empresa')),
                 ('filial', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='filial_venda', to='core.filial')),
-                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_venda', to='api.fornecedor')),
-                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_venda', to='api.produto')),
+                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_venda', to='app.fornecedor')),
+                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_venda', to='app.produto')),
             ],
         ),
         migrations.CreateModel(
@@ -108,8 +108,8 @@ class Migration(migrations.Migration):
                 ('campo_tres', models.CharField(blank=True, max_length=255, null=True)),
                 ('empresa', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='empresa_pedidos', to='core.empresa')),
                 ('filial', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='filial_pedidos', to='core.filial')),
-                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_pedidos', to='api.fornecedor')),
-                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_pedidos', to='api.produto')),
+                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_pedidos', to='app.fornecedor')),
+                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_pedidos', to='app.produto')),
             ],
             options={
                 'verbose_name': 'Pedido',
@@ -132,8 +132,8 @@ class Migration(migrations.Migration):
                 ('campo_tres', models.CharField(blank=True, max_length=255, null=True)),
                 ('empresa', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='empresa_historicoestoque', to='core.empresa')),
                 ('filial', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='filial_historicoestoque', to='core.filial')),
-                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_historicoestoque', to='api.fornecedor')),
-                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_historicoestoque', to='api.produto')),
+                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_historicoestoque', to='app.fornecedor')),
+                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_historicoestoque', to='app.produto')),
             ],
             options={
                 'verbose_name': 'Histórico',
@@ -163,8 +163,8 @@ class Migration(migrations.Migration):
                 ('campo_tres', models.CharField(blank=True, max_length=255, null=True)),
                 ('empresa', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='empresa_estoqueatual', to='core.empresa')),
                 ('filial', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='filial_estoqueatual', to='core.filial')),
-                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_estoqueatual', to='api.fornecedor')),
-                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_estoqueatual', to='api.produto')),
+                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_estoqueatual', to='app.fornecedor')),
+                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_estoqueatual', to='app.produto')),
             ],
             options={
                 'verbose_name': 'Estoque',
@@ -188,8 +188,8 @@ class Migration(migrations.Migration):
                 ('campo_tres', models.CharField(blank=True, max_length=255, null=True)),
                 ('empresa', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='empresa_entrada', to='core.empresa')),
                 ('filial', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='filial_entrada', to='core.filial')),
-                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_entrada', to='api.fornecedor')),
-                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_entrada', to='api.produto')),
+                ('fornecedor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fornecedor_entrada', to='app.fornecedor')),
+                ('produto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='produto_entrada', to='app.produto')),
             ],
             options={
                 'verbose_name': 'Entrada',

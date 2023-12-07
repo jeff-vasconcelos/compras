@@ -1,5 +1,5 @@
 import pandas as pd
-from api.models.entrada import Entrada
+from app.models.entrada import Entrada
 from core.views.alerta.verificador import get_filiais
 from core.views.utils.datas import intervalo_periodo
 

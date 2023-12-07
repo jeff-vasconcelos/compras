@@ -1,5 +1,5 @@
-from api.models.pedido import Pedido
-from api.models.produto import Produto
+from app.models.pedido import Pedido
+from app.models.produto import Produto
 import pandas as pd
 import datetime
 

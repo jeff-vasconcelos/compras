@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from core.models.parametros_models import Parametro
-from api.models.fornecedor import Fornecedor
+from app.models.fornecedor import Fornecedor
 from django.contrib.auth.decorators import login_required
 from core.forms.fornecedor_forms import FornecedorForm
 from core.forms.parametros_form import ParametroForm

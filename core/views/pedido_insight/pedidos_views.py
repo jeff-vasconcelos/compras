@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from api.models.fornecedor import Fornecedor
-from api.models.produto import Produto
+from app.models.fornecedor import Fornecedor
+from app.models.produto import Produto
 from core.models.pedidos_models import *
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
