@@ -12,7 +12,7 @@
 
 /static
 
-
+.tools/data
 
 # User-specific stuff
 .idea/**/workspace.xml
