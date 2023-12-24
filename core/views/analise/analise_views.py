@@ -226,7 +226,7 @@ def products_chosen_by_provider_search(request):
             data = []
 
             for product in qs_products:
-                if check_sales_by_period(company_id=company_id, product=qs_products):
+                if check_sales_by_period(company_id=company_id, product=product):
                     item = {
                         'pk': product.pk,
                         'nome': product.desc_produto,
