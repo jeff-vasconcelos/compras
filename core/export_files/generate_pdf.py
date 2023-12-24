@@ -107,7 +107,7 @@ def pdf_excesso(request):
         p.drawString(mm(101), mm(contador_y), f"{prod.estoque}")
         p.drawString(mm(121), mm(contador_y), f"{prod.qt_excesso}")
         p.drawString(mm(146), mm(contador_y), f"{prod.vl_excesso}")
-        p.drawString(mm(167), mm(contador_y), f"{prod.campo_um}")
+        #p.drawString(mm(167), mm(contador_y), f"{prod.campo_um}")
         p.drawString(mm(181), mm(contador_y), f"{prod.cod_fornecedor}")
 
         if contador_y <= 10:
@@ -165,7 +165,7 @@ def pdf_ruptura(request):
         p.drawString(mm(101), mm(contador_y), f"{prod.estoque}")
         p.drawString(mm(121), mm(contador_y), f"{prod.sugestao}")
         p.drawString(mm(146), mm(contador_y), f"{prod.valor}")
-        p.drawString(mm(167), mm(contador_y), f"{prod.campo_um}")
+        #p.drawString(mm(167), mm(contador_y), f"{prod.campo_um}")
         p.drawString(mm(181), mm(contador_y), f"{prod.cod_fornecedor}")
 
         if contador_y <= 10:
