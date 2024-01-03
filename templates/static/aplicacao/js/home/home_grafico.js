@@ -33,7 +33,7 @@ $.ajax({
                     labels: ["Normal", "Parcial", "Excesso"],
                     datasets: [{
                         data: [curvaA.part_normal, curvaA.part_parcial, curvaA.part_excesso],
-                        backgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
+                        backgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
                         hoverBackgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
@@ -66,7 +66,7 @@ $.ajax({
                     labels: ["Normal", "Parcial", "Excesso"],
                     datasets: [{
                         data: [curvaB.part_normal, curvaB.part_parcial, curvaB.part_excesso],
-                        backgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
+                        backgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
                         hoverBackgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
@@ -206,9 +206,9 @@ $.ajax({
                         {
                             label: "%",
                             yAxisID: 'B',
-                            backgroundColor: "#ffbc40",
-                            hoverBackgroundColor: "#ffbc40",
-                            borderColor: "#ffbc40",
+                            backgroundColor: "#50c878",
+                            hoverBackgroundColor: "#1D370A",
+                            borderColor: "#1D370A",
                             data: curvaRuptura.porcentagem,
                             maxBarThickness: 35,
                         }

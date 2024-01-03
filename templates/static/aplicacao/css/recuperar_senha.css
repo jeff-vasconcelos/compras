@@ -1,27 +1,9 @@
-@font-face {
-    font-family: RBN-Extralight;
-    src: url(../fonts/RBNo3-1-ExtraLight.otf);
-}
 
-@font-face {
-    font-family: RBN-Medium;
-    src: url(../fonts/RBNo3-1-Medium.otf);
-}
-
-@font-face {
-    font-family: Montserrat-Medium;
-    src: url(../fonts/Montserrat-Medium.ttf);
-}
-
-@font-face {
-    font-family: Montserrat-Light;
-    src: url(../fonts/Montserrat-Light.ttf);
-}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 body {
-    font-family: Montserrat-Medium;
     height: 100%;
-    background-color: #f0f2f5;
+    font-family: 'Montserrat', sans-serif;
 }
 
 nav.nav-topo{
@@ -39,7 +21,9 @@ div.main-recuperar{
     margin-top: 5%;
     padding: 30px 20px 20px 20px;
     border-radius: 10px;
-    border: solid 1px #224390;
+    border: solid 1px #1D370D;
+    margin: 0 auto;
+    margin-top: 25px;
 }
 
 input.form-control{
@@ -50,7 +34,7 @@ input.form-control{
 
 .btn-continuar{
     width: 100%;
-    background-color: #224390;
+    background-color: #1D370D;
     border: none;
     border-radius: 10px;
     font-size: 20px;
@@ -58,12 +42,12 @@ input.form-control{
 }
 
 .btn-continuar:hover{
-    background-color: #4d67a3;
+    background-color: #1D370D;
 }
 
 button.btn-continuar-r{
     width: 100%;
-    background-color: #224390;
+    background-color: #1D370D;
     border: none;
     border-radius: 10px;
     font-size: 20px;
@@ -71,7 +55,7 @@ button.btn-continuar-r{
 }
 
 button.btn-continuar-r:hover{
-    background-color: #4d67a3;
+    background-color: #1D370D;
 }
 
 small.texto-link-cancelar{
@@ -88,11 +72,11 @@ h5.texto-rodape{
 
 h4.texto-recuperar{
     margin-bottom: 20px;
-    font-family: RBN-Medium;
+
     color: #828282;
 }
 p.texto-rec-senha{
-    font-family: Montserrat-Light;
+
     font-size: 14px;
 }
 

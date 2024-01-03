@@ -3,7 +3,7 @@
 
 
 {% block title %}
-    <title>Home - Insight</title>
+    <title>Home - Ponto de Pedido</title>
 {% endblock title %}
 
 
@@ -27,7 +27,7 @@
 
 
     <!-- CARDS -->
-    <div class="row">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
         {% if grafico_curva %}
             {% for g_um in grafico_curva %}
                 <div class="card_curvas col">
@@ -35,13 +35,14 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12" style="text-align: center">
-                                    <h5>Curva {{ g_um.curva }}</h5>
+                                   
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-12" style="margin-right: auto; margin-left: auto">
-                                    <div class="chart-pie pt-4">
+                                <div class="col-12 text-center">
+                                    <div class="chart-pie">
+                                        <h5><b>Curva {{ g_um.curva }}</b></h5>
                                         <canvas id="chartCurva{{ g_um.curva }}"></canvas>
                                     </div>
                                 </div>
@@ -50,83 +51,83 @@
                             <div class="row" style="margin-top: 23px; padding-top: 20px">
 
                                 <div class="col-5">
-                                    <h6 class="curvas_text">Normal:</h6>
-                                    <h6 class="curvas_text">Parcial:</h6>
-                                    <h6 class="curvas_text">Excesso:</h6>
+                                    <h6 class="curvas_text normal">Normal:</h6>
+                                    <h6 class="curvas_text parcial">Parcial:</h6>
+                                    <h6 class="curvas_text excesso">Excesso:</h6>
                                     <h6 class="curvas_text">Total Est.:</h6>
                                 </div>
 
                                 <div class="col-7 text-right">
-                                    <h6 class="curvas_text">{{ g_um.normal }}</h6>
-                                    <h6 class="curvas_text">{{ g_um.parcial }}</h6>
-                                    <h6 class="curvas_text">{{ g_um.excesso }}</h6>
-                                    <h6 class="curvas_text">{{ g_um.total }}</h6>
+                                    <h6 class="curvas_text"><b>{{ g_um.normal }}</b></h6>
+                                    <h6 class="curvas_text"><b>{{ g_um.parcial }}</b></h6>
+                                    <h6 class="curvas_text"><b>{{ g_um.excesso }}</b></h6>
+                                    <h6 class="curvas_text"><b>{{ g_um.total }}</b></h6>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             {% endfor %}
+            <style>
+                .curvas_text{ font-weight:bold;}
+                .normal{color: #50c878; }
+                .parcial{color: #ffbc40; }
+                .excesso{color: #FC544B; }
+            </style>
+            <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="mb-4"><b>Dados Estoque</b></h5>
+                        <table class="table table-responsive-md table-bordered table-striped ">
+                            <thead>
+                            <tr>
+                                <th class="tabela-home-head"><b>Curva</b></th>
+                                <th class="tabela-home-head"><b>SKU's</b></th>
+                                <th class="tabela-home-head"><b>Normal</b></th>
+                                <th class="tabela-home-head"><b>Ruptura Parc.</b></th>
+                                <th class="tabela-home-head"><b>Ruptura</b></th>
+                                <th class="tabela-home-head"><b>Excesso</b></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if dados_estoque %}
+                                {% for dados in dados_estoque %}
+                                    <tr>
+                                        <td class="tabela-home-body">{{ dados.curva }}</td>
+                                        <td class="tabela-home-body">{{ dados.skus }}</td>
+                                        <td class="tabela-home-body">{{ dados.normal }}</td>
+                                        <td class="tabela-home-body">{{ dados.parcial }}</td>
+                                        <td class="tabela-home-body">{{ dados.ruptura }}</td>
+                                        <td class="tabela-home-last">{{ dados.excesso }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th class="tabela-home-foot">Total</th>
+                                <th class="tabela-home-foot">{{ totais_dados_estoque.total_skus }}</th>
+                                <th class="tabela-home-foot">{{ totais_dados_estoque.total_normal }}</th>
+                                <th class="tabela-home-foot">{{ totais_dados_estoque.total_parcial }}</th>
+                                <th class="tabela-home-foot">{{ totais_dados_estoque.total_ruptura }}</th>
+                                <th class="tabela-home-last">{{ totais_dados_estoque.total_excesso }}</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+    
+                    </div>
+                </div>
+            </div>
         {% endif %}
     </div>
 
     <!-- GRAFICO -->
     <div class="row">
-
-        <div class="col-xl-6 col-lg-6">
+        <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <h6>Dados Estoque</h6>
-
-                    <table width="100%">
-                        <thead>
-                        <tr>
-                            <th class="tabela-home-head">Curva</th>
-                            <th class="tabela-home-head">SKU's</th>
-                            <th class="tabela-home-head">Normal</th>
-                            <th class="tabela-home-head">Ruptura Parc.</th>
-                            <th class="tabela-home-head">Ruptura</th>
-                            <th class="tabela-home-last" id="excesso-table-home">Excesso</th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        {% if dados_estoque %}
-                            {% for dados in dados_estoque %}
-                                <tr>
-                                    <td class="tabela-home-body">{{ dados.curva }}</td>
-                                    <td class="tabela-home-body">{{ dados.skus }}</td>
-                                    <td class="tabela-home-body">{{ dados.normal }}</td>
-                                    <td class="tabela-home-body">{{ dados.parcial }}</td>
-                                    <td class="tabela-home-body">{{ dados.ruptura }}</td>
-                                    <td class="tabela-home-last">{{ dados.excesso }}</td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        </tbody>
-
-                        <tfoot>
-
-                        <tr>
-                            <th class="tabela-home-foot">Total</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_skus }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_normal }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_parcial }}</th>
-                            <th class="tabela-home-foot">{{ totais_dados_estoque.total_ruptura }}</th>
-                            <th class="tabela-home-last">{{ totais_dados_estoque.total_excesso }}</th>
-                        </tr>
-
-                        </tfoot>
-                    </table>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <p>Faturamento x Curva</p>
+                    <h5><b>Faturamento x Curva</b></h5>
                     <div class="chart-bar">
                         <canvas id="chartRupturaxCurva"></canvas>
                     </div>
@@ -135,21 +136,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12" style="margin-right: auto; margin-left: auto">
-            <div class="chart-pie pt-4">
-                <canvas id="grafico_a"></canvas>
-            </div>
-        </div>
-    </div>
-
     <style>
-        div.card_curvas {
-            margin-left: auto;
-            margin-right: auto;
-            width: 10%;
-        }
-
         h6.curvas_text {
             font-size: 14px;
         }

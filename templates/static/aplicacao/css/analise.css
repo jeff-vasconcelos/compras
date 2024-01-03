@@ -21,8 +21,8 @@ input.input-analise {
 }
 
 select.select-analise {
-    height: 30px;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 900;
 }
 
 div.analise-div {
