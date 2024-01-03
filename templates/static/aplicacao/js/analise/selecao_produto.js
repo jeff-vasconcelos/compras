@@ -6,7 +6,7 @@ const titulo_vendasxmes = document.getElementById('titulo_vendasxmes')
 // INPUT DE MEDIA PARA DDE
 const input_analise_media = document.getElementById('input_analise_media')
 
-const listaProdutosSelecionar = document.getElementById('results-produtos')
+const productSelect = document.getElementById('results-produtos')
 const listaFiliais = document.getElementById('filtro-filial')
 const tabelaInfo = document.getElementById('body-tabela-analise')
 const tabelaPedidosPendentes = document.getElementById('pedidos-pendentes-modal')
@@ -22,22 +22,78 @@ const valor_media_simples = document.getElementById('valor_media_simples')
 const porc_ruptura = document.getElementById('porc_ruptura')
 const valor_ruptura = document.getElementById('valor_ruptura')
 
-const leadtime = document.getElementById('leadtime')
-const t_reposicao = document.getElementById('tempo_reposicao')
+const leadtimeInput = document.getElementById('leadtime')
+const replenishmentTimeInput = document.getElementById('tempo_reposicao')
 
 const area_graf_um = document.getElementById('div-grafico-um')
 const area_graf_dois = document.getElementById('div-grafico-dois')
 
-const sendSelectProd = (codfilial, prod, lead, t_repo) => {
+function OnProductChange(event){
+
+    resultsBoxFornec.classList.add('d-none')
+    resultsBoxProd.classList.add('d-none')
+    resultsBoxPrincipio.classList.add('d-none')
+
+    const selectedProduct = event.target.value
+    const selectedBranch = listaFiliais.value
+    const selectedLeadTime = leadtimeInput.value
+    const selectedReplenishmentTime = replenishmentTimeInput.value
+
+    if (selectedProduct == 0){
+        return
+    }
+
+    let lead = selectedLeadTime === "" ? 0 : selectedLeadTime
+    let replenishmentTime = replenishmentTimeInput.value === "" ? 0 : selectedReplenishmentTime
+
+    sendSelectedProduct(selectedBranch, selectedProduct, lead, replenishmentTime)
+}
+
+async function getDefaultAnalisisParameters(product){
+
+    return $.ajax({
+        type: 'POST',
+        url: '/painel/get-product-parameters/',
+        data: {
+            'csrfmiddlewaretoken': csrf,
+            'product': product,
+        },
+        success: function(parameters) {
+            return parameters
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    })
+}
+
+async function setDefaultAnalisisParameters(event){
+
+    resultsBoxFornec.classList.add('d-none')
+    resultsBoxProd.classList.add('d-none')
+    resultsBoxPrincipio.classList.add('d-none')
+
+    const selectedProduct = event.target.value
+
+    parameters = await getDefaultAnalisisParameters(selectedProduct)
+
+    leadtimeInput.value = parameters.leadTime
+    replenishmentTimeInput.value = parameters.replenishmentTime
+
+
+}
+
+const sendSelectedProduct = (codFilial, product, lead, replenishmentTime) => {
+
     $.ajax({
         type: 'POST',
         url: '/painel/select-prod/',
         data: {
             'csrfmiddlewaretoken': csrf,
-            'filial': codfilial,
-            'produto': prod,
+            'filial': codFilial,
+            'produto': product,
             'leadtime': lead,
-            'tempo_reposicao': t_repo
+            'tempo_reposicao': replenishmentTime
         },
         success: (info_prod) => {
 
@@ -78,14 +134,13 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Cx Fech.</th>
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
-<!--                            <th class="tabela-info">Pr. tabela</th>-->
-<!--                            <th class="tabela-info">Margem</th>-->
-                            <!--                                <th>Qt digitada</th>-->
-                            <!--                                <th>Pr. compra</th>-->
-                            <!--                                <th>% margem</th>-->
-                            <!--                                <th>Pr. sugerido</th>-->
-                            <!--                                <th>DDE</th>-->
-
+                            <!--<th class="tabela-info">Pr. tabela</th>-->
+                            <!--<th class="tabela-info">Margem</th>-->
+                            <!--<th>Qt digitada</th>-->
+                            <!--<th>Pr. compra</th>-->
+                            <!--<th>% margem</th>-->
+                            <!--<th>Pr. sugerido</th>-->
+                            <!--<th>DDE</th>-->
                         </tr>
                     `
                 // porc_media.innerHTML = "-"
@@ -144,14 +199,13 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
                             <th class="tabela-info">Cx Fech.</th>
                             <th class="tabela-info">Und Caixa</th>
                             <th class="tabela-info">Sugestão Und</th>
-<!--                            <th class="tabela-info">Pr. tabela</th>-->
-<!--                            <th class="tabela-info">Margem</th>-->
-                            <!--                                <th>Qt digitada</th>-->
-                            <!--                                <th>Pr. compra</th>-->
-                            <!--                                <th>% margem</th>-->
-                            <!--                                <th>Pr. sugerido</th>-->
-                            <!--                                <th>DDE</th>-->
-
+                            <!--<th class="tabela-info">Pr. tabela</th>-->
+                            <!--<th>Qt digitada</th>-->
+                            <!--<th class="tabela-info">Margem</th>-->
+                            <!--<th>Pr. compra</th>-->
+                            <!--<th>% margem</th>-->
+                            <!--<th>Pr. sugerido</th>-->
+                            <!--<th>DDE</th>-->
                         </tr>
                     `
                 // porc_media.innerHTML = "-"
@@ -688,140 +742,6 @@ const sendSelectProd = (codfilial, prod, lead, t_repo) => {
     })
 }
 
-// EXECUTA AO MUDAR DE PRODUTO
-listaProdutosSelecionar.addEventListener('change', e => {
-    resultsBoxFornec.classList.add('d-none')
-    resultsBoxProd.classList.add('d-none')
-    resultsBoxPrincipio.classList.add('d-none')
-
-    // PEGANDO PRODUTO SELECIONADO
-    const produtoSelecionado = e.target.value
-
-    const filialSelecionado = listaFiliais.value
-
-    // PEGANDO LEADTIME
-    const valorlead = leadtime.value
-    var lead = 0
-    if (valorlead === "") {
-        lead = 0
-    } else {
-        lead = valorlead
-    }
-
-    // PEGANDO TEMPO DE REPOSIÇÃO
-    const valor_treposicao = t_reposicao.value
-    var t_repo = 0
-    if (valor_treposicao === "") {
-        t_repo = 0
-    } else {
-        t_repo = valor_treposicao
-    }
-
-    sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
-})
-
-// EXECUTA AO MUDAR DE FILIAL
-listaFiliais.addEventListener('change', e => {
-    resultsBoxFornec.classList.add('d-none')
-    resultsBoxProd.classList.add('d-none')
-    resultsBoxPrincipio.classList.add('d-none')
-
-    //PEGANDO FILIAL SELECIONADA
-    const filialSelecionada = e.target.value
-
-    // PEGANDO PRODUTO SELECIONADO
-    const produtoSelecionado = listaProdutosSelecionar.value
-
-
-    // PEGANDO LEADTIME
-    const valorlead = leadtime.value
-    var lead = 0
-    if (valorlead === "") {
-        lead = 0
-    } else {
-        lead = valorlead
-    }
-
-    // PEGANDO TEMPO DE REPOSIÇÃO
-    const valor_treposicao = t_reposicao.value
-    var t_repo = 0
-    if (valor_treposicao === "") {
-        t_repo = 0
-    } else {
-        t_repo = valor_treposicao
-    }
-
-    sendSelectProd(filialSelecionada, produtoSelecionado, lead, t_repo)
-})
-
-// EXECUTA AO ALTERAR LEADTIME
-leadtime.addEventListener('keyup', a => {
-    resultsBoxFornec.classList.add('d-none')
-    resultsBoxProd.classList.add('d-none')
-    resultsBoxPrincipio.classList.add('d-none')
-
-    // PEGANDO PRODUTO SELECIONADO
-    const produtoSelecionado = listaProdutosSelecionar.value
-
-    const filialSelecionado = listaFiliais.value
-
-    // PEGANDO LEADTIME
-    const valorlead = leadtime.value
-    var lead = 0
-    if (valorlead === "") {
-        lead = 0
-    } else {
-        lead = valorlead
-    }
-
-    // PEGANDO TEMPO DE REPOSIÇÃO
-    let valor_treposicao = ""
-    valor_treposicao = t_reposicao.value
-    var t_repo = 0
-    if (valor_treposicao === "") {
-        t_repo = 0
-    } else {
-        t_repo = valor_treposicao
-    }
-
-
-    sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
-})
-
-// EXECUTA AO ALTERAR TEMPO DE REPOSICAO
-t_reposicao.addEventListener('keyup', a => {
-    resultsBoxFornec.classList.add('d-none')
-    resultsBoxProd.classList.add('d-none')
-    resultsBoxPrincipio.classList.add('d-none')
-
-    // PEGANDO PRODUTO SELECIONADO
-    const produtoSelecionado = listaProdutosSelecionar.value
-
-    const filialSelecionado = listaFiliais.value
-
-    // PEGANDO LEADTIME
-    const valorlead = leadtime.value
-    var lead = 0
-    if (valorlead === "") {
-        lead = 0
-    } else {
-        lead = valorlead
-    }
-
-    // PEGANDO TEMPO DE REPOSIÇÃO
-    let valor_treposicao = ""
-    valor_treposicao = t_reposicao.value
-    var t_repo = 0
-    if (valor_treposicao === "") {
-        t_repo = 0
-    } else {
-        t_repo = valor_treposicao
-    }
-
-    sendSelectProd(filialSelecionado, produtoSelecionado, lead, t_repo)
-})
-
-
 function calculaDDEAnalise() {
     let input_qt_digitada = document.getElementById("qt_digit");
     let input_media = document.getElementById("input_analise_media");
@@ -835,10 +755,23 @@ function calculaDDEAnalise() {
     } else {
         input_dde.value = 0
     }
-
-
-
-
-    // qt_digitada.value = qt_digitada.value.toUpperCase();
 }
+
+
+productSelect.addEventListener('change', event => {
+    setDefaultAnalisisParameters(event)
+    OnProductChange(event)
+})
+
+listaFiliais.addEventListener('change', event => {
+    OnProductChange(event)
+})
+
+leadtimeInput.addEventListener('keyup', event => {
+    OnProductChange(event)
+})
+
+replenishmentTimeInput.addEventListener('keyup', event => {
+    OnProductChange(event)
+})
 
