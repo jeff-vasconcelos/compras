@@ -18,7 +18,7 @@ def vendas(cod_produto, id_empresa, periodo):
         days=periodo - 1
     )  # Aqui sempre será o periodo informado -1
 
-    datas = get_days_in_period(id_empresa, periodo)
+    datas = get_days_in_period(periodo)
 
     filiais = get_filiais(id_empresa)
 
