@@ -16,7 +16,7 @@ from core.models.empresas_models import Filial
 @permission_classes((IsAuthenticated, ))
 def access_valid(request):
 
-    return Response("API - Insight")
+    return Response("API - Ponto de Pedido")
 
 
 @api_view(['GET', ])

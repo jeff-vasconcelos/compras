@@ -34,7 +34,7 @@ $.ajax({
                     datasets: [{
                         data: [curvaA.part_normal, curvaA.part_parcial, curvaA.part_excesso],
                         backgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
-                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
+                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
                 },
@@ -67,7 +67,7 @@ $.ajax({
                     datasets: [{
                         data: [curvaB.part_normal, curvaB.part_parcial, curvaB.part_excesso],
                         backgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
-                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
+                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
                 },
@@ -98,8 +98,8 @@ $.ajax({
                     labels: ["Normal", "Parcial", "Excesso"],
                     datasets: [{
                         data: [curvaC.part_normal, curvaC.part_parcial, curvaC.part_excesso],
-                        backgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
-                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
+                        backgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
+                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
                 },
@@ -130,8 +130,8 @@ $.ajax({
                     labels: ["Normal", "Parcial", "Excesso"],
                     datasets: [{
                         data: [curvaD.part_normal, curvaD.part_parcial, curvaD.part_excesso],
-                        backgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
-                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
+                        backgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
+                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
                 },
@@ -162,8 +162,8 @@ $.ajax({
                     labels: ["Normal", "Parcial", "Excesso"],
                     datasets: [{
                         data: [curvaE.part_normal, curvaE.part_parcial, curvaE.part_excesso],
-                        backgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
-                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#e32f1c'],
+                        backgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
+                        hoverBackgroundColor: ['#50c878', '#ffbc40', '#FC544B'],
                         hoverBorderColor: "rgba(234, 236, 244, 1)",
                     }],
                 },
